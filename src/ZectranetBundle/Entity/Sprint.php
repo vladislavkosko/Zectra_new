@@ -70,14 +70,6 @@ class Sprint
     private $status;
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -162,7 +154,7 @@ class Sprint
      * @param \ZectranetBundle\Entity\Task $tasks
      * @return Sprint
      */
-    public function addTask(\ZectranetBundle\Entity\Task $tasks)
+    public function addTask(Task $tasks)
     {
         $this->tasks[] = $tasks;
 
@@ -174,7 +166,7 @@ class Sprint
      *
      * @param \ZectranetBundle\Entity\Task $tasks
      */
-    public function removeTask(\ZectranetBundle\Entity\Task $tasks)
+    public function removeTask(Task $tasks)
     {
         $this->tasks->removeElement($tasks);
     }
@@ -195,7 +187,7 @@ class Sprint
      * @param \ZectranetBundle\Entity\SprintStatus $status
      * @return Sprint
      */
-    public function setStatus(\ZectranetBundle\Entity\SprintStatus $status = null)
+    public function setStatus(SprintStatus $status = null)
     {
         $this->status = $status;
 
@@ -241,7 +233,7 @@ class Sprint
      * @param \ZectranetBundle\Entity\Office $office
      * @return Sprint
      */
-    public function setOffice(\ZectranetBundle\Entity\Office $office = null)
+    public function setOffice(Office $office = null)
     {
         $this->office = $office;
 
@@ -256,5 +248,14 @@ class Sprint
     public function getOffice()
     {
         return $this->office;
+    }
+
+    /**
+     * @param EntityManager $em
+     */
+    public function __construct(EntityManager $em) {
+        $this->tasks = new ArrayCollection();
+        $this->setStatus(SprintStatus::getOpenStatus($em));
+        $this->setStatusid(1);
     }
 }
