@@ -247,7 +247,7 @@
 
 .profile .user-details .details-list {
     text-align: left;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .panel-cascade>.panel-body {
@@ -278,3 +278,7 @@
     padding: 4%;
 }
 
+.vertical-center {
+    position: relative;
+    top: 45%;
+}

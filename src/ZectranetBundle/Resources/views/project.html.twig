@@ -4,18 +4,32 @@
 
 {% block body %}
     <div class="page-header">
+        <i class="fa fa-briefcase fa-2x"></i>
         <span style="font-size: 25px;">{{ project.name }}</span>
-        <a href="#"><i class="fa fa-fw fa-gear" style="font-size: 20px;"></i></a>
-        <a href="#"><i class="fa fa-fw fa-trash" style="color: red; font-size: 20px;"></i></a>
+
+        <!-- Begin of Project controll buttons -->
+        {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
+            <a href="#" style="text-decoration: none;">
+                <i class="fa fa-fw fa-gear" style="font-size: 20px;"></i>
+            </a>
+
+            <a href="#" style="text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
+                <i class="fa fa-fw fa-trash" style="color: red; font-size: 20px;"></i>
+            </a>
+        {% endif %}
+        <!-- End of Project controll buttons -->
     </div>
 
     <!-- BEGIN OF CHAT PANEL -->
-    <div class="chat-panel panel panel-default">
-        <div class="panel-heading">
+    <div class="chat-panel list-group">
+        <div class="list-group-item active">
             <i class="fa fa-comments fa-fw"></i>
-            Project Chat
+            Office Chat
         </div>
-        <div class="panel-body">
+        <div class="list-group-item panel-body" style="max-height: 300px;">
+            {% if project.postsProject | length == 0 %}
+                <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
+            {% endif %}
             <ul class="chat">
                 {% for post in project.postsProject %}
                     <li class="{% if app.user.id == post.user.id %}right{% else %}left{% endif %} clearfix">
@@ -45,7 +59,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="panel-footer">
+        <div class="list-group-item">
             <form class="input-group input-group-lg" action="{{ path('zectranet_project_add_post', { 'project_id': project.id  }) }}" method="post">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" style="height: 65px;">
@@ -62,4 +76,35 @@
         </div>
     </div>
     <!-- END OF CHAT PANEL -->
+{% endblock %}
+
+{% block modals %}
+    {{ parent() }}
+    {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
+        <!-- Begin of Delete Private Project Modal -->
+        <div class="modal fade" id="delete_private_project" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header label-danger">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                            Delete Project
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="header">
+                                <h3 class="text-center">Are you really want to delete this project?</h3><br>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-danger" href="{{ path('zectranet_delete_project', {'project_id': project.id }) }}">Delete</a>
+                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Delete Private Project Modal -->
+    {% endif %}
 {% endblock %}

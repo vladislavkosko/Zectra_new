@@ -4,16 +4,30 @@
 
 {% block body %}
     <div class="page-header">
+        {% if office.owner.id == app.user.id %}
+            <i class="fa fa-home fa-2x"></i>
+        {% else %}
+            <i class="fa fa-sitemap fa-2x"></i>
+        {% endif %}
         <span style="font-size: 25px;">{{ office.name }}</span>
-        <a href="#"><i class="fa fa-fw fa-gear" style="font-size: 20px;"></i></a>
-        <a href="#"><i class="fa fa-fw fa-trash" style="color: red; font-size: 20px;"></i></a>
+        <!-- Begin of Office controll buttons -->
+        {% if (office.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+            <a href="#" style="text-decoration: none;">
+                <i class="fa fa-fw fa-gear" style="font-size: 20px;"></i>
+            </a>
+
+            <a href="#" style="text-decoration: none;" data-toggle="modal" data-target="#delete_private_office">
+                <i class="fa fa-fw fa-trash" style="color: red; font-size: 20px;"></i>
+            </a>
+        {% endif %}
+        <!-- End of Office controll buttons -->
     </div>
 
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">Office Description:</div>
-                <div class="panel-body">{{ office.description }}</div>
+            <div class="list-group">
+                <div class="list-group-item active">Office Description:</div>
+                <div class="list-group-item">{{ office.description }}</div>
             </div>
         </div>
     </div>
@@ -21,33 +35,33 @@
     <div class="row">
         <!-- BEGIN OF USER ROLES LIST -->
         <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="list-group">
+                <div class="list-group-item active">
                     <i class="fa fa-user fa-fw"></i>
                     Connected Users
                 </div>
-                <div class="panel-body">
+                <div class="list-group-item">
                     {% if office.users|length > 0 %}
-                        <table class="table">
+                        <table class="table" style="margin-bottom: 0">
                             <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Role</th>
-                                </tr>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {% for user in office.users %}
-                                    <tr>
-                                        <td>
-                                            <a href="#" style="display: block; text-decoration: none;">
-                                                <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-circle"
-                                                     style="width: 20px; height: 20px;">
-                                                {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')'}}
-                                            </a>
-                                        </td>
-                                        <td>Manager</td>
-                                    </tr>
-                                {% endfor %}
+                            {% for user in office.users %}
+                                <tr>
+                                    <td>
+                                        <a href="#" style="display: block; text-decoration: none;">
+                                            <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-circle"
+                                                 style="width: 20px; height: 20px;">
+                                            {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')'}}
+                                        </a>
+                                    </td>
+                                    <td>Manager</td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     {% elseif office.users|length == 0 %}
@@ -60,55 +74,59 @@
 
         <!-- BEGIN OF CONNECTED PROJECTS LIST -->
         <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="list-group">
+                <div class="list-group-item active">
                     <i class="fa fa-briefcase"></i>
                     <span>Connected Projects</span>
                 </div>
-                <div class="panel-body">
-                    {% if office.projects|length > 0 %}
-                    <div class="list-group">
-                        {% for project in office.projects %}
-                            <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                                <i class="fa fa-briefcase"></i>
-                                <span>{{ project.name}}</span>
-                            </a>
-                        {% endfor %}
-                    </div>
-                    {% elseif office.projects|length == 0 %}
+                {% if office.projects|length > 0 %}
+                    {% for project in office.projects %}
+                        <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                            <i class="fa fa-briefcase"></i>
+                            <span>{{ project.name}}</span>
+                        </a>
+                    {% endfor %}
+                {% elseif office.projects|length == 0 %}
+                    <div class="list-group-item">
                         <h4 class="text-info text-center">Projects will be displayed here</h4>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
         <!-- END OF CONNECTED PROJECTS LIST -->
 
         <!-- BEGIN OF SPRINT LIST -->
         <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="list-group">
+                <div class="list-group-item active">
                     <i class="fa fa-repeat"></i>
                     Office Sprints
                 </div>
-                <div class="panel-body">
-                    {% for sprint in office.sprints %}
-                        <a>{{ sprint.name }}</a>
-                    {% endfor %}
-                    {% if office.sprints|length == 0 %}
+                {% for sprint in office.sprints %}
+                    <a class="list-group-item" href="#">
+                        <i class="fa fa-repeat"></i>
+                        <span>{{ sprint.name}}</span>
+                    </a>
+                {% endfor %}
+                {% if office.sprints|length == 0 %}
+                    <div class="list-group-item">
                         <h4 class="text-info text-center">Sprints will be displayed here</h4>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
         <!-- END OF SPRINT LIST -->
     </div>
 
-    <div class="chat-panel panel panel-default">
-        <div class="panel-heading">
+    <div class="chat-panel list-group">
+        <div class="list-group-item active">
             <i class="fa fa-comments fa-fw"></i>
             Office Chat
         </div>
-        <div class="panel-body">
+        <div class="list-group-item panel-body" style="max-height: 300px;">
+            {% if office.postsOffice | length == 0 %}
+                <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
+            {% endif %}
             <ul class="chat">
                 {% for post in office.postsOffice %}
                     <li class="{% if app.user.id == post.user.id %}right{% else %}left{% endif %} clearfix">
@@ -138,7 +156,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="panel-footer">
+        <div class="list-group-item">
             <form class="input-group input-group-lg" action="{{ path('zectranet_office_add_post', { 'office_id': office.id  }) }}" method="post">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" style="height: 65px;">
@@ -154,4 +172,35 @@
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block modals %}
+    {{ parent() }}
+    {% if (office.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+        <!-- Begin of Delete Private Office Modal -->
+        <div class="modal fade" id="delete_private_office" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header label-danger">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                            Delete Office
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="header">
+                                <h3 class="text-center">Are you really want to delete this office?</h3><br>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <a class="btn btn-danger" href="{{ path('zectranet_delete_office', {'office_id': office.id}) }}">Delete</a>
+                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Delete Private Office Modal -->
+    {% endif %}
 {% endblock %}

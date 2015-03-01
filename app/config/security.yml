@@ -9,6 +9,9 @@ security:
         user_db:
             entity: { class: ZectranetBundle\Entity\User }
 
+    role_hierarchy:
+                ROLE_ADMIN:       ROLE_USER
+
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/

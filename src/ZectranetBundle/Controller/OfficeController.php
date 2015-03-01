@@ -45,6 +45,32 @@ class OfficeController extends Controller
     }
 
     /**
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $office_id
+     */
+    public function deleteAction(Request $request, $office_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var AuthorizationChecker $auth_checker */
+        $auth_checker = $this->get('security.authorization_checker');
+
+        /** @var Project $project */
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($office && ($office->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN'))) {
+            Office::deleteOffice($em, $office_id);
+        }
+
+        return $this->redirectToRoute('zectranet_user_page');
+    }
+
+
+    /**
      * @Route("/office/{office_id}/addNewPost")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request

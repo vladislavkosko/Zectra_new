@@ -107,13 +107,6 @@
 							</li>
 
 							<li>
-								<a href="#" data-toggle="modal" data-target="#add_private_office">
-									<i class='fa fa-plus-circle'></i>
-									<span>Add New Private Office</span>
-								</a>
-							</li>
-
-							<li>
 								<a href="#">
 									<i class='fa fa-sitemap'></i>
 									<span>Connected Offices</span>
@@ -129,25 +122,32 @@
 									{% endfor %}
 								</ul>
 							</li>
+
+							<li>
+								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_office">
+									<i class='fa fa-plus-circle'></i>
+									<span>Add New Private Office</span>
+								</a>
+							</li>
 						</ul>
 					</li>
 
 					<li {% if project is defined %} class="active" {% endif %}>
 						<a href="#">
-							<i class='fa fa-sitemap'></i>
+							<i class='fa fa-briefcase'></i>
 							<span>Projects</span>
 						</a>
 						<ul class="nav nav-second-level">
 							<li>
 								<a href="#">
-									<i class='fa fa-sitemap'></i>
+									<i class='fa fa-briefcase'></i>
 									<span>Private Projects</span>
 								</a>
 								<ul class="nav nav-third-level">
 									{% for project in app.user.ownedProjects %}
 										<li>
 											<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-												<i class='fa fa-sitemap'></i>
+												<i class='fa fa-briefcase'></i>
 												<span>{{ project.name }}</span>
 											</a>
 										</li>
@@ -157,14 +157,14 @@
 
 							<li>
 								<a href="#">
-									<i class='fa fa-sitemap'></i>
+									<i class='fa fa-briefcase'></i>
 									<span>Connected Projects</span>
 								</a>
 								<ul class="nav nav-third-level">
 									{% for project in app.user.projects %}
 										<li>
 											<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-												<i class='fa fa-sitemap'></i>
+												<i class='fa fa-briefcase'></i>
 												<span>{{ project.name }}</span>
 											</a>
 										</li>

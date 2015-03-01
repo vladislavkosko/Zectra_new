@@ -36,8 +36,14 @@ zectranet_show_office:
         office_id: \d+
 
 zectranet_add_office:
-    pattern: /office/add
+    path: /office/add
     defaults: { _controller: ZectranetBundle:Office:addOffice }
+
+zectranet_delete_office:
+    pattern: /office/{office_id}/delete
+    defaults: { _controller: ZectranetBundle:Office:delete }
+    requirements:
+        office_id: \d+
 
 zectranet_office_add_post:
     pattern: /office/{office_id}/addNewPost
@@ -52,8 +58,14 @@ zectranet_show_project:
         project_id: \d+
 
 zectranet_add_project:
-    pattern: /project/add
+    path: /project/add
     defaults: { _controller: ZectranetBundle:Project:addProject }
+
+zectranet_delete_project:
+    pattern: /project/{project_id}/delete
+    defaults: { _controller: ZectranetBundle:Project:delete }
+    requirements:
+        project_id: \d+
 
 zectranet_project_add_post:
     pattern: /project/{project_id}/addNewPost

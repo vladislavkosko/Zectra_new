@@ -396,4 +396,27 @@ class Project
 
         return $project;
     }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     */
+    public static function deleteProject(EntityManager $em, $project_id) {
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+
+        /** @var Office $office */
+        foreach ($project->getOffices() as $office) {
+            $project->removeOffice($office);
+            $em->remove($office);
+        }
+
+        /** @var ProjectPost $post */
+        foreach ($project->getPostsProject() as $post) {
+            $project->removePostsProject($post);
+            $em->remove($post);
+        }
+
+        $em->remove($project);
+        $em->flush();
+    }
 }

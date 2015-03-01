@@ -234,3 +234,7 @@
     border-radius: 5%;
 }
 
+.vertical-center {
+    position: relative;
+    top: 45%;
+}

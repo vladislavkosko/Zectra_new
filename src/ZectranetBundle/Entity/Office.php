@@ -65,14 +65,14 @@ class Office
 
     /**
      * @ORM\OneToMany(targetEntity="Sprint", mappedBy="office")
-     * @var array
+     * @var ArrayCollection
      */
     private $sprints;
 
     /**
      * @ORM\OneToMany(targetEntity="OfficePost", mappedBy="office")
      * @ORM\OrderBy({"posted" = "DESC"})
-     * @var array
+     * @var ArrayCollection
      */
     private $postsOffice;
 
@@ -374,5 +374,41 @@ class Office
         $em->flush();
 
         return $office;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $office_id
+     */
+    public static function deleteOffice(EntityManager $em, $office_id) {
+        /** @var Office $office */
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+
+        /** @var OfficeRole $role */
+        foreach ($office->getOfficeUserRoles() as $role) {
+            $office->removeOfficeUserRole($role);
+            $em->remove($role);
+        }
+
+        /** @var OfficePost $post */
+        foreach ($office->getPostsOffice() as $post) {
+            $office->removePostsOffice($post);
+            $em->remove($post);
+        }
+
+        /** @var Project $project */
+        foreach ($office->getProjects() as $project) {
+            $office->removeProject($project);
+            $em->remove($project);
+        }
+
+        /** @var User $user */
+        foreach ($office->getUsers() as $user) {
+            $office->removeUser($user);
+            $em->remove($user);
+        }
+
+        $em->remove($office);
+        $em->flush();
     }
 }
