@@ -21,6 +21,10 @@ zectranet_signup_action:
     path: /signup_action
     defaults: { _controller: ZectranetBundle:Index:signupAct }
 
+zectranet_wde:
+    path: /wde
+    defaults: { _controller: ZectranetBundle:User:wde }
+
 zectranet_user_page:
     path: /user
     defaults: { _controller: ZectranetBundle:User:index }

@@ -22,17 +22,87 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="panel list-group">
+            <div class="panel panel-default list-group">
                 <div class="list-group-item active">
                     <i class="fa fa-tasks"></i>
                     <span>Tasks</span>
                 </div>
-                <div class="panel-heading list-group-item">
-                    <div class="btn-group">
-                        <div class="btn btn-default active">Task view: </div>
-                        <div class="btn btn-default">Table</div>
-                        <div class="btn btn-default">List</div>
-                        <div class="btn btn-default">Agile board</div>
+                <div class="panel-body">
+                    <ul id="myTab" class="nav nav-tabs" role="tablist">
+                        <li data-toggle="tooltip" data-placement="top" title="Table view">
+                            <a data-toggle="tab" class="btn" href="#table-view">
+                                <i class="fa fa-table fa-2x"></i>
+                            </a>
+                        </li>
+                        <li data-toggle="tooltip" data-placement="top" title="List view">
+                            <a data-toggle="tab" class="btn" href="#list-view">
+                                <i class="fa fa-list fa-2x"></i>
+                            </a>
+                        </li>
+                        <li data-toggle="tooltip" data-placement="top" title="Agile view">
+                            <a data-toggle="tab" class="btn" href="#agile-view">
+                                <i class="fa fa-th fa-2x"></i>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div id="tasks-tab-content" class="tab-content">
+
+                        <div id="table-view" class="tab-pane fade in active" aria-labelledby="home-tab" role="tabpanel">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-xs-1">ID</th>
+                                        <th class="col-xs-3">Name</th>
+                                        <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
+                                        <th class="col-xs-1">Status</th>
+                                        <th class="col-xs-1">Progress</th>
+                                        <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
+                                        <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
+                                        <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
+                                        <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
+                                        <th class="col-xs-1">Assigned</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for task in project.tasks %}
+                                        <tr>
+                                            <td class="col-xs-1">{{ task.id }} {{ (task.type.label == 'bug') ? '.B' : '' }}</td>
+                                            <td class="col-xs-3">{{ task.name }}</td>
+                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.priority.label }}</td>
+                                            <td class="col-xs-1">{{ task.status.label }}</td>
+                                            <td class="col-xs-1">{{ task.progress }}%</td>
+                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.estimatedHours ~ ':' ~ task.estimatedMinutes }}</td>
+                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.startdate is empty ? '-' : task.startdate | date('Y-m-d') }}</td>
+                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.enddate is empty ? '-' : task.enddate | date('Y-m-d') }}</td>
+                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.owner.name ~ ' ' ~ task.owner.surname}}</td>
+                                            <td class="col-xs-1">
+                                                {% if task.assigned %}
+                                                    {{ task.assigned.name ~ ' ' ~ task.assigned.surname}}
+                                                {% else %}
+                                                    {{ '-' }}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="list-view" class="tab-pane fade" aria-labelledby="home-tab" role="tabpanel">
+                            <ul class="list-group">
+
+                            </ul>
+                        </div>
+
+                        <div id="agile-view" class="tab-pane fade" aria-labelledby="home-tab" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -126,4 +196,13 @@
         </div>
         <!-- End of Delete Private Project Modal -->
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 {% endblock %}

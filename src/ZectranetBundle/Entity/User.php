@@ -173,6 +173,13 @@ class User implements UserInterface, \Serializable
      */
     private $userSettingsNotifications;
 
+    /**
+     * @ORM\OneToMany(targetEntity="DailyTimeSheet", mappedBy="user")
+     * @ORM\OrderBy({"date" = "DESC"})
+     * @var array
+     */
+    private $wde;
+
     public function __construct()
     {
         $this->active = true;
@@ -1064,5 +1071,38 @@ class User implements UserInterface, \Serializable
     public function getProjects()
     {
         return $this->projects;
+    }
+
+    /**
+     * Add wde
+     *
+     * @param \ZectranetBundle\Entity\DailyTimeSheet $wde
+     * @return User
+     */
+    public function addWde(\ZectranetBundle\Entity\DailyTimeSheet $wde)
+    {
+        $this->wde[] = $wde;
+
+        return $this;
+    }
+
+    /**
+     * Remove wde
+     *
+     * @param \ZectranetBundle\Entity\DailyTimeSheet $wde
+     */
+    public function removeWde(\ZectranetBundle\Entity\DailyTimeSheet $wde)
+    {
+        $this->wde->removeElement($wde);
+    }
+
+    /**
+     * Get wde
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWde()
+    {
+        return $this->wde;
     }
 }
