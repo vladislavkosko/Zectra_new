@@ -1,0 +1,50 @@
+.local-red{
+  border-left:5px solid #ce4844;
+  border-radius: 3px;
+}
+.local-green{
+  border-left:5px solid green;
+  border-radius: 3px;
+}
+.local-yellow{
+  border-left:5px solid #ffea00;
+  border-radius: 3px;
+}
+.localfilter{
+  background: #f2f2f2;
+  padding: 15px;
+}
+
+.members{
+  height:210px;
+  overflow-y: auto;
+  overflow-x:hidden;
+}
+.user-chat{
+  width: 64px;
+}
+.user-chat p{
+  text-align: center;
+  font-size: 11px;
+}
+.user-chat a{
+  text-decoration: none;
+}
+.useron{
+  border-radius:0;
+  font-size:10px;
+  margin:-15px 0 0;
+  opacity:0.75;
+  position:absolute;
+  width:64px;
+  display: block;
+}
+.userof{
+  border-radius:0;
+  font-size:10px;
+  margin:-15px 0 0;
+  opacity:0.75;
+  position:absolute;
+  width:64px;
+  display: block;
+}

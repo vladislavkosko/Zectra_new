@@ -1,0 +1,82 @@
+{% extends '@Zectranet/layout.html.twig' %}
+
+{% block title %}Login Area{% endblock %}
+
+{% block styles %}
+	{{ parent() }}
+  	<!-- Loading Stylesheets -->    
+  	{#<link href="{{ asset('bundles/intranet/css/login.css') }}" rel="stylesheet">#}
+{% endblock %}
+
+{% block page %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-xs-12">
+				<section id="login">
+					<div class="row animated fadeInLeftBig">
+						<div class="login-holder">
+							{% if messageError is defined %}
+								<div class="message">
+									{{ messageError }}
+								</div>
+							{% endif %}
+							{% if messageError1 is defined %}
+								<div class="message1">
+									{{ messageError1 }}
+								</div>
+							{% endif %}
+							<h2 class="page-header text-center text-primary" style="font-size: 30px"> Welcome to Zectranet </h2>
+							<form role="form" action="{{ path('zectranet_login_check') }}" method="post">
+								<div class="form-group">
+									<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter username/email" name="_username" value="{{ last_username }}">
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="_password">
+								</div>
+								{% if error %}
+								<div class="alert alert-danger">
+									{{ error.message }}
+								</div>
+								{% endif %}
+
+								<!-- Forgot password -->
+								<a href="#" data-toggle="modal" data-target="#myModal">
+									Forgot your password?
+								</a>
+
+								<div class="form-footer">
+									<input type="hidden" name="_target_path" value="/user" />
+									<button type="submit" class="btn btn-info pull-right btn-submit">Login</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	{#<!-- Modal window-->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel" style="color: #495b79 ">
+						Reset your password
+					</h4>
+				</div>
+				<div class="modal-body">
+					<form method="post" action="{{ path('intranet_login_forgot_password') }}">
+						<div class="form-group">
+							<input type="email" class="form-control" id="inputEmail3" placeholder="Enter the email address you use to Zectranet.com" name="userEmail" required>
+						</div>
+						<div class="form-group">
+							<input type="submit" class="btn btn-primary" value="Continue" style="margin-top: 10px; margin-bottom: -20px;">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	#}
+{% endblock %}

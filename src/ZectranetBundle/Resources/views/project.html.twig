@@ -1,0 +1,65 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <span style="font-size: 25px;">{{ project.name }}</span>
+        <a href="#"><i class="fa fa-fw fa-gear" style="font-size: 20px;"></i></a>
+        <a href="#"><i class="fa fa-fw fa-trash" style="color: red; font-size: 20px;"></i></a>
+    </div>
+
+    <!-- BEGIN OF CHAT PANEL -->
+    <div class="chat-panel panel panel-default">
+        <div class="panel-heading">
+            <i class="fa fa-comments fa-fw"></i>
+            Project Chat
+        </div>
+        <div class="panel-body">
+            <ul class="chat">
+                {% for post in project.postsProject %}
+                    <li class="{% if app.user.id == post.user.id %}right{% else %}left{% endif %} clearfix">
+                        <span class="chat-img {% if app.user.id == post.user.id %}pull-right{% else %}pull-left{% endif %}">
+                            <img src="{{ asset('') ~ 'documents/' ~ post.user.avatar }}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
+                        </span>
+                        <div class="chat-body clearfix">
+                            <div class="header" style="height: 28px;">
+                                <strong class="{% if app.user.id == post.user.id %}pull-right{% else %}pull-left{% endif %} primary-font">
+                                    {{ post.user.name ~ ' ' ~ post.user.surname ~ ' (' ~ post.user.username ~ ')' }}
+                                </strong>
+                                <small class="{% if app.user.id == post.user.id %}pull-left{% else %}pull-right{% endif %} text-muted">
+                                    <i class="fa fa-clock-o fa-fw"></i>
+                                    Posted on {{ post.posted|date('Y-m-d h:i:s') }}
+                                    {% if post.edited != null %}
+                                        <i class="fa fa-edit"></i>
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <pre style="white-space: pre-line;">
+                                <span>
+                                    {{ post.message }}
+                                </span>
+                            </pre>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="panel-footer">
+            <form class="input-group input-group-lg" action="{{ path('zectranet_project_add_post', { 'project_id': project.id  }) }}" method="post">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" style="height: 65px;">
+                        <i class="fa fa-file"></i>
+                    </button>
+                </span>
+                <textarea name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;"></textarea>
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" name="subscribe" type="submit" style="height: 65px; font-size:15px;">
+                        <span>Post</span>
+                    </button>
+                </span>
+            </form>
+        </div>
+    </div>
+    <!-- END OF CHAT PANEL -->
+{% endblock %}

@@ -1,0 +1,32 @@
+security:
+    encoders:
+        ZectranetBundle\Entity\User:
+            algorithm: sha512
+            encode_as_base64: false
+            iterations: 1
+            
+    providers:
+        user_db:
+            entity: { class: ZectranetBundle\Entity\User }
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        secured_area:
+            pattern:    ^/*
+            anonymous: ~
+            form_login:
+                login_path: /login
+                check_path: /login_check
+
+            logout:
+                path:   /logout
+                target: /
+
+    access_control:
+         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/user, roles: ROLE_USER }
+         - { path: ^/office, roles: ROLE_USER }
+         - { path: ^/project, roles: ROLE_USER }

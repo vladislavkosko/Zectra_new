@@ -1,0 +1,83 @@
+<h3 class="page-header">
+    <i class="fa fa-users"></i>
+    Members
+    <span class="label label-success">[[members.length]]</span>
+</h3>
+
+<div class="members">
+    <div class="col-xs-4 col-md-1" ng-repeat="member in members">
+        <div class="user-chat">
+            <a href="" oncontextmenu="return false;">
+                <img alt="Avatar" ng-src="[[avatarURL + member.avatar]]" style="width: 64px; height: 64px;">
+                <span class="label label-success useron">online</span>
+                <p>[[member.name + ' ' + member.surname]] ([[member.username]])</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+<h3 class="page-header"><i class="fa fa-weixin"></i> Chat</h3>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div id="pagination" style="padding: 0; display: block; margin: 0">
+            <ul class="pagination" style="margin: 0">
+                <li ng-if="paginator.curPageId != 1"><a href="#" ng-click="paginator.firstPage($event)">«</a></li>
+                <li ng-if="paginator.curPageId != 1"><a href="#" ng-click="paginator.prevPage($event)">‹</a></li>
+                <li ng-class="{active: paginator.curPageId == item }" ng-repeat="item in paginator.pages"><a href="#" ng-click="paginator.toPage($event, item)">[[item]]</a></li>
+                <li ng-if="paginator.curPageId != paginator.countPages"><a href="#" ng-click="paginator.nextPage($event)">›</a>
+                <li ng-if="paginator.curPageId != paginator.countPages"><a href="#" ng-click="paginator.lastPage($event)">»</a></li></li>
+            </ul>
+        </div>
+        <div class="btn-group" style="display: block; height: 32px;">
+            <button class="btn btn-default" type="button">Show: [[postsPerPage]]</button>
+            <button class="btn btn-default dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="#" ng-click="postsPerPage=5; changePostsPerPage();">5</a>
+                </li>
+                <li>
+                    <a href="#" ng-click="postsPerPage=10; changePostsPerPage();">10</a>
+                </li>
+                <li>
+                    <a href="#" ng-click="postsPerPage=50; changePostsPerPage();">50</a>
+                </li>
+                <li>
+                    <a href="#" ng-click="postsPerPage=100; changePostsPerPage();">100</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body" style="height:300px; overflow: auto;">
+        <div class="media" ng-repeat="post in posts">
+            <a href="#" class="pull-left">
+                <img class="media-object" alt="Avatar"  ng-src="[[avatarURL + post.user.avatar]]" style="width: 64px; height: 64px;">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading">[[post.user.name + ' ' + post.user.surname]] ([[post.user.username]]) <small><i>Posted on [[ post.posted.date ]]</i> <i class="fa fa-edit" ng-show="post.edited"></i></small></h4>
+                <p highlight ng-bind-html="post.message"></p>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="input-group input-group-lg">
+            <span class="input-group-btn">
+                <button class="btn btn-default" name="subscribe" type="button" ng-click="addDocuments()" style="height: 80px;">
+                    <i class="fa fa-file"></i>
+                </button>
+            </span>
+            <textarea class="form-control" rows="3" style="font-size:12px; height: 80px;" ng-class="{editing: editingPost}"
+                      id="write-message" ng-model="message" ng-keypress="pressEnter($event)">
+            </textarea>
+            <span class="input-group-btn">
+                <button class="btn btn-primary" name="subscribe" type="button" id="send-message" ng-click="sendPost()"
+                        style="height: 80px; font-size:15px;">
+                    Post
+                </button>
+            </span>
+        </div>
+    </div>
+</div>

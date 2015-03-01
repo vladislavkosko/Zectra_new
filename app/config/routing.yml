@@ -1,0 +1,3 @@
+zectranet:
+    resource: "@ZectranetBundle/Resources/config/routing.yml"
+    prefix:   /

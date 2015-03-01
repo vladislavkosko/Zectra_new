@@ -1,0 +1,62 @@
+zectranet_homepage:
+    path: /
+    defaults: { _controller: ZectranetBundle:Index:index }
+
+zectranet_login:
+    path: /login
+    defaults: { _controller: ZectranetBundle:Index:login }
+
+zectranet_login_check:
+    path: /login_check
+    defaults: { _controller: ZectranetBundle:Index:loginCheck }
+
+zectranet_logout:
+    path: /logout
+
+zectranet_signup:
+    path: /signup
+    defaults: { _controller: ZectranetBundle:Index:signup }
+
+zectranet_signup_action:
+    path: /signup_action
+    defaults: { _controller: ZectranetBundle:Index:signupAct }
+
+zectranet_user_page:
+    path: /user
+    defaults: { _controller: ZectranetBundle:User:index }
+
+zectranet_generate_avatar:
+    path: /user/generate_avatar
+    defaults: { _controller: ZectranetBundle:User:generateAvatar }
+
+zectranet_show_office:
+    pattern: /office/{office_id}
+    defaults: { _controller: ZectranetBundle:Office:index }
+    requirements:
+        office_id: \d+
+
+zectranet_add_office:
+    pattern: /office/add
+    defaults: { _controller: ZectranetBundle:Office:addOffice }
+
+zectranet_office_add_post:
+    pattern: /office/{office_id}/addNewPost
+    defaults: { _controller: ZectranetBundle:Office:addPost }
+    requirements:
+        office_id: \d+
+
+zectranet_show_project:
+    pattern: /project/{project_id}
+    defaults: { _controller: ZectranetBundle:Project:index }
+    requirements:
+        project_id: \d+
+
+zectranet_add_project:
+    pattern: /project/add
+    defaults: { _controller: ZectranetBundle:Project:addProject }
+
+zectranet_project_add_post:
+    pattern: /project/{project_id}/addNewPost
+    defaults: { _controller: ZectranetBundle:Project:addPost }
+    requirements:
+        project_id: \d+

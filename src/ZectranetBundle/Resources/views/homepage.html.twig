@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Welcome</title>
+
+	<link href="{{ asset('bundles/zectranet/css/bootstrap.css') }}" rel="stylesheet">
+	<link href="{{ asset('bundles/zectranet/css/font-awesome.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ asset('bundles/zectranet/css/index.css') }}">
+	<script src="{{ asset('bundles/zectranet/js/index.js') }}"></script>
+
+</head>
+
+<body>
+
+<div class="l-container">
+	<div class="l-main">
+		<div class="b-page__first" style="height: auto;">
+			<div class="b-page-inner">
+				<div class="b-bg-icons__left__back" ></div>
+				<div class="b-bg-icons__left__front"></div>
+				<div class="b-bg-icons__right__back"></div>
+				<div class="b-bg-icons__right__front"></div>
+				<header class="b-header">
+					<div class="b-header-slogan">
+						<div class="b-wave__left"></div>
+						<div class="b-wave__right"></div>
+						<img src="{{ asset('bundles/zectranet/img/logo.png') }}" style="width: 150px;">
+						<br>
+						Hello guest
+						<br>
+						Welcome to our service
+					</div>
+					<div class="b-header-dots"></div>
+					<div class="b-header-desc">Our service will help you and your team to quickly locate contact with each other , take time. Create projects to find them. Please become today</div>
+					<br>
+					<br>
+					<a class="btn btn-success" href="{{ path('zectranet_login') }}">Login</a>
+					<a class="btn btn-info" href="{{ path('zectranet_signup') }}">Signup</a>
+					<img style="left: 609px; position: absolute; top: 203px;" src="{{ asset('bundles/zectranet/img/girl2.png') }}">
+					<img style="left: -79px; position: absolute; top: 203px;" src="{{ asset('bundles/zectranet/img/girl.png') }}">
+				</header>
+
+				<div class="b-screenshot__front">
+					<div class="b-screenshot-shadow__middle"></div>
+					<div class="b-screenshot-img"></div>
+					<a class="b-screenshot-button" href="#"></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{{ asset('bundles/zectranet/js/jquery-2.1.3.min.js') }}"></script>
+<script src="{{ asset('bundles/zectranet/js/libs.min.js') }}"></script>
+<script src="{{ asset('bundles/zectranet/js/Bootstrap/bootstrap.min.js') }}"></script>
+
+</body>
+</html>

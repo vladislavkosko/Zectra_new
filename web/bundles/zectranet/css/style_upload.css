@@ -1,0 +1,268 @@
+/*-------------------------
+    Simple reset
+--------------------------*/
+
+
+*{
+    margin:0;
+    padding:0;
+}
+
+
+/*-------------------------
+    General Styles
+--------------------------*/
+
+
+
+
+#upload{
+    font-family: 'PT Sans Narrow', sans-serif;
+    padding: 1%;
+    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+}
+
+#drop_upload{
+    border: 5px dashed #495b79;
+    background-color: white;
+    margin-bottom: 30px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-weight: bold;
+    color: #7f858a;
+    padding: 4%;
+}
+
+#drop_upload a{
+    background-color: #495b79;
+    color: #fff;
+    font-size: 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1;
+    padding: 10px;
+}
+#drop_upload p{
+    text-align: center;
+}
+
+#drop_upload a:hover{
+    background-color:#0986a3;
+}
+
+#drop_upload input{
+    display:none;
+}
+
+#upload ul{
+    list-style: none;
+    border-top: 1px solid #495b79;
+    border-right: 1px solid #495b79;
+    border-left: 1px solid #495b79;
+}
+
+#upload ul li{
+
+    background-color: #f7f7f7;
+    border-top: 1px solid #f7f7f7;
+    border-bottom: 1px solid #495b79;
+    padding: 15px;
+    height: 80px;
+    position: relative;
+    display: block;
+}
+
+#upload ul li input{
+    display: none;
+}
+
+#upload ul li p{
+    width: 400px;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #495b79;
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    left: 100px;
+}
+
+#upload ul li i{
+    font-weight: normal;
+    font-style:normal;
+    color:#7f7f7f;
+    display:block;
+}
+
+#upload ul li canvas{
+    top: 15px;
+    left: 32px;
+    position: absolute;
+}
+
+#upload ul li span{
+    width: 48px;
+    height: 48px;
+    background: url('../images/ok_download.png') no-repeat;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
+}
+
+#upload ul li.working span{
+    width: 48px;
+    height: 48px;
+    background: url('../images/fail_download.jpeg') no-repeat;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
+
+}
+
+#upload ul li.extention p{
+    color: red;
+    left: 10px;
+    width: 100%;
+    font-size: large;
+    top: 7px;
+}
+
+#upload ul li.extention span {
+    width: 48px;
+    height: 48px;
+    background: url('../images/fail_download.jpeg') no-repeat;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
+
+}
+#upload_ofice{
+    font-family: 'PT Sans Narrow', sans-serif;
+    padding: 1%;
+    border-radius: 3px;
+    width: 100%;
+    height: 100%;
+}
+
+#drop_upload_ofice{
+    border: 5px dashed #495b79;
+    background-color: white;
+    margin-bottom: 30px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-size: 30px;
+    font-weight: bold;
+    color: #7f858a;
+    padding: 4%;
+}
+
+#drop_upload_ofice a{
+    background-color: #495b79;
+    color: #fff;
+    font-size: 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1;
+    padding: 10px;
+}
+#drop_upload_ofice p{
+    text-align: center;
+}
+
+#drop_upload_ofice a:hover{
+    background-color:#0986a3;
+}
+
+#drop_upload_ofice input{
+    display:none;
+}
+
+#upload_ofice ul{
+    list-style: none;
+    border-top: 1px solid #495b79;
+    border-right: 1px solid #495b79;
+    border-left: 1px solid #495b79;
+}
+
+#upload_ofice ul li{
+
+    background-color: #f7f7f7;
+    border-top: 1px solid #f7f7f7;
+    border-bottom: 1px solid #495b79;
+    padding: 15px;
+    height: 80px;
+    position: relative;
+    display: block;
+}
+
+#upload_ofice ul li input{
+    display: none;
+}
+
+#upload_ofice ul li p{
+    width: 400px;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #495b79;
+    font-size: 16px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    left: 100px;
+}
+
+#upload_ofice ul li i{
+    font-weight: normal;
+    font-style:normal;
+    color:#7f7f7f;
+    display:block;
+}
+
+#upload_ofice ul li canvas{
+    top: 15px;
+    left: 32px;
+    position: absolute;
+}
+
+#upload_ofice ul li span{
+    width: 48px;
+    height: 48px;
+    background: url('../images/ok_download.png') no-repeat;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
+}
+
+#upload_ofice ul li.working span{
+    width: 48px;
+    height: 48px;
+    background: url('../images/fail_download.jpeg') no-repeat;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
+
+}
+
+#upload_ofice ul li.extention p{
+    color: red;
+    left: 10px;
+    width: 100%;
+    font-size: large;
+    top: 7px;
+}
+
+#upload_ofice ul li.extention span {
+    width: 48px;
+    height: 48px;
+    background: url('../images/fail_download.jpeg') no-repeat;
+    position: absolute;
+    right: 16px;
+    cursor: pointer;
+
+}

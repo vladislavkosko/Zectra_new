@@ -1,0 +1,4 @@
+services:
+#    zectranet.example:
+#        class: ZectranetBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

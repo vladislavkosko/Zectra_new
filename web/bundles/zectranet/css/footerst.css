@@ -1,0 +1,21 @@
+html {
+    min-height: 100%;
+    position: relative;
+}
+
+.footer {
+    background-color: #f8f8f8;
+    bottom: 0px;
+    height: 60px;
+    position: absolute;
+    width: 100%;
+}
+.container {
+    max-width: 680px;
+    padding: 0 15px;
+    width: auto;
+}
+.container .text-muted {
+    margin: 20px 0;
+    text-align: center;
+}

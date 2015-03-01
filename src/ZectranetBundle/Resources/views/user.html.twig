@@ -1,0 +1,271 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}Hello {{ app.user.name }} {% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <span style="font-size: 25px;">Hello, {{ app.user.name }}</span>
+    </div>
+
+    <!-- Begin of Private block -->
+    <div class="row">
+        <!-- Begin of Private Offices -->
+        <div class="list-group col-md-4">
+            <div class="list-group-item active">
+                <i class="fa fa-home"></i>
+                Private Offices
+            </div>
+            {% set officesCount = app.user.ownedOffices | length %}
+
+            {% if officesCount == 0 %}
+                <div class="list-group-item">
+                    <h4 class="text-info text-center">Offices will be displayed here</h4>
+                </div>
+            {% endif %}
+
+            {% for office in app.user.ownedOffices | reverse | slice(0, 3) %}
+                <a class="list-group-item" href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                    <i class="fa fa-home"></i>
+                    {{ office.name }}
+                </a>
+            {% endfor %}
+            <div id="private_office_collapse" class="panel-collapse collapse" aria-expanded="false">
+                {% for office in app.user.ownedOffices | reverse | slice(3, officesCount) %}
+                    <a class="list-group-item" href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                        <i class="fa fa-home"></i>
+                        {{ office.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% if officesCount > 3 %}
+                <a data-toggle="collapse" href="#private_office_collapse" aria-expanded="false"
+                   class="collapsed list-group-item text-center btn btn-default">
+                    Show all
+                </a>
+            {% endif %}
+
+            <a href="#" class="list-group-item text-center btn btn-default" data-toggle="modal" data-target="#add_private_office">
+                <span>Add New Private Office</span>
+            </a>
+        </div>
+        <!-- End of Private Offices -->
+
+        <!-- Begin of Private Projects -->
+        <div class="list-group col-md-4">
+            <div class="list-group-item active">
+                <i class="fa fa-briefcase"></i>
+                Private Projects
+            </div>
+            {% set projectsCount = app.user.ownedProjects | length %}
+
+            {% if projectsCount == 0 %}
+                <div class="list-group-item">
+                    <h4 class="text-info text-center">Projects will be displayed here</h4>
+                </div>
+            {% endif %}
+
+            {% for project in app.user.ownedProjects | reverse | slice(0, 3) %}
+                <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                    <i class="fa fa-briefcase"></i>
+                    {{ project.name }}
+                </a>
+            {% endfor %}
+            <div id="private_project_collapse" class="panel-collapse collapse" aria-expanded="false">
+                {% for project in app.user.ownedProjects | reverse | slice(3, projectsCount) %}
+                    <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                        <i class="fa fa-briefcase"></i>
+                        {{ project.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% if projectsCount > 3 %}
+                <a data-toggle="collapse" href="#private_project_collapse" aria-expanded="false"
+                   class="collapsed list-group-item text-center btn btn-default">
+                    Show all
+                </a>
+            {% endif %}
+
+            <a href="#" class="list-group-item text-center btn btn-default" data-toggle="modal" data-target="#add_private_project">
+                <span>Add New Private Project</span>
+            </a>
+        </div>
+        <!-- End of Private Projects -->
+
+        <!-- Begin of Private Sprints -->
+        <div class="list-group col-md-4">
+            <div class="list-group-item active">
+                <i class="fa fa-repeat"></i>
+                Owned Sprints
+            </div>
+
+            {% set sharedSprints = [] %}
+            {% for office in app.user.ownedOffices %}
+                {% if office.sprints | length > 0 %}
+                    {% for sprint in office.sprints %}
+                        {% set sharedSprints = sharedSprints | merge([sprint]) %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+            {% set sprintsCount = sharedSprints | length %}
+
+            {% if sprintsCount == 0 %}
+                <div class="list-group-item">
+                    <h4 class="text-info text-center">Sprints will be displayed here</h4>
+                </div>
+            {% endif %}
+
+            {% for sprint in sharedSprints | reverse | slice(0, 3) %}
+                <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
+                    <i class="fa fa-repeat"></i>
+                    {{ sprint.name }}
+                </a>
+            {% endfor %}
+            <div id="connected_sprint_collapse" class="panel-collapse collapse" aria-expanded="false">
+                {% for sprint in sharedSprints | reverse | slice(3, sprintsCount) %}
+                    <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
+                        <i class="fa fa-repeat"></i>
+                        {{ sprint.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% if sprintsCount > 3 %}
+                <a data-toggle="collapse" href="#connected_sprint_collapse" aria-expanded="false"
+                   class="collapsed list-group-item text-center btn btn-default">
+                    Show all
+                </a>
+            {% endif %}
+        </div>
+        <!-- End of Shared Sprints -->
+
+    </div>
+    <!-- End of Private block -->
+
+    <!-- Begin of Shared block -->
+    <div class="row">
+
+        <!-- Begin of Shared Offices -->
+        <div class="list-group col-md-4">
+            <div class="list-group-item active">
+                <i class="fa fa-sitemap"></i>
+                Connected Offices
+            </div>
+            {% set officesCount = app.user.assignedOffices | length %}
+
+            {% if officesCount == 0 %}
+                <div class="list-group-item">
+                    <h4 class="text-info text-center">Offices will be displayed here</h4>
+                </div>
+            {% endif %}
+
+            {% for office in app.user.assignedOffices | reverse | slice(0, 3) %}
+                <a class="list-group-item" href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                    <i class="fa fa-sitemap"></i>
+                    {{ office.name }}
+                </a>
+            {% endfor %}
+            <div id="connected_office_collapse" class="panel-collapse collapse" aria-expanded="false">
+                {% for office in app.user.assignedOffices | reverse | slice(3, officesCount) %}
+                    <a class="list-group-item" href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                        <i class="fa fa-sitemap"></i>
+                        {{ office.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% if officesCount > 3 %}
+                <a data-toggle="collapse" href="#connected_office_collapse" aria-expanded="false"
+                   class="collapsed list-group-item text-center btn btn-default">
+                    Show all
+                </a>
+            {% endif %}
+        </div>
+        <!-- End of Shared Offices -->
+
+        <!-- Begin of Shared Projects -->
+        <div class="list-group col-md-4">
+            <div class="list-group-item active">
+                <i class="fa fa-briefcase"></i>
+                Connected Projects
+            </div>
+            {% set projectsCount = app.user.projects | length %}
+
+            {% if projectsCount == 0 %}
+                <div class="list-group-item">
+                    <h4 class="text-info text-center">Projects will be displayed here</h4>
+                </div>
+            {% endif %}
+
+            {% for project in app.user.projects | reverse | slice(0, 3) %}
+                <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                    <i class="fa fa-briefcase"></i>
+                    {{ project.name }}
+                </a>
+            {% endfor %}
+            <div id="connected_project_collapse" class="panel-collapse collapse" aria-expanded="false">
+                {% for project in app.user.projects | reverse | slice(3, projectsCount) %}
+                    <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                        <i class="fa fa-briefcase"></i>
+                        {{ project.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% if projectsCount > 3 %}
+                <a data-toggle="collapse" href="#connected_project_collapse" aria-expanded="false"
+                   class="collapsed list-group-item text-center btn btn-default">
+                    Show all
+                </a>
+            {% endif %}
+        </div>
+        <!-- End of Shared Projects -->
+
+        <!-- Begin of Shared Sprints -->
+        <div class="list-group col-md-4">
+            <div class="list-group-item active">
+                <i class="fa fa-repeat"></i>
+                Connected Sprints
+            </div>
+
+            {% set sharedSprints = [] %}
+            {% for office in app.user.assignedOffices %}
+                {% if office.sprints | length > 0 %}
+                    {% for sprint in office.sprints %}
+                        {% set sharedSprints = sharedSprints | merge([sprint]) %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+            {% set sprintsCount = sharedSprints | length %}
+
+            {% if sprintsCount == 0 %}
+                <div class="list-group-item">
+                    <h4 class="text-info text-center">Sprints will be displayed here</h4>
+                </div>
+            {% endif %}
+
+            {% for sprint in sharedSprints | reverse | slice(0, 3) %}
+                <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
+                    <i class="fa fa-repeat"></i>
+                    {{ sprint.name }}
+                </a>
+            {% endfor %}
+            <div id="connected_sprint_collapse" class="panel-collapse collapse" aria-expanded="false">
+                {% for sprint in sharedSprints | reverse | slice(3, sprintsCount) %}
+                    <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
+                        <i class="fa fa-repeat"></i>
+                        {{ sprint.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            {% if projectsCount > 3 %}
+                <a data-toggle="collapse" href="#connected_sprint_collapse" aria-expanded="false"
+                   class="collapsed list-group-item text-center btn btn-default">
+                    Show all
+                </a>
+            {% endif %}
+        </div>
+        <!-- End of Shared Sprints -->
+
+    </div>
+    <!-- End of Shared block -->
+
+{% endblock %}
