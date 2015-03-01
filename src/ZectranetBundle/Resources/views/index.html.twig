@@ -20,11 +20,11 @@
 								   ng-keypress="pressEnter($event, '{{ path('zectranet_user_page') }}SearchPage/')"
 								   ng-change="InputChange('{{ path('zectranet_user_page') }}SearchPage/')"
 								   data-toggle="dropdown" type="search">
-									<span class="input-group-btn">
-										<a ng-href="{{ path('zectranet_user_page') }}SearchPage/[[searchInput]]" ng-click="PreCheck();" class="btn btn-default"  >
-											<i class="fa fa-search"></i>
-										</a>
-									</span>
+							<span class="input-group-btn">
+								<a ng-href="{{ path('zectranet_user_page') }}SearchPage/[[searchInput]]" ng-click="PreCheck();" class="btn btn-default"  >
+									<i class="fa fa-search"></i>
+								</a>
+							</span>
 
 							<ul ng-if="searchInput.length >= 0" class="dropdown-menu open dropdown-search-ul" role="menu" style="width: 200%;" aria-labelledby="dLabel">
 								<li ng-if="searchCount == 0" style="overflow-x: auto;">
@@ -126,7 +126,7 @@
 							<li>
 								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_office">
 									<i class='fa fa-plus-circle'></i>
-									<span>Add New Private Office</span>
+									<span>Add New Office</span>
 								</a>
 							</li>
 						</ul>
@@ -171,6 +171,13 @@
 									{% endfor %}
 								</ul>
 							</li>
+
+							<li>
+								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_project">
+									<i class='fa fa-plus-circle'></i>
+									<span>Add New Project</span>
+								</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -186,9 +193,9 @@
 		<div class="modal fade" id="add_private_office" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header label-primary">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel" style="color: #495b79 ">
+						<h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
 							Add New Private Office
 						</h4>
 					</div>
@@ -218,9 +225,9 @@
 		<div class="modal fade" id="add_private_project" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header">
+					<div class="modal-header label-primary">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel" style="color: #495b79 ">
+						<h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5; ">
 							Add New Private Project
 						</h4>
 					</div>
