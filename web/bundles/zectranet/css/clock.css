@@ -1,0 +1,13 @@
+.clock{
+    display: inline-block;
+}
+
+.clock ul li {
+    text-shadow: 0 0 15px #00c6ff;
+}
+
+.point {
+    position: relative;
+    padding-left: 3px;
+    padding-right: 3px;
+}
