@@ -103,86 +103,86 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="Office", mappedBy="owner")
-     * @var array
+     * @var ArrayCollection
      */
     private $ownedOffices;
 
     /**
      * @ORM\ManyToMany(targetEntity="Office", mappedBy="users")
-     * @var array
+     * @var ArrayCollection
      */
     private $assignedOffices;
 
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="owner")
-     * @var array
+     * @var ArrayCollection
      */
     private $ownedTasks;
 
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="assigned")
-     * @var array
+     * @var ArrayCollection
      */
     private $assignedTasks;
 
     /**
      * @ORM\OneToMany(targetEntity="Project", mappedBy="owner")
-     * @var array
+     * @var ArrayCollection
      */
     private $ownedProjects;
 
     /**
      * @ORM\ManyToMany(targetEntity="Project", mappedBy="users")
-     * @var array
+     * @var ArrayCollection
      */
     private $projects;
 
     /**
      * @ORM\OneToMany(targetEntity="OfficePost", mappedBy="user")
-     * @var array
+     * @var ArrayCollection
      */
     private $postsOffice;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjectPost", mappedBy="user")
-     * @var array
+     * @var ArrayCollection
      */
     private $postsProject;
 
     /**
      * @ORM\OneToMany(targetEntity="TaskPost", mappedBy="user")
-     * @var array
+     * @var ArrayCollection
      */
     private $postsTask;
 
     /**
      * @ORM\OneToMany(targetEntity="Document", mappedBy="user")
-     * @var array
+     * @var ArrayCollection
      */
     private $documents;
 
     /**
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
-     * @var array
+     * @var ArrayCollection
      */
     private $notifications;
 
     /**
      * @ORM\OneToOne(targetEntity="UserSettings", mappedBy="user")
-     * @var array
+     * @var ArrayCollection
      */
     private $userSettings;
 
     /**
      * @ORM\OneToOne(targetEntity="UserSettingsNotifications", mappedBy="user")
-     * @var array
+     * @var ArrayCollection
      */
     private $userSettingsNotifications;
 
     /**
      * @ORM\OneToMany(targetEntity="DailyTimeSheet", mappedBy="user")
      * @ORM\OrderBy({"date" = "DESC"})
-     * @var array
+     * @var ArrayCollection
      */
     private $wde;
 

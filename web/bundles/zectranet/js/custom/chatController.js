@@ -1,5 +1,4 @@
-var chat = Zectranet.controller('ChatController', ['$rootScope', '$scope', '$http', '$paginator', '$modal', '$sce',
-    function($rootScope, $scope, $http, $paginator, $modal, $sce) {
-
+var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$paginator',
+    function($scope, $http, $paginator) {
         console.log('Chat Controller was loaded');
     }]);
