@@ -247,7 +247,7 @@
         <!-- END OF OFFICE USERS PANEL -->
 
         <!-- BEGIN OF CHAT PANEL -->
-        <div class="chat-panel list-group col-md-8">
+        <div class="chat-panel list-group col-md-8" ng-controller="ChatController">
             <div class="list-group-item active">
                 <i class="fa fa-comments fa-fw"></i>
                 Project Chat
@@ -474,6 +474,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
@@ -483,4 +484,5 @@
             $('#add_subtask_parent').val(subtask_id);
         }
     </script>
+    <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
 {% endblock %}
