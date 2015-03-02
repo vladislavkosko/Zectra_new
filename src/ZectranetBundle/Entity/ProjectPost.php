@@ -245,6 +245,7 @@ class ProjectPost
      * @param int $user_id
      * @param int $project_id
      * @param string $message
+     * @return ProjectPost
      */
     public static function addNewPost(EntityManager $em, $user_id, $project_id, $message) {
         $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
@@ -259,5 +260,29 @@ class ProjectPost
 
         $em->persist($post);
         $em->flush();
+        return $post;
+    }
+
+    public function getInArray() {
+        return array(
+            'id' => $this->id,
+            'message' => $this->message,
+            'posted' => $this->posted->format('Y-m-d H:i:s'),
+            'edited' => ($this->edited) ? $this->edited-> format('Y-m-d H:i:s') : null,
+            'projectid' => $this->projectid,
+            'userid' =>  $this->userid
+        );
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @param int $offset
+     * @param int $count
+     * @return array
+     */
+    public static function getPostsOffset(EntityManager $em, $project_id, $offset, $count) {
+        return $em->getRepository('ZectranetBundle:ProjectPost')
+            ->findBy(array('projectid' => $project_id), array('id' => 'DESC'), $count, $offset);
     }
 }

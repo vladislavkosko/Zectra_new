@@ -245,6 +245,7 @@ class OfficePost
      * @param int $user_id
      * @param int $office_id
      * @param string $message
+     * @return OfficePost
      */
     public static function addNewPost(EntityManager $em, $user_id, $office_id, $message) {
         $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
@@ -259,5 +260,7 @@ class OfficePost
 
         $em->persist($post);
         $em->flush();
+
+        return $post;
     }
 }
