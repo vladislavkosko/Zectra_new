@@ -29,7 +29,7 @@ security:
                 target: /
 
     access_control:
-         - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/user, roles: ROLE_USER }
-         - { path: ^/office, roles: ROLE_USER }
-         - { path: ^/project, roles: ROLE_USER }
+         #- { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         #- { path: ^/user, roles: ROLE_USER }
+         #- { path: ^/office, roles: ROLE_USER }
+         #- { path: ^/project, roles: ROLE_USER }
