@@ -2,9 +2,12 @@
 
 namespace ZectranetBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\User;
+use ZectranetBundle\Entity\TaskStatus;
 
 /**
  * Task
@@ -81,16 +84,22 @@ class Task
     /**
      * @var integer
      *
-     * @ORM\Column(name="parent_id", type="integer")
+     * @ORM\Column(name="parent_id", type="integer", nullable=true, options={"default"=null})
      */
     private $parentid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Task")
+     * @ORM\ManyToOne(targetEntity="Task", inversedBy="subtasks")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      * @var Task
      */
     protected $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="parent")
+     * @var ArrayCollection
+     */
+    private $subtasks;
 
     /**
      * @var integer
@@ -107,7 +116,7 @@ class Task
 
     /**
      * @var integer
-     * @ORM\Column(name="assigned_id", type="integer")
+     * @ORM\Column(name="assigned_id", type="integer", nullable=true, options={"default"=null})
      */
     private $assignedid;
 
@@ -153,7 +162,7 @@ class Task
     /**
      * @var integer
      *
-     * @ORM\Column(name="sprint_id", type="integer")
+     * @ORM\Column(name="sprint_id", type="integer", nullable=true, options={"default"=null})
      */
     private $sprintid;
 
@@ -182,6 +191,9 @@ class Task
      */
     public function __construct()
     {
+        $this->progress = 0;
+        $this->estimatedHours = 0;
+        $this->estimatedMinutes = 0;
         $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -755,5 +767,89 @@ class Task
     public function getOwner()
     {
         return $this->owner;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @param int $project_id
+     * @param array $parameters
+     * @return Task
+     */
+    public static function addNewTask(EntityManager $em, User $user, $project_id, $parameters) {
+        $task = new Task();
+        $task->setName($parameters['name']);
+        $task->setDescription($parameters['description']);
+        $task->setProject($em->getRepository('ZectranetBundle:Project')->find($project_id));
+        $task->setStatus($em->getRepository('ZectranetBundle:TaskStatus')->find(1));
+        $task->setOwner($user);
+        $task->setPriority($em->getRepository('ZectranetBundle:TaskPriority')->find($parameters['priority']));
+        $task->setType($em->getRepository('ZectranetBundle:TaskType')->find($parameters['type']));
+        $task->setStartdate(\DateTime::createFromFormat('Y-m-d', $parameters['startdate']));
+        $task->setEnddate(\DateTime::createFromFormat('Y-m-d', $parameters['enddate']));
+
+        $em->persist($task);
+        $em->flush();
+
+        return $task;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @param int $project_id
+     * @param array $parameters
+     * @return Task
+     */
+    public static function addNewSubTask(EntityManager $em, User $user, $project_id, $parameters) {
+        $task = new Task();
+        $task->setName($parameters['name']);
+        $task->setDescription($parameters['description']);
+        $task->setProject($em->getRepository('ZectranetBundle:Project')->find($project_id));
+        $task->setStatus($em->getRepository('ZectranetBundle:TaskStatus')->find(1));
+        $task->setOwner($user);
+        $task->setPriority($em->getRepository('ZectranetBundle:TaskPriority')->find($parameters['priority']));
+        $task->setType($em->getRepository('ZectranetBundle:TaskType')->find($parameters['type']));
+        $task->setStartdate(\DateTime::createFromFormat('Y-m-d', $parameters['startdate']));
+        $task->setEnddate(\DateTime::createFromFormat('Y-m-d', $parameters['enddate']));
+        $task->setParent($em->getRepository('ZectranetBundle:Task')->find($parameters['parent']));
+
+        $em->persist($task);
+        $em->flush();
+
+        return $task;
+    }
+
+    /**
+     * Add subtasks
+     *
+     * @param \ZectranetBundle\Entity\Notification $subtasks
+     * @return Task
+     */
+    public function addSubtask(\ZectranetBundle\Entity\Notification $subtasks)
+    {
+        $this->subtasks[] = $subtasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove subtasks
+     *
+     * @param \ZectranetBundle\Entity\Notification $subtasks
+     */
+    public function removeSubtask(\ZectranetBundle\Entity\Notification $subtasks)
+    {
+        $this->subtasks->removeElement($subtasks);
+    }
+
+    /**
+     * Get subtasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubtasks()
+    {
+        return $this->subtasks;
     }
 }

@@ -150,6 +150,12 @@ class User implements UserInterface, \Serializable
     private $postsProject;
 
     /**
+     * @ORM\OneToMany(targetEntity="TaskPost", mappedBy="user")
+     * @var array
+     */
+    private $postsTask;
+
+    /**
      * @ORM\OneToMany(targetEntity="Document", mappedBy="user")
      * @var array
      */
@@ -1104,5 +1110,38 @@ class User implements UserInterface, \Serializable
     public function getWde()
     {
         return $this->wde;
+    }
+
+    /**
+     * Add postsTask
+     *
+     * @param \ZectranetBundle\Entity\TaskPost $postsTask
+     * @return User
+     */
+    public function addPostsTask(\ZectranetBundle\Entity\TaskPost $postsTask)
+    {
+        $this->postsTask[] = $postsTask;
+
+        return $this;
+    }
+
+    /**
+     * Remove postsTask
+     *
+     * @param \ZectranetBundle\Entity\TaskPost $postsTask
+     */
+    public function removePostsTask(\ZectranetBundle\Entity\TaskPost $postsTask)
+    {
+        $this->postsTask->removeElement($postsTask);
+    }
+
+    /**
+     * Get postsTask
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPostsTask()
+    {
+        return $this->postsTask;
     }
 }

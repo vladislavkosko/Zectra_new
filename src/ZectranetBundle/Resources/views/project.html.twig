@@ -29,31 +29,36 @@
                 </div>
                 <div class="panel-body">
                     <ul id="myTab" class="nav nav-tabs" role="tablist">
-                        <li data-toggle="tooltip" data-placement="top" title="Table view">
-                            <a data-toggle="tab" class="btn" href="#table-view">
+                        <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
+                            <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
                                 <i class="fa fa-table fa-2x"></i>
                             </a>
                         </li>
-                        <li data-toggle="tooltip" data-placement="top" title="List view">
-                            <a data-toggle="tab" class="btn" href="#list-view">
+                        <li data-toggle="tooltip" data-placement="top" title="List view" role="presentation">
+                            <a data-toggle="tab" id="task-view-list" class="btn" href="#list-view" aria-controls="list-view" role="tab" aria-expanded="false">
                                 <i class="fa fa-list fa-2x"></i>
                             </a>
                         </li>
-                        <li data-toggle="tooltip" data-placement="top" title="Agile view">
-                            <a data-toggle="tab" class="btn" href="#agile-view">
+                        <li data-toggle="tooltip" data-placement="top" title="Agile view" role="presentation">
+                            <a data-toggle="tab" id="task-view-agile"  class="btn" href="#agile-view" aria-controls="agile-view" role="tab" aria-expanded="false">
                                 <i class="fa fa-th fa-2x"></i>
+                            </a>
+                        </li>
+                        <li data-toggle="tooltip" data-placement="top" title="Add new task" role="presentation">
+                            <a style="cursor: pointer" data-toggle="modal" data-target="#add_new_task" href="#">
+                                <i class="fa fa-plus fa-2x"></i>
                             </a>
                         </li>
                     </ul>
 
                     <div id="tasks-tab-content" class="tab-content">
 
-                        <div id="table-view" class="tab-pane fade in active" aria-labelledby="home-tab" role="tabpanel">
+                        <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
                             <table class="table">
                                 <thead>
                                     <tr>
                                         <th class="col-xs-1">ID</th>
-                                        <th class="col-xs-3">Name</th>
+                                        <th class="col-xs-2">Name</th>
                                         <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
                                         <th class="col-xs-1">Status</th>
                                         <th class="col-xs-1">Progress</th>
@@ -62,14 +67,23 @@
                                         <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
                                         <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
                                         <th class="col-xs-1">Assigned</th>
+                                        <th class="col-xs-1">Operations</th>
                                     </tr>
                                 </thead>
 
-                                <tbody>
-                                    {% for task in project.tasks %}
+                                {% for task in project.tasks %}
+                                    {% if task.parent == null %}
+                                        <tbody>
                                         <tr>
-                                            <td class="col-xs-1">{{ task.id }} {{ (task.type.label == 'bug') ? '.B' : '' }}</td>
-                                            <td class="col-xs-3">{{ task.name }}</td>
+                                            <td class="col-xs-1">{{ task.id }}{{ (task.type.label == 'bug') ? '.B' : '' }}</td>
+                                            <td class="col-xs-3">
+                                                {% if task.subtasks | length > 0 %}
+                                                    <a data-toggle="collapse" href="#task{{ task.id }}" aria-expanded="false" class="collapsed" style="text-decoration: none;">
+                                                        <i class="fa fa-plus"></i>
+                                                    </a>
+                                                {% endif %}
+                                                <a>{{ task.name }}</a>
+                                            </td>
                                             <td class="col-xs-1 hidden-sm hidden-xs">{{ task.priority.label }}</td>
                                             <td class="col-xs-1">{{ task.status.label }}</td>
                                             <td class="col-xs-1">{{ task.progress }}%</td>
@@ -84,19 +98,66 @@
                                                     {{ '-' }}
                                                 {% endif %}
                                             </td>
+                                            <td class="col-xs-1">
+                                                <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
+                                                   onclick="addParentToSubTask({{ task.id }})" style="width: 22px; height: 22px;">
+                                                    <i class="fa fa-code-fork"></i>
+                                                </a>
+                                                <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
+                                                   onclick="addParentToSubTask({{ task.id }})" style="width: 22px; height: 22px;">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                                <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
+                                                   onclick="addParentToSubTask({{ task.id }})" style="width: 22px; height: 22px;">
+                                                    <i class="fa fa-stack-overflow"></i>
+                                                </a>
+                                            </td>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
+                                        </tbody>
+
+                                        {% if task.subtasks | length > 0 %}
+                                            <tbody id="task{{ task.id }}" class="collapse" aria-expanded="false">
+                                            {% for i in 0..task.subtasks | length - 1%}
+                                                <tr>
+                                                    <td class="col-xs-1">
+                                                        {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                    </td>
+                                                    <td class="col-xs-3">
+                                                        {{ task.subtasks[i].name }}
+                                                    </td>
+                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].priority.label }}</td>
+                                                    <td class="col-xs-1">{{ task.subtasks[i].status.label }}</td>
+                                                    <td class="col-xs-1">{{ task.subtasks[i].progress }}%</td>
+                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].estimatedHours ~ ':' ~ task.subtasks[i].estimatedMinutes }}</td>
+                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].startdate is empty ? '-' : task.subtasks[i].startdate | date('Y-m-d') }}</td>
+                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].enddate is empty ? '-' : task.subtasks[i].enddate | date('Y-m-d') }}</td>
+                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].owner.name ~ ' ' ~ task.subtasks[i].owner.surname}}</td>
+                                                    <td class="col-xs-1">
+                                                        {% if task.subtasks[i].assigned %}
+                                                            {{ task.subtasks[i].assigned.name ~ ' ' ~ task.subtasks[i].assigned.surname}}
+                                                        {% else %}
+                                                            {{ '-' }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="col-xs-1">
+
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
                             </table>
                         </div>
 
-                        <div id="list-view" class="tab-pane fade" aria-labelledby="home-tab" role="tabpanel">
+                        <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
                             <ul class="list-group">
 
                             </ul>
                         </div>
 
-                        <div id="agile-view" class="tab-pane fade" aria-labelledby="home-tab" role="tabpanel">
+                        <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-12">
 
@@ -109,62 +170,104 @@
         </div>
     </div>
 
-    <!-- BEGIN OF CHAT PANEL -->
-    <div class="chat-panel list-group">
-        <div class="list-group-item active">
-            <i class="fa fa-comments fa-fw"></i>
-            Office Chat
+    <div class="row">
+        <!-- BEGIN OF OFFICE USERS PANEL -->
+        <div class="col-md-4">
+            <div class="list-group">
+                <div class="list-group-item active">
+                    <i class="fa fa-users"></i>
+                    Project Users
+                </div>
+                <div class="list-group-item">
+                    {% if project.users|length > 0 %}
+                        <table class="table" style="margin-bottom: 0">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in project.users %}
+                                <tr>
+                                    <td>
+                                        <a href="#" style="display: block; text-decoration: none;">
+                                            <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-circle"
+                                                 style="width: 20px; height: 20px;">
+                                            {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')'}}
+                                        </a>
+                                    </td>
+                                    <td>Manager</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% elseif project.users|length == 0 %}
+                        <h4 class="text-info text-center">Users will be displayed here</h4>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <div class="list-group-item panel-body" style="max-height: 300px;">
-            {% if project.postsProject | length == 0 %}
-                <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
-            {% endif %}
-            <ul class="chat">
-                {% for post in project.postsProject %}
-                    <li class="{% if app.user.id == post.user.id %}right{% else %}left{% endif %} clearfix">
+        <!-- END OF OFFICE USERS PANEL -->
+
+        <!-- BEGIN OF CHAT PANEL -->
+        <div class="chat-panel list-group col-md-8">
+            <div class="list-group-item active">
+                <i class="fa fa-comments fa-fw"></i>
+                Project Chat
+            </div>
+            <div class="list-group-item panel-body" style="max-height: 300px;">
+                {% if project.postsProject | length == 0 %}
+                    <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
+                {% endif %}
+                <ul class="chat">
+                    {% for post in project.postsProject %}
+                        <li class="{% if app.user.id == post.user.id %}right{% else %}left{% endif %} clearfix">
                         <span class="chat-img {% if app.user.id == post.user.id %}pull-right{% else %}pull-left{% endif %}">
                             <img src="{{ asset('') ~ 'documents/' ~ post.user.avatar }}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
                         </span>
-                        <div class="chat-body clearfix">
-                            <div class="header" style="height: 28px;">
-                                <strong class="{% if app.user.id == post.user.id %}pull-right{% else %}pull-left{% endif %} primary-font">
-                                    {{ post.user.name ~ ' ' ~ post.user.surname ~ ' (' ~ post.user.username ~ ')' }}
-                                </strong>
-                                <small class="{% if app.user.id == post.user.id %}pull-left{% else %}pull-right{% endif %} text-muted">
-                                    <i class="fa fa-clock-o fa-fw"></i>
-                                    Posted on {{ post.posted|date('Y-m-d h:i:s') }}
-                                    {% if post.edited != null %}
-                                        <i class="fa fa-edit"></i>
-                                    {% endif %}
-                                </small>
-                            </div>
+                            <div class="chat-body clearfix">
+                                <div class="header" style="height: 28px;">
+                                    <strong class="{% if app.user.id == post.user.id %}pull-right{% else %}pull-left{% endif %} primary-font">
+                                        {{ post.user.name ~ ' ' ~ post.user.surname ~ ' (' ~ post.user.username ~ ')' }}
+                                    </strong>
+                                    <small class="{% if app.user.id == post.user.id %}pull-left{% else %}pull-right{% endif %} text-muted">
+                                        <i class="fa fa-clock-o fa-fw"></i>
+                                        Posted on {{ post.posted|date('Y-m-d h:i:s') }}
+                                        {% if post.edited != null %}
+                                            <i class="fa fa-edit"></i>
+                                        {% endif %}
+                                    </small>
+                                </div>
                             <pre style="white-space: pre-line;">
                                 <span>
                                     {{ post.message }}
                                 </span>
                             </pre>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="list-group-item">
-            <form class="input-group input-group-lg" action="{{ path('zectranet_project_add_post', { 'project_id': project.id  }) }}" method="post">
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="list-group-item">
+                <form class="input-group input-group-lg" action="{{ path('zectranet_project_add_post', { 'project_id': project.id  }) }}" method="post">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" style="height: 65px;">
                         <i class="fa fa-file"></i>
                     </button>
                 </span>
-                <textarea name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;"></textarea>
+                    <textarea name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;"></textarea>
                 <span class="input-group-btn">
                     <button class="btn btn-primary" name="subscribe" type="submit" style="height: 65px; font-size:15px;">
                         <span>Post</span>
                     </button>
                 </span>
-            </form>
+                </form>
+            </div>
         </div>
+        <!-- END OF CHAT PANEL -->
     </div>
-    <!-- END OF CHAT PANEL -->
+
 {% endblock %}
 
 {% block modals %}
@@ -195,6 +298,141 @@
             </div>
         </div>
         <!-- End of Delete Private Project Modal -->
+
+        <!-- Begin of Add Task Modal -->
+        <div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header label-primary">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                            Add New Task
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <form class="form-horizontal" action="{{ path('zectranet_project_add_task', { 'project_id': project.id }) }}" method="post">
+                                        <div class="form-group">
+                                            <label for="add_task_name" class="control-label">Task Name:</label>
+                                            <input type="text" id="add_task_name" class="form-control" name="name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_task_description" class="control-label">Task Description:</label>
+                                            <input type="text" id="add_task_description" class="form-control" name="description" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_task_type" class="control-label">Task Type:</label>
+                                            <select id="add_task_type" class="form-control" name="type" required>
+                                                {% for type in task_types %}
+                                                    <option value="{{ type.id }}">
+                                                        {{ type.label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_task_priority" class="control-label">Task Priority:</label>
+                                            <select id="add_task_priority" class="form-control" name="priority" required>
+                                                {% for priority in task_priority %}
+                                                    <option value="{{ priority.id }}">
+                                                        {{ priority.label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_task_startdate" class="control-label">Task Start Date:</label>
+                                            <input type="date" id="add_task_startdate" class="form-control" name="startdate" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_task_enddate" class="control-label">Task End Date:</label>
+                                            <input type="date" id="add_task_enddate" class="form-control" name="enddate" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Add</button>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Add Task Modal -->
+
+        <!-- Begin of Add SubTask Modal -->
+        <div class="modal fade" id="add_new_subtask" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header label-primary">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                            Add New SubTask
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <form class="form-horizontal" action="{{ path('zectranet_project_add_subtask', { 'project_id': project.id }) }}" method="post">
+                                        <div class="form-group">
+                                            <label for="add_subtask_name" class="control-label">Task Name:</label>
+                                            <input type="text" id="add_subtask_name" class="form-control" name="name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_subtask_description" class="control-label">Task Description:</label>
+                                            <input type="text" id="add_subtask_description" class="form-control" name="description" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_subtask_type" class="control-label">Task Type:</label>
+                                            <select id="add_subtask_type" class="form-control" name="type" required>
+                                                {% for type in task_types %}
+                                                    <option value="{{ type.id }}">
+                                                        {{ type.label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_subtask_priority" class="control-label">Task Priority:</label>
+                                            <select id="add_subtask_priority" class="form-control" name="priority" required>
+                                                {% for priority in task_priority %}
+                                                    <option value="{{ priority.id }}">
+                                                        {{ priority.label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_subtask_startdate" class="control-label">Task Start Date:</label>
+                                            <input type="date" id="add_subtask_startdate" class="form-control" name="startdate" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_subtask_enddate" class="control-label">Task End Date:</label>
+                                            <input type="date" id="add_subtask_enddate" class="form-control" name="enddate" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_subtask_parent" class="control-label">Parent Task ID:</label>
+                                            <input type="text" id="add_subtask_parent" class="form-control" readonly name="parent" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Add</button>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Add SubTask Modal -->
+
     {% endif %}
 {% endblock %}
 
@@ -203,6 +441,10 @@
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-        })
+        });
+
+        function addParentToSubTask(subtask_id) {
+            $('#add_subtask_parent').val(subtask_id);
+        }
     </script>
 {% endblock %}

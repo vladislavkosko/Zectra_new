@@ -76,3 +76,15 @@ zectranet_project_add_post:
     defaults: { _controller: ZectranetBundle:Project:addPost }
     requirements:
         project_id: \d+
+
+zectranet_project_add_task:
+    pattern: /project/{project_id}/addNewTask
+    defaults: { _controller: ZectranetBundle:Project:addTask }
+    requirements:
+        project_id: \d+
+
+zectranet_project_add_subtask:
+    pattern: /project/{project_id}/addNewSubTask
+    defaults: { _controller: ZectranetBundle:Project:addSubTask }
+    requirements:
+        project_id: \d+

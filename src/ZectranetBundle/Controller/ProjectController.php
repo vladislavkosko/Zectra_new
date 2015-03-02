@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\ProjectPost;
+use ZectranetBundle\Entity\Task;
 use ZectranetBundle\Entity\User;
 
 class ProjectController extends Controller
@@ -23,9 +24,15 @@ class ProjectController extends Controller
      */
     public function indexAction($project_id)
     {
-        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')
-            ->find($project_id);
-        return $this->render('@Zectranet/project.html.twig', array('project' => $project));
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+        $task_priority = $this->getDoctrine()->getRepository('ZectranetBundle:TaskPriority')->findAll();
+        $task_types = $this->getDoctrine()->getRepository('ZectranetBundle:TaskType')->findAll();
+        return $this->render('@Zectranet/project.html.twig', array(
+            'project' => $project,
+            'task_priority' => $task_priority,
+            'task_types' => $task_types
+            )
+        );
     }
 
     /**
@@ -49,6 +56,7 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @param int $project_id
+     * @return RedirectResponse
      */
     public function deleteAction(Request $request, $project_id) {
         /** @var EntityManager $em */
@@ -85,6 +93,61 @@ class ProjectController extends Controller
             $user_id = $this->getUser()->getId();
             ProjectPost::addNewPost($em, $user_id, $project_id, $message);
         }
+        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+    }
+
+    /**
+     * @Route("/project/{project_id}/addNewTask")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $project_id
+     * @return RedirectResponse
+     */
+    public function addTaskAction(Request $request, $project_id) {
+        $parameters = array(
+            'name' => $request->request->get('name'),
+            'description' => $request->request->get('description'),
+            'type' => $request->request->get('type'),
+            'priority' => $request->request->get('priority'),
+            'startdate' => $request->request->get('startdate'),
+            'enddate' => $request->request->get('enddate'),
+        );
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        Task::addNewTask($em, $user, $project_id, $parameters);
+
+        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+    }
+
+    /**
+     * @Route("/project/{project_id}/addNewSubTask")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $project_id
+     * @return RedirectResponse
+     */
+    public function addSubTaskAction(Request $request, $project_id) {
+        $parameters = array(
+            'name' => $request->request->get('name'),
+            'description' => $request->request->get('description'),
+            'type' => $request->request->get('type'),
+            'priority' => $request->request->get('priority'),
+            'startdate' => $request->request->get('startdate'),
+            'enddate' => $request->request->get('enddate'),
+            'parent' => $request->request->get('parent')
+        );
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        Task::addNewSubTask($em, $user, $project_id, $parameters);
+
         return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
     }
 }
