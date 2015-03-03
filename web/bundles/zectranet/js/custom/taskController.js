@@ -3,17 +3,13 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         console.log('Task Controller was loaded');
 
         $scope.tasks = null;
-        $scope.task = null;
+        $scope.tasks = [];
 
         $scope.urlGetTasks = JSON_URLS.getTasks;
 
-        $scope.addTask = function(taskName,taskDescription,taskType,taskPriority,taskStartDate,taskEndDate){
-            console.log(taskName);
-            console.log(taskDescription);
-            console.log(taskType);
-            console.log(taskPriority);
-            console.log(taskStartDate);
-            console.log(taskEndDate);
+        $scope.addTask = function (){
+            console.log($scope.task);
+
         };
 
         $scope.getTasks = function () {
