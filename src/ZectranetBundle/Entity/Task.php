@@ -863,7 +863,10 @@ class Task
             'estimatedHours' => $this->getEstimatedHours(),
             'estimatedMinutes' => $this->getEstimatedMinutes(),
             'ownerId' => $this->getOwnerid(),
-            'owner' => $this->getOwner()->getInArray()
+            'owner' => $this->getOwner()->getInArray(),
+            'status' => $this->getStatus()->getInArray(),
+            'type' => $this->getType()->getInArray(),
+            'prority' => $this->getPriority()->getInArray()
         );
     }
 }

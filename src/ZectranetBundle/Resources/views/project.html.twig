@@ -168,7 +168,7 @@
 
                                         <div class="list-group">
                                             <div class="row" ng-repeat="task in tasks">
-                                                <div class="col-md-3">
+                                                <div class="col-md-12">
                                                     <span ng-if="task.status.label == 'story'">
                                                         <a class="list-group-item" style="margin-bottom: 5px;"
                                                            ng-class="{
@@ -183,12 +183,12 @@
                                                             <p class="list-group-item-text">
                                                                 [[ task.description ]]
                                                             </p>
-                                                            <p style="padding-top:5px;">
+                                                            <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
                                                                 <span class="label label-info" style="float:left;">0</span>
-                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                                <img class="img-circle" alt="Avatar" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                                                             </p>
                                                         </a>
-                                                        {% if task.subtasks | length > 0 %}
+                                                        {#{% if task.subtasks | length > 0 %}
                                                             {% for i in 0..task.subtasks | length - 1 %}
                                                                 <a class="list-group-item
                                                                     {% if task.subtasks[i].priority.label == 'low' %}
@@ -214,6 +214,7 @@
                                                                 </a>
                                                             {% endfor %}
                                                         {% endif %}
+                                                        #}
                                                     </span>
                                                 </div>
                                             </div>

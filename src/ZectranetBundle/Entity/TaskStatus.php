@@ -37,6 +37,18 @@ class TaskStatus
      * @var array
      */
     private $tasks;
+
+    /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'label' => $this->getLabel(),
+            'color' => $this->getColor(),
+        );
+    }
+
     /**
      * Constructor
      */

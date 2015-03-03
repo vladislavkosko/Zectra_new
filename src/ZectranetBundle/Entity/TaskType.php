@@ -33,6 +33,17 @@ class TaskType
     private $color;
 
     /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'label' => $this->getLabel(),
+            'color' => $this->getColor(),
+        );
+    }
+
+    /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="type")
      * @var array
      */
