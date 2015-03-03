@@ -507,7 +507,7 @@
                         <i class="fa fa-file"></i>
                     </button>
                 </span>
-                    <textarea name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-model="message"></textarea>
+                    <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
                 <span class="input-group-btn">
                     <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
                         <span>Post</span>
@@ -550,7 +550,7 @@
         <!-- End of Delete Private Project Modal -->
 
         <!-- Begin of Add Task Modal -->
-        <div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="TaskController" >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header label-primary">
@@ -566,15 +566,15 @@
                                     <form class="form-horizontal" action="{{ path('zectranet_project_add_task', { 'project_id': project.id }) }}" method="post">
                                         <div class="form-group">
                                             <label for="add_task_name" class="control-label">Task Name:</label>
-                                            <input type="text" id="add_task_name" class="form-control" name="name" required>
+                                            <input type="text" id="add_task_name" class="form-control" name="name" ng-model="task.Name" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="add_task_description" class="control-label">Task Description:</label>
-                                            <input type="text" id="add_task_description" class="form-control" name="description" required>
+                                            <input type="text" id="add_task_description" class="form-control" name="description" ng-model="task.Description" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="add_task_type" class="control-label">Task Type:</label>
-                                            <select id="add_task_type" class="form-control" name="type" required>
+                                            <select id="add_task_type" class="form-control" name="type" ng-model="task.Type" required>
                                                 {% for type in task_types %}
                                                     <option value="{{ type.id }}">
                                                         {{ type.label }}
@@ -584,7 +584,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="add_task_priority" class="control-label">Task Priority:</label>
-                                            <select id="add_task_priority" class="form-control" name="priority" required>
+                                            <select id="add_task_priority" class="form-control" name="priority" ng-model="task.Priority" required>
                                                 {% for priority in task_priority %}
                                                     <option value="{{ priority.id }}">
                                                         {{ priority.label }}
@@ -594,14 +594,14 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="add_task_startdate" class="control-label">Task Start Date:</label>
-                                            <input type="date" id="add_task_startdate" class="form-control" name="startdate" required>
+                                            <input type="date" id="add_task_startdate" class="form-control" name="startdate" ng-model="task.StartDate" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="add_task_enddate" class="control-label">Task End Date:</label>
-                                            <input type="date" id="add_task_enddate" class="form-control" name="enddate" required>
+                                            <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
                                         </div>
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Add</button>
+                                            <button type="submit" class="btn btn-primary" ng-click="addTask(task)">Add</button>
                                             <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
                                         </div>
                                     </form>
