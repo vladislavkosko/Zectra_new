@@ -3,6 +3,7 @@
 {% block title %}{{ project.name }}{% endblock %}
 
 {% block body %}
+
     <div class="page-header">
         <i class="fa fa-briefcase fa-2x"></i>
         <span style="font-size: 25px;">{{ project.name }}</span>
@@ -20,7 +21,8 @@
         <!-- End of Project controll buttons -->
     </div>
 
-    <div class="row">
+    <!-- Begin of Tasks -->
+    <div class="row" ng-controller="TaskController">
         <div class="col-md-12">
             <div class="panel panel-default list-group">
                 <div class="list-group-item active">
@@ -51,25 +53,24 @@
                         </li>
                     </ul>
 
-                    <div id="tasks-tab-content" class="tab-content" ng-controller="TaskController" ng-init="getTasks()">
+                    <div id="tasks-tab-content" class="tab-content" ng-init="getTasks()">
 
                         <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
                             <table class="table" >
-                                <div ng-repeat="task in tasks"></div>
                                 <thead>
-                                    <tr>
-                                        <th class="col-xs-1">ID</th>
-                                        <th class="col-xs-2">Name</th>
-                                        <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
-                                        <th class="col-xs-1">Status</th>
-                                        <th class="col-xs-1">Progress</th>
-                                        <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
-                                        <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
-                                        <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
-                                        <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
-                                        <th class="col-xs-1">Assigned</th>
-                                        <th class="col-xs-1">Operations</th>
-                                    </tr>
+                                <tr>
+                                    <th class="col-xs-1">ID</th>
+                                    <th class="col-xs-2">Name</th>
+                                    <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
+                                    <th class="col-xs-1">Status</th>
+                                    <th class="col-xs-1">Progress</th>
+                                    <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
+                                    <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
+                                    <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
+                                    <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
+                                    <th class="col-xs-1">Assigned</th>
+                                    <th class="col-xs-1">Operations</th>
+                                </tr>
                                 </thead>
 
                                 {% for task in project.tasks %}
@@ -162,16 +163,69 @@
                             <div class="col-md-12">
 
                                 <div class="row">
-                                    <div class="col-md-3 col-sm-6">
+                                    <div class="col-md-3">
                                         <div class="page-header text-center">Story</div>
+
+                                        <div class="list-group">
+                                            <div class="row" ng-repeat="task in tasks">
+                                                <div class="col-md-3">
+                                                    <span ng-if="task.status.label == 'story'">
+                                                        <a class="list-group-item" style="margin-bottom: 5px;"
+                                                           ng-class="{
+                                                                'local-red': task.priority.label == 'high',
+                                                                'local-yellow': task.priority.label == 'medium',
+                                                                'local-green': task.priority.label == 'low'
+                                                            }">
+                                                            <h4 class="list-group-item-heading">
+                                                                <span style="color: black;">[[ task.id ]]&nbsp;</span>
+                                                                [[ task.name ]]
+                                                            </h4>
+                                                            <p class="list-group-item-text">
+                                                                [[ task.description ]]
+                                                            </p>
+                                                            <p style="padding-top:5px;">
+                                                                <span class="label label-info" style="float:left;">0</span>
+                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            </p>
+                                                        </a>
+                                                        {% if task.subtasks | length > 0 %}
+                                                            {% for i in 0..task.subtasks | length - 1 %}
+                                                                <a class="list-group-item
+                                                                    {% if task.subtasks[i].priority.label == 'low' %}
+                                                                            {{ ' local-green ' }}
+                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
+                                                                            {{ ' local-yellow ' }}
+                                                                    {% else %}
+                                                                            {{ ' local-red ' }}
+                                                                    {% endif %}" style="margin-bottom: 5px;">
+                                                                    <h4 class="list-group-item-heading">
+                                                                        <span style="color: black;">
+                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                                        </span>
+                                                                        {{ task.subtasks[i].name }}
+                                                                    </h4>
+                                                                    <p class="list-group-item-text">
+                                                                        {{ task.subtasks[i].description }}
+                                                                    </p>
+                                                                    <p style="padding-top:5px;">
+                                                                        <span class="label label-info" style="float:left;">0</span>
+                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                                    </p>
+                                                                </a>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3 col-sm-6">
+                                    <div class="col-md-3">
                                         <div class="page-header text-center">Todo</div>
                                     </div>
-                                    <div class="col-md-3 col-sm-6">
+                                    <div class="col-md-3">
                                         <div class="page-header text-center">In-progress</div>
                                     </div>
-                                    <div class="col-md-3 col-sm-6">
+                                    <div class="col-md-3">
                                         <div class="page-header text-center">Done</div>
                                     </div>
                                 </div>
@@ -180,67 +234,18 @@
                                     {% for task in project.tasks %}
                                         <div class="row">
                                             {% if task.parentid == null %}
-                                                <div class="col-md-3 col-sm-6">
-                                                    {% if task.status.label == 'story' %}
-                                                        <a class="list-group-item
-                                                            {% if task.priority.label == 'low' %}
-                                                                {{ ' local-green ' }}
-                                                            {% elseif task.priority.label == 'medium' %}
-                                                                {{ ' local-yellow ' }}
-                                                            {% else %}
-                                                                {{ ' local-red ' }}
-                                                            {% endif %}" style="margin-bottom: 5px;">
-                                                            <h4 class="list-group-item-heading">
-                                                                <span style="color: black;">{{ task.id }}&nbsp;</span>
-                                                                {{ task.name }}
-                                                            </h4>
-                                                            <p class="list-group-item-text">
-                                                                {{ task.description }}
-                                                            </p>
-                                                            <p style="padding-top:5px;">
-                                                                <span class="label label-info" style="float:left;">0</span>
-                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            </p>
-                                                        </a>
-                                                        {% if task.subtasks | length > 0 %}
-                                                            {% for i in 0..task.subtasks | length - 1 %}
-                                                                <a class="list-group-item
-                                                                    {% if task.subtasks[i].priority.label == 'low' %}
-                                                                        {{ ' local-green ' }}
-                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
-                                                                        {{ ' local-yellow ' }}
-                                                                    {% else %}
-                                                                        {{ ' local-red ' }}
-                                                                    {% endif %}" style="margin-bottom: 5px;">
-                                                                    <h4 class="list-group-item-heading">
-                                                                        <span style="color: black;">
-                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                                        </span>
-                                                                        {{ task.subtasks[i].name }}
-                                                                    </h4>
-                                                                    <p class="list-group-item-text">
-                                                                        {{ task.subtasks[i].description }}
-                                                                    </p>
-                                                                    <p style="padding-top:5px;">
-                                                                        <span class="label label-info" style="float:left;">0</span>
-                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                                    </p>
-                                                                </a>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </div>
 
-                                                <div class="col-md-3 col-sm-6">
+
+                                                <div class="col-md-3">
                                                     {% if task.status.label == 'todo' %}
                                                         <a class="list-group-item
-                                                            {% if task.priority.label == 'low' %}
-                                                                {{ ' local-green ' }}
-                                                            {% elseif task.priority.label == 'medium' %}
-                                                                {{ ' local-yellow ' }}
-                                                            {% else %}
-                                                                {{ ' local-red ' }}
-                                                            {% endif %}" style="margin-bottom: 5px;">
+                                                                {% if task.priority.label == 'low' %}
+                                                                    {{ ' local-green ' }}
+                                                                {% elseif task.priority.label == 'medium' %}
+                                                                    {{ ' local-yellow ' }}
+                                                                {% else %}
+                                                                    {{ ' local-red ' }}
+                                                                {% endif %}" style="margin-bottom: 5px;">
                                                             <h4 class="list-group-item-heading">
                                                                 <span style="color: black;">{{ task.id }}&nbsp;</span>
                                                                 {{ task.name }}
@@ -256,17 +261,17 @@
                                                         {% if task.subtasks | length > 0 %}
                                                             {% for i in 0..task.subtasks | length - 1 %}
                                                                 <a class="list-group-item
-                                                                    {% if task.subtasks[i].priority.label == 'low' %}
-                                                                        {{ ' local-green ' }}
-                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
-                                                                        {{ ' local-yellow ' }}
-                                                                    {% else %}
-                                                                        {{ ' local-red ' }}
-                                                                    {% endif %}" style="margin-bottom: 5px;">
+                                                                        {% if task.subtasks[i].priority.label == 'low' %}
+                                                                            {{ ' local-green ' }}
+                                                                        {% elseif task.subtasks[i].priority.label == 'medium' %}
+                                                                            {{ ' local-yellow ' }}
+                                                                        {% else %}
+                                                                            {{ ' local-red ' }}
+                                                                        {% endif %}" style="margin-bottom: 5px;">
                                                                     <h4 class="list-group-item-heading">
-                                                                        <span style="color: black;">
-                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                                        </span>
+                                                                            <span style="color: black;">
+                                                                                {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                                            </span>
                                                                         {{ task.subtasks[i].name }}
                                                                     </h4>
                                                                     <p class="list-group-item-text">
@@ -282,16 +287,16 @@
                                                     {% endif %}
                                                 </div>
 
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3">
                                                     {% if task.status.label == 'in-progress' %}
                                                         <a class="list-group-item
-                                                            {% if task.priority.label == 'low' %}
-                                                                {{ ' local-green ' }}
-                                                            {% elseif task.priority.label == 'medium' %}
-                                                                {{ ' local-yellow ' }}
-                                                            {% else %}
-                                                                {{ ' local-red ' }}
-                                                            {% endif %}" style="margin-bottom: 5px;">
+                                                                {% if task.priority.label == 'low' %}
+                                                                    {{ ' local-green ' }}
+                                                                {% elseif task.priority.label == 'medium' %}
+                                                                    {{ ' local-yellow ' }}
+                                                                {% else %}
+                                                                    {{ ' local-red ' }}
+                                                                {% endif %}" style="margin-bottom: 5px;">
                                                             <h4 class="list-group-item-heading">
                                                                 <span style="color: black;">{{ task.id }}&nbsp;</span>
                                                                 {{ task.name }}
@@ -307,17 +312,17 @@
                                                         {% if task.subtasks | length > 0 %}
                                                             {% for i in 0..task.subtasks | length - 1 %}
                                                                 <a class="list-group-item
-                                                                    {% if task.subtasks[i].priority.label == 'low' %}
-                                                                        {{ ' local-green ' }}
-                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
-                                                                        {{ ' local-yellow ' }}
-                                                                    {% else %}
-                                                                        {{ ' local-red ' }}
-                                                                    {% endif %}" style="margin-bottom: 5px;">
+                                                                        {% if task.subtasks[i].priority.label == 'low' %}
+                                                                            {{ ' local-green ' }}
+                                                                        {% elseif task.subtasks[i].priority.label == 'medium' %}
+                                                                            {{ ' local-yellow ' }}
+                                                                        {% else %}
+                                                                            {{ ' local-red ' }}
+                                                                        {% endif %}" style="margin-bottom: 5px;">
                                                                     <h4 class="list-group-item-heading">
-                                                                        <span style="color: black;">
-                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                                        </span>
+                                                                            <span style="color: black;">
+                                                                                {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                                            </span>
                                                                         {{ task.subtasks[i].name }}
                                                                     </h4>
                                                                     <p class="list-group-item-text">
@@ -333,16 +338,16 @@
                                                     {% endif %}
                                                 </div>
 
-                                                <div class="col-md-3 col-sm-6">
+                                                <div class="col-md-3">
                                                     {% if task.status.label == 'done' %}
                                                         <a class="list-group-item
-                                                            {% if task.priority.label == 'low' %}
-                                                                {{ ' local-green ' }}
-                                                            {% elseif task.priority.label == 'medium' %}
-                                                                {{ ' local-yellow ' }}
-                                                            {% else %}
-                                                                {{ ' local-red ' }}
-                                                            {% endif %}" style="margin-bottom: 5px;">
+                                                                {% if task.priority.label == 'low' %}
+                                                                    {{ ' local-green ' }}
+                                                                {% elseif task.priority.label == 'medium' %}
+                                                                    {{ ' local-yellow ' }}
+                                                                {% else %}
+                                                                    {{ ' local-red ' }}
+                                                                {% endif %}" style="margin-bottom: 5px;">
                                                             <h4 class="list-group-item-heading">
                                                                 <span style="color: black;">{{ task.id }}&nbsp;</span>
                                                                 {{ task.name }}
@@ -358,17 +363,17 @@
                                                         {% if task.subtasks | length > 0 %}
                                                             {% for i in 0..task.subtasks | length - 1 %}
                                                                 <a class="list-group-item
-                                                                    {% if task.subtasks[i].priority.label == 'low' %}
-                                                                        {{ ' local-green ' }}
-                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
-                                                                        {{ ' local-yellow ' }}
-                                                                    {% else %}
-                                                                        {{ ' local-red ' }}
-                                                                    {% endif %}" style="margin-bottom: 5px;">
+                                                                        {% if task.subtasks[i].priority.label == 'low' %}
+                                                                            {{ ' local-green ' }}
+                                                                        {% elseif task.subtasks[i].priority.label == 'medium' %}
+                                                                            {{ ' local-yellow ' }}
+                                                                        {% else %}
+                                                                            {{ ' local-red ' }}
+                                                                        {% endif %}" style="margin-bottom: 5px;">
                                                                     <h4 class="list-group-item-heading">
-                                                                        <span style="color: black;">
-                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                                        </span>
+                                                                            <span style="color: black;">
+                                                                                {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                                            </span>
                                                                         {{ task.subtasks[i].name }}
                                                                     </h4>
                                                                     <p class="list-group-item-text">
@@ -390,147 +395,13 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <!-- BEGIN OF OFFICE USERS PANEL -->
-        <div class="col-md-4">
-            <div class="list-group">
-                <div class="list-group-item active">
-                    <i class="fa fa-users"></i>
-                    Project Users
-                </div>
-                <div class="list-group-item">
-                    {% if project.users|length > 0 %}
-                        <table class="table" style="margin-bottom: 0">
-                            <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Role</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for user in project.users %}
-                                <tr>
-                                    <td>
-                                        <a href="#" style="display: block; text-decoration: none;">
-                                            <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-circle"
-                                                 style="width: 20px; height: 20px;">
-                                            {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')'}}
-                                        </a>
-                                    </td>
-                                    <td>Manager</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {% elseif project.users|length == 0 %}
-                        <h4 class="text-info text-center">Users will be displayed here</h4>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <!-- END OF OFFICE USERS PANEL -->
-
-        <!-- BEGIN OF CHAT PANEL -->
-        <div class="chat-panel list-group col-md-8" ng-controller="ChatController" ng-init="getPosts(0, 100)">
-            <div class="list-group-item active">
-                <i class="fa fa-comments fa-fw"></i>
-                Project Chat
-            </div>
-            <div class="list-group-item panel-body" style="max-height: 300px;">
-                {% if project.postsProject | length == 0 %}
-                    <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
-                {% endif %}
-                <ul class="chat">
-                    <li ng-repeat="post in posts" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
-                        <span class="chat-img"
-                              ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }"
-                              ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + post.user.avatar)">
-                            <img src="#" ng-src="[[avatar]]" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
-                        </span>
-                        <div class="chat-body clearfix">
-                            <div class="header" style="height: 28px;">
-                                <strong class="primary-font"
-                                        ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }">
-                                    [[post.user.name + ' ' + post.user.surname + ' (' + post.user.username + ')' ]]
-                                </strong>
-
-                                <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == post.user.id, 'pull-right': {{ app.user.id }} != post.user.id }">
-                                    <i class="fa fa-clock-o fa-fw"></i>
-                                    Posted on [[post.posted]]
-                                    <i ng-if="post.edited" class="fa fa-edit"></i>
-                                </small>
-                            </div>
-                            <pre style="white-space: pre-line;">
-                                <span>
-                                    [[ post.message ]]
-                                </span>
-                            </pre>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="list-group-item" >
-                <form class="input-group input-group-lg">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" style="height: 65px;">
-                        <i class="fa fa-file"></i>
-                    </button>
-                </span>
-                    <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
-                        <span>Post</span>
-                    </button>
-                </span>
-                </form>
-                <div id="slide-down-menu-screenshots" style="display: none;">
-                    <div id="div-screenshot" style="display: none; width: auto;height: auto;">
-
-                    </div>
-                    <button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="InsertScreenshotsInChat()" style="width: 100%; height: 40px; margin-top: 10px;">Insert Screenshots in chat</button>
-                </div>
-            </div>
-        </div>
-        <!-- END OF CHAT PANEL -->
-    </div>
-{% endblock %}
-
-{% block modals %}
-    {{ parent() }}
-    {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
-        <!-- Begin of Delete Private Project Modal -->
-        <div class="modal fade" id="delete_private_project" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header label-danger">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-                            Delete Project
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <div class="header">
-                                <h3 class="text-center">Are you really want to delete this project?</h3><br>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <a class="btn btn-danger" href="{{ path('zectranet_delete_project', {'project_id': project.id }) }}">Delete</a>
-                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of Delete Private Project Modal -->
 
         <!-- Begin of Add Task Modal -->
-        <div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true" ng-controller="TaskController" >
+        <div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header label-primary">
@@ -539,11 +410,12 @@
                             Add New Task
                         </h4>
                     </div>
+
                     <div class="modal-body">
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-10 col-md-offset-1">
-                                    <form class="form-horizontal" >
+                                    <form class="form-horizontal" action="{{ path('zectranet_project_add_task', { 'project_id': project.id }) }}" method="post">
                                         <div class="form-group">
                                             <label for="add_task_name" class="control-label">Task Name:</label>
                                             <input type="text" id="add_task_name" class="form-control" name="name" ng-model="task.Name" required>
@@ -581,7 +453,7 @@
                                             <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
                                         </div>
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addTask(task)">Add</button>
+                                            <button type="button" class="btn btn-primary" ng-click="addTask(task)">Add</button>
                                             <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
                                         </div>
                                     </form>
@@ -589,6 +461,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -663,7 +536,143 @@
         </div>
         <!-- End of Add SubTask Modal -->
 
-    {% endif %}
+    </div>
+    <!-- End of Tasks -->
+
+    <div class="row">
+
+        <!-- BEGIN OF OFFICE USERS PANEL -->
+        <div class="col-md-4">
+            <div class="list-group">
+                <div class="list-group-item active">
+                    <i class="fa fa-users"></i>
+                    Project Users
+                </div>
+                <div class="list-group-item">
+                    {% if project.users|length > 0 %}
+                        <table class="table" style="margin-bottom: 0">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in project.users %}
+                                <tr>
+                                    <td>
+                                        <a href="#" style="display: block; text-decoration: none;">
+                                            <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-circle"
+                                                 style="width: 20px; height: 20px;">
+                                            {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')'}}
+                                        </a>
+                                    </td>
+                                    <td>Manager</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% elseif project.users|length == 0 %}
+                        <h4 class="text-info text-center">Users will be displayed here</h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- END OF OFFICE USERS PANEL -->
+
+        <!-- BEGIN OF CHAT PANEL -->
+        <div class="chat-panel list-group col-md-8" ng-controller="ChatController" ng-init="getPosts(0, 100)">
+            <div class="list-group-item active">
+                <i class="fa fa-comments fa-fw"></i>
+                Project Chat
+            </div>
+            <div class="list-group-item panel-body" style="max-height: 300px;">
+                {% if project.postsProject | length == 0 %}
+                    <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
+                {% endif %}
+                <ul class="chat">
+                    <li ng-repeat="post in posts" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
+                            <span class="chat-img"
+                                  ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }"
+                                  ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + post.user.avatar)">
+                                <img src="#" ng-src="[[avatar]]" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
+                            </span>
+                        <div class="chat-body clearfix">
+                            <div class="header" style="height: 28px;">
+                                <strong class="primary-font"
+                                        ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }">
+                                    [[post.user.name + ' ' + post.user.surname + ' (' + post.user.username + ')' ]]
+                                </strong>
+
+                                <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == post.user.id, 'pull-right': {{ app.user.id }} != post.user.id }">
+                                    <i class="fa fa-clock-o fa-fw"></i>
+                                    Posted on [[post.posted]]
+                                    <i ng-if="post.edited" class="fa fa-edit"></i>
+                                </small>
+                            </div>
+                                <pre style="white-space: pre-line;">
+                                    <span>
+                                        [[ post.message ]]
+                                    </span>
+                                </pre>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="list-group-item" >
+                <form class="input-group input-group-lg">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" style="height: 65px;">
+                            <i class="fa fa-file"></i>
+                        </button>
+                    </span>
+                    <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
+                            <span>Post</span>
+                        </button>
+                    </span>
+                </form>
+            </div>
+        </div>
+        <!-- END OF CHAT PANEL -->
+
+        {% block projectModals %}
+            {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
+                <!-- Begin of Delete Private Project Modal -->
+                <div class="modal fade" id="delete_private_project" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header label-danger">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                                    Delete Project
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="header">
+                                        <h3 class="text-center">Are you really want to delete this project?</h3><br>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <a class="btn btn-danger" href="{{ path('zectranet_delete_project', {'project_id': project.id }) }}">Delete</a>
+                                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of Delete Private Project Modal -->
+            {% endif %}
+        {% endblock %}
+
+    </div>
+
+{% endblock %}
+
+{% block modals %}
+    {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
@@ -677,20 +686,6 @@
         function addParentToSubTask(subtask_id) {
             $('#add_subtask_parent').val(subtask_id);
         }
-
-        var DeleteLastScreenshot = function() {
-            var img;
-            setTimeout(function() {
-                img = $('.img-screenshot');
-                console.log(img);
-                return img;
-            },100);
-
-            if($('.img-screenshot').length == 1) {
-                $('#slide-down-menu-screenshots').fadeOut(500);
-
-            }
-        };
 
         JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': project.id }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': project.id }) }}";

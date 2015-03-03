@@ -20,4 +20,8 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     $scope.tasks = response.Tasks;
                 });
         };
+
+        $scope.generateAsset = function (asset, url) {
+            return asset + url;
+        };
     }]);
