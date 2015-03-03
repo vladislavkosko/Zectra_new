@@ -4,6 +4,27 @@
 
 {% block body %}
 
+    {% if mes is defined %}
+        <div class="form-group" style="max-width: 350px; margin-top: 30px;">
+            <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                <button class="close" aria-label="Close" data-dismiss="alert" type="button">
+                    <span aria-hidden="true">×</span>
+                </button>
+                {% if mes == 0 %}
+                    Invalid Current password!
+
+                {% elseif mes == 1 %}
+                    New password and Repeated new password did not match!
+
+                {% elseif mes == 2 %}
+                    Password changed successfully!
+
+                {% endif %}
+
+            </div>
+        </div>
+    {% endif %}
+
     <!-- General settings -->
     <form method="post" action="{{ path('zectranet_user_settings_general') }}" style="margin-top: 20px;">
 
@@ -159,26 +180,7 @@
             <div class="col-xs-12">
                 <div class="col-xs-2"></div>
                 <div class="col-xs-10" style="max-width: 350px;">
-                    {% if mes is defined %}
-                        <div class="form-group">
-                            <div class="alert alert-warning alert-dismissible fade in" role="alert">
-                                <button class="close" aria-label="Close" data-dismiss="alert" type="button">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                {% if mes == 0 %}
-                                    Invalid Current password!
 
-                                {% elseif mes == 1 %}
-                                    New password and Repeated new password did not match!
-
-                                {% elseif mes == 2 %}
-                                    Password changed successfully!
-
-                                {% endif %}
-
-                            </div>
-                        </div>
-                    {% endif %}
                     <div class="form-group">
                         <span class="control-label">Current password:</span>
                         <input name="currentPassword" type="password" class="form-control" required>
