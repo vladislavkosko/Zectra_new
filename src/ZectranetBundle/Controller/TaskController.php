@@ -7,6 +7,8 @@ use ZectranetBundle\Entity\Task;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use ZectranetBundle\Entity\User;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class TaskController extends Controller {
     /**

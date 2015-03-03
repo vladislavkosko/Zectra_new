@@ -23,6 +23,7 @@ class OfficePostController extends Controller
     {
         $post = json_decode($request->getContent(), true);
         $post = (object)$post;
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */

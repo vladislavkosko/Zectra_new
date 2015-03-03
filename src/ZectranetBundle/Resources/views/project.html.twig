@@ -51,10 +51,11 @@
                         </li>
                     </ul>
 
-                    <div id="tasks-tab-content" class="tab-content">
+                    <div id="tasks-tab-content" class="tab-content" ng-controller="TaskController" ng-init="getTasks()">
 
                         <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
-                            <table class="table">
+                            <table class="table" >
+                                <div ng-repeat="task in tasks">[[ task ]]</div>
                                 <thead>
                                     <tr>
                                         <th class="col-xs-1">ID</th>
@@ -674,8 +675,9 @@
 
         JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': project.id }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': project.id }) }}";
-
+        JSON_URLS.getTasks = "{{ path('zectranet_project_get_tasks', { 'project_id': project.id }) }}";
 
     </script>
     <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/custom/taskController.js') }}" type="text/javascript"></script>
 {% endblock %}
