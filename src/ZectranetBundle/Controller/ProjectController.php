@@ -106,13 +106,15 @@ class ProjectController extends Controller
      * @return RedirectResponse
      */
     public function addTaskAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $data = (object)$data;
         $parameters = array(
-            'name' => $request->request->get('name'),
-            'description' => $request->request->get('description'),
-            'type' => $request->request->get('type'),
-            'priority' => $request->request->get('priority'),
-            'startdate' => $request->request->get('startdate'),
-            'enddate' => $request->request->get('enddate'),
+            'name' => $data->task->Name,
+            'description' => $data->task->Description,
+            'type' => $data->task->Type,
+            'priority' => $data->task->Priority,
+            'startdate' => $data->task->StartDate,
+            'enddate' => $data->task->EndDate,
         );
 
         /** @var EntityManager $em */
