@@ -10,7 +10,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.addTask = function (task){
             $http.post($scope.urlAddTask, {'task': task})
                 .success(function (response) {
-                    console.log(response);
                     $scope.getTasks();
                 });
         };
@@ -19,7 +18,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             $http.post($scope.urlGetTasks)
                 .success(function (response) {
                     $scope.tasks = response.Tasks;
-                    console.log(response.Tasks);
                 });
         };
     }]);

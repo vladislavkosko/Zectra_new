@@ -33,4 +33,46 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             return asset + url;
         }
 
+
+        //InsertScreenshots ctrl + V
+        {
+            var atachments = [];
+            window.onload = function () {
+                document.getElementById('textarea-post').addEventListener('paste', function (event) {
+
+                    var cbd = event.clipboardData;
+                    if (cbd.items && cbd.items.length) {
+                        var cbi = cbd.items[0];
+                        console.log(cbi);
+                        if (/^image\/(png|gif|jpe?g)$/.test(cbi.type)) {
+                            event.stopPropagation();
+                            event.preventDefault();
+                            var f = cbi.getAsFile();
+                            var fr = new FileReader();
+                            fr.onload = function () {
+                                var im = new Image();
+                                im.src = this.result;
+                                im.style.display = 'block';
+                                im.setAttribute('class', 'img-screenshot');
+                                im.setAttribute('onclick', '$(this).remove(DeleteLastScreenshot());');
+                                document.getElementById('div-screenshot').style.display = 'block';
+                                $('#slide-down-menu-screenshots').fadeIn(1500);
+                                document.getElementById('div-screenshot').appendChild(im);
+                                $(im).fadeIn(1500);
+                                atachments.push($(im).attr('src'));
+                            };
+                            fr.readAsDataURL(f);
+                        }
+
+                    }
+
+                }, false);
+            };
+
+            $scope.InsertScreenshotsInChat = function () {
+
+            };
+        }
+        //End InsertScreenshots ctrl + V
+
     }]);

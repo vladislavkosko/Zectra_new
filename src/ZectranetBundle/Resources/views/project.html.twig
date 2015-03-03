@@ -488,6 +488,12 @@
                     </button>
                 </span>
                 </form>
+                <div id="slide-down-menu-screenshots" style="display: none;">
+                    <div id="div-screenshot" style="display: none; width: auto;height: auto;">
+
+                    </div>
+                    <button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="InsertScreenshotsInChat()" style="width: 100%; height: 40px; margin-top: 10px;">Insert Screenshots in chat</button>
+                </div>
             </div>
         </div>
         <!-- END OF CHAT PANEL -->
@@ -537,7 +543,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-10 col-md-offset-1">
-                                    <form class="form-horizontal" action="{{ path('zectranet_project_add_task', { 'project_id': project.id }) }}" method="post">
+                                    <form class="form-horizontal" >
                                         <div class="form-group">
                                             <label for="add_task_name" class="control-label">Task Name:</label>
                                             <input type="text" id="add_task_name" class="form-control" name="name" ng-model="task.Name" required>
@@ -575,7 +581,7 @@
                                             <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
                                         </div>
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-primary" ng-click="addTask(task)">Add</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addTask(task)">Add</button>
                                             <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
                                         </div>
                                     </form>
@@ -671,6 +677,20 @@
         function addParentToSubTask(subtask_id) {
             $('#add_subtask_parent').val(subtask_id);
         }
+
+        var DeleteLastScreenshot = function() {
+            var img;
+            setTimeout(function() {
+                img = $('.img-screenshot');
+                console.log(img);
+                return img;
+            },100);
+
+            if($('.img-screenshot').length == 1) {
+                $('#slide-down-menu-screenshots').fadeOut(500);
+
+            }
+        };
 
         JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': project.id }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': project.id }) }}";
