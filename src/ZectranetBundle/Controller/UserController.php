@@ -16,16 +16,31 @@ use ZectranetBundle\Entity\UserSettings;
 class UserController extends Controller
 {
 
+    /**
+     * @Route("/user")
+     * @Security("has_role('ROLE_USER')")
+     * @return Response
+     */
     public function indexAction()
     {
         return $this->render('@Zectranet/user.html.twig');
     }
 
+    /**
+     * @Route("/user/settings")
+     * @Security("has_role('ROLE_USER')")
+     * @return Response
+     */
     public function settingsAction()
     {
         return $this->render('@Zectranet/settings.html.twig');
     }
 
+    /**
+     * @Route("/user/generate_avatar")
+     * @Security("has_role('ROLE_USER')")
+     * @return RedirectResponse
+     */
     public function generateAvatarAction() {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
@@ -33,6 +48,12 @@ class UserController extends Controller
         return $this->redirectToRoute('zectranet_user_page');
     }
 
+    /**
+     * @Route("/user/settings/general")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @return Response
+     */
     public function generalAction(Request $request)
     {
         /** @var EntityManager $em */
@@ -49,6 +70,12 @@ class UserController extends Controller
         return $this->render('@Zectranet/settings.html.twig');
     }
 
+    /**
+     * @Route("/user/settings/email")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @return Response
+     */
     public function emailAction(Request $request)
     {
         /** @var EntityManager $em */
@@ -71,6 +98,12 @@ class UserController extends Controller
         return $this->render('@Zectranet/settings.html.twig');
     }
 
+    /**
+     * @Route("/user/settings/site")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @return Response
+     */
     public function siteAction(Request $request)
     {
         /** @var EntityManager $em */
@@ -93,6 +126,12 @@ class UserController extends Controller
         return $this->render('@Zectranet/settings.html.twig');
     }
 
+    /**
+     * @Route("/user/settings/change_password")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @return Response
+     */
     public function changePasswordAction(Request $request)
     {
         /** @var EntityManager $em */
@@ -116,6 +155,12 @@ class UserController extends Controller
             return $this->render('@Zectranet/settings.html.twig', array('mes' => 2));
     }
 
+    /**
+     * @Route("/wde")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function wdeAction(Request $request)
     {
         $currentDate = new \DateTime();

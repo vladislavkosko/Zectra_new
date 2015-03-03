@@ -55,6 +55,7 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/project/{project_id}/delete")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @param int $project_id
