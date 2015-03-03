@@ -55,7 +55,7 @@
 
                         <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
                             <table class="table" >
-                                <div ng-repeat="task in tasks">[[ task ]]</div>
+                                <div ng-repeat="task in tasks"></div>
                                 <thead>
                                     <tr>
                                         <th class="col-xs-1">ID</th>
@@ -88,7 +88,7 @@
                                             <td class="col-xs-1 hidden-sm hidden-xs">{{ task.priority.label }}</td>
                                             <td class="col-xs-1">{{ task.status.label }}</td>
                                             <td class="col-xs-1">{{ task.progress }}%</td>
-                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.estimatedHours ~ ':' ~ task.estimatedMinutes }}</td>
+                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.estimatedHours ~ ' h ' ~ task.estimatedMinutes ~ ' m'}}</td>
                                             <td class="col-xs-1 hidden-sm hidden-xs">{{ task.startdate is empty ? '-' : task.startdate | date('Y-m-d') }}</td>
                                             <td class="col-xs-1 hidden-sm hidden-xs">{{ task.enddate is empty ? '-' : task.enddate | date('Y-m-d') }}</td>
                                             <td class="col-xs-1 hidden-sm hidden-xs">{{ task.owner.name ~ ' ' ~ task.owner.surname}}</td>
@@ -129,7 +129,7 @@
                                                     <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].priority.label }}</td>
                                                     <td class="col-xs-1">{{ task.subtasks[i].status.label }}</td>
                                                     <td class="col-xs-1">{{ task.subtasks[i].progress }}%</td>
-                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].estimatedHours ~ ':' ~ task.subtasks[i].estimatedMinutes }}</td>
+                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].estimatedHours ~ ' h ' ~ task.subtasks[i].estimatedMinutes ~ ' m' }}</td>
                                                     <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].startdate is empty ? '-' : task.subtasks[i].startdate | date('Y-m-d') }}</td>
                                                     <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].enddate is empty ? '-' : task.subtasks[i].enddate | date('Y-m-d') }}</td>
                                                     <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].owner.name ~ ' ' ~ task.subtasks[i].owner.surname}}</td>
@@ -436,7 +436,7 @@
         <!-- END OF OFFICE USERS PANEL -->
 
         <!-- BEGIN OF CHAT PANEL -->
-        <div class="chat-panel list-group col-md-8" ng-controller="ChatController" ng-init="getPosts(0,10)">
+        <div class="chat-panel list-group col-md-8" ng-controller="ChatController" ng-init="getPosts(0, 100)">
             <div class="list-group-item active">
                 <i class="fa fa-comments fa-fw"></i>
                 Project Chat
@@ -445,7 +445,7 @@
                 {% if project.postsProject | length == 0 %}
                     <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
                 {% endif %}
-                <ul class="chat" >
+                <ul class="chat">
                     <li ng-repeat="post in posts" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
                         <span class="chat-img"
                               ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }"

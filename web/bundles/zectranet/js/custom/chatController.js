@@ -2,17 +2,23 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
     function($scope, $http, $paginator) {
         console.log('Chat Controller was loaded');
 
-        $scope.posts = null;
+        // ------------ BEGIN OF SCOPE VARIABLES ------------ \\
+        {
+            $scope.posts = null;
+            $scope.message = '';
 
-        $scope.urlAddPost = JSON_URLS.addPost;
-        $scope.urlGetPosts = JSON_URLS.getPosts;
+            $scope.urlAddPost = JSON_URLS.addPost;
+            $scope.urlGetPosts = JSON_URLS.getPosts;
+        }
+        // ------------ END OF SCOPE VARIABLES --------------- \\
+
 
         $scope.SendPost = function (message) {
-           $http.post($scope.urlAddPost, {'message': message})
-               .success(function (response) {
-                    console.log(response);
-                   $scope.getPosts(0,100);
-               });
+            $scope.message = '';
+            $http.post($scope.urlAddPost, {'message': message})
+                .success(function (response) {
+                    $scope.getPosts(0, 100);
+                });
         };
 
         $scope.getPosts = function (offset, count) {

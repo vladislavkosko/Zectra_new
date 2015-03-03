@@ -3,10 +3,6 @@ namespace ZectranetBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use ZectranetBundle\Entity\OfficePost;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +43,7 @@ class OfficePostController extends Controller
         foreach ($phpPosts as $post) {
             $jsonPosts[] = $post->getInArray();
         }
+
         $response = new Response(json_encode(array('Posts' => $jsonPosts)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;

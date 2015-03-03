@@ -107,14 +107,15 @@ class ProjectController extends Controller
      */
     public function addTaskAction(Request $request, $project_id) {
         $data = json_decode($request->getContent(), true);
-        $data = (object)$data;
+        $data = (object) $data['task'];
+
         $parameters = array(
-            'name' => $data->task->Name,
-            'description' => $data->task->Description,
-            'type' => $data->task->Type,
-            'priority' => $data->task->Priority,
-            'startdate' => $data->task->StartDate,
-            'enddate' => $data->task->EndDate,
+            'name' => $data->Name,
+            'description' => $data->Description,
+            'type' => $data->Type,
+            'priority' => $data->Priority,
+            'startdate' => date('Y-m-d', strtotime($data->StartDate)),
+            'enddate' => date('Y-m-d', strtotime($data->EndDate)),
         );
 
         /** @var EntityManager $em */
@@ -122,9 +123,11 @@ class ProjectController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
-        Task::addNewTask($em, $user, $project_id, $parameters);
+        $task = Task::addNewTask($em, $user, $project_id, $parameters);
 
-        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+        $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     /**

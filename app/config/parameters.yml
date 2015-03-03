@@ -9,6 +9,6 @@ parameters:
     mailer_transport: smtp
     mailer_host: mailout.one.com
     mailer_user: support@zectranet.com
-    mailer_password: ~
+    mailer_password: null
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
