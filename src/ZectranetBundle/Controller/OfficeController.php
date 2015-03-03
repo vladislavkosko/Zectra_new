@@ -8,8 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\OfficePost;
+use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -45,9 +47,11 @@ class OfficeController extends Controller
     }
 
     /**
+     * @Route("/office/{office_id}/delete")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @param int $office_id
+     * @return RedirectResponse
      */
     public function deleteAction(Request $request, $office_id) {
         /** @var EntityManager $em */

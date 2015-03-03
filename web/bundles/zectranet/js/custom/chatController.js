@@ -7,7 +7,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         $scope.urlAddPost = JSON_URLS.addPost;
         $scope.urlGetPosts = JSON_URLS.getPosts;
 
-        $scope.SendPost  = function (message) {
+        $scope.SendPost = function (message) {
            $http.post($scope.urlAddPost, {'message': message})
                .success(function (response) {
                     console.log(response);

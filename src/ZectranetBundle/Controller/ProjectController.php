@@ -19,6 +19,8 @@ class ProjectController extends Controller
 {
 
     /**
+     * @Route("/project/{project_id}")
+     * @Security("has_role('ROLE_USER')")
      * @param int $project_id
      * @return Response
      */

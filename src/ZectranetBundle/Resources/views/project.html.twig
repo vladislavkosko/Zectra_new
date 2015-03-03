@@ -161,43 +161,231 @@
                             <div class="col-md-12">
 
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-sm-6">
                                         <div class="page-header text-center">Story</div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-sm-6">
                                         <div class="page-header text-center">Todo</div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-sm-6">
                                         <div class="page-header text-center">In-progress</div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 col-sm-6">
                                         <div class="page-header text-center">Done</div>
                                     </div>
                                 </div>
 
-                                {% for task in project.tasks %}
-                                <div class="row">
+                                <div class="list-group">
+                                    {% for task in project.tasks %}
+                                        <div class="row">
+                                            {% if task.parentid == null %}
+                                                <div class="col-md-3 col-sm-6">
+                                                    {% if task.status.label == 'story' %}
+                                                        <a class="list-group-item
+                                                            {% if task.priority.label == 'low' %}
+                                                                {{ ' local-green ' }}
+                                                            {% elseif task.priority.label == 'medium' %}
+                                                                {{ ' local-yellow ' }}
+                                                            {% else %}
+                                                                {{ ' local-red ' }}
+                                                            {% endif %}" style="margin-bottom: 5px;">
+                                                            <h4 class="list-group-item-heading">
+                                                                <span style="color: black;">{{ task.id }}&nbsp;</span>
+                                                                {{ task.name }}
+                                                            </h4>
+                                                            <p class="list-group-item-text">
+                                                                {{ task.description }}
+                                                            </p>
+                                                            <p style="padding-top:5px;">
+                                                                <span class="label label-info" style="float:left;">0</span>
+                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            </p>
+                                                        </a>
+                                                        {% if task.subtasks | length > 0 %}
+                                                            {% for i in 0..task.subtasks | length - 1 %}
+                                                                <a class="list-group-item
+                                                                    {% if task.subtasks[i].priority.label == 'low' %}
+                                                                        {{ ' local-green ' }}
+                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
+                                                                        {{ ' local-yellow ' }}
+                                                                    {% else %}
+                                                                        {{ ' local-red ' }}
+                                                                    {% endif %}" style="margin-bottom: 5px;">
+                                                                    <h4 class="list-group-item-heading">
+                                                                        <span style="color: black;">
+                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                                        </span>
+                                                                        {{ task.subtasks[i].name }}
+                                                                    </h4>
+                                                                    <p class="list-group-item-text">
+                                                                        {{ task.subtasks[i].description }}
+                                                                    </p>
+                                                                    <p style="padding-top:5px;">
+                                                                        <span class="label label-info" style="float:left;">0</span>
+                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                                    </p>
+                                                                </a>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
 
-                                    <div class="col-md-3">
-                                        {% if task.status.label == 'story' %}
+                                                <div class="col-md-3 col-sm-6">
+                                                    {% if task.status.label == 'todo' %}
+                                                        <a class="list-group-item
+                                                            {% if task.priority.label == 'low' %}
+                                                                {{ ' local-green ' }}
+                                                            {% elseif task.priority.label == 'medium' %}
+                                                                {{ ' local-yellow ' }}
+                                                            {% else %}
+                                                                {{ ' local-red ' }}
+                                                            {% endif %}" style="margin-bottom: 5px;">
+                                                            <h4 class="list-group-item-heading">
+                                                                <span style="color: black;">{{ task.id }}&nbsp;</span>
+                                                                {{ task.name }}
+                                                            </h4>
+                                                            <p class="list-group-item-text">
+                                                                {{ task.description }}
+                                                            </p>
+                                                            <p style="padding-top:5px;">
+                                                                <span class="label label-info" style="float:left;">0</span>
+                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            </p>
+                                                        </a>
+                                                        {% if task.subtasks | length > 0 %}
+                                                            {% for i in 0..task.subtasks | length - 1 %}
+                                                                <a class="list-group-item
+                                                                    {% if task.subtasks[i].priority.label == 'low' %}
+                                                                        {{ ' local-green ' }}
+                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
+                                                                        {{ ' local-yellow ' }}
+                                                                    {% else %}
+                                                                        {{ ' local-red ' }}
+                                                                    {% endif %}" style="margin-bottom: 5px;">
+                                                                    <h4 class="list-group-item-heading">
+                                                                        <span style="color: black;">
+                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                                        </span>
+                                                                        {{ task.subtasks[i].name }}
+                                                                    </h4>
+                                                                    <p class="list-group-item-text">
+                                                                        {{ task.subtasks[i].description }}
+                                                                    </p>
+                                                                    <p style="padding-top:5px;">
+                                                                        <span class="label label-info" style="float:left;">0</span>
+                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                                    </p>
+                                                                </a>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-6">
+                                                    {% if task.status.label == 'in-progress' %}
+                                                        <a class="list-group-item
+                                                            {% if task.priority.label == 'low' %}
+                                                                {{ ' local-green ' }}
+                                                            {% elseif task.priority.label == 'medium' %}
+                                                                {{ ' local-yellow ' }}
+                                                            {% else %}
+                                                                {{ ' local-red ' }}
+                                                            {% endif %}" style="margin-bottom: 5px;">
+                                                            <h4 class="list-group-item-heading">
+                                                                <span style="color: black;">{{ task.id }}&nbsp;</span>
+                                                                {{ task.name }}
+                                                            </h4>
+                                                            <p class="list-group-item-text">
+                                                                {{ task.description }}
+                                                            </p>
+                                                            <p style="padding-top:5px;">
+                                                                <span class="label label-info" style="float:left;">0</span>
+                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            </p>
+                                                        </a>
+                                                        {% if task.subtasks | length > 0 %}
+                                                            {% for i in 0..task.subtasks | length - 1 %}
+                                                                <a class="list-group-item
+                                                                    {% if task.subtasks[i].priority.label == 'low' %}
+                                                                        {{ ' local-green ' }}
+                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
+                                                                        {{ ' local-yellow ' }}
+                                                                    {% else %}
+                                                                        {{ ' local-red ' }}
+                                                                    {% endif %}" style="margin-bottom: 5px;">
+                                                                    <h4 class="list-group-item-heading">
+                                                                        <span style="color: black;">
+                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                                        </span>
+                                                                        {{ task.subtasks[i].name }}
+                                                                    </h4>
+                                                                    <p class="list-group-item-text">
+                                                                        {{ task.subtasks[i].description }}
+                                                                    </p>
+                                                                    <p style="padding-top:5px;">
+                                                                        <span class="label label-info" style="float:left;">0</span>
+                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                                    </p>
+                                                                </a>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+
+                                                <div class="col-md-3 col-sm-6">
+                                                    {% if task.status.label == 'done' %}
+                                                        <a class="list-group-item
+                                                            {% if task.priority.label == 'low' %}
+                                                                {{ ' local-green ' }}
+                                                            {% elseif task.priority.label == 'medium' %}
+                                                                {{ ' local-yellow ' }}
+                                                            {% else %}
+                                                                {{ ' local-red ' }}
+                                                            {% endif %}" style="margin-bottom: 5px;">
+                                                            <h4 class="list-group-item-heading">
+                                                                <span style="color: black;">{{ task.id }}&nbsp;</span>
+                                                                {{ task.name }}
+                                                            </h4>
+                                                            <p class="list-group-item-text">
+                                                                {{ task.description }}
+                                                            </p>
+                                                            <p style="padding-top:5px;">
+                                                                <span class="label label-info" style="float:left;">0</span>
+                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            </p>
+                                                        </a>
+                                                        {% if task.subtasks | length > 0 %}
+                                                            {% for i in 0..task.subtasks | length - 1 %}
+                                                                <a class="list-group-item
+                                                                    {% if task.subtasks[i].priority.label == 'low' %}
+                                                                        {{ ' local-green ' }}
+                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
+                                                                        {{ ' local-yellow ' }}
+                                                                    {% else %}
+                                                                        {{ ' local-red ' }}
+                                                                    {% endif %}" style="margin-bottom: 5px;">
+                                                                    <h4 class="list-group-item-heading">
+                                                                        <span style="color: black;">
+                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
+                                                                        </span>
+                                                                        {{ task.subtasks[i].name }}
+                                                                    </h4>
+                                                                    <p class="list-group-item-text">
+                                                                        {{ task.subtasks[i].description }}
+                                                                    </p>
+                                                                    <p style="padding-top:5px;">
+                                                                        <span class="label label-info" style="float:left;">0</span>
+                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                                    </p>
+                                                                </a>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
                                             {% endif %}
-                                    </div>
-
-                                    <div class="col-md-3">
-
-                                    </div>
-
-                                    <div class="col-md-3">
-
-                                    </div>
-
-                                    <div class="col-md-3">
-
-                                    </div>
-
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
-
                             </div>
                         </div>
                     </div>
@@ -258,7 +446,7 @@
                 {% endif %}
                 <div ng-repeat="post in posts ">[[ post.message ]]</div>
                 <ul class="chat"  >
-                     {% for post in project.postsProject %}
+                    {% for post in project.postsProject %}
                         <li class="{% if app.user.id == post.user.id  %}right{% else %}left{% endif %} clearfix">
                         <span class="chat-img {% if app.user.id == post.user.id %}pull-right{% else %}pull-left{% endif %}">
                             <img src="{{ asset('') ~ 'documents/' ~ post.user.avatar }}" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
@@ -283,7 +471,7 @@
                             </pre>
                             </div>
                         </li>
-                     {% endfor %}
+                    {% endfor %}
                 </ul>
             </div>
             <div class="list-group-item" >
@@ -304,7 +492,6 @@
         </div>
         <!-- END OF CHAT PANEL -->
     </div>
-
 {% endblock %}
 
 {% block modals %}
