@@ -270,7 +270,8 @@ class ProjectPost
             'posted' => $this->posted->format('Y-m-d H:i:s'),
             'edited' => ($this->edited) ? $this->edited-> format('Y-m-d H:i:s') : null,
             'projectid' => $this->projectid,
-            'userid' =>  $this->userid
+            'userid' =>  $this->userid,
+            'user' => $this->getUser()->getInArray()
         );
     }
 

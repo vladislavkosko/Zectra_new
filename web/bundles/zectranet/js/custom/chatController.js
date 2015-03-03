@@ -23,4 +23,8 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                 });
         };
 
+        $scope.generateAsset = function (asset, url) {
+            return asset + url;
+        }
+
     }]);

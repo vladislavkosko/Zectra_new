@@ -445,8 +445,33 @@
                 {% if project.postsProject | length == 0 %}
                     <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
                 {% endif %}
-                <div ng-repeat="post in posts ">[[ post.message ]]</div>
-                <ul class="chat"  >
+                <ul class="chat" >
+                    <li ng-repeat="post in posts" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
+                        <span class="chat-img"
+                              ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }"
+                              ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + post.user.avatar)">
+                            <img src="#" ng-src="[[avatar]]" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
+                        </span>
+                        <div class="chat-body clearfix">
+                            <div class="header" style="height: 28px;">
+                                <strong class="primary-font"
+                                        ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }">
+                                    [[post.user.name + ' ' + post.user.surname + ' (' + post.user.username + ')' ]]
+                                </strong>
+
+                                <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == post.user.id, 'pull-right': {{ app.user.id }} != post.user.id }">
+                                    <i class="fa fa-clock-o fa-fw"></i>
+                                    Posted on [[post.posted]]
+                                    <i ng-if="post.edited" class="fa fa-edit"></i>
+                                </small>
+                            </div>
+                        </div>
+                        <pre style="white-space: pre-line;">
+                            <span>
+                                [[ post.message ]]
+                            </span>
+                        </pre>
+                    </li>
                     {% for post in project.postsProject %}
                         <li class="{% if app.user.id == post.user.id  %}right{% else %}left{% endif %} clearfix">
                         <span class="chat-img {% if app.user.id == post.user.id %}pull-right{% else %}pull-left{% endif %}">
@@ -476,7 +501,7 @@
                 </ul>
             </div>
             <div class="list-group-item" >
-                <form class="input-group input-group-lg" action="{{ path('zectranet_project_add_post', { 'project_id': project.id  }) }}" method="post">
+                <form class="input-group input-group-lg">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" style="height: 65px;">
                         <i class="fa fa-file"></i>

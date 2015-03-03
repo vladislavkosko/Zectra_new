@@ -853,17 +853,17 @@ class Task
 
     public function getInArray() {
         return array(
-            '' => $this->getId(),
-            '' => $this->getName(),
-            '' => $this->getDescription(),
-            '' => ($this->assigned) ? $this->getAssigned()->getInArray() : null,
-            '' => $this->getAssignedid(),
-            '' => $this->getStartdate()->format('Y-m-d'),
-            '' => $this->getEnddate()->format('Y-m-d'),
-            '' => $this->getEstimatedHours(),
-            '' => $this->getEstimatedMinutes(),
-            '' => $this->getOwnerid(),
-            '' => $this->getOwner()->getInArray()
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'assigned' => ($this->assigned) ? $this->getAssigned()->getInArray() : null,
+            'assignedId' => $this->getAssignedid(),
+            'startDate' => $this->getStartdate()->format('Y-m-d'),
+            'endDate' => $this->getEnddate()->format('Y-m-d'),
+            'estimatedHours' => $this->getEstimatedHours(),
+            'estimatedMinutes' => $this->getEstimatedMinutes(),
+            'ownerId' => $this->getOwnerid(),
+            'owner' => $this->getOwner()->getInArray()
         );
     }
 }
