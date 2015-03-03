@@ -263,4 +263,27 @@ class OfficePost
 
         return $post;
     }
+
+    public function getInArray() {
+        return array(
+            'id' => $this->id,
+            'message' => $this->message,
+            'posted' => $this->posted->format('Y-m-d H:i:s'),
+            'edited' => ($this->edited) ? $this->edited-> format('Y-m-d H:i:s') : null,
+            'officeid' => $this->officeid,
+            'userid' =>  $this->userid
+        );
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $office_id
+     * @param int $offset
+     * @param int $count
+     * @return array
+     */
+    public static function getPostsOffset(EntityManager $em, $office_id, $offset, $count) {
+        return $em->getRepository('ZectranetBundle:OfficePost')
+            ->findBy(array('officeid' => $office_id), array('id' => 'DESC'), $count, $offset);
+    }
 }

@@ -51,7 +51,13 @@ zectranet_delete_office:
 
 zectranet_office_add_post:
     pattern: /office/{office_id}/addNewPost
-    defaults: { _controller: ZectranetBundle:Office:addPost }
+    defaults: { _controller: ZectranetBundle:OfficePost:addPost }
+    requirements:
+        office_id: \d+
+
+zectranet_office_get_post:
+    pattern: /office/{office_id}/getPosts
+    defaults: { _controller: ZectranetBundle:OfficePost:getPosts }
     requirements:
         office_id: \d+
 
