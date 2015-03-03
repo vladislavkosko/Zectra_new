@@ -75,39 +75,6 @@ class Role implements RoleInterface
     }
 
     /**
-     * Add users
-     *
-     * @param \ZectranetBundle\Entity\User $users
-     * @return Role
-     */
-    public function addUser(\ZectranetBundle\Entity\User $users)
-    {
-        $this->users[] = $users;
-
-        return $this;
-    }
-
-    /**
-     * Remove users
-     *
-     * @param \ZectranetBundle\Entity\User $users
-     */
-    public function removeUser(\ZectranetBundle\Entity\User $users)
-    {
-        $this->users->removeElement($users);
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsers()
-    {
-        return $this->users;
-    }
-
-    /**
      * @param EntityManager $em
      * @return Role
      */
