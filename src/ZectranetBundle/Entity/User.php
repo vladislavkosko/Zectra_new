@@ -289,21 +289,6 @@ class User implements UserInterface, \Serializable
         );
     }
 
-    public static function isRegisteredByEmail($em, $email)
-    {
-        $repository = $em->getRepository('ZectranetBundle:User');
-        $query = $repository->createQueryBuilder('u')
-            ->where('u.email = :email')
-            ->setParameter('email', $email)
-            ->getQuery();
-
-        try {
-            return $query->getSingleResult();
-        } catch (NoResultException $e) {
-            return null;
-        }
-    }
-
     /**
      * Get id
      *

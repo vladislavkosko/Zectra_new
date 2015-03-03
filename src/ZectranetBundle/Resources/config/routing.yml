@@ -100,3 +100,9 @@ zectranet_project_add_subtask:
     defaults: { _controller: ZectranetBundle:Project:addSubTask }
     requirements:
         project_id: \d+
+
+zectranet_project_get_tasks:
+    pattern: /project/{project_id}/getTasks
+    defaults: { _controller: ZectranetBundle:Task:getTasks }
+    requirements:
+        project_id: \d+

@@ -272,10 +272,7 @@ class OfficePost
             'edited' => ($this->edited) ? $this->edited-> format('Y-m-d H:i:s') : null,
             'officeid' => $this->officeid,
             'userid' =>  $this->userid,
-            'user_name' => $this->getUser()->getName(),
-            'user_surname' => $this->getUser()->getSurname(),
-            'user_username' => $this->getUser()->getUsername(),
-            'user_avatar' => $this->getUser()->getAvatar(),
+            'user' => $this->getUser()->getInArray()
         );
     }
 

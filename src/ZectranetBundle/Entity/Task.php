@@ -826,7 +826,7 @@ class Task
      * @param \ZectranetBundle\Entity\Notification $subtasks
      * @return Task
      */
-    public function addSubtask(\ZectranetBundle\Entity\Notification $subtasks)
+    public function addSubtask(Notification $subtasks)
     {
         $this->subtasks[] = $subtasks;
 
@@ -835,21 +835,35 @@ class Task
 
     /**
      * Remove subtasks
-     *
      * @param \ZectranetBundle\Entity\Notification $subtasks
      */
-    public function removeSubtask(\ZectranetBundle\Entity\Notification $subtasks)
+    public function removeSubtask(Notification $subtasks)
     {
         $this->subtasks->removeElement($subtasks);
     }
 
     /**
      * Get subtasks
-     *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSubtasks()
     {
         return $this->subtasks;
+    }
+
+    public function getInArray() {
+        return array(
+            '' => $this->getId(),
+            '' => $this->getName(),
+            '' => $this->getDescription(),
+            '' => ($this->assigned) ? $this->getAssigned()->getInArray() : null,
+            '' => $this->getAssignedid(),
+            '' => $this->getStartdate()->format('Y-m-d'),
+            '' => $this->getEnddate()->format('Y-m-d'),
+            '' => $this->getEstimatedHours(),
+            '' => $this->getEstimatedMinutes(),
+            '' => $this->getOwnerid(),
+            '' => $this->getOwner()->getInArray()
+        );
     }
 }
