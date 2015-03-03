@@ -1,0 +1,207 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %} Settings {% endblock %}
+
+{% block body %}
+
+    <!-- General settings -->
+    <form method="post" action="{{ path('zectranet_user_settings_general') }}" style="margin-top: 20px;">
+
+        <div class="form-group">
+            <div style="font-size: 1.2em;">General</div>
+            <div style="height: 1px; background-color: #e5e5e5;"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+                    <div class="form-group">
+                        <input type="checkbox" name="showClosedProjects" {% if (app.user.userSettings.showClosedProjects) %}{{'checked'}}{% endif %}>
+                        Show closed projects
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" style="margin: 15px 0;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <!-- End General settings -->
+
+    <!-- Notification on Email -->
+    <form method="post" action="{{ path('zectranet_user_settings_email') }}" style="margin-top: 20px;">
+
+        <div class="form-group">
+            <div style="font-size: 1.2em;">Notification on Email</div>
+            <div style="height: 1px; background-color: #e5e5e5;"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+
+                    <div class="form-group">
+                        <input type="checkbox" name="disableAllOnEmail" {% if (app.user.userSettings.disableAllOnEmail) %}{{'checked'}}{% endif %}>
+                        Disable all notifications on email
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgEmailMessageOffice" {% if (app.user.userSettings.msgEmailMessageOffice) %}{{'checked'}}{% endif %}>
+                        New message in office
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgEmailMessageProject" {% if (app.user.userSettings.msgEmailMessageProject) %}{{'checked'}}{% endif %}>
+                        New message in project
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgEmailRemovedOffice" {% if (app.user.userSettings.msgEmailRemovedOffice) %}{{'checked'}}{% endif %}>
+                        Office removed
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgEmailRemovedProject" {% if (app.user.userSettings.msgEmailRemovedProject) %}{{'checked'}}{% endif %}>
+                        Project removed
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgEmailTaskAssigned" {% if (app.user.userSettings.msgEmailTaskAssigned) %}{{'checked'}}{% endif %}>
+                        Task assigned
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgEmailTaskComment" {% if (app.user.userSettings.msgEmailTaskComment) %}{{'checked'}}{% endif %}>
+                        New comment to task
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" style="margin: 15px 0;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <!-- End Notification on Email -->
+
+    <!-- Notification on Site -->
+    <form method="post" action="{{ path('zectranet_user_settings_site') }}" style="margin-top: 20px;">
+
+        <div class="form-group">
+            <div style="font-size: 1.2em;">Notification on Site</div>
+            <div style="height: 1px; background-color: #e5e5e5;"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10">
+
+                    <div class="form-group">
+                        <input type="checkbox" name="disableAllOnSite" {% if (app.user.userSettings.disableAllOnSite) %}{{'checked'}}{% endif %}>
+                        Disable all notifications on site
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgSiteMessageOffice" {% if (app.user.userSettings.msgSiteMessageOffice) %}{{'checked'}}{% endif %}>
+                        Notify about new message in office
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgSiteMessageProject" {% if (app.user.userSettings.msgSiteMessageProject) %}{{'checked'}}{% endif %}>
+                        Notify about new message in project
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgSiteRemovedOffice" {% if (app.user.userSettings.msgSiteRemovedOffice) %}{{'checked'}}{% endif %}>
+                        Notify about office removed
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgSiteRemovedProject" {% if (app.user.userSettings.msgSiteRemovedProject) %}{{'checked'}}{% endif %}>
+                        Notify about project removed
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgSiteTaskAssigned" {% if (app.user.userSettings.msgSiteTaskAssigned) %}{{'checked'}}{% endif %}>
+                        Notify about task assigned
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgSiteTaskComment" {% if (app.user.userSettings.msgSiteTaskComment) %}{{'checked'}}{% endif %}>
+                        Notify about new comment to task
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" style="margin: 15px 0;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <!-- End Notification on Site -->
+
+    <form method="post" action="{{ path('zectranet_user_settings_changePassword') }}" style="margin-top: 20px;">
+
+        <div class="form-group">
+            <div style="font-size: 1.2em;">Change password</div>
+            <div style="height: 1px; background-color: #e5e5e5;"></div>
+        </div>
+
+        <!-- Change password -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-10" style="max-width: 350px;">
+                    {% if mes is defined %}
+                        <div class="form-group">
+                            <div class="alert alert-warning alert-dismissible fade in" role="alert">
+                                <button class="close" aria-label="Close" data-dismiss="alert" type="button">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                                {% if mes == 0 %}
+                                    Invalid Current password!
+
+                                {% elseif mes == 1 %}
+                                    New password and Repeated new password did not match!
+
+                                {% elseif mes == 2 %}
+                                    Password changed successfully!
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <span class="control-label">Current password:</span>
+                        <input name="currentPassword" type="password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="control-label">New password:</span>
+                        <input name="newPassword" type="password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <span class="control-label">Repeat new password:</span>
+                        <input name="repeatNewPassword" type="password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Save" style="margin: 15px 0;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Change password -->
+
+    </form>
+
+{% endblock %}

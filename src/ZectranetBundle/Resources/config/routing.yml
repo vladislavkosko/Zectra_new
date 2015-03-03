@@ -29,6 +29,26 @@ zectranet_user_page:
     path: /user
     defaults: { _controller: ZectranetBundle:User:index }
 
+zectranet_user_settings:
+    path: /user/settings
+    defaults: { _controller: ZectranetBundle:User:settings }
+
+zectranet_user_settings_general:
+    path: /user/settings/general
+    defaults: { _controller: ZectranetBundle:User:general }
+
+zectranet_user_settings_email:
+    path: /user/settings/email
+    defaults: { _controller: ZectranetBundle:User:email }
+
+zectranet_user_settings_site:
+    path: /user/settings/site
+    defaults: { _controller: ZectranetBundle:User:site }
+
+zectranet_user_settings_changePassword:
+    path: /user/settings/change_password
+    defaults: { _controller: ZectranetBundle:User:changePassword }
+
 zectranet_generate_avatar:
     path: /user/generate_avatar
     defaults: { _controller: ZectranetBundle:User:generateAvatar }

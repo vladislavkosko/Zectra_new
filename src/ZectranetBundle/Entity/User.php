@@ -174,12 +174,6 @@ class User implements UserInterface, \Serializable
     private $userSettings;
 
     /**
-     * @ORM\OneToOne(targetEntity="UserSettingsNotifications", mappedBy="user")
-     * @var ArrayCollection
-     */
-    private $userSettingsNotifications;
-
-    /**
      * @ORM\OneToMany(targetEntity="DailyTimeSheet", mappedBy="user")
      * @ORM\OrderBy({"date" = "DESC"})
      * @var ArrayCollection
@@ -500,139 +494,6 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * @param EntityManager $em
-     * @param string $username
-     * @return User
-     */
-    public static function isRegisteredByUsername(EntityManager $em, $username)
-    {
-        return $em->getRepository('ZectranetBundle:User')->findOneBy(array('username' => $username));
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param string $username
-     * @return User
-     */
-    public static function getUserByUsername(EntityManager $em, $username)
-    {
-        return $em->getRepository('ZectranetBundle:User')->findOneBy(array('username' => $username));
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param EncoderFactory $encoderFactory
-     * @param array $parameters
-     * @return User
-     */
-    public static function addUser(EntityManager $em, EncoderFactory $encoderFactory, $parameters)
-    {
-        /** @var User $user */
-        $user = new User();
-        $encoder = $encoderFactory->getEncoder($user);
-        $user->setName($parameters['name']);
-        $user->setSurname($parameters['surname']);
-        $user->setEmail($parameters['email']);
-        $user->setUsername($parameters['username']);
-        $user->setPassword($encoder->encodePassword($parameters['password'], $user->getSalt()));
-        $user->setRegistered(new \DateTime());
-        $user->setLastActive(new \DateTime());
-        $user->addRole(Role::getUserRole($em));
-        $em->persist($user);
-
-        $settings = new UserSettings();
-        $settings->setUser($user);
-        $em->persist($settings);
-
-        $settings = new UserSettingsNotifications();
-        $settings->setUser($user);
-        $em->persist($settings);
-
-        $em->flush();
-        return $user;
-    }
-
-    public static function changePassword($em, $encoderFactory, User $user, $parameters)
-    {
-        $encoder = $encoderFactory->getEncoder($user);
-        $encodedPassword = $encoder->encodePassword($parameters['currentPassword'], $user->getSalt());
-        if ($encodedPassword != $user->getPassword())
-            return 0;
-        if ($parameters['newPassword'] != $parameters['repeatNewPassword'])
-            return 1;
-        $usr = $em->getRepository('ZectranetBundle:User')->find($user->getId());
-        $newPassword = $encoder->encodePassword($parameters['newPassword'], $user->getSalt());
-        $usr->setPassword($newPassword);
-        $em->flush();
-        return 2;
-    }
-
-    public static function resetPassword($em, $encoderFactory, User $user, $parameters)
-    {
-        if ($parameters['newPassword'] != $parameters['repeatNewPassword'])
-            return 0;
-        $encoder = $encoderFactory->getEncoder($user);
-        $usr = $em->getRepository('ZectranetBundle:User')->find($user->getId());
-        $newPassword = $encoder->encodePassword($parameters['newPassword'], $user->getSalt());
-        $usr->setPassword($newPassword);
-        $em->flush();
-        return 1;
-    }
-
-    public static function GenerateDefaultAvatar($em, $user)
-    {
-        if ($user->getAvatar() != null) {
-            // Delete existing avatar
-            $file_path = __DIR__ . '/../../../../web/documents/' . $user->getAvatar();
-            if (file_exists($file_path)) unlink($file_path);
-        }
-
-        $text_colors = array(
-            array(1, 201, 220),
-            array(126, 0, 151),
-            array(0, 151, 71),
-            array(236, 126, 0),
-            array(210, 8, 0),
-            array(167, 0, 219),
-            array(15, 0, 226),
-            array(244, 0, 114)
-        );
-
-        $rnd_clr = rand(0, count($text_colors) - 1);
-        $first = substr(ucfirst($user->getName()),0,1);
-        $second = substr(ucfirst($user->getSurname()),0,1);
-        $text = $first . $second;
-        $font = __DIR__.'/../../../web/bundles/zectranet/fonts/DejaVuSansMono.ttf';
-
-        $fs = new Filesystem();
-
-        $image_path = __DIR__.'/../../../web/documents/' . $user->getUsername() .'/avatar/';
-        $width = 150; $height = 150;
-        $center = round($width/2);
-        $box = imagettfbbox(60, 0, $font, $text);
-        $position = $center-round(($box[2]-$box[0])/2);
-
-        // Draw image
-        $im = imagecreate($width, $height);
-        imagefilledrectangle($im, 0, 0, $width, $height, imagecolorallocate($im, $text_colors[$rnd_clr][0],
-            $text_colors[$rnd_clr][1], $text_colors[$rnd_clr][2]));
-        imagettftext($im, 60, 0, $position, 105, imagecolorallocate($im, 255, 255, 255),
-            $font, $first . $second);
-        $datetime = new \DateTime();
-        srand($datetime->format('s'));
-        $file_name = rand(1000, 100000);
-        $fs = new Filesystem();
-        $fs->dumpFile($image_path . $file_name . '.jpeg', '');
-        imagejpeg($im, $image_path . $file_name . '.jpeg');
-
-        // Set new avatar as current
-        $user->setAvatar($user->getUsername() . '/avatar/' . $file_name . '.jpeg');
-        $user = $em->getRepository('ZectranetBundle:User')->find($user->getId());
-        $user->setAvatar($user->getUsername() . '/avatar/' . $file_name . '.jpeg');
-        $em->flush();
-    }
-
-    /**
      * Add roles
      *
      * @param \ZectranetBundle\Entity\Role $roles
@@ -887,39 +748,6 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add officeUserRoles
-     *
-     * @param \ZectranetBundle\Entity\OfficeRole $officeUserRoles
-     * @return User
-     */
-    public function addOfficeUserRole(\ZectranetBundle\Entity\OfficeRole $officeUserRoles)
-    {
-        $this->officeUserRoles[] = $officeUserRoles;
-
-        return $this;
-    }
-
-    /**
-     * Remove officeUserRoles
-     *
-     * @param \ZectranetBundle\Entity\OfficeRole $officeUserRoles
-     */
-    public function removeOfficeUserRole(\ZectranetBundle\Entity\OfficeRole $officeUserRoles)
-    {
-        $this->officeUserRoles->removeElement($officeUserRoles);
-    }
-
-    /**
-     * Get officeUserRoles
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOfficeUserRoles()
-    {
-        return $this->officeUserRoles;
-    }
-
-    /**
      * Add documents
      *
      * @param \ZectranetBundle\Entity\Document $documents
@@ -1006,29 +834,6 @@ class User implements UserInterface, \Serializable
     public function getUserSettings()
     {
         return $this->userSettings;
-    }
-
-    /**
-     * Set userSettingsNotifications
-     *
-     * @param \ZectranetBundle\Entity\UserSettingsNotifications $userSettingsNotifications
-     * @return User
-     */
-    public function setUserSettingsNotifications(\ZectranetBundle\Entity\UserSettingsNotifications $userSettingsNotifications = null)
-    {
-        $this->userSettingsNotifications = $userSettingsNotifications;
-
-        return $this;
-    }
-
-    /**
-     * Get userSettingsNotifications
-     *
-     * @return \ZectranetBundle\Entity\UserSettingsNotifications 
-     */
-    public function getUserSettingsNotifications()
-    {
-        return $this->userSettingsNotifications;
     }
 
     /**
@@ -1128,5 +933,152 @@ class User implements UserInterface, \Serializable
     public function getPostsTask()
     {
         return $this->postsTask;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param string $username
+     * @return User
+     */
+    public static function isRegisteredByUsername($em, $username)
+    {
+        return $em->getRepository('ZectranetBundle:User')->findOneBy(array('username' => $username));
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param string $username
+     * @return User
+     */
+    public static function getUserByUsername($em, $username)
+    {
+        return $em->getRepository('ZectranetBundle:User')->findOneBy(array('username' => $username));
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param EncoderFactory $encoderFactory
+     * @param array $parameters
+     * @return User
+     */
+    public static function addUser($em, $encoderFactory, $parameters)
+    {
+        /** @var User $user */
+        $user = new User();
+        $encoder = $encoderFactory->getEncoder($user);
+        $user->setName($parameters['name']);
+        $user->setSurname($parameters['surname']);
+        $user->setEmail($parameters['email']);
+        $user->setUsername($parameters['username']);
+        $user->setPassword($encoder->encodePassword($parameters['password'], $user->getSalt()));
+        $user->setRegistered(new \DateTime());
+        $user->setLastActive(new \DateTime());
+        $user->addRole(Role::getUserRole($em));
+        $em->persist($user);
+
+        $settings = new UserSettings();
+        $settings->setUser($user);
+        $em->persist($settings);
+
+        $em->flush();
+        return $user;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param EncoderFactory $encoderFactory
+     * @param User $user
+     * @param array $parameters
+     * @return int
+     */
+    public static function changePassword($em, $encoderFactory, $user, $parameters)
+    {
+        $encoder = $encoderFactory->getEncoder($user);
+        $encodedPassword = $encoder->encodePassword($parameters['currentPassword'], $user->getSalt());
+        if ($encodedPassword != $user->getPassword())
+            return 0;
+        if ($parameters['newPassword'] != $parameters['repeatNewPassword'])
+            return 1;
+        $usr = $em->getRepository('ZectranetBundle:User')->find($user->getId());
+        $newPassword = $encoder->encodePassword($parameters['newPassword'], $user->getSalt());
+        $usr->setPassword($newPassword);
+        $em->flush();
+        return 2;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param EncoderFactory $encoderFactory
+     * @param User $user
+     * @param array $parameters
+     * @return int
+     */
+    public static function resetPassword($em, $encoderFactory, $user, $parameters)
+    {
+        if ($parameters['newPassword'] != $parameters['repeatNewPassword'])
+            return 0;
+        $encoder = $encoderFactory->getEncoder($user);
+        $usr = $em->getRepository('ZectranetBundle:User')->find($user->getId());
+        $newPassword = $encoder->encodePassword($parameters['newPassword'], $user->getSalt());
+        $usr->setPassword($newPassword);
+        $em->flush();
+        return 1;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     */
+    public static function GenerateDefaultAvatar($em, $user)
+    {
+        if ($user->getAvatar() != null) {
+            // Delete existing avatar
+            $file_path = __DIR__ . '/../../../../web/documents/' . $user->getAvatar();
+            if (file_exists($file_path)) unlink($file_path);
+        }
+
+        $text_colors = array(
+            array(1, 201, 220),
+            array(126, 0, 151),
+            array(0, 151, 71),
+            array(236, 126, 0),
+            array(210, 8, 0),
+            array(167, 0, 219),
+            array(15, 0, 226),
+            array(244, 0, 114)
+        );
+
+        $rnd_clr = rand(0, count($text_colors) - 1);
+        $first = substr(ucfirst($user->getName()),0,1);
+        $second = substr(ucfirst($user->getSurname()),0,1);
+        $text = $first . $second;
+        $font = __DIR__.'/../../../web/bundles/zectranet/fonts/DejaVuSansMono.ttf';
+
+        $fs = new Filesystem();
+
+        $image_path = __DIR__.'/../../../web/documents/' . $user->getUsername() .'/avatar/';
+        $width = 150; $height = 150;
+        $center = round($width/2);
+        $box = imagettfbbox(60, 0, $font, $text);
+        $position = $center-round(($box[2]-$box[0])/2);
+
+        // Draw image
+        $im = imagecreate($width, $height);
+        imagefilledrectangle($im, 0, 0, $width, $height, imagecolorallocate($im, $text_colors[$rnd_clr][0],
+            $text_colors[$rnd_clr][1], $text_colors[$rnd_clr][2]));
+        imagettftext($im, 60, 0, $position, 105, imagecolorallocate($im, 255, 255, 255),
+            $font, $first . $second);
+        $datetime = new \DateTime();
+        srand($datetime->format('s'));
+        $file_name = rand(1000, 100000);
+        $fs = new Filesystem();
+        $fs->dumpFile($image_path . $file_name . '.jpeg', '');
+        imagejpeg($im, $image_path . $file_name . '.jpeg');
+
+        // Set new avatar as current
+        $user->setAvatar($user->getUsername() . '/avatar/' . $file_name . '.jpeg');
+        $user = $em->getRepository('ZectranetBundle:User')->find($user->getId());
+        $user->setAvatar($user->getUsername() . '/avatar/' . $file_name . '.jpeg');
+        $em->flush();
     }
 }
