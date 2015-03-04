@@ -21,6 +21,18 @@ zectranet_signup_action:
     path: /signup_action
     defaults: { _controller: ZectranetBundle:Index:signupAct }
 
+zectranet_forgot_password:
+    path: /forgot_password
+    defaults: { _controller: ZectranetBundle:Index:forgotPassword }
+
+zectranet_reset_password:
+    pattern: /reset_password/{keyForAccess}
+    defaults: { _controller: ZectranetBundle:Index:resetPassword }
+
+zectranet_reset_password_save:
+    pattern: /reset_password_save/{userid}
+    defaults: { _controller: ZectranetBundle:Index:resetPasswordSave }
+
 zectranet_wde:
     path: /wde
     defaults: { _controller: ZectranetBundle:User:wde }

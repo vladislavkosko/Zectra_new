@@ -2,6 +2,7 @@
 
 namespace ZectranetBundle\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use ZectranetBundle\Entity\User;
 
@@ -35,22 +36,6 @@ class ForgotPassword
      * @ORM\Column(name="keyForAccess", type="text")
      */
     private $keyForAccess;
-
-    public static function addForgotRecord($em, User $user)
-    {
-        $newRecord = new ForgotPassword();
-
-        $datetime = new \DateTime();
-        srand($datetime->format('s'));
-        $keyForAccess = md5(rand(1000, 100000));
-
-        $newRecord->setUserid($user->getId());
-        $newRecord->setKeyForAccess($keyForAccess);
-        $em->persist($newRecord);
-        $em->flush();
-
-        return $keyForAccess;
-    }
 
     /**
      * Get id
@@ -106,5 +91,26 @@ class ForgotPassword
     public function getKeyForAccess()
     {
         return $this->keyForAccess;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @return string
+     */
+    public static function addForgotRecord($em, $user)
+    {
+        $newRecord = new ForgotPassword();
+
+        $datetime = new \DateTime();
+        srand($datetime->format('s'));
+        $keyForAccess = md5(rand(1000, 100000));
+
+        $newRecord->setUserid($user->getId());
+        $newRecord->setKeyForAccess($keyForAccess);
+        $em->persist($newRecord);
+        $em->flush();
+
+        return $keyForAccess;
     }
 }
