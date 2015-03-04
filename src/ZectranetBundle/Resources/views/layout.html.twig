@@ -21,6 +21,7 @@
 		<link href="{{ asset('bundles/zectranet/css/style_upload.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('bundles/zectranet/css/clock.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('bundles/zectranet/css/search.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('bundles/zectranet/css/angular-busy.css') }}" rel="stylesheet" type="text/css">
     {% endblock %}
 
 	{% block head %}
@@ -395,9 +396,10 @@
 	<script src="{{ asset('bundles/zectranet/js/Bootstrap/bootstrap.min.js') }}" type="text/javascript"></script>
 
 	<script src="{{ asset('bundles/zectranet/js/AngularJS/angular.js') }}" type="text/javascript"></script>
-	{#<script src="{{ asset('bundles/zectranet/js/AngularJS/angular-route.min.js') }}" type="text/javascript"></script>#}
+	<script src="{{ asset('bundles/zectranet/js/AngularJS/angular-route.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/AngularJS/angular-sanitize.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/AngularJS/angular-animate.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/zectranet/js/AngularJS/angular-busy.js') }}"></script>
 
 	<script src="{{ asset('bundles/zectranet/js/Bootstrap/ui-bootstrap-tpls-0.10.0.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/metisMenu.min.js') }}" type="text/javascript"></script>
@@ -413,6 +415,7 @@
 	<script type="text/javascript">
 		var JSON_URLS =
 		{
+			asset: "{{ asset('') }}",
 			{#notificationsGet: "{{ url('intranet_notifications_get') }}",
 			officeShow: "{{ url('intranet_show_office', {office_id: 0}) }}",
 			topicShow: "{{ url('intranet_show_topic', {topic_id: 0}) }}",

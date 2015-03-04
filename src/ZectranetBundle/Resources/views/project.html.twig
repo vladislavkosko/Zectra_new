@@ -38,7 +38,7 @@
                     <i class="fa fa-tasks"></i>
                     <span>Tasks</span>
                 </div>
-                <div class="panel-body">
+                <div cg-busy="promise" class="panel-body">
                     <ul id="myTab" class="nav nav-tabs" role="tablist">
                         <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
                             <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
@@ -63,341 +63,16 @@
                     </ul>
 
                     <div id="tasks-tab-content" class="tab-content" ng-init="getTasks()">
-
                         <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
-                            <table class="table">
-
-                                <thead>
-                                <tr>
-                                    <th class="col-xs-1">ID</th>
-                                    <th class="col-xs-2">Name</th>
-                                    <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
-                                    <th class="col-xs-1">Status</th>
-                                    <th class="col-xs-1">Progress</th>
-                                    <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
-                                    <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
-                                    <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
-                                    <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
-                                    <th class="col-xs-1">Assigned</th>
-                                    <th class="col-xs-1">Operations</th>
-                                </tr>
-                                </thead>
-
-                                <tbody ng-repeat="task in tasks" ng-init="task.expand = false; parentTask = task">
-                                    <tr ng-if="task.parentid == null">
-                                        <td class="col-xs-1">
-                                            [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                        </td>
-                                        <td class="col-xs-3">
-                                            <a ng-show="task.subtasks.length > 0" href="#" ng-click="task.expand = !task.expand" style="text-decoration: none;">
-                                                <i ng-hide="task.expand" class="fa fa-plus"></i>
-                                                <i ng-show="task.expand" class="fa fa-minus"></i>
-                                            </a>
-                                            <a>[[ task.name ]]</a>
-                                        </td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
-                                        <td class="col-xs-1">[[ task.status.label ]]</td>
-                                        <td class="col-xs-1">[[ task.progress ]]%</td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
-                                        <td class="col-xs-1">
-                                            <span ng-if="task.assigned">
-                                                [[ task.assigned.name + ' ' + task.assigned.surname ]]
-                                            </span>
-                                            <span ng-if="task.assigned == null">
-                                                <span ng-init="task.assigned = { 'name': none }"></span>
-                                                [[ task.assigned.name ]]
-                                            </span>
-                                        </td>
-                                        <td class="col-xs-1">
-                                            <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
-                                               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
-                                                <i class="fa fa-code-fork"></i>
-                                            </a>
-                                            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
-                                               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_task_to_sprint" href="#"
-                                               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
-                                                <i class="fa fa-stack-overflow"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-
-                                    <tr ng-show="parentTask.expand" ng-repeat="task in task.subtasks">
-                                        <td class="col-xs-1">
-                                            [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                        </td>
-                                        <td class="col-xs-3">
-                                            [[ task.name ]]
-                                        </td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
-                                        <td class="col-xs-1">[[ task.status.label ]]</td>
-                                        <td class="col-xs-1">[[ task.progress ]]%</td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
-                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
-                                        <td class="col-xs-1">
-                                            <span ng-if="task.assigned">
-                                                [[ task.assigned.name + ' ' + task.assigned.surname ]]
-                                            </span>
-                                            <span ng-if="task.assigned == null">
-                                                <span ng-init="task.assigned = { 'name': none }"></span>
-                                                [[ task.assigned.name ]]
-                                            </span>
-                                        </td>
-                                        <td class="col-xs-1">
-                                            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
-                                               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-
-                            </table>
+                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-table.html') ~ '\'' }}"></ng-include>
                         </div>
 
                         <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
-                            <ul class="list-group">
-                                <li class="list-group-item"></li>
-                            </ul>
+                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
                         </div>
 
                         <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
-                            <div class="col-md-12">
-                                <div class="row">
-
-                                    <div class="col-md-3">
-                                        <div class="page-header text-center">Story</div>
-
-                                        <div class="list-group">
-                                            <div class="row" ng-repeat="task in tasks">
-                                                <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
-                                                    <span ng-if="task.status.label == 'story'">
-                                                        <a class="list-group-item" style="margin-bottom: 5px;"
-                                                           ng-class="{
-                                                                'local-red': task.priority.id == 3,
-                                                                'local-yellow': task.priority.id == 2,
-                                                                'local-green': task.priority.id == 1 }">
-                                                            <h4 class="list-group-item-heading">
-                                                                <span style="color: black;">
-                                                                    [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                                                    &nbsp;
-                                                                </span>
-                                                                [[ task.name ]]
-                                                            </h4>
-                                                            <p class="list-group-item-text">
-                                                                [[ task.description ]]
-                                                            </p>
-                                                            <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
-                                                                <span class="label label-info" style="float:left;">0</span>
-                                                                <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            </p>
-                                                        </a>
-                                                    </span>
-                                                    <span ng-repeat="task in task.subtasks">
-                                                        <a ng-if="task.status.label == 'story'" class="list-group-item"
-                                                           ng-class="{
-                                                                'local-red': task.priority.id == 3,
-                                                                'local-yellow': task.priority.id == 2,
-                                                                'local-green': task.priority.id == 1
-                                                                }" style="margin-bottom: 5px;">
-                                                            <h4 class="list-group-item-heading">
-                                                                <span style="color: black;">
-                                                                    [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                                                    &nbsp;
-                                                                </span>
-                                                                [[ task.name ]]
-                                                            </h4>
-                                                            <p class="list-group-item-text">
-                                                                [[ task.description ]]
-                                                            </p>
-                                                            <p style="padding-top:5px;">
-                                                                <span class="label label-info" style="float:left;">0</span>
-                                                                <img ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                                <img ng-if="task.assigned != null" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            </p>
-                                                        </a>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="page-header text-center">Todo</div>
-
-                                        <div class="row" ng-repeat="task in tasks">
-                                            <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
-                                                <span ng-if="task.status.label == 'todo'">
-                                                    <a class="list-group-item" style="margin-bottom: 5px;"
-                                                       ng-class="{
-                                                               'local-red': task.priority.id == 3,
-                                                               'local-yellow': task.priority.id == 2,
-                                                               'local-green': task.priority.id == 1 }">
-                                                        <h4 class="list-group-item-heading">
-                                                            <span style="color: black;">
-                                                                [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                                                &nbsp;
-                                                            </span>
-                                                            [[ task.name ]]
-                                                        </h4>
-                                                        <p class="list-group-item-text">
-                                                            [[ task.description ]]
-                                                        </p>
-                                                        <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
-                                                            <span class="label label-info" style="float:left;">0</span>
-                                                            <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                        </p>
-                                                    </a>
-                                                </span>
-                                                <span ng-repeat="task in task.subtasks">
-                                                    <a ng-if="task.status.label == 'todo'" class="list-group-item"
-                                                       ng-class="{
-                                                               'local-red': task.priority.id == 3,
-                                                               'local-yellow': task.priority.id == 2,
-                                                               'local-green': task.priority.id == 1
-                                                               }" style="margin-bottom: 5px;">
-                                                        <h4 class="list-group-item-heading">
-                                                            <span style="color: black;">
-                                                                [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                                                &nbsp;
-                                                            </span>
-                                                            [[ task.name ]]
-                                                        </h4>
-                                                        <p class="list-group-item-text">
-                                                            [[ task.description ]]
-                                                        </p>
-                                                        <p style="padding-top:5px;">
-                                                            <span class="label label-info" style="float:left;">0</span>
-                                                            <img ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            <img ng-if="task.assigned != null" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                        </p>
-                                                    </a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="page-header text-center">In-progress</div>
-
-                                        <div class="row" ng-repeat="task in tasks">
-                                            <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
-                                                <span ng-if="task.status.label == 'in-progress'">
-                                                    <a class="list-group-item" style="margin-bottom: 5px;"
-                                                       ng-class="{
-                                                               'local-red': task.priority.id == 3,
-                                                               'local-yellow': task.priority.id == 2,
-                                                               'local-green': task.priority.id == 1 }">
-                                                        <h4 class="list-group-item-heading">
-                                                            <span style="color: black;">
-                                                                [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                                                &nbsp;
-                                                            </span>
-                                                            [[ task.name ]]
-                                                        </h4>
-                                                        <p class="list-group-item-text">
-                                                            [[ task.description ]]
-                                                        </p>
-                                                        <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
-                                                            <span class="label label-info" style="float:left;">0</span>
-                                                            <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                        </p>
-                                                    </a>
-                                                </span>
-
-                                                <span ng-repeat="task in task.subtasks">
-                                                    <a ng-if="task.status.label == 'in-progress'" class="list-group-item"
-                                                       ng-class="{
-                                                               'local-red': task.priority.id == 3,
-                                                               'local-yellow': task.priority.id == 2,
-                                                               'local-green': task.priority.id == 1
-                                                               }" style="margin-bottom: 5px;">
-                                                        <h4 class="list-group-item-heading">
-                                                            <span style="color: black;">
-                                                                [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                                                &nbsp;
-                                                            </span>
-                                                            [[ task.name ]]
-                                                        </h4>
-                                                        <p class="list-group-item-text">
-                                                            [[ task.description ]]
-                                                        </p>
-                                                        <p style="padding-top:5px;">
-                                                            <span class="label label-info" style="float:left;">0</span>
-                                                            <img ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            <img ng-if="task.assigned != null" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                        </p>
-                                                    </a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="page-header text-center">Done</div>
-
-                                        <div class="row" ng-repeat="task in tasks">
-                                            <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
-                                                <span ng-if="task.status.label == 'done'">
-                                                    <a class="list-group-item" style="margin-bottom: 5px;"
-                                                       ng-class="{
-                                                               'local-red': task.priority.id == 3,
-                                                               'local-yellow': task.priority.id == 2,
-                                                               'local-green': task.priority.id == 1 }">
-                                                        <h4 class="list-group-item-heading">
-                                                            <span style="color: black;">
-                                                                [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                                                &nbsp;
-                                                            </span>
-                                                            [[ task.name ]]
-                                                        </h4>
-                                                        <p class="list-group-item-text">
-                                                            [[ task.description ]]
-                                                        </p>
-                                                        <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
-                                                            <span class="label label-info" style="float:left;">0</span>
-                                                            <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                        </p>
-                                                    </a>
-                                                </span>
-
-                                                <span ng-repeat="task in task.subtasks">
-                                                    <a ng-if="task.status.label == 'done'" class="list-group-item"
-                                                       ng-class="{
-                                                               'local-red': task.priority.id == 3,
-                                                               'local-yellow': task.priority.id == 2,
-                                                               'local-green': task.priority.id == 1
-                                                               }" style="margin-bottom: 5px;">
-                                                        <h4 class="list-group-item-heading">
-                                                            <span style="color: black;">
-                                                                [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                                                &nbsp;
-                                                            </span>
-                                                            [[ task.name ]]
-                                                        </h4>
-                                                        <p class="list-group-item-text">
-                                                            [[ task.description ]]
-                                                        </p>
-                                                        <p style="padding-top:5px;">
-                                                            <span class="label label-info" style="float:left;">0</span>
-                                                            <img ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            <img ng-if="task.assigned != null" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                        </p>
-                                                    </a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-agile.html') ~ '\'' }}"></ng-include>
                         </div>
                     </div>
 
@@ -591,38 +266,13 @@
                 <i class="fa fa-comments fa-fw"></i>
                 Project Chat
             </div>
-            <div class="list-group-item panel-body" style="max-height: 300px;">
+            <div class="list-group-item panel-body"  cg-busy="promise" style="max-height: 300px;">
                 {% if project.postsProject | length == 0 %}
                     <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
                 {% endif %}
-                <ul class="chat">
-                    <li ng-repeat="post in posts" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
-                            <span class="chat-img"
-                                  ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }"
-                                  ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + post.user.avatar)">
-                                <img src="#" ng-src="[[avatar]]" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
-                            </span>
-                        <div class="chat-body clearfix">
-                            <div class="header" style="height: 28px;">
-                                <strong class="primary-font"
-                                        ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }">
-                                    [[post.user.name + ' ' + post.user.surname + ' (' + post.user.username + ')' ]]
-                                </strong>
 
-                                <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == post.user.id, 'pull-right': {{ app.user.id }} != post.user.id }">
-                                    <i class="fa fa-clock-o fa-fw"></i>
-                                    Posted on [[post.posted]]
-                                    <i ng-if="post.edited" class="fa fa-edit"></i>
-                                </small>
-                            </div>
-                                <pre style="white-space: pre-line;">
-                                    <span>
-                                        [[ post.message ]]
-                                    </span>
-                                </pre>
-                        </div>
-                    </li>
-                </ul>
+                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/chat.html') ~ '\'' }}"></ng-include>
+
             </div>
             <div class="list-group-item">
                 <form class="input-group input-group-lg">
@@ -702,6 +352,8 @@
         JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': project.id }) }}";
         JSON_URLS.addTask = "{{ path('zectranet_project_add_task', { 'project_id': project.id }) }}";
         JSON_URLS.getTasks = "{{ path('zectranet_project_get_tasks', { 'project_id': project.id }) }}";
+
+        var USER_ID = {{ app.user.id }};
 
     </script>
     <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>

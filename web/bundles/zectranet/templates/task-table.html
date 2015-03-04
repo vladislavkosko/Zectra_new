@@ -1,0 +1,93 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th class="col-xs-1">ID</th>
+        <th class="col-xs-2">Name</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
+        <th class="col-xs-1">Status</th>
+        <th class="col-xs-1">Progress</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
+        <th class="col-xs-1">Assigned</th>
+        <th class="col-xs-1">Operations</th>
+    </tr>
+    </thead>
+
+    <tbody ng-repeat="task in tasks" ng-init="task.expand = false; parentTask = task">
+    <tr ng-if="task.parentid == null">
+        <td class="col-xs-1">
+            [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+        </td>
+        <td class="col-xs-3">
+            <a ng-show="task.subtasks.length > 0" href="#" ng-click="task.expand = !task.expand" style="text-decoration: none;">
+                <i ng-hide="task.expand" class="fa fa-plus"></i>
+                <i ng-show="task.expand" class="fa fa-minus"></i>
+            </a>
+            <a>[[ task.name ]]</a>
+        </td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
+        <td class="col-xs-1">[[ task.status.label ]]</td>
+        <td class="col-xs-1">[[ task.progress ]]%</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
+        <td class="col-xs-1">
+            <span ng-if="task.assigned">
+                [[ task.assigned.name + ' ' + task.assigned.surname ]]
+            </span>
+            <span ng-if="task.assigned == null">
+                <span ng-init="task.assigned = { 'name': none }"></span>
+                [[ task.assigned.name ]]
+            </span>
+        </td>
+        <td class="col-xs-1">
+            <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
+               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+                <i class="fa fa-code-fork"></i>
+            </a>
+            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
+               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+                <i class="fa fa-trash"></i>
+            </a>
+            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_task_to_sprint" href="#"
+               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+                <i class="fa fa-stack-overflow"></i>
+            </a>
+        </td>
+    </tr>
+
+    <tr ng-show="parentTask.expand" ng-repeat="task in task.subtasks">
+        <td class="col-xs-1">
+            [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+        </td>
+        <td class="col-xs-3">
+            [[ task.name ]]
+        </td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
+        <td class="col-xs-1">[[ task.status.label ]]</td>
+        <td class="col-xs-1">[[ task.progress ]]%</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
+        <td class="col-xs-1">
+            <span ng-if="task.assigned">
+                [[ task.assigned.name + ' ' + task.assigned.surname ]]
+            </span>
+            <span ng-if="task.assigned == null">
+                <span ng-init="task.assigned = { 'name': none }"></span>
+                [[ task.assigned.name ]]
+            </span>
+        </td>
+        <td class="col-xs-1">
+            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
+               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+                <i class="fa fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
