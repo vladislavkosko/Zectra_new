@@ -155,29 +155,31 @@
 
                         <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
                             <ul class="list-group">
-
+                                <li class="list-group-item"></li>
                             </ul>
                         </div>
 
                         <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
                             <div class="col-md-12">
-
                                 <div class="row">
+
                                     <div class="col-md-3">
                                         <div class="page-header text-center">Story</div>
 
                                         <div class="list-group">
                                             <div class="row" ng-repeat="task in tasks">
-                                                <div class="col-md-12">
+                                                <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                                                     <span ng-if="task.status.label == 'story'">
                                                         <a class="list-group-item" style="margin-bottom: 5px;"
                                                            ng-class="{
-                                                                'local-red': task.priority.label == 'high',
-                                                                'local-yellow': task.priority.label == 'medium',
-                                                                'local-green': task.priority.label == 'low'
-                                                            }">
+                                                                'local-red': task.priority.id == 3,
+                                                                'local-yellow': task.priority.id == 2,
+                                                                'local-green': task.priority.id == 1 }">
                                                             <h4 class="list-group-item-heading">
-                                                                <span style="color: black;">[[ task.id ]]&nbsp;</span>
+                                                                <span style="color: black;">
+                                                                    [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                                    &nbsp;
+                                                                </span>
                                                                 [[ task.name ]]
                                                             </h4>
                                                             <p class="list-group-item-text">
@@ -185,213 +187,206 @@
                                                             </p>
                                                             <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
                                                                 <span class="label label-info" style="float:left;">0</span>
-                                                                <img class="img-circle" alt="Avatar" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                                <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                                                             </p>
                                                         </a>
-                                                        {#{% if task.subtasks | length > 0 %}
-                                                            {% for i in 0..task.subtasks | length - 1 %}
-                                                                <a class="list-group-item
-                                                                    {% if task.subtasks[i].priority.label == 'low' %}
-                                                                            {{ ' local-green ' }}
-                                                                    {% elseif task.subtasks[i].priority.label == 'medium' %}
-                                                                            {{ ' local-yellow ' }}
-                                                                    {% else %}
-                                                                            {{ ' local-red ' }}
-                                                                    {% endif %}" style="margin-bottom: 5px;">
-                                                                    <h4 class="list-group-item-heading">
-                                                                        <span style="color: black;">
-                                                                            {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                                        </span>
-                                                                        {{ task.subtasks[i].name }}
-                                                                    </h4>
-                                                                    <p class="list-group-item-text">
-                                                                        {{ task.subtasks[i].description }}
-                                                                    </p>
-                                                                    <p style="padding-top:5px;">
-                                                                        <span class="label label-info" style="float:left;">0</span>
-                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                                    </p>
-                                                                </a>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                        #}
+                                                    </span>
+                                                    <span ng-repeat="task in task.subtasks">
+                                                        <a ng-if="task.status.label == 'story'" class="list-group-item"
+                                                           ng-class="{
+                                                                'local-red': task.priority.id == 3,
+                                                                'local-yellow': task.priority.id == 2,
+                                                                'local-green': task.priority.id == 1
+                                                                }" style="margin-bottom: 5px;">
+                                                            <h4 class="list-group-item-heading">
+                                                                <span style="color: black;">
+                                                                    [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                                    &nbsp;
+                                                                </span>
+                                                                [[ task.name ]]
+                                                            </h4>
+                                                            <p class="list-group-item-text">
+                                                                [[ task.description ]]
+                                                            </p>
+                                                            <p style="padding-top:5px;">
+                                                                <span class="label label-info" style="float:left;">0</span>
+                                                                <img ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                                <img ng-if="task.assigned != null" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            </p>
+                                                        </a>
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-md-3">
                                         <div class="page-header text-center">Todo</div>
+
+                                        <div class="row" ng-repeat="task in tasks">
+                                            <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
+                                                <span ng-if="task.status.label == 'todo'">
+                                                    <a class="list-group-item" style="margin-bottom: 5px;"
+                                                       ng-class="{
+                                                               'local-red': task.priority.id == 3,
+                                                               'local-yellow': task.priority.id == 2,
+                                                               'local-green': task.priority.id == 1 }">
+                                                        <h4 class="list-group-item-heading">
+                                                            <span style="color: black;">
+                                                                [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                                &nbsp;
+                                                            </span>
+                                                            [[ task.name ]]
+                                                        </h4>
+                                                        <p class="list-group-item-text">
+                                                            [[ task.description ]]
+                                                        </p>
+                                                        <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
+                                                            <span class="label label-info" style="float:left;">0</span>
+                                                            <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                        </p>
+                                                    </a>
+                                                </span>
+                                                <span ng-repeat="task in task.subtasks">
+                                                    <a ng-if="task.status.label == 'todo'" class="list-group-item"
+                                                       ng-class="{
+                                                               'local-red': task.priority.id == 3,
+                                                               'local-yellow': task.priority.id == 2,
+                                                               'local-green': task.priority.id == 1
+                                                               }" style="margin-bottom: 5px;">
+                                                        <h4 class="list-group-item-heading">
+                                                            <span style="color: black;">
+                                                                [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                                &nbsp;
+                                                            </span>
+                                                            [[ task.name ]]
+                                                        </h4>
+                                                        <p class="list-group-item-text">
+                                                            [[ task.description ]]
+                                                        </p>
+                                                        <p style="padding-top:5px;">
+                                                            <span class="label label-info" style="float:left;">0</span>
+                                                            <img ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            <img ng-if="task.assigned != null" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                        </p>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <div class="col-md-3">
                                         <div class="page-header text-center">In-progress</div>
+
+                                        <div class="row" ng-repeat="task in tasks">
+                                            <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
+                                                <span ng-if="task.status.label == 'in-progress'">
+                                                    <a class="list-group-item" style="margin-bottom: 5px;"
+                                                       ng-class="{
+                                                               'local-red': task.priority.id == 3,
+                                                               'local-yellow': task.priority.id == 2,
+                                                               'local-green': task.priority.id == 1 }">
+                                                        <h4 class="list-group-item-heading">
+                                                            <span style="color: black;">
+                                                                [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                                &nbsp;
+                                                            </span>
+                                                            [[ task.name ]]
+                                                        </h4>
+                                                        <p class="list-group-item-text">
+                                                            [[ task.description ]]
+                                                        </p>
+                                                        <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
+                                                            <span class="label label-info" style="float:left;">0</span>
+                                                            <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                        </p>
+                                                    </a>
+                                                </span>
+
+                                                <span ng-repeat="task in task.subtasks">
+                                                    <a ng-if="task.status.label == 'in-progress'" class="list-group-item"
+                                                       ng-class="{
+                                                               'local-red': task.priority.id == 3,
+                                                               'local-yellow': task.priority.id == 2,
+                                                               'local-green': task.priority.id == 1
+                                                               }" style="margin-bottom: 5px;">
+                                                        <h4 class="list-group-item-heading">
+                                                            <span style="color: black;">
+                                                                [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                                &nbsp;
+                                                            </span>
+                                                            [[ task.name ]]
+                                                        </h4>
+                                                        <p class="list-group-item-text">
+                                                            [[ task.description ]]
+                                                        </p>
+                                                        <p style="padding-top:5px;">
+                                                            <span class="label label-info" style="float:left;">0</span>
+                                                            <img ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            <img ng-if="task.assigned != null" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                        </p>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <div class="col-md-3">
                                         <div class="page-header text-center">Done</div>
-                                    </div>
-                                </div>
 
-                                <div class="list-group">
-                                    {% for task in project.tasks %}
-                                        <div class="row">
-                                            {% if task.parentid == null %}
+                                        <div class="row" ng-repeat="task in tasks">
+                                            <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
+                                                <span ng-if="task.status.label == 'done'">
+                                                    <a class="list-group-item" style="margin-bottom: 5px;"
+                                                       ng-class="{
+                                                               'local-red': task.priority.id == 3,
+                                                               'local-yellow': task.priority.id == 2,
+                                                               'local-green': task.priority.id == 1 }">
+                                                        <h4 class="list-group-item-heading">
+                                                            <span style="color: black;">
+                                                                [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                                &nbsp;
+                                                            </span>
+                                                            [[ task.name ]]
+                                                        </h4>
+                                                        <p class="list-group-item-text">
+                                                            [[ task.description ]]
+                                                        </p>
+                                                        <p style="padding-top:5px;" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)">
+                                                            <span class="label label-info" style="float:left;">0</span>
+                                                            <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                        </p>
+                                                    </a>
+                                                </span>
 
-
-                                                <div class="col-md-3">
-                                                    {% if task.status.label == 'todo' %}
-                                                        <a class="list-group-item
-                                                                {% if task.priority.label == 'low' %}
-                                                                    {{ ' local-green ' }}
-                                                                {% elseif task.priority.label == 'medium' %}
-                                                                    {{ ' local-yellow ' }}
-                                                                {% else %}
-                                                                    {{ ' local-red ' }}
-                                                                {% endif %}" style="margin-bottom: 5px;">
-                                                            <h4 class="list-group-item-heading">
-                                                                <span style="color: black;">{{ task.id }}&nbsp;</span>
-                                                                {{ task.name }}
-                                                            </h4>
-                                                            <p class="list-group-item-text">
-                                                                {{ task.description }}
-                                                            </p>
-                                                            <p style="padding-top:5px;">
-                                                                <span class="label label-info" style="float:left;">0</span>
-                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            </p>
-                                                        </a>
-                                                        {% if task.subtasks | length > 0 %}
-                                                            {% for i in 0..task.subtasks | length - 1 %}
-                                                                <a class="list-group-item
-                                                                        {% if task.subtasks[i].priority.label == 'low' %}
-                                                                            {{ ' local-green ' }}
-                                                                        {% elseif task.subtasks[i].priority.label == 'medium' %}
-                                                                            {{ ' local-yellow ' }}
-                                                                        {% else %}
-                                                                            {{ ' local-red ' }}
-                                                                        {% endif %}" style="margin-bottom: 5px;">
-                                                                    <h4 class="list-group-item-heading">
-                                                                            <span style="color: black;">
-                                                                                {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                                            </span>
-                                                                        {{ task.subtasks[i].name }}
-                                                                    </h4>
-                                                                    <p class="list-group-item-text">
-                                                                        {{ task.subtasks[i].description }}
-                                                                    </p>
-                                                                    <p style="padding-top:5px;">
-                                                                        <span class="label label-info" style="float:left;">0</span>
-                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                                    </p>
-                                                                </a>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    {% if task.status.label == 'in-progress' %}
-                                                        <a class="list-group-item
-                                                                {% if task.priority.label == 'low' %}
-                                                                    {{ ' local-green ' }}
-                                                                {% elseif task.priority.label == 'medium' %}
-                                                                    {{ ' local-yellow ' }}
-                                                                {% else %}
-                                                                    {{ ' local-red ' }}
-                                                                {% endif %}" style="margin-bottom: 5px;">
-                                                            <h4 class="list-group-item-heading">
-                                                                <span style="color: black;">{{ task.id }}&nbsp;</span>
-                                                                {{ task.name }}
-                                                            </h4>
-                                                            <p class="list-group-item-text">
-                                                                {{ task.description }}
-                                                            </p>
-                                                            <p style="padding-top:5px;">
-                                                                <span class="label label-info" style="float:left;">0</span>
-                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            </p>
-                                                        </a>
-                                                        {% if task.subtasks | length > 0 %}
-                                                            {% for i in 0..task.subtasks | length - 1 %}
-                                                                <a class="list-group-item
-                                                                        {% if task.subtasks[i].priority.label == 'low' %}
-                                                                            {{ ' local-green ' }}
-                                                                        {% elseif task.subtasks[i].priority.label == 'medium' %}
-                                                                            {{ ' local-yellow ' }}
-                                                                        {% else %}
-                                                                            {{ ' local-red ' }}
-                                                                        {% endif %}" style="margin-bottom: 5px;">
-                                                                    <h4 class="list-group-item-heading">
-                                                                            <span style="color: black;">
-                                                                                {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                                            </span>
-                                                                        {{ task.subtasks[i].name }}
-                                                                    </h4>
-                                                                    <p class="list-group-item-text">
-                                                                        {{ task.subtasks[i].description }}
-                                                                    </p>
-                                                                    <p style="padding-top:5px;">
-                                                                        <span class="label label-info" style="float:left;">0</span>
-                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                                    </p>
-                                                                </a>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    {% if task.status.label == 'done' %}
-                                                        <a class="list-group-item
-                                                                {% if task.priority.label == 'low' %}
-                                                                    {{ ' local-green ' }}
-                                                                {% elseif task.priority.label == 'medium' %}
-                                                                    {{ ' local-yellow ' }}
-                                                                {% else %}
-                                                                    {{ ' local-red ' }}
-                                                                {% endif %}" style="margin-bottom: 5px;">
-                                                            <h4 class="list-group-item-heading">
-                                                                <span style="color: black;">{{ task.id }}&nbsp;</span>
-                                                                {{ task.name }}
-                                                            </h4>
-                                                            <p class="list-group-item-text">
-                                                                {{ task.description }}
-                                                            </p>
-                                                            <p style="padding-top:5px;">
-                                                                <span class="label label-info" style="float:left;">0</span>
-                                                                <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                            </p>
-                                                        </a>
-                                                        {% if task.subtasks | length > 0 %}
-                                                            {% for i in 0..task.subtasks | length - 1 %}
-                                                                <a class="list-group-item
-                                                                        {% if task.subtasks[i].priority.label == 'low' %}
-                                                                            {{ ' local-green ' }}
-                                                                        {% elseif task.subtasks[i].priority.label == 'medium' %}
-                                                                            {{ ' local-yellow ' }}
-                                                                        {% else %}
-                                                                            {{ ' local-red ' }}
-                                                                        {% endif %}" style="margin-bottom: 5px;">
-                                                                    <h4 class="list-group-item-heading">
-                                                                            <span style="color: black;">
-                                                                                {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                                            </span>
-                                                                        {{ task.subtasks[i].name }}
-                                                                    </h4>
-                                                                    <p class="list-group-item-text">
-                                                                        {{ task.subtasks[i].description }}
-                                                                    </p>
-                                                                    <p style="padding-top:5px;">
-                                                                        <span class="label label-info" style="float:left;">0</span>
-                                                                        <img class="img-circle" alt="Avatar" src="{{ asset('') }}documents/{{ task.subtasks[i].owner.avatar }}" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                                                    </p>
-                                                                </a>
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </div>
-                                            {% endif %}
+                                                <span ng-repeat="task in task.subtasks">
+                                                    <a ng-if="task.status.label == 'done'" class="list-group-item"
+                                                       ng-class="{
+                                                               'local-red': task.priority.id == 3,
+                                                               'local-yellow': task.priority.id == 2,
+                                                               'local-green': task.priority.id == 1
+                                                               }" style="margin-bottom: 5px;">
+                                                        <h4 class="list-group-item-heading">
+                                                            <span style="color: black;">
+                                                                [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                                &nbsp;
+                                                            </span>
+                                                            [[ task.name ]]
+                                                        </h4>
+                                                        <p class="list-group-item-text">
+                                                            [[ task.description ]]
+                                                        </p>
+                                                        <p style="padding-top:5px;">
+                                                            <span class="label label-info" style="float:left;">0</span>
+                                                            <img ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                            <img ng-if="task.assigned != null" ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                                        </p>
+                                                    </a>
+                                                </span>
+                                            </div>
                                         </div>
-                                    {% endfor %}
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -454,7 +449,7 @@
                                             <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
                                         </div>
                                         <div class="form-group">
-                                            <button type="button" class="btn btn-primary" ng-click="addTask(task)">Add</button>
+                                            <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-primary" ng-click="addTask(task)">Add</button>
                                             <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
                                         </div>
                                     </form>
@@ -620,7 +615,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="list-group-item" >
+            <div class="list-group-item">
                 <form class="input-group input-group-lg">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" style="height: 65px;">
@@ -634,6 +629,12 @@
                         </button>
                     </span>
                 </form>
+                <div id="slide-down-menu-screenshots" style="display: none;">
+                    <div id="div-screenshot" style="display: none; width: auto;height: auto;">
+
+                    </div>
+                    <button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="InsertScreenshotsInChat()" style="width: 100%; height: 40px; margin-top: 10px;">Insert Screenshots in chat</button>
+                </div>
             </div>
         </div>
         <!-- END OF CHAT PANEL -->

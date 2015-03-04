@@ -19,9 +19,13 @@ class IndexController extends Controller
      */
     public function indexAction()
     {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('zectranet_user_page');
+        }
+
         $response = new Response();
         $response->setPublic();
-        $response->setMaxAge(20000);
+        $response->setMaxAge(200000);
         $response->headers->addCacheControlDirective('must-revalidate', true);
 
         return $this->render('@Zectranet/homepage.html.twig', array(), $response);
@@ -35,6 +39,14 @@ class IndexController extends Controller
      */
     public function loginAction($param = null, $param1 = null)
     {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('zectranet_user_page');
+        }
+
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('zectranet_user_page');
+        }
+
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -72,6 +84,9 @@ class IndexController extends Controller
      * @Route("/signup", name="zectranet_signup")
      */
     public function signupAction() {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('zectranet_user_page');
+        }
         return $this->render('@Zectranet/register.html.twig');
     }
 
@@ -81,6 +96,10 @@ class IndexController extends Controller
      * @return Response
      */
     public function signupActAction(Request $request) {
+        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
+            return $this->redirectToRoute('zectranet_user_page');
+        }
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 

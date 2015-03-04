@@ -852,21 +852,30 @@ class Task
     }
 
     public function getInArray() {
+        $subtasks = array();
+        if ($this->subtasks) {
+            $sub = $this->getSubtasks();
+            /** @var Task $task */
+            foreach ($sub as $task) {
+                $subtasks[] = $task->getInArray();
+            }
+        }
+
         return array(
             'id' => $this->getId(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
+            'parentid' => $this->getParentid(),
             'assigned' => ($this->assigned) ? $this->getAssigned()->getInArray() : null,
-            'assignedId' => $this->getAssignedid(),
             'startDate' => $this->getStartdate()->format('Y-m-d'),
             'endDate' => $this->getEnddate()->format('Y-m-d'),
             'estimatedHours' => $this->getEstimatedHours(),
             'estimatedMinutes' => $this->getEstimatedMinutes(),
-            'ownerId' => $this->getOwnerid(),
             'owner' => $this->getOwner()->getInArray(),
             'status' => $this->getStatus()->getInArray(),
             'type' => $this->getType()->getInArray(),
-            'prority' => $this->getPriority()->getInArray()
+            'priority' => $this->getPriority()->getInArray(),
+            'subtasks' => $subtasks
         );
     }
 }

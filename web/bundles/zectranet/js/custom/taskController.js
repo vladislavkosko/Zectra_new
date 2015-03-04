@@ -8,10 +8,14 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.urlAddTask  = JSON_URLS.addTask;
 
         $scope.addTask = function (task){
-            $http.post($scope.urlAddTask, {'task': task})
-                .success(function (response) {
-                    $scope.getTasks();
-                });
+            if (task && task.Name && task.Description && task.Priority && task.Type
+                && task.Startdate && task.Enddate) {
+
+                $http.post($scope.urlAddTask, {'task': task})
+                    .success(function (response) {
+                        $scope.getTasks();
+                    });
+            }
         };
 
         $scope.getTasks = function () {
