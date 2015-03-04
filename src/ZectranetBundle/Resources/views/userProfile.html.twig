@@ -1,0 +1,62 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}UserProfile{% endblock %}
+
+{% block body %}
+    <img src="{{ asset('') }}documents/{{ user.avatar }}"><br>
+
+    <span> Name: </span><br>
+    <span> {{ user.name }} </span><br>
+    <span> Surname: </span><br>
+    <span> {{ user.surname }} </span><br>
+    <span>AboutMe</span><br>
+    <div style=" width:200px;height: 200px;border:1px solid #000000;"></div><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Start in Office</th>
+                <th>Start lunch</th>
+                <th>End lunch</th>
+                <th>End in Office</th>
+                <th>Total hours</th>
+                <th>Main Task</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for wde in user.wde %}
+                <tr>
+                    <td>
+                        {{ wde.date | date("Y/m/d")  }}
+                    </td>
+                    <td>
+                      {{ wde.startTime | date("H : i") }}
+                    </td>
+                    <td>
+                       {{ wde.beginLunch | date("H : i") }}
+                    </td>
+                    <td>
+                        {{ wde.endLunch | date("H : i") }}
+                    </td>
+                    <td>
+                        {{ wde.endTime | date("H : i") }}
+                    </td>
+                    <td>
+                        {{ wde.hours }}
+                    </td>
+                    <td>
+                        {{ wde.mainTask }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block modals %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

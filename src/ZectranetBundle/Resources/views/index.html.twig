@@ -18,11 +18,10 @@
 								   class="form-control dropdown-toggle"
 								   placeholder="Search..."
 								   maxlength="50"
-								   ng-keypress="pressEnter($event, '{{ path('zectranet_user_page') }}SearchPage/')"
-								   ng-change="InputChange('{{ path('zectranet_user_page') }}SearchPage/')"
+								   ng-change="InputChange()"
 								   data-toggle="dropdown" type="search">
 							<span class="input-group-btn">
-								<a ng-href="{{ path('zectranet_user_page') }}SearchPage/[[searchInput]]" ng-click="PreCheck();" class="btn btn-default"  >
+								<a ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}SearchPage/[[searchInput]]" ng-click="PreCheck();" class="btn btn-default"  >
 									<i class="fa fa-search"></i>
 								</a>
 							</span>
@@ -39,7 +38,7 @@
 									   style="color: whitesmoke; padding: 1px 0; margin: 0;"></p>
 								</li>
 								<li ng-if="(searchCount > 0) && (searchInput.length > 0)" ng-repeat="res in search_projects" style="border-top: solid darkgray 1px;">
-									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page') }}office/[[res.id]]">
+									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}office/[[res.id]]">
 										<span style="font-size: 14px;" class="quicksearch-result blue-color-links"><i class="fa fa-user" style="font-size: 14px;"></i> [[res.name]]</span>
 										<span style="font-size: 11px;" class="quicksearch-source">[[res.Office.name]]</span>
 									</a>
@@ -50,13 +49,13 @@
 									   style="color: whitesmoke; padding: 1px 0; margin: 0;"></p>
 								</li>
 								<li ng-if="(searchCount > 0) && (searchInput.length > 0)" ng-repeat="res in search_tasks" style="border-top: solid darkgray 1px;">
-									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page') }}office/[[res.officeid]]/[[searchInput]]">
+									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}office/[[res.officeid]]/[[searchInput]]">
 										<span style="font-size: 14px;" class="quicksearch-result blue-color-links"><i class="fa fa-filter" style="font-size: 14px;"></i> [[res.name]]</span>
 										<span style="font-size: 11px;" class="quicksearch-source">[[res.Office.name]]</span>
 									</a>
 								</li>
 								<li ng-if="(searchCount > 0) && (searchInput.length > 0)" ng-repeat="res in search_task_posts" style="border-top: solid darkgray 1px;">
-									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page') }}office/[[res.Office.officeid]]/[[searchInput]]">
+									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}office/[[res.Office.officeid]]/[[searchInput]]">
 										<span style="font-size: 14px;" class="quicksearch-result blue-color-links"><i class="fa fa-filter" style="font-size: 14px;"></i> [[res.message]]</span>
 										<span style="font-size: 11px;" class="quicksearch-source">[[res.Office.name]]</span>
 									</a>
@@ -67,11 +66,11 @@
 									   style="color: whitesmoke; padding: 1px 0; margin: 0;"></p>
 								</li>
 								<li ng-if="(searchCount > 0) && (searchInput.length > 0)" ng-repeat="res in search_chats" style="border-top: solid darkgray 1px;">
-									<a tabindex="-1" ng-if="res.Topics == null" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page') }}office/[[res.officeid]]/[[searchInput]]">
+									<a tabindex="-1" ng-if="res.Topics == null" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}office/[[res.officeid]]/[[searchInput]]">
 										<span class="quicksearch-result blue-color-links"><i class="fa fa-comments" style="font-size: 14px;"></i> [[res.message]]</span>
 										<span style="font-size: 11px;" class="quicksearch-source">[[res.Offices.name]]</span>
 									</a>
-									<a tabindex="-1" ng-if="res.Offices == null" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page') }}topic/[[res.topicid]]/[[searchInput]]">
+									<a tabindex="-1" ng-if="res.Offices == null" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}topic/[[res.topicid]]/[[searchInput]]">
 										<span class="quicksearch-result blue-color-links"><i class="fa fa-comments" style="font-size: 14px;"></i> [[res.message]]</span>
 										<span style="font-size: 11px;" class="quicksearch-source">[[res.Topics.name]]</span>
 									</a>
