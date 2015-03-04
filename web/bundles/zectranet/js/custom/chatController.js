@@ -25,7 +25,6 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             $http.post($scope.urlGetPosts, {'offset': offset , 'count': count})
                 .success(function (response) {
                    $scope.posts = response.Posts;
-                    console.log(response.Posts);
                 });
         };
 
@@ -43,7 +42,6 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                     var cbd = event.clipboardData;
                     if (cbd.items && cbd.items.length) {
                         var cbi = cbd.items[0];
-                        console.log(cbi);
                         if (/^image\/(png|gif|jpe?g)$/.test(cbi.type)) {
                             event.stopPropagation();
                             event.preventDefault();
