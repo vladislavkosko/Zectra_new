@@ -47,7 +47,7 @@
                             </a>
                         </li>
                         <li data-toggle="tooltip" data-placement="top" title="Add new task" role="presentation">
-                            <a style="cursor: pointer" data-toggle="modal" data-target="#add_new_task" href="#">
+                            <a style="cursor: pointer" data-toggle="modal" data-target="#add_new_task">
                                 <i class="fa fa-plus fa-2x"></i>
                             </a>
                         </li>
@@ -56,7 +56,8 @@
                     <div id="tasks-tab-content" class="tab-content" ng-init="getTasks()">
 
                         <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
-                            <table class="table" >
+                            <table class="table">
+
                                 <thead>
                                 <tr>
                                     <th class="col-xs-1">ID</th>
@@ -73,83 +74,82 @@
                                 </tr>
                                 </thead>
 
-                                {% for task in project.tasks %}
-                                    {% if task.parent == null %}
-                                        <tbody>
-                                        <tr>
-                                            <td class="col-xs-1">{{ task.id }}{{ (task.type.label == 'bug') ? '.B' : '' }}</td>
-                                            <td class="col-xs-3">
-                                                {% if task.subtasks | length > 0 %}
-                                                    <a data-toggle="collapse" href="#task{{ task.id }}" aria-expanded="false" class="collapsed" style="text-decoration: none;">
-                                                        <i class="fa fa-plus"></i>
-                                                    </a>
-                                                {% endif %}
-                                                <a>{{ task.name }}</a>
-                                            </td>
-                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.priority.label }}</td>
-                                            <td class="col-xs-1">{{ task.status.label }}</td>
-                                            <td class="col-xs-1">{{ task.progress }}%</td>
-                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.estimatedHours ~ ' h ' ~ task.estimatedMinutes ~ ' m'}}</td>
-                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.startdate is empty ? '-' : task.startdate | date('Y-m-d') }}</td>
-                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.enddate is empty ? '-' : task.enddate | date('Y-m-d') }}</td>
-                                            <td class="col-xs-1 hidden-sm hidden-xs">{{ task.owner.name ~ ' ' ~ task.owner.surname}}</td>
-                                            <td class="col-xs-1">
-                                                {% if task.assigned %}
-                                                    {{ task.assigned.name ~ ' ' ~ task.assigned.surname}}
-                                                {% else %}
-                                                    {{ '-' }}
-                                                {% endif %}
-                                            </td>
-                                            <td class="col-xs-1">
-                                                <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
-                                                   onclick="addParentToSubTask({{ task.id }})" style="width: 22px; height: 22px;">
-                                                    <i class="fa fa-code-fork"></i>
-                                                </a>
-                                                <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
-                                                   onclick="addParentToSubTask({{ task.id }})" style="width: 22px; height: 22px;">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                                <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
-                                                   onclick="addParentToSubTask({{ task.id }})" style="width: 22px; height: 22px;">
-                                                    <i class="fa fa-stack-overflow"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        </tbody>
+                                <tbody ng-repeat="task in tasks" ng-init="task.expand = false; parentTask = task">
+                                    <tr ng-if="task.parentid == null">
+                                        <td class="col-xs-1">
+                                            [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                        </td>
+                                        <td class="col-xs-3">
+                                            <a ng-show="task.subtasks.length > 0" href="#" ng-click="task.expand = !task.expand" style="text-decoration: none;">
+                                                <i ng-hide="task.expand" class="fa fa-plus"></i>
+                                                <i ng-show="task.expand" class="fa fa-minus"></i>
+                                            </a>
+                                            <a>[[ task.name ]]</a>
+                                        </td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
+                                        <td class="col-xs-1">[[ task.status.label ]]</td>
+                                        <td class="col-xs-1">[[ task.progress ]]%</td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
+                                        <td class="col-xs-1">
+                                            <span ng-if="task.assigned">
+                                                [[ task.assigned.name + ' ' + task.assigned.surname ]]
+                                            </span>
+                                            <span ng-if="task.assigned == null">
+                                                <span ng-init="task.assigned = { 'name': none }"></span>
+                                                [[ task.assigned.name ]]
+                                            </span>
+                                        </td>
+                                        <td class="col-xs-1">
+                                            <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
+                                               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+                                                <i class="fa fa-code-fork"></i>
+                                            </a>
+                                            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
+                                               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_task_to_sprint" href="#"
+                                               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+                                                <i class="fa fa-stack-overflow"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
 
-                                        {% if task.subtasks | length > 0 %}
-                                            <tbody id="task{{ task.id }}" class="collapse" aria-expanded="false">
-                                            {% for i in 0..task.subtasks | length - 1%}
-                                                <tr>
-                                                    <td class="col-xs-1">
-                                                        {{ task.id }}.{{ i + 1 }}{% if (task.subtasks[i].type.label == 'bug') %}{{ 'B' }}{% elseif (task.subtasks[i].type.label == 'improvement') %}{{ 'I' }}{% endif %}
-                                                    </td>
-                                                    <td class="col-xs-3">
-                                                        {{ task.subtasks[i].name }}
-                                                    </td>
-                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].priority.label }}</td>
-                                                    <td class="col-xs-1">{{ task.subtasks[i].status.label }}</td>
-                                                    <td class="col-xs-1">{{ task.subtasks[i].progress }}%</td>
-                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].estimatedHours ~ ' h ' ~ task.subtasks[i].estimatedMinutes ~ ' m' }}</td>
-                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].startdate is empty ? '-' : task.subtasks[i].startdate | date('Y-m-d') }}</td>
-                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].enddate is empty ? '-' : task.subtasks[i].enddate | date('Y-m-d') }}</td>
-                                                    <td class="col-xs-1 hidden-sm hidden-xs">{{ task.subtasks[i].owner.name ~ ' ' ~ task.subtasks[i].owner.surname}}</td>
-                                                    <td class="col-xs-1">
-                                                        {% if task.subtasks[i].assigned %}
-                                                            {{ task.subtasks[i].assigned.name ~ ' ' ~ task.subtasks[i].assigned.surname}}
-                                                        {% else %}
-                                                            {{ '-' }}
-                                                        {% endif %}
-                                                    </td>
-                                                    <td class="col-xs-1">
+                                    <tr ng-show="parentTask.expand" ng-repeat="task in task.subtasks">
+                                        <td class="col-xs-1">
+                                            [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                        </td>
+                                        <td class="col-xs-3">
+                                            [[ task.name ]]
+                                        </td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
+                                        <td class="col-xs-1">[[ task.status.label ]]</td>
+                                        <td class="col-xs-1">[[ task.progress ]]%</td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
+                                        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
+                                        <td class="col-xs-1">
+                                            <span ng-if="task.assigned">
+                                                [[ task.assigned.name + ' ' + task.assigned.surname ]]
+                                            </span>
+                                            <span ng-if="task.assigned == null">
+                                                <span ng-init="task.assigned = { 'name': none }"></span>
+                                                [[ task.assigned.name ]]
+                                            </span>
+                                        </td>
+                                        <td class="col-xs-1">
+                                            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
+                                               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
 
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
                             </table>
                         </div>
 

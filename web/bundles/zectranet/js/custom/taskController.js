@@ -9,7 +9,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
         $scope.addTask = function (task){
             if (task && task.Name && task.Description && task.Priority && task.Type
-                && task.Startdate && task.Enddate) {
+                && task.StartDate && task.EndDate) {
 
                 $http.post($scope.urlAddTask, {'task': task})
                     .success(function (response) {
