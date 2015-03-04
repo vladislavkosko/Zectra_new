@@ -78,7 +78,9 @@ class IndexController extends Controller
     /**
      * @Route("/login_check", name="zectranet_login_check")
      */
-    public function loginCheckAction() { }
+    public function loginCheckAction() {
+
+    }
 
     /**
      * @Route("/signup", name="zectranet_signup")

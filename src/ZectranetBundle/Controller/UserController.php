@@ -19,9 +19,25 @@ class UserController extends Controller
     /**
      * @Route("/user")
      * @Security("has_role('ROLE_USER')")
+     * @param int|null $user_id
      * @return Response
      */
-    public function indexAction()
+    public function indexAction($user_id = null)
+    {
+        if ($user_id != null) {
+            $user = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($user_id);
+        } else {
+            $user = $this->getUser();
+        }
+        return $this->render('@Zectranet/userProfile.html.twig', array('user' => $user));
+    }
+
+    /**
+     * @Route("/user/home")
+     * @Security("has_role('ROLE_USER')")
+     * @return Response
+     */
+    public function homeAction()
     {
         return $this->render('@Zectranet/user.html.twig');
     }

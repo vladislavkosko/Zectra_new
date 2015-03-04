@@ -13,6 +13,10 @@ zectranet_login_check:
 zectranet_logout:
     path: /logout
 
+zectranet_user_home:
+    path: /user/home
+    defaults: { _controller: ZectranetBundle:User:home }
+
 zectranet_signup:
     path: /signup
     defaults: { _controller: ZectranetBundle:Index:signup }
@@ -38,8 +42,10 @@ zectranet_wde:
     defaults: { _controller: ZectranetBundle:User:wde }
 
 zectranet_user_page:
-    path: /user
-    defaults: { _controller: ZectranetBundle:User:index }
+    path: /userProfile/{user_id}
+    defaults: { _controller: ZectranetBundle:User:index, user_id: null }
+    requirements:
+            user_id: \d+
 
 zectranet_user_settings:
     path: /user/settings
