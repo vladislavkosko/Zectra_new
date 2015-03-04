@@ -313,18 +313,12 @@ class DailyTimeSheet
         $newWDE->setUser($user);
         $newWDE->setDate(new \DateTime());
 
-        if ($parameters['startOffice'])
-            $newWDE->setStartTime(date_create_from_format('H:i', $parameters['startOffice']));
-        if ($parameters['startLunch'])
-            $newWDE->setBeginLunch(date_create_from_format('H:i', $parameters['startLunch']));
-        if ($parameters['endLunch'])
-            $newWDE->setEndLunch(date_create_from_format('H:i', $parameters['endLunch']));
-        if ($parameters['endOffice'])
-            $newWDE->setEndTime(date_create_from_format('H:i', $parameters['endOffice']));
-        if ($parameters['hours'])
-            $newWDE->setHours($parameters['hours']);
-        if ($parameters['mainTask'])
-            $newWDE->setMainTask($parameters['mainTask']);
+        $newWDE->setStartTime(($parameters['startOffice']) ? date_create_from_format('H:i', $parameters['startOffice']) : null);
+        $newWDE->setBeginLunch(($parameters['startLunch']) ? date_create_from_format('H:i', $parameters['startLunch']) : null);
+        $newWDE->setEndLunch(($parameters['endLunch']) ? date_create_from_format('H:i', $parameters['endLunch']) : null);
+        $newWDE->setEndTime(($parameters['endOffice']) ? date_create_from_format('H:i', $parameters['endOffice']) : null);
+        $newWDE->setHours(($parameters['hours']) ? $parameters['hours'] : null);
+        $newWDE->setMainTask(($parameters['mainTask']) ? $parameters['mainTask'] : null);
 
         $em->persist($newWDE);
         $em->flush();
@@ -340,18 +334,12 @@ class DailyTimeSheet
     {
         $currentWDE = $em->getRepository('ZectranetBundle:DailyTimeSheet')->findOneBy(array('date' => $currentDate, 'userid' => $user->getId()));
 
-        if ($parameters['startOffice'])
-            $currentWDE->setStartTime(date_create_from_format('H:i', $parameters['startOffice']));
-        if ($parameters['startLunch'])
-            $currentWDE->setBeginLunch(date_create_from_format('H:i', $parameters['startLunch']));
-        if ($parameters['endLunch'])
-            $currentWDE->setEndLunch(date_create_from_format('H:i', $parameters['endLunch']));
-        if ($parameters['endOffice'])
-            $currentWDE->setEndTime(date_create_from_format('H:i', $parameters['endOffice']));
-        if ($parameters['hours'])
-            $currentWDE->setHours($parameters['hours']);
-        if ($parameters['mainTask'])
-            $currentWDE->setMainTask($parameters['mainTask']);
+        $currentWDE->setStartTime(($parameters['startOffice']) ? date_create_from_format('H:i', $parameters['startOffice']) : null);
+        $currentWDE->setBeginLunch(($parameters['startLunch']) ? date_create_from_format('H:i', $parameters['startLunch']) : null);
+        $currentWDE->setEndLunch(($parameters['endLunch']) ? date_create_from_format('H:i', $parameters['endLunch']) : null);
+        $currentWDE->setEndTime(($parameters['endOffice']) ? date_create_from_format('H:i', $parameters['endOffice']) : null);
+        $currentWDE->setHours(($parameters['hours']) ? $parameters['hours'] : null);
+        $currentWDE->setMainTask(($parameters['mainTask']) ? $parameters['mainTask'] : null);
 
         $em->flush();
     }

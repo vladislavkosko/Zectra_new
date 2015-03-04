@@ -4,15 +4,16 @@
 
 {% block styles %}
 	{{ parent() }}
+
 {% endblock %}
 
 {% block leftSidebar %}
 	<div class="navbar-default sidebar" role="navigation">
 		<div class="sidebar-nav navbar-collapse">
-			<div id="quicksearch-block">
+			<div id="quicksearch-block" ng-controller="SearchController">
 				<ul class="nav">
 					<li class="sidebar-search">
-						<div class="input-group custom-search-form dropdown">
+						<div class="input-group custom-search-form dropdown" >
 							<input id="text-search" ng-model="searchInput"
 								   class="form-control dropdown-toggle"
 								   placeholder="Search..."
@@ -283,6 +284,8 @@
 
 {% block javascripts %}
 	{{ parent() }}
+	<script src="{{ asset('bundles/zectranet/js/custom/searchController.js') }}" type="text/javascript" ></script>
+	<script src="{{ asset('bundles/zectranet/js/highlight.js') }}" type="text/javascript"></script>
 	{#
 	<script src="{{ asset('bundles/intranet/js/custom/documents.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/intranet/js/custom/sprint.js') }}" type="text/javascript"></script>
