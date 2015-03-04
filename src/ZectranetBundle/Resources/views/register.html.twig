@@ -68,7 +68,6 @@
 		$('#signup_form').bind('submit', function (event) {
 			var pass = $('#pass');
 			var repeatPass = $('#repeatpass');
-			debugger;
 			if (pass.val() !== repeatPass.val()) {
 				repeatPass.notify(
 						"Passwords do not match",

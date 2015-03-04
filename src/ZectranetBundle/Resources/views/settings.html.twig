@@ -213,10 +213,9 @@
     <script src="{{ asset('bundles/zectranet/js/notify.min.js') }}" type="text/javascript"></script>
     <script>
         $('#pswrdChange').on('submit', function(e) {
-            debugger;
             var pswrd = $('#pswrd');
             var rpswrd = $('#rpswrd');
-            if (pswrd != rpswrd) {
+            if (pswrd.val() !== rpswrd.val()) {
                 rpswrd.notify('Passwords do not match!', { position:"right" });
                 return false;
             }
