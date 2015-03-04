@@ -64,6 +64,7 @@ class Notification
      * @ORM\Column(name="activated", type="datetime")
      */
     private $activated;
+    
 
     /**
      * Get id
@@ -234,5 +235,21 @@ class Notification
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'user' => $this->getUser()->getInArray(),
+            'resourceid' => $this->getResourceid(),
+            'destinationid' => $this->getDestinationid(),
+            'type' => $this->getType(),
+            'message' => $this->getMessage(),
+            'activated' => $this->getActivated()
+        );
     }
 }

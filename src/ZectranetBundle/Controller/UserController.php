@@ -83,7 +83,7 @@ class UserController extends Controller
 
         $em->persist($settings);
         $em->flush();
-        return $this->render('@Zectranet/settings.html.twig');
+        return $this->redirectToRoute('zectranet_user_settings');
     }
 
     /**
@@ -103,15 +103,17 @@ class UserController extends Controller
             'disableAllOnEmail' => $request->request->get('disableAllOnEmail'),
             'msgEmailMessageOffice' => $request->request->get('msgEmailMessageOffice'),
             'msgEmailMessageProject' => $request->request->get('msgEmailMessageProject'),
-            'msgEmailRemovedOffice' => $request->request->get('msgEmailRemovedOffice'),
-            'msgEmailRemovedProject' => $request->request->get('msgEmailRemovedProject'),
-            'msgEmailTaskAssigned' => $request->request->get('msgEmailTaskAssigned'),
-            'msgEmailTaskComment' => $request->request->get('msgEmailTaskComment')
+            'msgEmailMessageEpicStory' => $request->request->get('msgEmailMessageEpicStory'),
+            'msgEmailMessageTask' => $request->request->get('msgEmailMessageTask'),
+            'msgEmailTaskAdded' => $request->request->get('msgEmailTaskAdded'),
+            'msgEmailEpicStoryAdded' => $request->request->get('msgEmailEpicStoryAdded'),
+            'msgEmailTaskDeleted' => $request->request->get('msgEmailTaskDeleted'),
+            'msgEmailEpicStoryDeleted' => $request->request->get('msgEmailEpicStoryDeleted')
         );
 
         UserSettings::setEmailSettings($em, $settings, $parameters);
 
-        return $this->render('@Zectranet/settings.html.twig');
+        return $this->redirectToRoute('zectranet_user_settings');
     }
 
     /**
@@ -131,15 +133,17 @@ class UserController extends Controller
             'disableAllOnSite' => $request->request->get('disableAllOnSite'),
             'msgSiteMessageOffice' => $request->request->get('msgSiteMessageOffice'),
             'msgSiteMessageProject' => $request->request->get('msgSiteMessageProject'),
-            'msgSiteRemovedOffice' => $request->request->get('msgSiteRemovedOffice'),
-            'msgSiteRemovedProject' => $request->request->get('msgSiteRemovedProject'),
-            'msgSiteTaskAssigned' => $request->request->get('msgSiteTaskAssigned'),
-            'msgSiteTaskComment' => $request->request->get('msgSiteTaskComment')
+            'msgSiteMessageEpicStory' => $request->request->get('msgSiteMessageEpicStory'),
+            'msgSiteMessageTask' => $request->request->get('msgSiteMessageTask'),
+            'msgSiteTaskAdded' => $request->request->get('msgSiteTaskAdded'),
+            'msgSiteEpicStoryAdded' => $request->request->get('msgSiteEpicStoryAdded'),
+            'msgSiteTaskDeleted' => $request->request->get('msgSiteTaskDeleted'),
+            'msgSiteEpicStoryDeleted' => $request->request->get('msgSiteEpicStoryDeleted')
         );
 
         UserSettings::setSiteSettings($em, $settings, $parameters);
 
-        return $this->render('@Zectranet/settings.html.twig');
+        return $this->redirectToRoute('zectranet_user_settings');
     }
 
     /**

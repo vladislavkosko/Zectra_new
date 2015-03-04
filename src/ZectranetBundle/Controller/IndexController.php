@@ -144,7 +144,7 @@ class IndexController extends Controller
         try {
             $message = $mailer->createMessage()
                 ->setSubject('Zectranet Reset Your Password!')
-                ->setFrom('support@zectratrading.com')
+                ->setFrom('notifications@zectratrading.com')
                 ->setTo($user->getEmail())
                 ->setBody($message, 'text/html');
             $mailer->send($message);

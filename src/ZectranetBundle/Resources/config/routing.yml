@@ -71,6 +71,18 @@ zectranet_generate_avatar:
     path: /user/generate_avatar
     defaults: { _controller: ZectranetBundle:User:generateAvatar }
 
+zectranet_notifications_clear:
+    pattern:  /notifications/clear
+    defaults: { _controller: ZectranetBundle:Notification:clearNotifications }
+
+zectranet_notifications_show:
+    pattern:  /notifications
+    defaults: { _controller: ZectranetBundle:Notification:showNotifications }
+
+zectranet_notifications_get:
+    pattern:  /notifications/get
+    defaults: { _controller: ZectranetBundle:Notification:getNotifications }
+
 zectranet_show_office:
     pattern: /office/{office_id}
     defaults: { _controller: ZectranetBundle:Office:index }

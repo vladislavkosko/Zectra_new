@@ -68,84 +68,88 @@ class UserSettings
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_email_removed_office", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_email_message_epic_story", type="boolean", options={"default" = true})
      */
-    private $msgEmailRemovedOffice;
+    private $msgEmailMessageEpicStory;
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_email_removed_project", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_email_message_task", type="boolean", options={"default" = true})
      */
-    private $msgEmailRemovedProject;
+    private $msgEmailMessageTask;
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_email_task_assigned", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_email_task_added", type="boolean", options={"default" = true})
      */
-    private $msgEmailTaskAssigned;
+    private $msgEmailTaskAdded;
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_email_task_comment", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_email_epic_story_added", type="boolean", options={"default" = true})
      */
-    private $msgEmailTaskComment;
+    private $msgEmailEpicStoryAdded;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="msg_email_task_deleted", type="boolean", options={"default" = true})
+     */
+    private $msgEmailTaskDeleted;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="msg_email_epic_story_deleted", type="boolean", options={"default" = true})
+     */
+    private $msgEmailEpicStoryDeleted;
 
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_Site_message_office", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_site_message_office", type="boolean", options={"default" = true})
      */
     private $msgSiteMessageOffice;
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_Site_message_project", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_site_message_project", type="boolean", options={"default" = true})
      */
     private $msgSiteMessageProject;
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_Site_removed_office", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_site_message_epic_story", type="boolean", options={"default" = true})
      */
-    private $msgSiteRemovedOffice;
+    private $msgSiteMessageEpicStory;
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_Site_removed_project", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_site_message_task", type="boolean", options={"default" = true})
      */
-    private $msgSiteRemovedProject;
+    private $msgSiteMessageTask;
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_Site_task_assigned", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_site_task_added", type="boolean", options={"default" = true})
      */
-    private $msgSiteTaskAssigned;
+    private $msgSiteTaskAdded;
 
     /**
      * @var boolean
-     * @ORM\Column(name="msg_Site_task_comment", type="boolean", options={"default" = true})
+     * @ORM\Column(name="msg_site_epic_story_added", type="boolean", options={"default" = true})
      */
-    private $msgSiteTaskComment;
+    private $msgSiteEpicStoryAdded;
 
+    /**
+     * @var boolean
+     * @ORM\Column(name="msg_site_task_deleted", type="boolean", options={"default" = true})
+     */
+    private $msgSiteTaskDeleted;
 
-    public function __construct() {
-        $this->disableAllOnEmail = false;
-        $this->disableAllOnSite = false;
-
-        $this->showClosedProjects = true;
-        $this->msgEmailMessageOffice = true;
-        $this->msgEmailMessageProject = true;
-        $this->msgEmailRemovedOffice = true;
-        $this->msgEmailRemovedProject = true;
-        $this->msgEmailTaskAssigned = true;
-        $this->msgEmailTaskComment = true;
-        $this->msgSiteMessageOffice = true;
-        $this->msgSiteMessageProject = true;
-        $this->msgSiteRemovedOffice = true;
-        $this->msgSiteRemovedProject = true;
-        $this->msgSiteTaskAssigned = true;
-        $this->msgSiteTaskComment = true;
-    }
+    /**
+     * @var boolean
+     * @ORM\Column(name="msg_site_epic_story_deleted", type="boolean", options={"default" = true})
+     */
+    private $msgSiteEpicStoryDeleted;
 
     /**
      * Get id
@@ -296,95 +300,141 @@ class UserSettings
     }
 
     /**
-     * Set msgEmailRemovedOffice
+     * Set msgEmailMessageEpicStory
      *
-     * @param boolean $msgEmailRemovedOffice
+     * @param boolean $msgEmailMessageEpicStory
      * @return UserSettings
      */
-    public function setMsgEmailRemovedOffice($msgEmailRemovedOffice)
+    public function setMsgEmailMessageEpicStory($msgEmailMessageEpicStory)
     {
-        $this->msgEmailRemovedOffice = $msgEmailRemovedOffice;
+        $this->msgEmailMessageEpicStory = $msgEmailMessageEpicStory;
 
         return $this;
     }
 
     /**
-     * Get msgEmailRemovedOffice
+     * Get msgEmailMessageEpicStory
      *
      * @return boolean 
      */
-    public function getMsgEmailRemovedOffice()
+    public function getMsgEmailMessageEpicStory()
     {
-        return $this->msgEmailRemovedOffice;
+        return $this->msgEmailMessageEpicStory;
     }
 
     /**
-     * Set msgEmailRemovedProject
+     * Set msgEmailMessageTask
      *
-     * @param boolean $msgEmailRemovedProject
+     * @param boolean $msgEmailMessageTask
      * @return UserSettings
      */
-    public function setMsgEmailRemovedProject($msgEmailRemovedProject)
+    public function setMsgEmailMessageTask($msgEmailMessageTask)
     {
-        $this->msgEmailRemovedProject = $msgEmailRemovedProject;
+        $this->msgEmailMessageTask = $msgEmailMessageTask;
 
         return $this;
     }
 
     /**
-     * Get msgEmailRemovedProject
+     * Get msgEmailMessageTask
      *
      * @return boolean 
      */
-    public function getMsgEmailRemovedProject()
+    public function getMsgEmailMessageTask()
     {
-        return $this->msgEmailRemovedProject;
+        return $this->msgEmailMessageTask;
     }
 
     /**
-     * Set msgEmailTaskAssigned
+     * Set msgEmailTaskAdded
      *
-     * @param boolean $msgEmailTaskAssigned
+     * @param boolean $msgEmailTaskAdded
      * @return UserSettings
      */
-    public function setMsgEmailTaskAssigned($msgEmailTaskAssigned)
+    public function setMsgEmailTaskAdded($msgEmailTaskAdded)
     {
-        $this->msgEmailTaskAssigned = $msgEmailTaskAssigned;
+        $this->msgEmailTaskAdded = $msgEmailTaskAdded;
 
         return $this;
     }
 
     /**
-     * Get msgEmailTaskAssigned
+     * Get msgEmailTaskAdded
      *
      * @return boolean 
      */
-    public function getMsgEmailTaskAssigned()
+    public function getMsgEmailTaskAdded()
     {
-        return $this->msgEmailTaskAssigned;
+        return $this->msgEmailTaskAdded;
     }
 
     /**
-     * Set msgEmailTaskComment
+     * Set msgEmailEpicStoryAdded
      *
-     * @param boolean $msgEmailTaskComment
+     * @param boolean $msgEmailEpicStoryAdded
      * @return UserSettings
      */
-    public function setMsgEmailTaskComment($msgEmailTaskComment)
+    public function setMsgEmailEpicStoryAdded($msgEmailEpicStoryAdded)
     {
-        $this->msgEmailTaskComment = $msgEmailTaskComment;
+        $this->msgEmailEpicStoryAdded = $msgEmailEpicStoryAdded;
 
         return $this;
     }
 
     /**
-     * Get msgEmailTaskComment
+     * Get msgEmailEpicStoryAdded
      *
      * @return boolean 
      */
-    public function getMsgEmailTaskComment()
+    public function getMsgEmailEpicStoryAdded()
     {
-        return $this->msgEmailTaskComment;
+        return $this->msgEmailEpicStoryAdded;
+    }
+
+    /**
+     * Set msgEmailTaskDeleted
+     *
+     * @param boolean $msgEmailTaskDeleted
+     * @return UserSettings
+     */
+    public function setMsgEmailTaskDeleted($msgEmailTaskDeleted)
+    {
+        $this->msgEmailTaskDeleted = $msgEmailTaskDeleted;
+
+        return $this;
+    }
+
+    /**
+     * Get msgEmailTaskDeleted
+     *
+     * @return boolean 
+     */
+    public function getMsgEmailTaskDeleted()
+    {
+        return $this->msgEmailTaskDeleted;
+    }
+
+    /**
+     * Set msgEmailEpicStoryDeleted
+     *
+     * @param boolean $msgEmailEpicStoryDeleted
+     * @return UserSettings
+     */
+    public function setMsgEmailEpicStoryDeleted($msgEmailEpicStoryDeleted)
+    {
+        $this->msgEmailEpicStoryDeleted = $msgEmailEpicStoryDeleted;
+
+        return $this;
+    }
+
+    /**
+     * Get msgEmailEpicStoryDeleted
+     *
+     * @return boolean 
+     */
+    public function getMsgEmailEpicStoryDeleted()
+    {
+        return $this->msgEmailEpicStoryDeleted;
     }
 
     /**
@@ -434,95 +484,141 @@ class UserSettings
     }
 
     /**
-     * Set msgSiteRemovedOffice
+     * Set msgSiteMessageEpicStory
      *
-     * @param boolean $msgSiteRemovedOffice
+     * @param boolean $msgSiteMessageEpicStory
      * @return UserSettings
      */
-    public function setMsgSiteRemovedOffice($msgSiteRemovedOffice)
+    public function setMsgSiteMessageEpicStory($msgSiteMessageEpicStory)
     {
-        $this->msgSiteRemovedOffice = $msgSiteRemovedOffice;
+        $this->msgSiteMessageEpicStory = $msgSiteMessageEpicStory;
 
         return $this;
     }
 
     /**
-     * Get msgSiteRemovedOffice
+     * Get msgSiteMessageEpicStory
      *
      * @return boolean 
      */
-    public function getMsgSiteRemovedOffice()
+    public function getMsgSiteMessageEpicStory()
     {
-        return $this->msgSiteRemovedOffice;
+        return $this->msgSiteMessageEpicStory;
     }
 
     /**
-     * Set msgSiteRemovedProject
+     * Set msgSiteMessageTask
      *
-     * @param boolean $msgSiteRemovedProject
+     * @param boolean $msgSiteMessageTask
      * @return UserSettings
      */
-    public function setMsgSiteRemovedProject($msgSiteRemovedProject)
+    public function setMsgSiteMessageTask($msgSiteMessageTask)
     {
-        $this->msgSiteRemovedProject = $msgSiteRemovedProject;
+        $this->msgSiteMessageTask = $msgSiteMessageTask;
 
         return $this;
     }
 
     /**
-     * Get msgSiteRemovedProject
+     * Get msgSiteMessageTask
      *
      * @return boolean 
      */
-    public function getMsgSiteRemovedProject()
+    public function getMsgSiteMessageTask()
     {
-        return $this->msgSiteRemovedProject;
+        return $this->msgSiteMessageTask;
     }
 
     /**
-     * Set msgSiteTaskAssigned
+     * Set msgSiteTaskAdded
      *
-     * @param boolean $msgSiteTaskAssigned
+     * @param boolean $msgSiteTaskAdded
      * @return UserSettings
      */
-    public function setMsgSiteTaskAssigned($msgSiteTaskAssigned)
+    public function setMsgSiteTaskAdded($msgSiteTaskAdded)
     {
-        $this->msgSiteTaskAssigned = $msgSiteTaskAssigned;
+        $this->msgSiteTaskAdded = $msgSiteTaskAdded;
 
         return $this;
     }
 
     /**
-     * Get msgSiteTaskAssigned
+     * Get msgSiteTaskAdded
      *
      * @return boolean 
      */
-    public function getMsgSiteTaskAssigned()
+    public function getMsgSiteTaskAdded()
     {
-        return $this->msgSiteTaskAssigned;
+        return $this->msgSiteTaskAdded;
     }
 
     /**
-     * Set msgSiteTaskComment
+     * Set msgSiteEpicStoryAdded
      *
-     * @param boolean $msgSiteTaskComment
+     * @param boolean $msgSiteEpicStoryAdded
      * @return UserSettings
      */
-    public function setMsgSiteTaskComment($msgSiteTaskComment)
+    public function setMsgSiteEpicStoryAdded($msgSiteEpicStoryAdded)
     {
-        $this->msgSiteTaskComment = $msgSiteTaskComment;
+        $this->msgSiteEpicStoryAdded = $msgSiteEpicStoryAdded;
 
         return $this;
     }
 
     /**
-     * Get msgSiteTaskComment
+     * Get msgSiteEpicStoryAdded
      *
      * @return boolean 
      */
-    public function getMsgSiteTaskComment()
+    public function getMsgSiteEpicStoryAdded()
     {
-        return $this->msgSiteTaskComment;
+        return $this->msgSiteEpicStoryAdded;
+    }
+
+    /**
+     * Set msgSiteTaskDeleted
+     *
+     * @param boolean $msgSiteTaskDeleted
+     * @return UserSettings
+     */
+    public function setMsgSiteTaskDeleted($msgSiteTaskDeleted)
+    {
+        $this->msgSiteTaskDeleted = $msgSiteTaskDeleted;
+
+        return $this;
+    }
+
+    /**
+     * Get msgSiteTaskDeleted
+     *
+     * @return boolean 
+     */
+    public function getMsgSiteTaskDeleted()
+    {
+        return $this->msgSiteTaskDeleted;
+    }
+
+    /**
+     * Set msgSiteEpicStoryDeleted
+     *
+     * @param boolean $msgSiteEpicStoryDeleted
+     * @return UserSettings
+     */
+    public function setMsgSiteEpicStoryDeleted($msgSiteEpicStoryDeleted)
+    {
+        $this->msgSiteEpicStoryDeleted = $msgSiteEpicStoryDeleted;
+
+        return $this;
+    }
+
+    /**
+     * Get msgSiteEpicStoryDeleted
+     *
+     * @return boolean 
+     */
+    public function getMsgSiteEpicStoryDeleted()
+    {
+        return $this->msgSiteEpicStoryDeleted;
     }
 
     /**
@@ -556,12 +652,15 @@ class UserSettings
     public static function setEmailSettings($em, $settings, $parameters)
     {
         $settings->setDisableAllOnEmail(($parameters['disableAllOnEmail'] == null) ? false : true);
+
         $settings->setMsgEmailMessageOffice(($parameters['msgEmailMessageOffice'] == null) ? false : true);
         $settings->setMsgEmailMessageProject(($parameters['msgEmailMessageProject'] == null) ? false : true);
-        $settings->setMsgEmailRemovedOffice(($parameters['msgEmailRemovedOffice'] == null) ? false : true);
-        $settings->setMsgEmailRemovedProject(($parameters['msgEmailRemovedProject'] == null) ? false : true);
-        $settings->setMsgEmailTaskAssigned(($parameters['msgEmailTaskAssigned'] == null) ? false : true);
-        $settings->setMsgEmailTaskComment(($parameters['msgEmailTaskComment'] == null) ? false : true);
+        $settings->setMsgEmailMessageEpicStory(($parameters['msgEmailMessageEpicStory'] == null) ? false : true);
+        $settings->setMsgEmailMessageTask(($parameters['msgEmailMessageTask'] == null) ? false : true);
+        $settings->setMsgEmailTaskAdded(($parameters['msgEmailTaskAdded'] == null) ? false : true);
+        $settings->setMsgEmailEpicStoryAdded(($parameters['msgEmailEpicStoryAdded'] == null) ? false : true);
+        $settings->setMsgEmailTaskDeleted(($parameters['msgEmailTaskDeleted'] == null) ? false : true);
+        $settings->setMsgEmailEpicStoryDeleted(($parameters['msgEmailEpicStoryDeleted'] == null) ? false : true);
 
         $em->persist($settings);
         $em->flush();
@@ -575,12 +674,15 @@ class UserSettings
     public static function setSiteSettings($em, $settings, $parameters)
     {
         $settings->setDisableAllOnSite(($parameters['disableAllOnSite'] == null) ? false : true);
+
         $settings->setMsgSiteMessageOffice(($parameters['msgSiteMessageOffice'] == null) ? false : true);
         $settings->setMsgSiteMessageProject(($parameters['msgSiteMessageProject'] == null) ? false : true);
-        $settings->setMsgSiteRemovedOffice(($parameters['msgSiteRemovedOffice'] == null) ? false : true);
-        $settings->setMsgSiteRemovedProject(($parameters['msgSiteRemovedProject'] == null) ? false : true);
-        $settings->setMsgSiteTaskAssigned(($parameters['msgSiteTaskAssigned'] == null) ? false : true);
-        $settings->setMsgSiteTaskComment(($parameters['msgSiteTaskComment'] == null) ? false : true);
+        $settings->setMsgSiteMessageEpicStory(($parameters['msgSiteMessageEpicStory'] == null) ? false : true);
+        $settings->setMsgSiteMessageTask(($parameters['msgSiteMessageTask'] == null) ? false : true);
+        $settings->setMsgSiteTaskAdded(($parameters['msgSiteTaskAdded'] == null) ? false : true);
+        $settings->setMsgSiteEpicStoryAdded(($parameters['msgSiteEpicStoryAdded'] == null) ? false : true);
+        $settings->setMsgSiteTaskDeleted(($parameters['msgSiteTaskDeleted'] == null) ? false : true);
+        $settings->setMsgSiteEpicStoryDeleted(($parameters['msgSiteEpicStoryDeleted'] == null) ? false : true);
 
         $em->persist($settings);
         $em->flush();

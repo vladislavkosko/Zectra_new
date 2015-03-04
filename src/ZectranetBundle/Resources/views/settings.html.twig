@@ -81,23 +81,34 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" name="msgEmailRemovedOffice" {% if (app.user.userSettings.msgEmailRemovedOffice) %}{{'checked'}}{% endif %}>
-                        Office removed
+                        <input type="checkbox" name="msgEmailMessageEpicStory" {% if (app.user.userSettings.msgEmailMessageEpicStory) %}{{'checked'}}{% endif %}>
+                        New message in epic story
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" name="msgEmailRemovedProject" {% if (app.user.userSettings.msgEmailRemovedProject) %}{{'checked'}}{% endif %}>
-                        Project removed
+                        <input type="checkbox" name="msgEmailMessageTask" {% if (app.user.userSettings.msgEmailMessageTask) %}{{'checked'}}{% endif %}>
+                        New message in task
+                    </div>
+
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgEmailTaskAdded" {% if (app.user.userSettings.msgEmailTaskAdded) %}{{'checked'}}{% endif %}>
+                        Task added
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" name="msgEmailTaskAssigned" {% if (app.user.userSettings.msgEmailTaskAssigned) %}{{'checked'}}{% endif %}>
-                        Task assigned
+                        <input type="checkbox" name="msgEmailEpicStoryAdded" {% if (app.user.userSettings.msgEmailEpicStoryAdded) %}{{'checked'}}{% endif %}>
+                        Epic story added
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" name="msgEmailTaskComment" {% if (app.user.userSettings.msgEmailTaskComment) %}{{'checked'}}{% endif %}>
-                        New comment to task
+                        <input type="checkbox" name="msgEmailTaskDeleted" {% if (app.user.userSettings.msgEmailTaskDeleted) %}{{'checked'}}{% endif %}>
+                        Task deleted
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgEmailEpicStoryDeleted" {% if (app.user.userSettings.msgEmailEpicStoryDeleted) %}{{'checked'}}{% endif %}>
+                        Epic story deleted
                     </div>
 
                     <div class="form-group">
@@ -128,6 +139,7 @@
                         Disable all notifications on site
                     </div>
 
+
                     <div class="form-group">
                         <input type="checkbox" name="msgSiteMessageOffice" {% if (app.user.userSettings.msgSiteMessageOffice) %}{{'checked'}}{% endif %}>
                         Notify about new message in office
@@ -139,23 +151,34 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" name="msgSiteRemovedOffice" {% if (app.user.userSettings.msgSiteRemovedOffice) %}{{'checked'}}{% endif %}>
-                        Notify about office removed
+                        <input type="checkbox" name="msgSiteMessageEpicStory" {% if (app.user.userSettings.msgSiteMessageEpicStory) %}{{'checked'}}{% endif %}>
+                        Notify about new message in epic story
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" name="msgSiteRemovedProject" {% if (app.user.userSettings.msgSiteRemovedProject) %}{{'checked'}}{% endif %}>
-                        Notify about project removed
+                        <input type="checkbox" name="msgSiteMessageTask" {% if (app.user.userSettings.msgSiteMessageTask) %}{{'checked'}}{% endif %}>
+                        Notify about new message in task
+                    </div>
+
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgSiteTaskAdded" {% if (app.user.userSettings.msgSiteTaskAdded) %}{{'checked'}}{% endif %}>
+                        Notify about task added
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" name="msgSiteTaskAssigned" {% if (app.user.userSettings.msgSiteTaskAssigned) %}{{'checked'}}{% endif %}>
-                        Notify about task assigned
+                        <input type="checkbox" name="msgSiteEpicStoryAdded" {% if (app.user.userSettings.msgSiteEpicStoryAdded) %}{{'checked'}}{% endif %}>
+                        Notify about epic story added
                     </div>
 
                     <div class="form-group">
-                        <input type="checkbox" name="msgSiteTaskComment" {% if (app.user.userSettings.msgSiteTaskComment) %}{{'checked'}}{% endif %}>
-                        Notify about new comment to task
+                        <input type="checkbox" name="msgSiteTaskDeleted" {% if (app.user.userSettings.msgSiteTaskDeleted) %}{{'checked'}}{% endif %}>
+                        Notify about task deleted
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" name="msgSiteEpicStoryDeleted" {% if (app.user.userSettings.msgSiteEpicStoryDeleted) %}{{'checked'}}{% endif %}>
+                        Notify about epic story deleted
                     </div>
 
                     <div class="form-group">
