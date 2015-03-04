@@ -83,9 +83,17 @@
 				</ul>
 
 				<!-- BEGIN OF SITE TREE -->
-				<ul class="nav nav-first-level" id="side-menu">
-					<li {% if office is defined %} class="active" {% endif %}>
+				<ul class="nav" id="side-menu">
+
+					<li class="active">
 						<a href="#">
+							<i class='fa fa-credit-card'></i>
+							<span>Public Market</span>
+						</a>
+					</li>
+
+					<li class="active">
+						<a>
 							<i class='fa fa-sitemap'></i>
 							<span>Offices</span>
 						</a>
@@ -124,7 +132,7 @@
 								</ul>
 							</li>
 
-							<li>
+							<li style="display: none;">
 								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_office">
 									<i class='fa fa-plus-circle'></i>
 									<span>Add New Office</span>
@@ -133,8 +141,8 @@
 						</ul>
 					</li>
 
-					<li {% if project is defined %} class="active" {% endif %}>
-						<a href="#">
+					<li class="active">
+						<a>
 							<i class='fa fa-briefcase'></i>
 							<span>Projects</span>
 						</a>
@@ -173,7 +181,7 @@
 								</ul>
 							</li>
 
-							<li>
+							<li style="display: none;">
 								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_project">
 									<i class='fa fa-plus-circle'></i>
 									<span>Add New Project</span>
