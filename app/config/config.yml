@@ -71,3 +71,12 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+services:
+    zectranet.notifier:
+        class: ZectranetBundle\Services\Notifier
+        arguments:
+            - @security.context
+            - @doctrine.orm.entity_manager
+            - @router
+            - @mailer
