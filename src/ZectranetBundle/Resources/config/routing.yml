@@ -169,6 +169,12 @@ zectranet_project_add_epic_story:
     requirements:
         project_id: \d+
 
+zectranet_task_show:
+    pattern: /task/{task_id}
+    defaults: { _controller: ZectranetBundle:Task:showTask }
+    requirements:
+        task_id: \d+
+
 zectranet_upload:
     pattern: /upload/
     defaults: { _controller: ZectranetBundle:Upload:index }

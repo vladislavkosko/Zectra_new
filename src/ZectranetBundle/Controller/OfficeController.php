@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class OfficeController extends Controller
 {
-
     /**
      * @Route("/office/{office_id}")
      * @Security("has_role('ROLE_USER')")

@@ -12,6 +12,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class TaskController extends Controller {
     /**
+     * @Route("/task/{$task_id}")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $task_id
+     * @return Response
+     */
+    public function showTaskAction ($task_id) {
+        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        return $this->render('@Zectranet/task.html.twig', array('task' => $task));
+    }
+
+    /**
      * @Route("/project/{project_id}/getTasks")
      * @Security("has_role('ROLE_USER')")
      * @param int $project_id

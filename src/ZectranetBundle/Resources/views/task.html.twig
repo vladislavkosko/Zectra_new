@@ -3,5 +3,59 @@
 {% block title %}{{ task.name }}{% endblock %}
 
 {% block body %}
-    
+    <div class="page-header">
+        <span style="font-size: 25px;">
+            <i class="fa fa-user fa-2x"></i>
+            {{ task.name }}
+        </span>
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="col-md-6">
+                    <div class="page-header">
+                        <span style="font-size: 20px;">Task Info</span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="page-header">
+                        <span style="font-size: 20px;">Task Details</span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="text-muted">Assigned:</label>
+                        </div>
+
+                        <div class="col-md-6">
+                            <p class="text-info" align="center">
+                                {% if task.assigned %}
+                                    {{ task.assigned.name ~ ' ' ~ task.assigned.surname ~ ' (' ~ task.assigned ~ ')' }}
+                                {% else %}
+                                    {{ 'Not Assigned' }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 vertical-center">
+                            <label class="text-muted">Progress:</label>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="progress progress-striped active" style="position: relative;">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                    <span class="sr-only">40% Complete (success)</span>
+                                    <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%;">40% Complete</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
