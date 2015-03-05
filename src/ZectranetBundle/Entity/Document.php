@@ -75,7 +75,7 @@ class Document
 
     protected function getUploadRootDir()
     {
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+        return __DIR__.'/../../../web/'.$this->getUploadDir();
     }
 
     protected function getUploadDir()
@@ -206,5 +206,37 @@ class Document
     public function getUser()
     {
         return $this->user;
+    }
+
+    public static function getAllDocuments($em, $userid = null)
+    {
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('d')
+            ->from('ZectranetBundle:Document', 'd')
+            ->orderBy('d.uploaded', 'DESC');
+
+        if ($userid != null)
+        {
+            $qb->andWhere('d.userid = :userid')
+                ->setParameter('userid', $userid);
+        }
+
+        $documents = $qb->getQuery()->getResult();
+        return array_map(function($document){
+            return $document->getInArray();
+        }, $documents);
+    }
+
+    public function getInArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'userid' => $this->getUserid(),
+            'user' => $this->getUser()->getInArray(),
+            'name' => $this->getName(),
+            'uploaded' => $this->getUploaded(),
+            'url' => $this->getWebPath()
+        );
     }
 }

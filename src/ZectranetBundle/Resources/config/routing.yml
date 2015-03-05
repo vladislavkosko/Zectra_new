@@ -168,3 +168,28 @@ zectranet_project_add_epic_story:
     defaults: { _controller: ZectranetBundle:Project:addNewEpicStory }
     requirements:
         project_id: \d+
+
+zectranet_upload:
+    pattern: /upload/
+    defaults: { _controller: ZectranetBundle:Upload:index }
+
+zectranet_document_upload:
+    pattern: /upload/documents/
+    defaults: { _controller: ZectranetBundle:Upload:upload }
+
+zectranet_document_get:
+    pattern: /upload/documents/get/
+    defaults: { _controller: ZectranetBundle:Upload:getDocuments }
+
+zectranet_document_rename:
+    pattern: documents/{fileid}/rename
+    defaults: { _controller: ZectranetBundle:Upload:renameDoc }
+    requirements:
+            fileid: \d+
+
+zectranet_document_delete:
+    pattern: documents/{fileid}/delete/
+    defaults: { _controller: ZectranetBundle:Upload:removeDoc }
+    requirements:
+                fileid: \d+
+

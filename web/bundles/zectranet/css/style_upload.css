@@ -25,7 +25,7 @@
 }
 
 #drop_upload{
-    border: 5px dashed #495b79;
+    border: 5px dashed #337ab7;
     background-color: white;
     margin-bottom: 30px;
     border-radius: 3px;
@@ -37,7 +37,7 @@
 }
 
 #drop_upload a{
-    background-color: #495b79;
+    background-color: #337ab7;
     color: #fff;
     font-size: 30px;
     border-radius: 5px;
@@ -48,10 +48,11 @@
 }
 #drop_upload p{
     text-align: center;
+    color: #337ab7;
 }
 
 #drop_upload a:hover{
-    background-color:#0986a3;
+    background-color:#00c6ff;
 }
 
 #drop_upload input{
@@ -60,9 +61,9 @@
 
 #upload ul{
     list-style: none;
-    border-top: 1px solid #495b79;
-    border-right: 1px solid #495b79;
-    border-left: 1px solid #495b79;
+    border-top: 1px solid #337ab7;
+    border-right: 1px solid #337ab7;
+    border-left: 1px solid #337ab7;
 }
 
 #upload ul li{

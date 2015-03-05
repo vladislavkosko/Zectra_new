@@ -89,4 +89,64 @@ Zectranet.factory('$paginator', function() {
 	return paginator;
  });
 
+Zectranet.directive('document', function() {
+	return {
+		restrict: 'E',
+		priority: 5000,
+		transclude: true,
+		template: function(element, attrs) {
+			var htmlElement =
+					'<div style="display: block;">'
+					+ '<div class="not-modal"><img/></div>'
+					+ '<a class="show-element"></a>'
+					+ '</div>'
+			/*+ '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
+			 + '<div class="modal-dialog">'
+			 + '<img class="img-responsive" style="max-width: 100%; max-height: 100%; width: 100%; height: 100%;" alt=""/>'
+			 + '</div>'
+			 + '</div>'*/;
+			return htmlElement;
+		},
+		link: function($scope, element, attrs) {
+			var extensions = {
+				'.doc': 'icons/DOC.png', '.docx': 'icons/DOCX.png', '.xlsx': 'icons/XLSX.png',
+				'.avi': 'icons/AVI.png', '.pdf': 'icons/PDF.png', '.mp3': 'icons/MP3.png',
+				'.zip': 'icons/ZIP.png', '.txt': 'icons/TXT.png', '.xml': 'icons/XML.png',
+				'.xps': 'icons/XPS.png', '.rtf': 'icons/RTF.png', '.odt': 'icons/ODT.png',
+				'.htm': 'icons/HTM.png', '.html': 'icons/HTML.png', '.ods': 'icons/ODS.png'
+			};
+
+			var regex = new RegExp('[.][A-Za-z0-9]{3,4}', '');
+			var file = attrs.file;
+			var extension = file.match(regex);
+
+			var link = element.find('a');
+			var image = element.find('img');
+			var imageContainer = image.parent();
+
+			image.css('object-fit', 'cover');
+			image.css('width', attrs.width);
+			image.css('height', attrs.height);
+			image.css('top', 'auto');
+			image.css('left', 'auto');
+			image.css('margin', 'auto');
+			link.css('width', attrs.width);
+
+			var img = null;
+			if (extension != '.png' && extension != '.gif' && extension != '.jpeg' && extension != '.jpg') {
+				img = JSON_URLS.asset + 'bundles/zectranet/' + extensions[extension];
+				image.css('cursor', 'pointer');
+				image.bind('click', function () {
+					document.location = JSON_URLS.asset + file;
+				});
+			} else {
+				img = JSON_URLS.asset + file;
+				link.attr('href', JSON_URLS.asset + file);
+				link.html('<i class="fa fa-download"></i> ' + attrs.name);
+				image.attr('src', img);
+			}
+		}
+	}
+});
+
 console.log('Angular core is loaded...');
