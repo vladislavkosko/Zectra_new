@@ -170,10 +170,7 @@
                                                 <label for="add_task_name" class="control-label">Task Name:</label>
                                                 <input type="text" id="add_task_name" class="form-control" name="name" ng-model="task.Name" required>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="add_task_description" class="control-label">Task Description:</label>
-                                                <input type="text" id="add_task_description" class="form-control" name="description" ng-model="task.Description" required>
-                                            </div>
+
                                             <div class="form-group">
                                                 <label for="add_task_type" class="control-label">Task Type:</label>
                                                 <select id="add_task_type" class="form-control" name="type" ng-model="task.Type" required>
@@ -194,6 +191,7 @@
                                                     {% endfor %}
                                                 </select>
                                             </div>
+
                                             <div class="form-group">
                                                 <label for="add_task_startdate" class="control-label">Task Start Date:</label>
                                                 <input type="date" id="add_task_startdate" class="form-control" name="startdate" ng-model="task.StartDate" required>
@@ -201,6 +199,10 @@
                                             <div class="form-group">
                                                 <label for="add_task_enddate" class="control-label">Task End Date:</label>
                                                 <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_task_description" class="control-label">Task Description:</label>
+                                                <textarea id="add_task_description" class="form-control" name="description" ng-model="task.Description" required style="height: 100px;"></textarea>
                                             </div>
                                             <div class="form-group">
                                                 <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-primary" ng-click="addTask(task)">Add</button>
@@ -231,14 +233,10 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-10 col-md-offset-1">
-                                        <form class="form-horizontal" action="{{ path('zectranet_project_add_subtask', { 'project_id': project.id }) }}" method="post">
+                                        <form class="form-horizontal">
                                             <div class="form-group">
                                                 <label for="add_subtask_name" class="control-label">Task Name:</label>
                                                 <input type="text" id="add_subtask_name" class="form-control" name="name" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_subtask_description" class="control-label">Task Description:</label>
-                                                <input type="text" id="add_subtask_description" class="form-control" name="description" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="add_subtask_type" class="control-label">Task Type:</label>
@@ -271,6 +269,10 @@
                                             <div class="form-group">
                                                 <label for="add_subtask_parent" class="control-label">Parent Task ID:</label>
                                                 <input type="text" id="add_subtask_parent" class="form-control" readonly name="parent" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_subtask_description" class="control-label">Task Description:</label>
+                                                <textarea type="text" id="add_subtask_description" class="form-control" name="description" required></textarea>
                                             </div>
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-primary">Add</button>
@@ -409,10 +411,6 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
-
-        function addParentToSubTask(subtask_id) {
-            $('#add_subtask_parent').val(subtask_id);
-        }
 
         JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': 0 }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': 0 }) }}";
