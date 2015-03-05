@@ -100,6 +100,40 @@ class Project
     }
 
     /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'parentid' => $this->getParentid(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'ownerid' => $this->getOwnerid()
+        );
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @param User $user
+     * @param $data
+     * @return Project
+     */
+    public static function addEpicStory(EntityManager $em, $project_id, User $user, $data) {
+        $epicStory = new Project();
+        $epicStory->setOwner($user);
+        $epicStory->setParent($em->getRepository('ZectranetBundle:Project')
+            ->find($project_id));
+        $epicStory->setName($data->name);
+        $epicStory->setDescription($data->description);
+
+        $em->persist($epicStory);
+        $em->flush();
+
+        return $epicStory;
+    }
+
+    /**
      * Get id
      *
      * @return integer 

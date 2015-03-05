@@ -1,16 +1,19 @@
-<table class="table">
+<div ng-if="(tasks == null) || (tasks.length == 0)" class="center-block vertical-center">
+    <h3 class="text-info text-center">Tasks will be displayed here</h3>
+</div>
+<table ng-if="(tasks) && (tasks.length > 0)" class="table">
     <thead>
     <tr>
         <th class="col-xs-1">ID</th>
         <th class="col-xs-2">Name</th>
         <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
-        <th class="col-xs-1">Status</th>
-        <th class="col-xs-1">Progress</th>
+        <th class="col-xs-1 hidden-xs">Status</th>
+        <th class="col-xs-1 hidden-xs">Progress</th>
         <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
         <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
         <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
         <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
-        <th class="col-xs-1">Assigned</th>
+        <th class="col-xs-1 hidden-xs">Assigned</th>
         <th class="col-xs-1">Operations</th>
     </tr>
     </thead>
@@ -21,20 +24,20 @@
             [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
         </td>
         <td class="col-xs-3">
-            <a ng-show="task.subtasks.length > 0" href="#" ng-click="task.expand = !task.expand" style="text-decoration: none;">
+            <a ng-show="task.subtasks.length > 0" ng-click="task.expand = !task.expand" style="text-decoration: none; cursor: pointer;">
                 <i ng-hide="task.expand" class="fa fa-plus"></i>
                 <i ng-show="task.expand" class="fa fa-minus"></i>
             </a>
             <a>[[ task.name ]]</a>
         </td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
-        <td class="col-xs-1">[[ task.status.label ]]</td>
-        <td class="col-xs-1">[[ task.progress ]]%</td>
+        <td class="col-xs-1 hidden-xs">[[ task.status.label ]]</td>
+        <td class="col-xs-1 hidden-xs">[[ task.progress ]]%</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
-        <td class="col-xs-1">
+        <td class="col-xs-1 hidden-xs">
             <span ng-if="task.assigned">
                 [[ task.assigned.name + ' ' + task.assigned.surname ]]
             </span>
@@ -44,16 +47,16 @@
             </span>
         </td>
         <td class="col-xs-1">
-            <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask" href="#"
-               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+            <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask"
+               ng-click="addParentToSubTask(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
                 <i class="fa fa-code-fork"></i>
             </a>
-            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
-               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task"
+               ng-click="addParentToSubTask(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
                 <i class="fa fa-trash"></i>
             </a>
-            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_task_to_sprint" href="#"
-               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_task_to_sprint"
+               ng-click="addParentToSubTask(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
                 <i class="fa fa-stack-overflow"></i>
             </a>
         </td>
@@ -67,13 +70,13 @@
             [[ task.name ]]
         </td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
-        <td class="col-xs-1">[[ task.status.label ]]</td>
-        <td class="col-xs-1">[[ task.progress ]]%</td>
+        <td class="col-xs-1 hidden-xs">[[ task.status.label ]]</td>
+        <td class="col-xs-1 hidden-xs">[[ task.progress ]]%</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
-        <td class="col-xs-1">
+        <td class="col-xs-1 hidden-xs">
             <span ng-if="task.assigned">
                 [[ task.assigned.name + ' ' + task.assigned.surname ]]
             </span>

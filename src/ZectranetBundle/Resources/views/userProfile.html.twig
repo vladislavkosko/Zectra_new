@@ -1,56 +1,142 @@
 {% extends '@Zectranet/index.html.twig' %}
 
-{% block title %}UserProfile{% endblock %}
+{% block title %}{{ user.username }} Profile{% endblock %}
 
 {% block body %}
-    <img src="{{ asset('') }}documents/{{ user.avatar }}"><br>
+    <div class="page-header">
+        <i class="fa fa-user fa-2x"></i>
+        <span style="font-size: 25px;">Profile Page</span>
+    </div>
 
-    <span> Name: </span><br>
-    <span> {{ user.name }} </span><br>
-    <span> Surname: </span><br>
-    <span> {{ user.surname }} </span><br>
-    <span>AboutMe</span><br>
-    <div style=" width:200px;height: 200px;border:1px solid #000000;"></div><br>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Start in Office</th>
-                <th>Start lunch</th>
-                <th>End lunch</th>
-                <th>End in Office</th>
-                <th>Total hours</th>
-                <th>Main Task</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for wde in user.wde %}
-                <tr>
-                    <td>
-                        {{ wde.date | date("Y/m/d")  }}
-                    </td>
-                    <td>
-                      {{ wde.startTime | date("H : i") }}
-                    </td>
-                    <td>
-                       {{ wde.beginLunch | date("H : i") }}
-                    </td>
-                    <td>
-                        {{ wde.endLunch | date("H : i") }}
-                    </td>
-                    <td>
-                        {{ wde.endTime | date("H : i") }}
-                    </td>
-                    <td>
-                        {{ wde.hours }}
-                    </td>
-                    <td>
-                        {{ wde.mainTask }}
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="list-group col-md-2">
+                <div class="list-group-item active">
+                    <span class="text-center">User Avatar:</span>
+                </div>
+                <div class="list-group-item">
+                    <img class="img-rounded center-block" src="{{ asset('') }}documents/{{ user.avatar }}" style="width: auto; max-width: 95%; max-height: 95%;">
+                </div>
+            </div>
+
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-6 list-group">
+                        <div class="list-group-item active">
+                            Name:
+                        </div>
+                        <div class="list-group-item" style="margin-bottom: 5px;">
+                            {{ user.name }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 list-group">
+                        <div class="list-group-item active">
+                            Surname:
+                        </div>
+                        <div class="list-group-item">
+                            {{ user.surname }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 list-group">
+                        <div class="list-group-item active">
+                            Login:
+                        </div>
+                        <div class="list-group-item">
+                            {{ user.username }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 list-group">
+                        <div class="list-group-item active">
+                            Country:
+                        </div>
+                        <div class="list-group-item">
+                            <div class="text-info text-center">Under construction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="list-group col-md-6">
+        <div class="list-group-item active">
+            <span class="text-center">About Me:</span>
+        </div>
+        <div class="list-group-item">
+            <div class="text-info text-center">Under construction</div>
+        </div>
+    </div>
+
+    <div class="list-group col-md-6">
+        <div class="list-group-item active">
+            <span class="text-center">Work Experience:</span>
+        </div>
+        <div class="list-group-item">
+            <div class="text-info text-center">Under construction</div>
+        </div>
+    </div>
+
+    <div class="list-group col-md-12">
+        <div class="list-group-item active">
+            <div class="text-center">Daily TimeSheet</div>
+        </div>
+        <div class="list-group-item">
+            {% if user.wde | length == 0 %}
+                <h4 class="text-center text-info">WDE will be displayed here</h4>
+            {% else %}
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Start In Office</th>
+                        <th>Start Lunch</th>
+                        <th>End Lunch</th>
+                        <th>End In Office</th>
+                        <th>Total hours</th>
+                        <th>Main Task</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in 0..user.wde | length - 1 %}
+                        <tr>
+                            <td>
+                                {{ i + 1 }}
+                            </td>
+                            <td>
+                                {{ user.wde[i].date | date("Y-m-d")  }}
+                            </td>
+                            <td>
+                                {{ user.wde[i].startTime | date("H:i") }}
+                            </td>
+                            <td>
+                                {{ user.wde[i].beginLunch | date("H:i") }}
+                            </td>
+                            <td>
+                                {{ user.wde[i].endLunch | date("H:i") }}
+                            </td>
+                            <td>
+                                {{ user.wde[i].endTime | date("H:i") }}
+                            </td>
+                            <td>
+                                {{ user.wde[i].hours }}
+                            </td>
+                            <td>
+                                {{ user.wde[i].mainTask }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+        </div>
+    </div>
 {% endblock %}
 
 {% block modals %}

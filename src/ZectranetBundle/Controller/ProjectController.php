@@ -158,4 +158,47 @@ class ProjectController extends Controller
 
         return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
     }
+
+    /**
+     * @Route("/project/{project_id}/getEpicStories")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $project_id
+     * @return Response
+     */
+    public function getEpicStoriesAction($project_id) {
+        $epicStories = $this->getDoctrine()->getRepository('ZectranetBundle:Project')
+            ->findBy(array('parentid' => $project_id));
+        $jsonEpicStories = array();
+        /** @var Project $epicStory */
+        foreach ($epicStories as $epicStory) {
+            $jsonEpicStories[] = $epicStory->getInArray();
+        }
+
+        $response = new Response(json_encode(array('EpicStories' => $jsonEpicStories)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Route("/project/{project_id}/addNewEpicStory")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $project_id
+     * @return Response
+     */
+    public function addNewEpicStoryAction(Request $request, $project_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $data = json_decode($request->getContent(), true);
+        $data = (object) $data['story'];
+
+        $epicStory = Project::addEpicStory($em, $project_id, $user, $data);
+
+        $response = new Response(json_encode(array('EpicStory' => $epicStory->getInArray())));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 }

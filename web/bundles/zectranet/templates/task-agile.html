@@ -1,4 +1,7 @@
-<div class="col-md-12">
+<div ng-if="(tasks == null) || (tasks.length == 0)" class="center-block vertical-center">
+    <h3 class="text-info text-center">Tasks will be displayed here</h3>
+</div>
+<div ng-if="(tasks) && (tasks.length > 0)" class="col-md-12">
     <div class="row">
 
         <div class="col-md-3">
@@ -47,7 +50,7 @@
                                <p style="padding-top:5px;">
                                     <span class="label label-info" style="float:left;">0</span>
                                     <img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                    <span ng-if="(task.assigned != null) && (task.assigned.avatar)"><img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;"></span>
+                                    <span ng-if="(task.assigned != null) && (task.assigned.avatar)"><img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;"></span>
                                </p>
                             </a>
                         </span>
@@ -79,7 +82,7 @@
                             </p>
                             <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                 <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                             </p>
                         </a>
                     </div>
@@ -102,8 +105,8 @@
                             </p>
                             <p style="padding-top:5px;">
                                 <span class="label label-info" style="float:left;">0</span>
-                                <img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                <img ng-if="task.assigned != null" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img ng-if="task.assigned != null" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                             </p>
                         </a>
                     </div>
@@ -134,7 +137,7 @@
                             </p>
                             <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                 <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                             </p>
                         </a>
                     </div>
@@ -158,8 +161,8 @@
                             </p>
                             <p style="padding-top:5px;">
                                 <span class="label label-info" style="float:left;">0</span>
-                                <img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                <img ng-if="task.assigned != null" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img ng-if="task.assigned != null" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                             </p>
                         </a>
                     </div>
@@ -190,7 +193,7 @@
                             </p>
                             <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                 <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                             </p>
                         </a>
                     </div>
@@ -214,8 +217,8 @@
                             </p>
                             <p style="padding-top:5px;">
                                 <span class="label label-info" style="float:left;">0</span>
-                                <img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                <img ng-if="task.assigned != null" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" src="#" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
+                                <img ng-if="task.assigned != null" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                             </p>
                         </a>
                     </div>

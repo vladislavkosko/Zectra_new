@@ -156,3 +156,15 @@ zectranet_project_get_tasks:
     defaults: { _controller: ZectranetBundle:Task:getTasks }
     requirements:
         project_id: \d+
+
+zectranet_project_get_epic_stories:
+    pattern: /project/{project_id}/getEpicStories
+    defaults: { _controller: ZectranetBundle:Project:getEpicStories }
+    requirements:
+        project_id: \d+
+
+zectranet_project_add_epic_story:
+    pattern: /project/{project_id}/addNewEpicStory
+    defaults: { _controller: ZectranetBundle:Project:addNewEpicStory }
+    requirements:
+        project_id: \d+

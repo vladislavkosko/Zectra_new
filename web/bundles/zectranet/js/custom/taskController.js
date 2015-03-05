@@ -1,11 +1,10 @@
-var taskController = Zectranet.controller('TaskController', ['$scope', '$http', '$paginator',
-    function($scope, $http, $paginator) {
+var taskController = Zectranet.controller('TaskController', ['$scope', '$http', '$rootScope','$paginator',
+    function($scope, $http, $rootScope, $paginator) {
         console.log('Task Controller was loaded');
 
         $scope.tasks = null;
-
-        $scope.urlGetTasks = JSON_URLS.getTasks;
-        $scope.urlAddTask  = JSON_URLS.addTask;
+        $scope.urlGetTasks = null;
+        $scope.urlAddTask  = null;
 
         $scope.urlTaskTable = JSON_URLS.urlTaskTable;
         $scope.urlTaskList = JSON_URLS.urlTaskList;
@@ -14,15 +13,10 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
         $scope.USER_ID = USER_ID;
 
-        $scope.addTask = function (task){
-            if (task && task.Name && task.Description && task.Priority && task.Type
-                && task.StartDate && task.EndDate) {
-
-                $http.post($scope.urlAddTask, {'task': task})
-                    .success(function (response) {
-                        $scope.getTasks();
-                    });
-            }
+        $rootScope.initTaskController = function (page_id) {
+            $scope.urlGetTasks = JSON_URLS.getTasks.replace('0', page_id);
+            $scope.urlAddTask  = JSON_URLS.addTask.replace('0', page_id);
+            $scope.getTasks();
         };
 
         $scope.getTasks = function () {
@@ -34,5 +28,16 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
         $scope.generateAsset = function (asset, url) {
             return asset + url;
+        };
+
+        $scope.addTask = function (task) {
+            if (task && task.Name && task.Description && task.Priority && task.Type
+                && task.StartDate && task.EndDate) {
+
+                $http.post($scope.urlAddTask, {'task': task})
+                    .success(function (response) {
+                        $scope.getTasks();
+                    });
+            }
         };
     }]);

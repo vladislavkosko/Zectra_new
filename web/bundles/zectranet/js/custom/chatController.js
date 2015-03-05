@@ -1,5 +1,5 @@
-var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$paginator',
-    function($scope, $http, $paginator) {
+var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope','$paginator',
+    function($scope, $http, $rootScope, $paginator) {
         console.log('Chat Controller was loaded');
 
         // ------------ BEGIN OF SCOPE VARIABLES ------------ \\
@@ -9,19 +9,16 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
 
             $scope.urlAddPost = JSON_URLS.addPost;
             $scope.urlGetPosts = JSON_URLS.getPosts;
-            $scope.urlAsset = JSON_URLS.asset;
 
+            $scope.urlAsset = JSON_URLS.asset;
             $scope.USER_ID = USER_ID;
         }
         // ------------ END OF SCOPE VARIABLES --------------- \\
 
-
-        $scope.SendPost = function (message) {
-            $scope.message = '';
-            $http.post($scope.urlAddPost, {'message': message})
-                .success(function (response) {
-                    $scope.getPosts(0, 100);
-                });
+        $rootScope.initChatController = function (page_id) {
+            $scope.urlAddPost = JSON_URLS.addPost.replace('0', page_id);
+            $scope.urlGetPosts  = JSON_URLS.getPosts.replace('0', page_id);
+            $scope.getPosts(0, 100);
         };
 
         $scope.getPosts = function (offset, count) {
@@ -35,6 +32,13 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             return asset + url;
         };
 
+        $scope.SendPost = function (message) {
+            $scope.message = '';
+            $http.post($scope.urlAddPost, {'message': message})
+                .success(function (response) {
+                    $scope.getPosts(0, 100);
+                });
+        };
 
         //InsertScreenshots ctrl + V
         {

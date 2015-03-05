@@ -3,332 +3,397 @@
 {% block title %}{{ project.name }}{% endblock %}
 
 {% block body %}
+    <div ng-controller="ProjectController" ng-init="getEpicStories({{ project.id }})">
+        <div class="page-header">
+            <i class="fa fa-briefcase fa-2x"></i>
+            <span style="font-size: 25px;">{{ project.name }}</span>
 
-    <div class="page-header">
-        <i class="fa fa-briefcase fa-2x"></i>
-        <span style="font-size: 25px;">{{ project.name }}</span>
-
-        <!-- Begin of Project controll buttons -->
-        {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
-            <a href="#" style="text-decoration: none;">
-                <i class="fa fa-fw fa-gear" style="font-size: 20px;"></i>
-            </a>
-
-            <a href="#" style="text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
-                <i class="fa fa-fw fa-trash" style="color: red; font-size: 20px;"></i>
-            </a>
-        {% endif %}
-        <!-- End of Project controll buttons -->
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="list-group">
-                <div class="list-group-item active">Project Description:</div>
-                <div class="list-group-item">{{ project.description }}</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Begin of Tasks -->
-    <div class="row" ng-controller="TaskController">
-        <div class="col-md-12">
-            <div class="panel panel-default list-group">
-                <div class="list-group-item active">
-                    <i class="fa fa-tasks"></i>
-                    <span>Tasks</span>
-                </div>
-                <div cg-busy="promise" class="panel-body">
-                    <ul id="myTab" class="nav nav-tabs" role="tablist">
-                        <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
-                            <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
-                                <i class="fa fa-table fa-2x"></i>
-                            </a>
-                        </li>
-                        <li data-toggle="tooltip" data-placement="top" title="List view" role="presentation">
-                            <a data-toggle="tab" id="task-view-list" class="btn" href="#list-view" aria-controls="list-view" role="tab" aria-expanded="false">
-                                <i class="fa fa-list fa-2x"></i>
-                            </a>
-                        </li>
-                        <li data-toggle="tooltip" data-placement="top" title="Agile view" role="presentation">
-                            <a data-toggle="tab" id="task-view-agile"  class="btn" href="#agile-view" aria-controls="agile-view" role="tab" aria-expanded="false">
-                                <i class="fa fa-th fa-2x"></i>
-                            </a>
-                        </li>
-                        <li data-toggle="tooltip" data-placement="top" title="Add new task" role="presentation">
-                            <a style="cursor: pointer" data-toggle="modal" data-target="#add_new_task">
-                                <i class="fa fa-plus fa-2x"></i>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <div id="tasks-tab-content" class="tab-content" ng-init="getTasks()">
-                        <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
-                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-table.html') ~ '\'' }}"></ng-include>
-                        </div>
-
-                        <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
-                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
-                        </div>
-
-                        <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
-                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-agile.html') ~ '\'' }}"></ng-include>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Begin of Add Task Modal -->
-        <div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header label-primary">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-                            Add New Task
-                        </h4>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <form class="form-horizontal" action="{{ path('zectranet_project_add_task', { 'project_id': project.id }) }}" method="post">
-                                        <div class="form-group">
-                                            <label for="add_task_name" class="control-label">Task Name:</label>
-                                            <input type="text" id="add_task_name" class="form-control" name="name" ng-model="task.Name" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_task_description" class="control-label">Task Description:</label>
-                                            <input type="text" id="add_task_description" class="form-control" name="description" ng-model="task.Description" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_task_type" class="control-label">Task Type:</label>
-                                            <select id="add_task_type" class="form-control" name="type" ng-model="task.Type" required>
-                                                {% for type in task_types %}
-                                                    <option value="{{ type.id }}">
-                                                        {{ type.label }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_task_priority" class="control-label">Task Priority:</label>
-                                            <select id="add_task_priority" class="form-control" name="priority" ng-model="task.Priority" required>
-                                                {% for priority in task_priority %}
-                                                    <option value="{{ priority.id }}">
-                                                        {{ priority.label }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_task_startdate" class="control-label">Task Start Date:</label>
-                                            <input type="date" id="add_task_startdate" class="form-control" name="startdate" ng-model="task.StartDate" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_task_enddate" class="control-label">Task End Date:</label>
-                                            <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-primary" ng-click="addTask(task)">Add</button>
-                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!-- End of Add Task Modal -->
-
-        <!-- Begin of Add SubTask Modal -->
-        <div class="modal fade" id="add_new_subtask" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header label-primary">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-                            Add New SubTask
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                    <form class="form-horizontal" action="{{ path('zectranet_project_add_subtask', { 'project_id': project.id }) }}" method="post">
-                                        <div class="form-group">
-                                            <label for="add_subtask_name" class="control-label">Task Name:</label>
-                                            <input type="text" id="add_subtask_name" class="form-control" name="name" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_subtask_description" class="control-label">Task Description:</label>
-                                            <input type="text" id="add_subtask_description" class="form-control" name="description" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_subtask_type" class="control-label">Task Type:</label>
-                                            <select id="add_subtask_type" class="form-control" name="type" required>
-                                                {% for type in task_types %}
-                                                    <option value="{{ type.id }}">
-                                                        {{ type.label }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_subtask_priority" class="control-label">Task Priority:</label>
-                                            <select id="add_subtask_priority" class="form-control" name="priority" required>
-                                                {% for priority in task_priority %}
-                                                    <option value="{{ priority.id }}">
-                                                        {{ priority.label }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_subtask_startdate" class="control-label">Task Start Date:</label>
-                                            <input type="date" id="add_subtask_startdate" class="form-control" name="startdate" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_subtask_enddate" class="control-label">Task End Date:</label>
-                                            <input type="date" id="add_subtask_enddate" class="form-control" name="enddate" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_subtask_parent" class="control-label">Parent Task ID:</label>
-                                            <input type="text" id="add_subtask_parent" class="form-control" readonly name="parent" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary">Add</button>
-                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- End of Add SubTask Modal -->
-
-    </div>
-    <!-- End of Tasks -->
-
-    <div class="row">
-
-        <!-- BEGIN OF OFFICE USERS PANEL -->
-        <div class="col-md-4">
-            <div class="list-group">
-                <div class="list-group-item active">
-                    <i class="fa fa-users"></i>
-                    Project Users
-                </div>
-                <div class="list-group-item">
-                    {% if project.users|length > 0 %}
-                        <table class="table" style="margin-bottom: 0">
-                            <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Role</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for user in project.users %}
-                                <tr>
-                                    <td>
-                                        <a href="#" style="display: block; text-decoration: none;">
-                                            <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-circle"
-                                                 style="width: 20px; height: 20px;">
-                                            {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')'}}
-                                        </a>
-                                    </td>
-                                    <td>Manager</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {% elseif project.users|length == 0 %}
-                        <h4 class="text-info text-center">Users will be displayed here</h4>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <!-- END OF OFFICE USERS PANEL -->
-
-        <!-- BEGIN OF CHAT PANEL -->
-        <div class="chat-panel list-group col-md-8" ng-controller="ChatController" ng-init="getPosts(0, 100)">
-            <div class="list-group-item active">
-                <i class="fa fa-comments fa-fw"></i>
-                Project Chat
-            </div>
-            <div class="list-group-item panel-body"  cg-busy="promise" style="max-height: 300px;">
-                {% if project.postsProject | length == 0 %}
-                    <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
-                {% endif %}
-
-                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/chat.html') ~ '\'' }}"></ng-include>
-
-            </div>
-            <div class="list-group-item">
-                <form class="input-group input-group-lg">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" style="height: 65px;">
-                            <i class="fa fa-file"></i>
-                        </button>
-                    </span>
-                    <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
-                            <span>Post</span>
-                        </button>
-                    </span>
-                </form>
-                <div id="slide-down-menu-screenshots" style="display: none;">
-                    <div id="div-screenshot" style="display: none; width: auto;height: auto;">
-
-                    </div>
-                    <button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="InsertScreenshotsInChat()" style="width: 100%; height: 40px; margin-top: 10px;">Insert Screenshots in chat</button>
-                </div>
-            </div>
-        </div>
-        <!-- END OF CHAT PANEL -->
-
-        {% block projectModals %}
+            <!-- Begin of Project controll buttons -->
             {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
-                <!-- Begin of Delete Private Project Modal -->
-                <div class="modal fade" id="delete_private_project" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header label-danger">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-                                    Delete Project
-                                </h4>
+                <div class="pull-right">
+                <a style="cursor: pointer; text-decoration: none;">
+                    <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
+                </a>
+                <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
+                    <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
+                </a>
+                </div>
+            {% endif %}
+            <!-- End of Project controll buttons -->
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6">
+                <div class="list-group">
+                    <div class="list-group-item active">
+                        Project
+                    </div>
+                    <a class="list-group-item" style="cursor: pointer;" ng-click="changeCurrentPage({{ project.id }})">
+                        <i class="fa fa-briefcase"></i>
+                        {{ project.name }}
+                    </a>
+                    <div class="list-group-item active">Project Description:</div>
+                    <div class="list-group-item">{{ project.description }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <div class="list-group">
+                    <div class="list-group-item active">
+                        Epic Stories
+                    </div>
+                    <div cg-busy="promiseProject">
+                        <a class="list-group-item" ng-repeat="story in epicStories" style="cursor: pointer;" ng-click="changeCurrentPage(story.id)">
+                            <i class="fa fa-briefcase"></i>
+                            [[ story.name ]]
+                        </a>
+                        <a class="list-group-item list-group-item-text" style="cursor: pointer;" data-toggle="modal" data-target="#add_epic_story">
+                            <i class="fa fa-plus-circle"></i>
+                            Add Epic Story
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BEGIN OF EPIC STORY ADD MODAL -->
+            <div class="modal fade" id="add_epic_story" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header label-primary">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                                Add New Epic Story
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-offset-1 col-md-10">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="add_epic_story_name">Epic Story Name:</label>
+                                            <input type="text" id="add_epic_story_name" ng-model="story.name" pattern="[0-9A-Za-z -_()]{1,30}" class="form-control" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="add_epic_story_description">Epic Story Description:</label>
+                                            <input type="text" id="add_epic_story_description" ng-model="story.description" class="form-control" pattern="[0-9A-Za-z -_()]{1,50}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <a class="btn btn-primary" ng-click="addNewEpicStory(story)">Add</a>
+                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <div class="header">
-                                        <h3 class="text-center">Are you really want to delete this project?</h3><br>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END OF EPIC STORY ADD MODAL -->
+        </div>
+
+        <!-- Begin of Tasks -->
+        <div class="row" ng-controller="TaskController">
+            <div class="col-md-12">
+                <div class="panel panel-default list-group">
+                    <div class="list-group-item active">
+                        <i class="fa fa-tasks"></i>
+                        <span>Tasks</span>
+                    </div>
+                    <div cg-busy="promise" class="panel-body">
+
+                        <!-- Begin of Task Nav Tabs -->
+                        <ul id="myTab" class="nav nav-tabs" role="tablist">
+                            <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
+                                <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
+                                    <i class="fa fa-table fa-2x"></i>
+                                </a>
+                            </li>
+                            <li data-toggle="tooltip" data-placement="top" title="List view" role="presentation">
+                                <a data-toggle="tab" id="task-view-list" class="btn" href="#list-view" aria-controls="list-view" role="tab" aria-expanded="false">
+                                    <i class="fa fa-list fa-2x"></i>
+                                </a>
+                            </li>
+                            <li data-toggle="tooltip" data-placement="top" title="Agile view" role="presentation">
+                                <a data-toggle="tab" id="task-view-agile"  class="btn" href="#agile-view" aria-controls="agile-view" role="tab" aria-expanded="false">
+                                    <i class="fa fa-th fa-2x"></i>
+                                </a>
+                            </li>
+                            <li data-toggle="tooltip" data-placement="top" title="Add new task" role="presentation">
+                                <a style="cursor: pointer" data-toggle="modal" data-target="#add_new_task">
+                                    <i class="fa fa-plus fa-2x"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- End of Task Nav Tabs -->
+
+                        <div id="tasks-tab-content" class="tab-content">
+
+                            <!-- Begin of Task Table View -->
+                            <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
+                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-table.html') ~ '\'' }}"></ng-include>
+                            </div>
+                            <!-- End of Task Table View -->
+
+                            <!-- Begin of Task List View -->
+                            <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
+                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
+                            </div>
+                            <!-- End of Task List View -->
+
+                            <!-- Begin of Task Agile View -->
+                            <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
+                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-agile.html') ~ '\'' }}"></ng-include>
+                            </div>
+                            <!-- End of Task Agile View -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Begin of Add Task Modal -->
+            <div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header label-primary">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                                Add New Task
+                            </h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-10 col-md-offset-1">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="add_task_name" class="control-label">Task Name:</label>
+                                                <input type="text" id="add_task_name" class="form-control" name="name" ng-model="task.Name" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_task_description" class="control-label">Task Description:</label>
+                                                <input type="text" id="add_task_description" class="form-control" name="description" ng-model="task.Description" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_task_type" class="control-label">Task Type:</label>
+                                                <select id="add_task_type" class="form-control" name="type" ng-model="task.Type" required>
+                                                    {% for type in task_types %}
+                                                        <option value="{{ type.id }}">
+                                                            {{ type.label }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_task_priority" class="control-label">Task Priority:</label>
+                                                <select id="add_task_priority" class="form-control" name="priority" ng-model="task.Priority" required>
+                                                    {% for priority in task_priority %}
+                                                        <option value="{{ priority.id }}">
+                                                            {{ priority.label }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_task_startdate" class="control-label">Task Start Date:</label>
+                                                <input type="date" id="add_task_startdate" class="form-control" name="startdate" ng-model="task.StartDate" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_task_enddate" class="control-label">Task End Date:</label>
+                                                <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-primary" ng-click="addTask(task)">Add</button>
+                                                <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <a class="btn btn-danger" href="{{ path('zectranet_delete_project', {'project_id': project.id }) }}">Delete</a>
-                                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- End of Add Task Modal -->
+
+            <!-- Begin of Add SubTask Modal -->
+            <div class="modal fade" id="add_new_subtask" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header label-primary">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                                Add New SubTask
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-10 col-md-offset-1">
+                                        <form class="form-horizontal" action="{{ path('zectranet_project_add_subtask', { 'project_id': project.id }) }}" method="post">
+                                            <div class="form-group">
+                                                <label for="add_subtask_name" class="control-label">Task Name:</label>
+                                                <input type="text" id="add_subtask_name" class="form-control" name="name" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_subtask_description" class="control-label">Task Description:</label>
+                                                <input type="text" id="add_subtask_description" class="form-control" name="description" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_subtask_type" class="control-label">Task Type:</label>
+                                                <select id="add_subtask_type" class="form-control" name="type" required>
+                                                    {% for type in task_types %}
+                                                        <option value="{{ type.id }}">
+                                                            {{ type.label }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_subtask_priority" class="control-label">Task Priority:</label>
+                                                <select id="add_subtask_priority" class="form-control" name="priority" required>
+                                                    {% for priority in task_priority %}
+                                                        <option value="{{ priority.id }}">
+                                                            {{ priority.label }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_subtask_startdate" class="control-label">Task Start Date:</label>
+                                                <input type="date" id="add_subtask_startdate" class="form-control" name="startdate" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_subtask_enddate" class="control-label">Task End Date:</label>
+                                                <input type="date" id="add_subtask_enddate" class="form-control" name="enddate" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="add_subtask_parent" class="control-label">Parent Task ID:</label>
+                                                <input type="text" id="add_subtask_parent" class="form-control" readonly name="parent" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary">Add</button>
+                                                <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- End of Delete Private Project Modal -->
-            {% endif %}
-        {% endblock %}
+            </div>
+            <!-- End of Add SubTask Modal -->
 
+        </div>
+        <!-- End of Tasks -->
+
+        <div class="row">
+            <!-- BEGIN OF OFFICE USERS PANEL -->
+            <div class="col-md-12 col-xs-12">
+                <div class="list-group">
+                    <div class="list-group-item active">
+                        <i class="fa fa-users"></i>
+                        Project Users
+                    </div>
+                    <div class="list-group-item">
+                        <div class="row">
+                            {% for user in project.users %}
+                                <div class="col-md-2 col-xs-4">
+                                    <div class="user-chat center-block">
+                                        <a href="{{ path('zectranet_user_page', {'user_id': user.id}) }}" style="display: block; text-decoration: none;">
+                                            <p class="text-muted label label-default label-primary text-center center-block" style="margin-bottom: 1px;">Manager</p>
+                                            <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-responsive center-block" style="width: 60px; height: 60px;">
+                                        </a>
+                                        <a style="cursor: pointer;">
+                                            <p class="text-center" style="font-weight: bold;">{{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user .username ~ ')'}}</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END OF OFFICE USERS PANEL -->
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <!-- BEGIN OF CHAT PANEL -->
+                <div class="chat-panel list-group" ng-controller="ChatController">
+                    <div class="list-group-item active">
+                        <i class="fa fa-comments fa-fw"></i>
+                        Project Chat
+                    </div>
+                    <div class="list-group-item panel-body" cg-busy="promise" style="max-height: 300px;">
+                        <div ng-if="(posts == null) || (posts.length == 0)" class="center-block vertical-center">
+                            <h3 class="text-info text-center">Post will be displayed here</h3>
+                        </div>
+
+                        <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/chat.html') ~ '\'' }}"></ng-include>
+
+                    </div>
+                    <div class="list-group-item">
+                        <form class="input-group input-group-lg">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" style="height: 65px;">
+                                    <i class="fa fa-file"></i>
+                                </button>
+                            </span>
+                            <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
+                                <span>Post</span>
+                            </button>
+                        </span>
+                        </form>
+                        <div id="slide-down-menu-screenshots" style="display: none;">
+                            <div id="div-screenshot" style="display: none; width: auto;height: auto;">
+
+                            </div>
+                            <button class="btn text-white bg-primary send-message" type="button" id="send-message" ng-click="InsertScreenshotsInChat()" style="width: 100%; height: 40px; margin-top: 10px;">Insert Screenshots in chat</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- END OF CHAT PANEL -->
+            </div>
+        </div>
+
+        <div ng-init="changeCurrentPage('{{ project.id }}')"></div>
     </div>
+
+    {% block projectModals %}
+        {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
+            <!-- Begin of Delete Private Project Modal -->
+            <div class="modal fade" id="delete_private_project" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header label-danger">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                                Delete Project
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="header">
+                                    <h3 class="text-center">Are you really want to delete this project?</h3><br>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <a class="btn btn-danger" href="{{ path('zectranet_delete_project', {'project_id': project.id }) }}">Delete</a>
+                                <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Delete Private Project Modal -->
+        {% endif %}
+    {% endblock %}
+
 
 {% endblock %}
 
@@ -340,6 +405,7 @@
     {{ parent() }}
 
     <script>
+
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
@@ -348,15 +414,18 @@
             $('#add_subtask_parent').val(subtask_id);
         }
 
-        JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': project.id }) }}";
-        JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': project.id }) }}";
-        JSON_URLS.addTask = "{{ path('zectranet_project_add_task', { 'project_id': project.id }) }}";
-        JSON_URLS.getTasks = "{{ path('zectranet_project_get_tasks', { 'project_id': project.id }) }}";
+        JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': 0 }) }}";
+        JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': 0 }) }}";
 
-        var USER_ID = {{ app.user.id }};
+        JSON_URLS.addTask = "{{ path('zectranet_project_add_task', { 'project_id': 0 }) }}";
+        JSON_URLS.getTasks = "{{ path('zectranet_project_get_tasks', { 'project_id': 0 }) }}";
+
+        JSON_URLS.getEpicStories = "{{ path('zectranet_project_get_epic_stories', { 'project_id': project.id }) }}";
+        JSON_URLS.addEpicStory = "{{ path('zectranet_project_add_epic_story', { 'project_id': project.id }) }}";
 
     </script>
+
     <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/taskController.js') }}" type="text/javascript"></script>
-
+    <script src="{{ asset('bundles/zectranet/js/custom/projectController.js') }}" type="text/javascript"></script>
 {% endblock %}

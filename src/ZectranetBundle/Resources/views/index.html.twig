@@ -153,12 +153,14 @@
 								</a>
 								<ul class="nav nav-third-level">
 									{% for project in app.user.ownedProjects %}
+										{% if project.parent == null %}
 										<li>
 											<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
 												<i class='fa fa-briefcase'></i>
 												<span>{{ project.name }}</span>
 											</a>
 										</li>
+										{% endif %}
 									{% endfor %}
 								</ul>
 							</li>
@@ -170,12 +172,14 @@
 								</a>
 								<ul class="nav nav-third-level">
 									{% for project in app.user.projects %}
+										{% if project.parent == null %}
 										<li>
 											<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
 												<i class='fa fa-briefcase'></i>
 												<span>{{ project.name }}</span>
 											</a>
 										</li>
+										{% endif %}
 									{% endfor %}
 								</ul>
 							</li>
@@ -285,10 +289,9 @@
 	{{ parent() }}
 	<script src="{{ asset('bundles/zectranet/js/custom/searchController.js') }}" type="text/javascript" ></script>
 	<script src="{{ asset('bundles/zectranet/js/highlight.js') }}" type="text/javascript"></script>
-	{#
-	<script src="{{ asset('bundles/intranet/js/custom/documents.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('bundles/intranet/js/custom/sprint.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('bundles/intranet/js/custom/searchController.js') }}" type="text/javascript"></script>
-	#}
+	<script>
+		// Variable for AngularJS
+		var USER_ID = {{ app.user.id }};
+	</script>
 {% endblock %}
 
