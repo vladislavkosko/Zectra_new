@@ -12,7 +12,7 @@ class ProjectPostController extends Controller
 {
     /**
      * @param Request $request
-     * @param int $project_id
+     * @param $project_id
      * @return Response
      */
     public function addPostAction(Request $request,$project_id)
@@ -23,7 +23,16 @@ class ProjectPostController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+
         $new_post = ProjectPost::addNewPost($em, $user->getId(), $project_id, $post->message);
+
+        if ($project->getParent())
+        {
+            $nameEpicStory = $project->getName();
+            $project = $project->getParent();
+        }
+        $this->get('zectranet.notifier')->createNotification("message_project", $user, $user, $project, $nameEpicStory, $post);
 
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');

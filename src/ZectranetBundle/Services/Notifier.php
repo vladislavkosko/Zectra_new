@@ -26,25 +26,25 @@ class Notifier
         //"project_added",
 
         //for user
-		"message_office",
-		"message_project",
-        "message_epic_story",
-        "message_task",
+		"message_office",                 // +
+		"message_project",                // +
+        "message_epic_story",             // +
+        "message_task",                   // -
 
-        "task_added",
-        "epic_story_added",
-        "task_deleted",
-        "epic_story_deleted",
+        "task_added",                     // +
+        "epic_story_added",               // +
+        "task_deleted",                   // -
+        "epic_story_deleted",             // -
 
-        "request_office",
-        "request_user_project",
-        "request_project",
-        "request_assign_task",
+        "request_office",                 // -
+        "request_user_project",           // -
+        "request_project",                // -
+        "request_assign_task",            // -
 
-        "private_message_office",
-        "private_message_project",
-        "private_message_epic_story",
-        "private_message_task",
+        "private_message_office",         // -
+        "private_message_project",        // -
+        "private_message_epic_story",     // -
+        "private_message_task",           // -
     );
 
 	public function __construct($securityContext, $em, $router, $mailer)
@@ -252,7 +252,10 @@ class Notifier
 
         elseif (in_array($type, array("message_office", "message_project", "message_epic_story")))
         {
-            $message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+            if ($user_to_send_name != null)
+                $message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$user_to_send_name.'"';
+            else
+                $message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
             $users = $destination->getUsers();
         }
 
@@ -336,9 +339,8 @@ class Notifier
 
 		foreach($users as $user)
 		{
-			if ($user->getId() != $this->user->getId()){
+			if ($user->getId() != $this->user->getId())
 				$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message, $post);
-			}
 		}
 		return true;
 	}

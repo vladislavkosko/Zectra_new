@@ -220,7 +220,155 @@
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 							<i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
 						</a>
+
 						<ul class="dropdown-menu dropdown-alerts">
+
+
+                            {% for notification in app.user.notifications %}
+                                {% if notification.type == "message_office" %}
+                                    <li>
+                                        <a href="#">
+                                            <div>
+                                                <i class="fa fa-comment fa-fw"></i>
+                                                <span ng-bind-html="'{{ notification.message }}'" ></span>
+                                                <span class="pull-right text-muted small">{{ notification.activated.date| date('Y-m-d H:i')}}</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            {#<li ng-repeat="notification in notifications|limitTo: 6" class="notification-li">
+
+                      				  <a ng-if="notification.type == 'membership_own'"
+				                        href="[[notification.href]]"
+				                        class="text-success notification-link">
+				                        <i class="fa noty-icon fa-user bg-success"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										<span style="clear:both;"></span>
+									  </a>
+
+				                      <a ng-if="notification.type == 'membership_own_out'"
+				                        href="[[notification.href]]"
+				                        class="text-danger notification-link">
+				                        <i class="fa noty-icon fa-user bg-danger"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+				                      <a ng-if="notification.type == 'membership_user'"
+				                        href="[[notification.href]]"
+				                        class="text-warning notification-link">
+				                        <i class="fa noty-icon fa-user bg-warning"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+				                      <a ng-if="notification.type == 'membership_user_out'"
+				                        href="[[notification.href]]"
+				                        class="text-danger notification-link">
+				                        <i class="fa noty-icon fa-user bg-danger"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+				                      <a ng-if="notification.type == 'message_office'"
+				                        href="[[notification.href]]" class="notification-link">
+				                        <i class="fa noty-icon fa-comment bg-primary"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+				                      	<span style="clear: both;"></span>
+									  </a>
+
+				                      <a ng-if="notification.type == 'message_topic'"
+				                        href="[[notification.href]]"
+				                        class="text-info notification-link">
+				                        <i class="fa noty-icon fa-comment bg-info"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+				                      <a ng-if="notification.type == 'removed_office'"
+				                        href="[[notification.href]]"
+				                        class="text-danger notification-link">
+				                        <i class="fa noty-icon fa-exclamation bg-danger"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+				                      <a ng-if="notification.type == 'removed_topic'"
+				                        href="[[notification.href]]"
+				                        class="text-danger notification-link">
+				                        <i class="fa noty-icon fa-exclamation bg-danger"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+				                      <a ng-if="notification.type == 'task_assigned'"
+				                        href="[[notification.href]]"
+				                        class="text-warning notification-link">
+				                        <i class="fa noty-icon fa-tasks bg-warning"></i>
+				                        <span class="description" ng-bind-html="notification.message"></span>
+				                        <span class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+				                      <a ng-if="notification.type == 'task_comment'"
+				                        href="[[notification.href]]"
+										class="notification-link">
+				                        <i class="fa noty-icon fa-tasks bg-primary"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+				                      <a ng-if="notification.type == 'topic_added'"
+				                        href="[[notification.href]]"
+				                        class="text-success notification-link">
+				                        <i class="fa noty-icon fa-comment bg-success"></i>
+				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
+				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										  <span style="clear: both;"></span>
+				                      </a>
+
+									<a ng-if="notification.type == 'private_message_office'"
+									   href="[[notification.href]]"
+									   class="text-success notification-link">
+										<i class="fa noty-icon fa-comment bg-success"></i>
+										<span class="description notification-message" ng-bind-html="notification.message" ng-style="privateMessageStyle"></span>
+										<span class="time" style="display: inline-block;"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										<span style="clear: both;"></span>
+									</a>
+
+									<a ng-if="notification.type == 'private_message_topic'"
+									   href="[[notification.href]]"
+									   class="text-success notification-link">
+										<i class="fa noty-icon fa-comment bg-success"></i>
+										<span class="description notification-message" ng-bind-html="notification.message"></span>
+										<span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										<span style="clear: both;"></span>
+									</a>
+
+									<a ng-if="notification.type == 'private_message_task'"
+									   href="[[notification.href]]"
+									   class="text-success notification-link">
+										<i class="fa noty-icon fa-comment bg-success"></i>
+										<span class="description notification-message" ng-bind-html="notification.message"></span>
+										<span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
+										<span style="clear: both;"></span>
+									</a>
+
+									<div style="clear:both;"></div>
+                    			</li>#}
+
+
+
 							<li>
 								<a href="#">
 									<div>
@@ -429,12 +577,12 @@
 		var JSON_URLS =
 		{
 			asset: "{{ asset('') }}",
-			{#notificationsGet: "{{ url('intranet_notifications_get') }}",
-			officeShow: "{{ url('intranet_show_office', {office_id: 0}) }}",
-			topicShow: "{{ url('intranet_show_topic', {topic_id: 0}) }}",
+			notificationsGet: "{{ url('zectranet_notifications_get') }}",
+            {#officeShow: "{{ url('zectranet_show_office', {office_id: 0}) }}",
+			projectShow: "{{ url('zectranet_show_project', {project_id: 0}) }}",
 			userSettings: "{{ url('intranet_get_user_settings') }}",
 			checkUserByUsername: "{{ url('intranet_user_check_username') }}",
-			registrationAction : "{{ url('intranet_register_action') }}",
+            registrationAction : "{{ url('intranet_register_action') }}",
 			checkUsername: "{{ url('intranet_user_check_username') }}",
 			checkEmail: "{{ url('intranet_user_check_email') }}",
 

@@ -24,7 +24,11 @@ class OfficePostController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+
         $new_post = OfficePost::addNewPost($em, $user->getId(), $office_id, $post->message);
+
+        $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $office, null, $post);
 
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');

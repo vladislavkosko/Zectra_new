@@ -123,8 +123,11 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
 
         $task = Task::addNewTask($em, $user, $project_id, $parameters);
+
+        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project);
 
         $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
@@ -153,8 +156,11 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
 
         Task::addNewSubTask($em, $user, $project_id, $parameters);
+
+        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project);
 
         return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
     }
@@ -191,11 +197,14 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
 
         $data = json_decode($request->getContent(), true);
         $data = (object) $data['story'];
 
         $epicStory = Project::addEpicStory($em, $project_id, $user, $data);
+
+        $this->get('zectranet.notifier')->createNotification("epic_story_added", $project, $user, $project);
 
         $response = new Response(json_encode(array('EpicStory' => $epicStory->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
