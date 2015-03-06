@@ -225,210 +225,39 @@
 						<ul class="dropdown-menu dropdown-alerts">
 
 
+
+
+
                             {% for notification in app.user.notifications %}
                                 {% if notification.type == "message_office" %}
                                     <li>
                                         <a href="#">
                                             <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="col-xs-1">
-                                                        <i class="fa fa-comment fa-fw"></i>
-                                                    </div>
-                                                    <div class="col-xs-8">
-                                                        <span ng-bind-html="'{{ notification.message }}'" ></span>
-                                                    </div>
-                                                    <div class="col-xs-3">
-                                                        <span class="pull-right text-muted small">{{ notification.activated.date| date('Y-m-d H:i')}}</span>
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <i class="fa fa-comment fa-fw"></i>
+                                                            <div  ng-bind-html="'{{ notification.message }}'" ></div>
+
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="pull-right text-muted small">{{ notification.activated.date| date('Y-m-d H:i')}}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </a>
                                     </li>
+                                    <li class="divider"></li>
                                 {% endif %}
                             {% endfor %}
-                            {#<li ng-repeat="notification in notifications|limitTo: 6" class="notification-li">
 
-                      				  <a ng-if="notification.type == 'membership_own'"
-				                        href="[[notification.href]]"
-				                        class="text-success notification-link">
-				                        <i class="fa noty-icon fa-user bg-success"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										<span style="clear:both;"></span>
-									  </a>
-
-				                      <a ng-if="notification.type == 'membership_own_out'"
-				                        href="[[notification.href]]"
-				                        class="text-danger notification-link">
-				                        <i class="fa noty-icon fa-user bg-danger"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-				                      <a ng-if="notification.type == 'membership_user'"
-				                        href="[[notification.href]]"
-				                        class="text-warning notification-link">
-				                        <i class="fa noty-icon fa-user bg-warning"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-				                      <a ng-if="notification.type == 'membership_user_out'"
-				                        href="[[notification.href]]"
-				                        class="text-danger notification-link">
-				                        <i class="fa noty-icon fa-user bg-danger"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-				                      <a ng-if="notification.type == 'message_office'"
-				                        href="[[notification.href]]" class="notification-link">
-				                        <i class="fa noty-icon fa-comment bg-primary"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-				                      	<span style="clear: both;"></span>
-									  </a>
-
-				                      <a ng-if="notification.type == 'message_topic'"
-				                        href="[[notification.href]]"
-				                        class="text-info notification-link">
-				                        <i class="fa noty-icon fa-comment bg-info"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-				                      <a ng-if="notification.type == 'removed_office'"
-				                        href="[[notification.href]]"
-				                        class="text-danger notification-link">
-				                        <i class="fa noty-icon fa-exclamation bg-danger"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-				                      <a ng-if="notification.type == 'removed_topic'"
-				                        href="[[notification.href]]"
-				                        class="text-danger notification-link">
-				                        <i class="fa noty-icon fa-exclamation bg-danger"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-				                      <a ng-if="notification.type == 'task_assigned'"
-				                        href="[[notification.href]]"
-				                        class="text-warning notification-link">
-				                        <i class="fa noty-icon fa-tasks bg-warning"></i>
-				                        <span class="description" ng-bind-html="notification.message"></span>
-				                        <span class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-				                      <a ng-if="notification.type == 'task_comment'"
-				                        href="[[notification.href]]"
-										class="notification-link">
-				                        <i class="fa noty-icon fa-tasks bg-primary"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-				                      <a ng-if="notification.type == 'topic_added'"
-				                        href="[[notification.href]]"
-				                        class="text-success notification-link">
-				                        <i class="fa noty-icon fa-comment bg-success"></i>
-				                        <span class="description notification-message" ng-bind-html="notification.message"></span>
-				                        <span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										  <span style="clear: both;"></span>
-				                      </a>
-
-									<a ng-if="notification.type == 'private_message_office'"
-									   href="[[notification.href]]"
-									   class="text-success notification-link">
-										<i class="fa noty-icon fa-comment bg-success"></i>
-										<span class="description notification-message" ng-bind-html="notification.message" ng-style="privateMessageStyle"></span>
-										<span class="time" style="display: inline-block;"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										<span style="clear: both;"></span>
-									</a>
-
-									<a ng-if="notification.type == 'private_message_topic'"
-									   href="[[notification.href]]"
-									   class="text-success notification-link">
-										<i class="fa noty-icon fa-comment bg-success"></i>
-										<span class="description notification-message" ng-bind-html="notification.message"></span>
-										<span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										<span style="clear: both;"></span>
-									</a>
-
-									<a ng-if="notification.type == 'private_message_task'"
-									   href="[[notification.href]]"
-									   class="text-success notification-link">
-										<i class="fa noty-icon fa-comment bg-success"></i>
-										<span class="description notification-message" ng-bind-html="notification.message"></span>
-										<span style="display: inline-block;" class="time"> <i class="fa fa-clock-o"></i>[[ notification.activated.date.substring(0, 16) ]]</span>
-										<span style="clear: both;"></span>
-									</a>
-
-									<div style="clear:both;"></div>
-                    			</li>#}
-
-
-
-							<li>
-								<a href="#">
-									<div>
-										<i class="fa fa-comment fa-fw"></i> New Comment
-										<span class="pull-right text-muted small">4 minutes ago</span>
-									</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-									<div>
-										<i class="fa fa-twitter fa-fw"></i> 3 New Followers
-										<span class="pull-right text-muted small">12 minutes ago</span>
-									</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-									<div>
-										<i class="fa fa-envelope fa-fw"></i> Message Sent
-										<span class="pull-right text-muted small">4 minutes ago</span>
-									</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-									<div>
-										<i class="fa fa-tasks fa-fw"></i> New Task
-										<span class="pull-right text-muted small">4 minutes ago</span>
-									</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-									<div>
-										<i class="fa fa-upload fa-fw"></i> Server Rebooted
-										<span class="pull-right text-muted small">4 minutes ago</span>
-									</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a class="text-center" href="#">
-									<strong>See All Alerts</strong>
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</li>
+                            <li>
+                                <a class="text-center" href="#">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
 						</ul>
 					</li>
 
