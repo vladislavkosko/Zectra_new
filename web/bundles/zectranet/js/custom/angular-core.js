@@ -97,8 +97,9 @@ Zectranet.directive('document', function() {
 		template: function(element, attrs) {
 			var htmlElement =
 					'<div style="display: block;">'
-					+ '<div class="not-modal"><img/></div>'
-					+ '<a class="show-element"></a>'
+					+ '<div class="not-modal">'
+					+ '<a data-lightbox="some" class="doc-show" href="' + JSON_URLS.asset + attrs.file + '" >'
+					+'<img class="zoom-images" /> </a></div>'
 					+ '</div>'
 			/*+ '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
 			 + '<div class="modal-dialog">'
@@ -120,10 +121,13 @@ Zectranet.directive('document', function() {
 			var file = attrs.file;
 			var extension = file.match(regex);
 
-			var link = element.find('a');
-			var image = element.find('img');
+			var link = element.find('.show-element');
+			var image = element.find('.zoom-images');
+
 			var imageContainer = image.parent();
 
+			imageContainer.css('href', JSON_URLS.asset + file);
+			image.css('href', JSON_URLS.asset + file);
 			image.css('object-fit', 'cover');
 			image.css('width', attrs.width);
 			image.css('height', attrs.height);
@@ -132,9 +136,10 @@ Zectranet.directive('document', function() {
 			image.css('margin', 'auto');
 			link.css('width', attrs.width);
 
+
 			var img = null;
 			if (extension != '.png' && extension != '.gif' && extension != '.jpeg' && extension != '.jpg') {
-				img = JSON_URLS.asset + 'bundles/zectranet/' + extensions[extension];
+				img = JSON_URLS.asset + 'bundles/intranet/' + extensions[extension];
 				image.css('cursor', 'pointer');
 				image.bind('click', function () {
 					document.location = JSON_URLS.asset + file;

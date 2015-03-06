@@ -8,7 +8,7 @@
         <span style="font-size: 25px;">Upload Files</span>
     </div>
     <div class="panel panel-cascade" ng-controller="DocumentsController">
-        <div class="panel-body">
+        <div class="panel-body" style="margin: 0px;border: 0px;">
             <form id="upload" method="post" action="{{ path('zectranet_document_upload') }}" enctype="multipart/form-data">
                 <div id="drop_upload">
                     <p> Drop Here</p>
@@ -19,16 +19,17 @@
                 </div>
                 <ul></ul>
             </form>
-            <ul class="file-list">
-                <li ng-repeat="doc in documents" style="position: relative;">
+
+            <div class="file-list row">
+                <div ng-repeat="doc in documents" style="position: relative;margin-bottom: 30px;" class="col-md-4" >
                     <document style="display: block;" name="[[doc.name]]" width="250px" height="250px" file="[[doc.url]]"></document>
                     <a href="#" data-toggle="dropdown" class="dropdown" style="text-align: center;">More options</a>
-                    <div class="dropdown-menu open" style="position: absolute; top: 60%; left: 0; padding-bottom: 0; transition: 0.25s linear display;">
+                    <div class="dropdown-menu open" style="position: absolute; top: 60%; left: 0;width: 100%; padding-bottom: 0; transition: 0.25s linear display;">
                         <a href="#" ng-click="delete([[ doc.id ]])" style="display: block;"><i class="fa fa-trash-o"></i> Delete file</a>
                         <a href="#" ng-click="setCurrentDocId(doc.id)" style="display: block;" data-toggle="modal" data-target="#rename-modal-dialog"><i class="fa fa-edit"></i> Rename file</a>
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
         <div class="modal fade" id="rename-modal-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -68,6 +69,7 @@
     <script src="{{ asset('bundles/zectranet/js/upload/jquery.iframe-transport.js') }}"></script>
     <script src="{{ asset('bundles/zectranet/js/upload/jquery.fileupload.js') }}"></script>
     <script src="{{ asset('bundles/zectranet/js/upload/script.js') }}"></script>
+
     <script>
         var getDocuments_;
         JSON_URLS.documentsGet = "{{ path('zectranet_document_get') }}";
