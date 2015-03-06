@@ -27,6 +27,7 @@ class ProjectPostController extends Controller
 
         $new_post = ProjectPost::addNewPost($em, $user->getId(), $project_id, $post->message);
 
+        $nameEpicStory = null;
         if ($project->getParent())
         {
             $nameEpicStory = $project->getName();

@@ -7,8 +7,8 @@ parameters:
     database_user: zectranet_com
     database_password: 123456
     mailer_transport: smtp
-    mailer_host: mailout.one.com
-    mailer_user: notifications@zectratrading.com
-    mailer_password: abcd1234
+    mailer_host: ~
+    mailer_user: ~
+    mailer_password: ~
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt

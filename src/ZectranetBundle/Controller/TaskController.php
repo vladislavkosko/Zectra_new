@@ -19,7 +19,15 @@ class TaskController extends Controller {
      */
     public function showTaskAction ($task_id) {
         $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
-        return $this->render('@Zectranet/task.html.twig', array('task' => $task));
+        $task_priority = $this->getDoctrine()->getRepository('ZectranetBundle:TaskPriority')->findAll();
+        $task_types = $this->getDoctrine()->getRepository('ZectranetBundle:TaskType')->findAll();
+        $task_statuses = $this->getDoctrine()->getRepository('ZectranetBundle:TaskStatus')->findAll();
+        return $this->render('@Zectranet/task.html.twig', array(
+            'task' => $task,
+            'task_priority' => $task_priority,
+            'task_types' => $task_types,
+            'task_statuses' => $task_statuses
+        ));
     }
 
     /**

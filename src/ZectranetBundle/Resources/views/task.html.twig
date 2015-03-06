@@ -4,57 +4,112 @@
 
 {% block body %}
     <div class="page-header">
-        <span style="font-size: 25px;">
+        <div class="page-header">
             <i class="fa fa-user fa-2x"></i>
             {{ task.name }}
-        </span>
+        </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <!--Begin of Main Task Info-->
+            <div class="col-md-6">
+                <div class="page-header">
+                    <span style="font-size: 20px;">Task Info</span>
+                </div>
 
-                <div class="col-md-6">
-                    <div class="page-header">
-                        <span style="font-size: 20px;">Task Info</span>
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted  form-control-static">Name:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <input type="text" style="border: none;" class="form-control" value="{{ task.name }}">
+                        </div>
+
                     </div>
                 </div>
 
-                <div class="col-md-6">
-
-                    <div class="page-header">
-                        <span style="font-size: 20px;">Task Details</span>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="text-muted">Assigned:</label>
-                        </div>
-
-                        <div class="col-md-6">
-                            <p class="text-info" align="center">
-                                {% if task.assigned %}
-                                    {{ task.assigned.name ~ ' ' ~ task.assigned.surname ~ ' (' ~ task.assigned ~ ')' }}
-                                {% else %}
-                                    {{ 'Not Assigned' }}
-                                {% endif %}
-                            </p>
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Type:</label>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 vertical-center">
-                            <label class="text-muted">Progress:</label>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <select class="form-control" style="border: none;">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3" selected="selected">3</option>
+                            </select>
                         </div>
-                        <div class="col-md-6">
-                            <div class="progress progress-striped active" style="position: relative;">
-                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                    <span class="sr-only">40% Complete (success)</span>
-                                    <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%;">40% Complete</div>
-                                </div>
+                    </div>
+                </div>
+            </div>
+            <!--End of Main Task Info-->
+
+            <!--Begin of Task Details-->
+            <div class="col-md-6">
+
+                <div class="page-header">
+                    <span style="font-size: 20px;">Task Details</span>
+                </div>
+
+                <div class="row" style="margin-bottom: 5px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Assigned:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <select class="form-control" style="border: none;">
+                                {% for user in task.project.users %}
+                                    <option value="{{ user.id }}" {% if task.assigned == user %}selected="selected"{% endif %}>{{ user.name }}</option
+                                {% endfor %}
+                                <option {% if task.assigned == null %}selected="selected"{% endif %}>Not Assigned</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted  form-control-static">Progress:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="progress progress-striped active" style="position: relative;">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ task.progress }}%">
+                                <span class="sr-only">{{ task.progress }}% Complete (success)</span>
+                                <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%;">{{ task.progress }}% Complete</div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <!--End of Task Details-->
 
+        </div>
+
+        <!-- Begin of Desciption Section -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h4>Description</h4>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea class="form-control" style="border: none; height: 150px; resize: none;">{{ task.description }}</textarea>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

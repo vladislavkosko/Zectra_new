@@ -223,15 +223,14 @@
 						</a>
 
 						<ul class="dropdown-menu dropdown-alerts">
-
                             {% for notification in app.user.notifications %}
-                                {% if notification.type == "message_office" %}
+                                {% if notification.type == "message_project" %}
                                     <li>
                                         <a href="#">
                                             <div class="row">
                                                 <div class="col-md-8">
                                                     <i class="fa fa-comment fa-fw"></i>
-                                                    <div  ng-bind-html="'{{ notification.message }}'" ></div>
+                                                    <p style="white-space: pre-line" ng-bind-html="'{{ notification.message }}'"></p>
 
                                                 </div>
                                                 <div class="col-md-4">
