@@ -151,6 +151,30 @@ class UserSettings
      */
     private $msgSiteEpicStoryDeleted;
 
+    function __construct()
+    {
+        $this->showClosedProjects = true;
+        $this->disableAllOnEmail = false;
+        $this->disableAllOnSite = false;
+        $this->msgEmailMessageOffice = true;
+        $this->msgEmailMessageProject = true;
+        $this->msgEmailMessageEpicStory = true;
+        $this->msgEmailMessageTask = true;
+        $this->msgEmailTaskAdded = true;
+        $this->msgEmailEpicStoryAdded = true;
+        $this->msgEmailTaskDeleted = true;
+        $this->msgEmailEpicStoryDeleted = true;
+        $this->msgSiteMessageOffice = true;
+        $this->msgSiteMessageProject = true;
+        $this->msgSiteMessageEpicStory = true;
+        $this->msgSiteMessageTask = true;
+        $this->msgSiteTaskAdded = true;
+        $this->msgSiteEpicStoryAdded = true;
+        $this->msgSiteTaskDeleted = true;
+        $this->msgSiteEpicStoryDeleted = true;
+    }
+
+
     /**
      * Get id
      *

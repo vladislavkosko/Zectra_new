@@ -228,10 +228,18 @@
                                 {% if notification.type == "message_office" %}
                                     <li>
                                         <a href="#">
-                                            <div>
-                                                <i class="fa fa-comment fa-fw"></i>
-                                                <span ng-bind-html="'{{ notification.message }}'" ></span>
-                                                <span class="pull-right text-muted small">{{ notification.activated.date| date('Y-m-d H:i')}}</span>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="col-xs-1">
+                                                        <i class="fa fa-comment fa-fw"></i>
+                                                    </div>
+                                                    <div class="col-xs-8">
+                                                        <span ng-bind-html="'{{ notification.message }}'" ></span>
+                                                    </div>
+                                                    <div class="col-xs-3">
+                                                        <span class="pull-right text-muted small">{{ notification.activated.date| date('Y-m-d H:i')}}</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </a>
                                     </li>
