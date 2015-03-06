@@ -222,26 +222,34 @@
 							<i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
 						</a>
 
-						<ul class="dropdown-menu dropdown-alerts" style="width: 800px;">
-                            {% for notification in app.user.notifications %}
-                                {% if notification.type == "message_office" %}
-                                    <li>
-                                        <a href="#">
-                                            <div class="text-muted small" style="text-align: right">{{ notification.activated.date| date('Y-m-d H:i')}}</div>
-                                            <i class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
-                                            <div style="word-wrap: break-word; display: inline-block" ng-bind-html="'{{ notification.message }}'"></div>
-                                        </a>
-                                    </li>
-                                    <li class="divider"></li>
-                                {% endif %}
-                            {% endfor %}
+						<ul class="dropdown-menu dropdown-alerts" style="width: 500px;">
+                            {% if app.user.notifications|length > 0 %}
+                                {% for notification in app.user.notifications %}
+                                    {% if notification.type == "message_office" %}
+                                        <li>
+                                            <a href="#">
+                                                <i class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
+                                                <div style="word-wrap: break-word; display: inline-block" ng-bind-html="'{{ notification.message }}'"></div>
+                                                <div class="text-muted small" style="text-align: right">{{ notification.activated.date| date('Y-m-d H:i')}}</div>
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                    {% endif %}
+                                {% endfor %}
+                                <li>
+                                    <a class="text-center" href="#">
+                                        <strong>See All Alerts</strong>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
+                                </li>
 
-                            <li>
-                                <a class="text-center" href="#">
-                                    <strong>See All Alerts</strong>
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
-                            </li>
+                            {% else %}
+                                <li class="text-center">
+                                    You don't have notifications!
+                                </li>
+
+                            {% endif %}
+
 						</ul>
 					</li>
 

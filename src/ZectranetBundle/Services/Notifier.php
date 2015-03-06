@@ -74,8 +74,8 @@ class Notifier
 
 		$localMessage = $message;
 		if ($post != null) {
-			$localMessage = $localMessage . '<br>Message: <i>' . substr($post->message, 0, 250) . '</i>';
-			if (strlen($post->message) >= 250) {
+			$localMessage = $localMessage . '<br>Message: <i>' . substr($post->message, 0, 100) . '</i>';
+			if (strlen($post->message) >= 100) {
 				$localMessage .= '...';
 			}
 		}
