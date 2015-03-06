@@ -222,21 +222,14 @@
 							<i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
 						</a>
 
-						<ul class="dropdown-menu dropdown-alerts">
+						<ul class="dropdown-menu dropdown-alerts" style="width: 800px;">
                             {% for notification in app.user.notifications %}
-                                {% if notification.type == "message_project" %}
+                                {% if notification.type == "message_office" %}
                                     <li>
                                         <a href="#">
-                                            <div class="row">
-                                                <div class="col-md-8">
-                                                    <i class="fa fa-comment fa-fw"></i>
-                                                    <p style="white-space: pre-line" ng-bind-html="'{{ notification.message }}'"></p>
-
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="pull-right text-muted small">{{ notification.activated.date| date('Y-m-d H:i')}}</div>
-                                                </div>
-                                            </div>
+                                            <div class="text-muted small" style="text-align: right">{{ notification.activated.date| date('Y-m-d H:i')}}</div>
+                                            <i class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
+                                            <div style="word-wrap: break-word; display: inline-block" ng-bind-html="'{{ notification.message }}'"></div>
                                         </a>
                                     </li>
                                     <li class="divider"></li>
