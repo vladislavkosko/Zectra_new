@@ -191,6 +191,7 @@ class Task
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="TaskLog", mappedBy="task")
+     * @ORM\OrderBy({"date" = "DESC"})
      */
     private $logs;
 
@@ -919,6 +920,116 @@ class Task
         $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
         $logger->valueChanged(1, $task_id, $task->getDescription(), $description);
         $task->setDescription($description);
+        $em->persist($task);
+        $em->flush();
+
+        return $task;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param TaskLogger $logger
+     * @param int $task_id
+     * @param array $parameters
+     * @return Task
+     */
+    public static function editMainInfo(EntityManager $em, TaskLogger $logger, $task_id, $parameters) {
+        $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
+        $name = $parameters['name'];
+        $type_id = $parameters['type'];
+        $priority_id = $parameters['priority'];
+        $status_id = $parameters['status'];
+        $project_id = $parameters['project'];
+
+        if ($name !== $task->getName()) {
+            $logger->valueChanged(0, $task_id, $task->getName(), $name);
+            $task->setName($name);
+        }
+
+        if ($type_id != $task->getTypeid()) {
+            $type = $em->getRepository('ZectranetBundle:TaskType')->find($type_id);
+            $logger->valueChanged(2, $task_id, $task->getType()->getLabel(), $type->getLabel());
+            $task->setType($type);
+        }
+
+        if ($priority_id != $task->getPriotityid()) {
+            $priority = $em->getRepository('ZectranetBundle:TaskPriority')->find($priority_id);
+            $logger->valueChanged(3, $task_id, $task->getPriority()->getLabel(), $priority->getLabel());
+            $task->setPriority($priority);
+        }
+
+        if ($status_id != $task->getStatusid()) {
+            $status = $em->getRepository('ZectranetBundle:TaskStatus')->find($status_id);
+            $logger->valueChanged(4, $task_id, $task->getStatus()->getLabel(), $status->getLabel());
+            $task->setStatus($status);
+        }
+
+        if ($project_id != $task->getProjectid()) {
+            $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+            $logger->valueChanged(5, $task_id, $task->getProject()->getName(), $project->getName());
+            $task->setProject($project);
+        }
+
+        $em->persist($task);
+        $em->flush();
+        return $task;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param TaskLogger $logger
+     * @param int $task_id
+     * @param array $parameters
+     * @return Task
+     */
+    public static function editDetailsInfo(EntityManager $em, TaskLogger $logger, $task_id, $parameters) {
+        $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
+
+        $assigned_id = $parameters['assigned'];
+        $progress = $parameters['progress'];
+        $estimatedHours = $parameters['estimated_hours'];
+        $estimatedMinutes = $parameters['estimated_minutes'];
+        $startDate = $parameters['start_date'];
+        $endDate = $parameters['end_date'];
+
+        if ($assigned_id != $task->getAssignedid()) {
+            $assigned = $em->getRepository('ZectranetBundle:User')->find($assigned_id);
+            $logger->valueChanged(6, $task_id,
+                ($task->getAssigned())
+                    ? $task->getAssigned()->getName()
+                    : 'Not Assigned',
+                ($assigned)
+                    ? $assigned->getName()
+                    : 'Not Assigned'
+            );
+            $task->setAssigned($assigned);
+        }
+
+        if ($progress != $task->getProgress()) {
+            $logger->valueChanged(7, $task_id, $task->getProgress(), $progress);
+            $task->setProgress($progress);
+        }
+
+        if ($estimatedHours != $task->getEstimatedHours()) {
+            $logger->valueChanged(8, $task_id, $task->getEstimatedHours(), $estimatedHours);
+            $task->setEstimatedHours($estimatedHours);
+        }
+
+        if ($estimatedMinutes != $task->getEstimatedMinutes()) {
+            $logger->valueChanged(9, $task_id, $task->getEstimatedMinutes(), $estimatedMinutes);
+            $task->setEstimatedMinutes($estimatedMinutes);
+        }
+
+        if ($startDate !== $task->getStartdate()->format('Y-m-d')) {
+            $logger->valueChanged(10, $task_id, $task->getStartdate()->format('Y-m-d'), $startDate);
+            $task->setStartdate(\DateTime::createFromFormat('Y-m-d', $startDate));
+        }
+
+        if ($endDate !== $task->getEnddate()->format('Y-m-d')) {
+            $logger->valueChanged(11, $task_id, $task->getEnddate()->format('Y-m-d'), $endDate);
+            $task->setEnddate(\DateTime::createFromFormat('Y-m-d', $endDate));
+        }
+
         $em->persist($task);
         $em->flush();
 

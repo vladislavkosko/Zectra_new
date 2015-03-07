@@ -3,6 +3,7 @@ namespace ZectranetBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use ZectranetBundle\Entity\Task;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,16 +70,67 @@ class TaskController extends Controller {
         return $response;
     }
 
-    public function editMainInfoAction ($task_id) {
+    /**
+     * @param Request $request
+     * @param int $task_id
+     * @return RedirectResponse
+     */
+    public function editMainInfoAction (Request $request, $task_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var Task $task */
         $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        /** @var TaskLogger $logger */
+        $logger = $this->get('zectranet.tasklogger');
+
+        $parameters = array(
+            'name' => $request->request->get('name'),
+            'type' => $request->request->get('type'),
+            'priority' => $request->request->get('priority'),
+            'status' => $request->request->get('status'),
+            'project' => $request->request->get('project'),
+        );
+
+        $task = Task::editMainInfo($em, $logger, $task_id, $parameters);
         return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
     }
 
-    public function editDetailInfoAction ($task_id) {
+    /**
+     * @param Request $request
+     * @param int $task_id
+     * @return RedirectResponse
+     */
+    public function editDetailInfoAction (Request $request, $task_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var Task $task */
         $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        /** @var TaskLogger $logger */
+        $logger = $this->get('zectranet.tasklogger');
+
+        $parameters = array(
+            'assigned' => $request->request->get('assigned'),
+            'progress' => $request->request->get('progress'),
+            'estimated_hours' => $request->request->get('estimated_hours'),
+            'estimated_minutes' => $request->request->get('estimated_minutes'),
+            'start_date' => $request->request->get('start_date'),
+            'end_date' => $request->request->get('end_date'),
+        );
+
+        $task = Task::editDetailsInfo($em, $logger, $task_id, $parameters);
+
         return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
     }
 
+    /**
+     * @param Request $request
+     * @param int $task_id
+     * @return RedirectResponse
+     */
     public function editDescriptionAction (Request $request, $task_id) {
         $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
         /** @var EntityManager $em */
