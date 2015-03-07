@@ -28,7 +28,7 @@
                 <i ng-hide="task.expand" class="fa fa-plus"></i>
                 <i ng-show="task.expand" class="fa fa-minus"></i>
             </a>
-            <a>[[ task.name ]]</a>
+            <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]">[[ task.name ]]</a>
         </td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
         <td class="col-xs-1 hidden-xs">[[ task.status.label ]]</td>
@@ -48,26 +48,26 @@
         </td>
         <td class="col-xs-1">
             <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask"
-               ng-click="addParentToSubTask(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
+               ng-click="addParentIdToSubTask(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
                 <i class="fa fa-code-fork"></i>
             </a>
             <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task"
-               ng-click="addParentToSubTask(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
+               ng-click="addDeleteTaskId(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
                 <i class="fa fa-trash"></i>
             </a>
             <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_task_to_sprint"
-               ng-click="addParentToSubTask(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
+               ng-click="" style="width: 22px; height: 22px; cursor: pointer;">
                 <i class="fa fa-stack-overflow"></i>
             </a>
         </td>
     </tr>
 
-    <tr ng-show="parentTask.expand" ng-repeat="task in task.subtasks">
+    <tr ng-show="parentTask.expand" class="angular-show-transition-2-ms" ng-repeat="task in task.subtasks">
         <td class="col-xs-1">
             [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
         </td>
         <td class="col-xs-3">
-            [[ task.name ]]
+            <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]">[[ task.name ]]</a>
         </td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.priority.label ]]</td>
         <td class="col-xs-1 hidden-xs">[[ task.status.label ]]</td>
@@ -87,7 +87,7 @@
         </td>
         <td class="col-xs-1">
             <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
-               ng-click="addParentToSubTask([[ task.id ]])" style="width: 22px; height: 22px;">
+               ng-click="addDeleteTaskId(task.id)" style="width: 22px; height: 22px;">
                 <i class="fa fa-trash"></i>
             </a>
         </td>

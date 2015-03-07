@@ -1,0 +1,68 @@
+<!-- Begin of Add Task Modal -->
+<div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                    Add New Task
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="add_task_name" class="control-label">Task Name:</label>
+                                    <input type="text" id="add_task_name" class="form-control" name="name" ng-model="task.Name" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="add_task_type" class="control-label">Task Type:</label>
+                                    <select id="add_task_type" class="form-control" name="type" ng-model="task.Type" required>
+                                        {% for type in task_types %}
+                                            <option value="{{ type.id }}">
+                                                {{ type.label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_task_priority" class="control-label">Task Priority:</label>
+                                    <select id="add_task_priority" class="form-control" name="priority" ng-model="task.Priority" required>
+                                        {% for priority in task_priority %}
+                                            <option value="{{ priority.id }}">
+                                                {{ priority.label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="add_task_startdate" class="control-label">Task Start Date:</label>
+                                    <input type="date" id="add_task_startdate" class="form-control" name="startdate" ng-model="task.StartDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_task_enddate" class="control-label">Task End Date:</label>
+                                    <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_task_description" class="control-label">Task Description:</label>
+                                    <textarea id="add_task_description" class="form-control" name="description" ng-model="task.Description" required style="height: 100px;"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" ng-click="addTask(task)">Add</button>
+                                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- End of Add Task Modal -->

@@ -1,6 +1,7 @@
 Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', function($scope, $http, $modal){
     console.log('DocumentsController was loaded!');
 
+    $scope.promise = null;
     $scope.documents = [];
     $scope.urlDeleteFile = JSON_URLS.deleteFile;
     $scope.urlRenameFile = JSON_URLS.renameFile;
@@ -8,7 +9,7 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', functi
     $scope.curr_doc_id = null;
     $scope.newName = null;
 
-    getDocuments_ = getDocuments;
+    $scope.getDocuments_ = getDocuments;
 
     getDocuments();
 

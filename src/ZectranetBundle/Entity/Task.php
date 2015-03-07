@@ -821,6 +821,22 @@ class Task
     }
 
     /**
+     * @param EntityManager $em
+     * @param int $task_id
+     */
+    public static function deleteTask(EntityManager $em, $task_id) {
+        $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
+        if (count($task->getSubtasks()) > 0) {
+            /** @var Task $subtask */
+            foreach ($task->getSubtasks() as $subtask) {
+                $em->remove($subtask);
+            }
+        }
+        $em->remove($task);
+        $em->flush();
+    }
+
+    /**
      * Add subtasks
      *
      * @param \ZectranetBundle\Entity\Notification $subtasks

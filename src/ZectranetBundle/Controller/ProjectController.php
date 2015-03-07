@@ -38,6 +38,13 @@ class ProjectController extends Controller
     }
 
     /**
+     * @return Response
+     */
+    public function renderAddTaskAction() {
+        return $this->render('taskAdd.html.twig');
+    }
+
+    /**
      * @Route("/project/add")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
@@ -139,17 +146,19 @@ class ProjectController extends Controller
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @param $project_id
-     * @return RedirectResponse
+     * @return Response
      */
     public function addSubTaskAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $data = (object) $data['task'];
         $parameters = array(
-            'name' => $request->request->get('name'),
-            'description' => $request->request->get('description'),
-            'type' => $request->request->get('type'),
-            'priority' => $request->request->get('priority'),
-            'startdate' => $request->request->get('startdate'),
-            'enddate' => $request->request->get('enddate'),
-            'parent' => $request->request->get('parent')
+            'name' => $data->name,
+            'description' => $data->description,
+            'type' => $data->type,
+            'priority' => $data->priority,
+            'startdate' => date('Y-m-d', strtotime($data->startdate)),
+            'enddate' => date('Y-m-d', strtotime($data->enddate)),
+            'parent' => $data->parent
         );
 
         /** @var EntityManager $em */
@@ -158,11 +167,13 @@ class ProjectController extends Controller
         $user = $this->getUser();
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
 
-        Task::addNewSubTask($em, $user, $project_id, $parameters);
+        $task = Task::addNewSubTask($em, $user, $project_id, $parameters);
 
         $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project);
 
-        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+        $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     /**

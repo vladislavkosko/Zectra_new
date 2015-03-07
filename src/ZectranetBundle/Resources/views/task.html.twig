@@ -67,12 +67,16 @@
 
                     <div class="col-md-9">
                         <div class="input-group">
-                            <select class="form-control" style="border: none;">
-                                {% for user in task.project.users %}
-                                    <option value="{{ user.id }}" {% if task.assigned == user %}selected="selected"{% endif %}>{{ user.name }}</option
-                                {% endfor %}
-                                <option {% if task.assigned == null %}selected="selected"{% endif %}>Not Assigned</option>
-                            </select>
+                            {% if task.project.users | length > 0 %}
+                                <select class="form-control" style="border: none;">
+                                    {% for user in task.project.users %}
+                                        <option value="{{ user.id }}" {% if task.assigned == user %}selected="selected"{% endif %}>{{ user.name }}</option>
+                                    {% endfor %}
+                                    <option {% if task.assigned == null %}selected="selected"{% endif %}>Not Assigned</option>
+                                </select>
+                            {% else %}
+                                <p class="form-control-static">Not Assigned</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -84,13 +88,16 @@
                         </div>
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="col-md-8" ng-init="progress = '{{ task.progress }}'">
                         <div class="progress progress-striped active" style="position: relative;">
-                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ task.progress }}%">
-                                <span class="sr-only">{{ task.progress }}% Complete (success)</span>
-                                <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%;">{{ task.progress }}% Complete</div>
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[progress]]%;">
+                                <span class="sr-only">[[progress]]% Complete (success)</span>
+                                <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%;">[[progress]]% Complete</div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-1">
+
                     </div>
                 </div>
             </div>

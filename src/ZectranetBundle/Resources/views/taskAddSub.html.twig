@@ -1,0 +1,68 @@
+<!-- Begin of Add SubTask Modal -->
+<div class="modal fade" id="add_new_subtask" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                    Add New SubTask
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-10 col-md-offset-1">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="add_subtask_name" class="control-label">Task Name:</label>
+                                    <input type="text" id="add_subtask_name" class="form-control" ng-model="subtask.name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_subtask_type" class="control-label">Task Type:</label>
+                                    <select id="add_subtask_type" class="form-control" ng-model="subtask.type" name="type" required>
+                                        {% for type in task_types %}
+                                            <option value="{{ type.id }}">
+                                                {{ type.label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_subtask_priority" class="control-label">Task Priority:</label>
+                                    <select id="add_subtask_priority" class="form-control" ng-model="subtask.priority" name="priority" required>
+                                        {% for priority in task_priority %}
+                                            <option value="{{ priority.id }}">
+                                                {{ priority.label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_subtask_startdate" class="control-label">Task Start Date:</label>
+                                    <input type="date" id="add_subtask_startdate" class="form-control" ng-model="subtask.startdate" name="startdate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_subtask_enddate" class="control-label">Task End Date:</label>
+                                    <input type="date" id="add_subtask_enddate" class="form-control" ng-model="subtask.enddate" name="enddate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_subtask_parent" class="control-label">Parent Task ID:</label>
+                                    <input type="text" id="add_subtask_parent" class="form-control" readonly ng-model="subtask.parent" name="parent" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_subtask_description" class="control-label">Task Description:</label>
+                                    <textarea id="add_subtask_description" class="form-control" ng-model="subtask.description" name="description" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <a ng-click="addSubTask(subtask)" class="btn btn-primary">Add</a>
+                                    <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Add SubTask Modal -->

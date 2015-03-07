@@ -153,7 +153,7 @@ class Notifier
             $link = $this->router->generate('zectranet_show_office', array('office_id' => $destinationid), true);
 
         elseif (in_array($type, array("message_task", "task_added", "task_deleted", "request_assign_task", "private_message_task")))
-            $link = $this->router->generate('#', array('task_id' => $destinationid), true);
+            $link = $this->router->generate('zectranet_task_show', array('task_id' => $destinationid), true);
 
         else
             $link = $this->router->generate('zectranet_show_project', array('project_id' => $destinationid), true);

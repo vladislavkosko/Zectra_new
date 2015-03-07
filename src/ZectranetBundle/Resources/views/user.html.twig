@@ -65,17 +65,21 @@
             {% endif %}
 
             {% for project in app.user.ownedProjects | reverse | slice(0, 3) %}
-                <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                    <i class="fa fa-briefcase"></i>
-                    {{ project.name }}
-                </a>
-            {% endfor %}
-            <div id="private_project_collapse" class="panel-collapse collapse" aria-expanded="false">
-                {% for project in app.user.ownedProjects | reverse | slice(3, projectsCount) %}
+                {% if project.parent == null %}
                     <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
                         <i class="fa fa-briefcase"></i>
                         {{ project.name }}
                     </a>
+                {% endif %}
+            {% endfor %}
+            <div id="private_project_collapse" class="panel-collapse collapse" aria-expanded="false">
+                {% for project in app.user.ownedProjects | reverse | slice(3, projectsCount) %}
+                    {% if project.parent == null %}
+                        <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                            <i class="fa fa-briefcase"></i>
+                            {{ project.name }}
+                        </a>
+                    {% endif %}
                 {% endfor %}
             </div>
             {% if projectsCount > 3 %}
@@ -196,17 +200,21 @@
             {% endif %}
 
             {% for project in app.user.projects | reverse | slice(0, 3) %}
-                <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                    <i class="fa fa-briefcase"></i>
-                    {{ project.name }}
-                </a>
-            {% endfor %}
-            <div id="connected_project_collapse" class="panel-collapse collapse" aria-expanded="false">
-                {% for project in app.user.projects | reverse | slice(3, projectsCount) %}
+                {% if project.parent == null %}
                     <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
                         <i class="fa fa-briefcase"></i>
                         {{ project.name }}
                     </a>
+                {% endif %}
+            {% endfor %}
+            <div id="connected_project_collapse" class="panel-collapse collapse" aria-expanded="false">
+                {% for project in app.user.projects | reverse | slice(3, projectsCount) %}
+                    {% if project.parent == null %}
+                        <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                            <i class="fa fa-briefcase"></i>
+                            {{ project.name }}
+                        </a>
+                    {% endif %}
                 {% endfor %}
             </div>
             {% if projectsCount > 3 %}

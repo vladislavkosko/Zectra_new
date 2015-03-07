@@ -49,4 +49,22 @@ class TaskController extends Controller {
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+
+
+    /**
+     * @Route("/task/{task_id}/deleteTask")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $task_id
+     * @return Response
+     */
+    public function deleteTaskAction($task_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        Task::deleteTask($em, $task_id);
+
+        $response = new Response(json_encode(null));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 }

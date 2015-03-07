@@ -11,7 +11,7 @@
                 <div class="row" ng-repeat="task in tasks">
                     <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                         <span ng-if="task.status.label == 'story'">
-                            <a class="list-group-item" style="margin-bottom: 5px;"
+                            <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                                ng-class="{
                                     'local-red': task.priority.id == 3,
                                     'local-yellow': task.priority.id == 2,
@@ -31,7 +31,7 @@
                             </a>
                         </span>
                         <span ng-repeat="task in task.subtasks">
-                            <a ng-if="task.status.label == 'story'" class="list-group-item"
+                            <a ng-if="task.status.label == 'story'" class="list-group-item" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                                ng-class="{
                                     'local-red': task.priority.id == 3,
                                                                 'local-yellow': task.priority.id == 2,
@@ -65,7 +65,7 @@
             <div class="row" ng-repeat="task in tasks">
                 <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                     <div ng-if="task.status.label == 'todo'">
-                        <a class="list-group-item" style="margin-bottom: 5px;"
+                        <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
                                 'local-red': task.priority.id == 3,
                                 'local-yellow': task.priority.id == 2,
@@ -87,7 +87,7 @@
                         </a>
                     </div>
                     <div ng-repeat="task in task.subtasks">
-                        <a ng-if="task.status.label == 'todo'" class="list-group-item"
+                        <a ng-if="task.status.label == 'todo'" class="list-group-item" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
                                 'local-red': task.priority.id == 3,
                                 'local-yellow': task.priority.id == 2,
@@ -120,11 +120,11 @@
             <div class="row" ng-repeat="task in tasks">
                 <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                     <div ng-if="task.status.label == 'in-progress'">
-                        <a class="list-group-item" style="margin-bottom: 5px;"
+                        <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
-                                                               'local-red': task.priority.id == 3,
-                                                               'local-yellow': task.priority.id == 2,
-                                                               'local-green': task.priority.id == 1 }">
+                                'local-red': task.priority.id == 3,
+                                'local-yellow': task.priority.id == 2,
+                                'local-green': task.priority.id == 1 }">
                             <h4 class="list-group-item-heading">
                             <span style="color: black;">
                                 [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
@@ -143,7 +143,7 @@
                     </div>
 
                     <div ng-repeat="task in task.subtasks">
-                        <a ng-if="task.status.label == 'in-progress'" class="list-group-item"
+                        <a ng-if="task.status.label == 'in-progress'" class="list-group-item" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
                                 'local-red': task.priority.id == 3,
                                 'local-yellow': task.priority.id == 2,
@@ -176,7 +176,7 @@
             <div class="row" ng-repeat="task in tasks">
                 <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                     <div ng-if="task.status.label == 'done'">
-                        <a class="list-group-item" style="margin-bottom: 5px;"
+                        <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
                                 'local-red': task.priority.id == 3,
                                 'local-yellow': task.priority.id == 2,
@@ -199,7 +199,7 @@
                     </div>
 
                     <div ng-repeat="task in task.subtasks">
-                        <a ng-if="task.status.label == 'done'" class="list-group-item"
+                        <a ng-if="task.status.label == 'done'" class="list-group-item" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
                                 'local-red': task.priority.id == 3,
                                 'local-yellow': task.priority.id == 2,

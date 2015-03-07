@@ -48,3 +48,15 @@
   width:64px;
   display: block;
 }
+
+.angular-show-transition-2-ms.ng-hide-add.ng-hide-add-active,
+.angular-show-transition-2-ms.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: all linear 0.3s;
+  transition: all linear 0.3s;
+}
+
+.angular-show-transition-2-ms.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  padding: 0 10px;
+}

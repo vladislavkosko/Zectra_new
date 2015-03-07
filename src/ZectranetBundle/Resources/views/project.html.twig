@@ -55,44 +55,14 @@
             </div>
 
             <!-- BEGIN OF EPIC STORY ADD MODAL -->
-            <div class="modal fade" id="add_epic_story" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header label-primary">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-                                Add New Epic Story
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-offset-1 col-md-10">
-                                    <form class="form-horizontal">
-                                        <div class="form-group">
-                                            <label for="add_epic_story_name">Epic Story Name:</label>
-                                            <input type="text" id="add_epic_story_name" ng-model="story.name" pattern="[0-9A-Za-z -_()]{1,30}" class="form-control" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="add_epic_story_description">Epic Story Description:</label>
-                                            <input type="text" id="add_epic_story_description" ng-model="story.description" class="form-control" pattern="[0-9A-Za-z -_()]{1,50}" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <a class="btn btn-primary" ng-click="addNewEpicStory(story)">Add</a>
-                                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include '@Zectranet/projectAddEpicStory.html.twig' %}
             <!-- END OF EPIC STORY ADD MODAL -->
+
         </div>
 
         <!-- Begin of Tasks -->
         <div class="row" ng-controller="TaskController">
+
             <div class="col-md-12">
                 <div class="panel panel-default list-group">
                     <div class="list-group-item active">
@@ -150,143 +120,13 @@
                 </div>
             </div>
 
-            <!-- Begin of Add Task Modal -->
-            <div class="modal fade" id="add_new_task" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header label-primary">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-                                Add New Task
-                            </h4>
-                        </div>
+            <!-- Begin of Task operations modals -->
+            {% include '@Zectranet/taskAdd.html.twig' %}
 
-                        <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-10 col-md-offset-1">
-                                        <form class="form-horizontal">
-                                            <div class="form-group">
-                                                <label for="add_task_name" class="control-label">Task Name:</label>
-                                                <input type="text" id="add_task_name" class="form-control" name="name" ng-model="task.Name" required>
-                                            </div>
+            {% include '@Zectranet/taskAddSub.html.twig' %}
 
-                                            <div class="form-group">
-                                                <label for="add_task_type" class="control-label">Task Type:</label>
-                                                <select id="add_task_type" class="form-control" name="type" ng-model="task.Type" required>
-                                                    {% for type in task_types %}
-                                                        <option value="{{ type.id }}">
-                                                            {{ type.label }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_task_priority" class="control-label">Task Priority:</label>
-                                                <select id="add_task_priority" class="form-control" name="priority" ng-model="task.Priority" required>
-                                                    {% for priority in task_priority %}
-                                                        <option value="{{ priority.id }}">
-                                                            {{ priority.label }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="add_task_startdate" class="control-label">Task Start Date:</label>
-                                                <input type="date" id="add_task_startdate" class="form-control" name="startdate" ng-model="task.StartDate" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_task_enddate" class="control-label">Task End Date:</label>
-                                                <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="task.EndDate" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_task_description" class="control-label">Task Description:</label>
-                                                <textarea id="add_task_description" class="form-control" name="description" ng-model="task.Description" required style="height: 100px;"></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-primary" ng-click="addTask(task)">Add</button>
-                                                <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <!-- End of Add Task Modal -->
-
-            <!-- Begin of Add SubTask Modal -->
-            <div class="modal fade" id="add_new_subtask" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header label-primary">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-                                Add New SubTask
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-10 col-md-offset-1">
-                                        <form class="form-horizontal">
-                                            <div class="form-group">
-                                                <label for="add_subtask_name" class="control-label">Task Name:</label>
-                                                <input type="text" id="add_subtask_name" class="form-control" name="name" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_subtask_type" class="control-label">Task Type:</label>
-                                                <select id="add_subtask_type" class="form-control" name="type" required>
-                                                    {% for type in task_types %}
-                                                        <option value="{{ type.id }}">
-                                                            {{ type.label }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_subtask_priority" class="control-label">Task Priority:</label>
-                                                <select id="add_subtask_priority" class="form-control" name="priority" required>
-                                                    {% for priority in task_priority %}
-                                                        <option value="{{ priority.id }}">
-                                                            {{ priority.label }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_subtask_startdate" class="control-label">Task Start Date:</label>
-                                                <input type="date" id="add_subtask_startdate" class="form-control" name="startdate" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_subtask_enddate" class="control-label">Task End Date:</label>
-                                                <input type="date" id="add_subtask_enddate" class="form-control" name="enddate" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_subtask_parent" class="control-label">Parent Task ID:</label>
-                                                <input type="text" id="add_subtask_parent" class="form-control" readonly name="parent" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="add_subtask_description" class="control-label">Task Description:</label>
-                                                <textarea type="text" id="add_subtask_description" class="form-control" name="description" required></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-primary">Add</button>
-                                                <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Add SubTask Modal -->
+            {% include '@Zectranet/taskDelete.html.twig' %}
+            <!-- End of Task operations modals -->
 
         </div>
         <!-- End of Tasks -->
@@ -366,35 +206,11 @@
         <div ng-init="changeCurrentPage('{{ project.id }}')"></div>
     </div>
 
-    {% block projectModals %}
         {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
             <!-- Begin of Delete Private Project Modal -->
-            <div class="modal fade" id="delete_private_project" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header label-danger">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-                                Delete Project
-                            </h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="header">
-                                    <h3 class="text-center">Are you really want to delete this project?</h3><br>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <a class="btn btn-danger" href="{{ path('zectranet_delete_project', {'project_id': project.id }) }}">Delete</a>
-                                <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% include '@Zectranet/projectDelete.html.twig' %}
             <!-- End of Delete Private Project Modal -->
         {% endif %}
-    {% endblock %}
 
 
 {% endblock %}
@@ -416,7 +232,10 @@
         JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': 0 }) }}";
 
         JSON_URLS.addTask = "{{ path('zectranet_project_add_task', { 'project_id': 0 }) }}";
+        JSON_URLS.addSubTask = "{{ path('zectranet_project_add_subtask', { 'project_id': 0 }) }}";
         JSON_URLS.getTasks = "{{ path('zectranet_project_get_tasks', { 'project_id': 0 }) }}";
+        JSON_URLS.deleteTask = "{{ path('zectranet_task_delete', { 'task_id': 0 }) }}";
+        JSON_URLS.showTask = "{{ path('zectranet_task_show', { 'task_id': 0 }) }}";
 
         JSON_URLS.getEpicStories = "{{ path('zectranet_project_get_epic_stories', { 'project_id': project.id }) }}";
         JSON_URLS.addEpicStory = "{{ path('zectranet_project_add_epic_story', { 'project_id': project.id }) }}";

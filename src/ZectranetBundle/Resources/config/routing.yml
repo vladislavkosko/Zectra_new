@@ -175,6 +175,18 @@ zectranet_task_show:
     requirements:
         task_id: \d+
 
+zectranet_task_add_show:
+    pattern: /project/{project_id}/showAddTask
+    defaults: { _controller: ZectranetBundle:Project:renderAddTask }
+    requirements:
+        project_id: \d+
+
+zectranet_task_delete:
+    pattern: /task/{task_id}/deleteTask
+    defaults: { _controller: ZectranetBundle:Task:deleteTask }
+    requirements:
+        task_id: \d+
+
 zectranet_upload:
     pattern: /upload/
     defaults: { _controller: ZectranetBundle:Upload:index }
@@ -191,11 +203,11 @@ zectranet_document_rename:
     pattern: documents/{fileid}/rename
     defaults: { _controller: ZectranetBundle:Upload:renameDoc }
     requirements:
-            fileid: \d+
+        fileid: \d+
 
 zectranet_document_delete:
     pattern: documents/{fileid}/delete/
     defaults: { _controller: ZectranetBundle:Upload:removeDoc }
     requirements:
-                fileid: \d+
+        fileid: \d+
 
