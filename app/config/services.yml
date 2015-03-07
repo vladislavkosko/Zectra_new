@@ -2,7 +2,7 @@ parameters:
 #    parameter_name: value
 
 services:
-    service_name:
+    zectranet.taskLogger:
         class: ZectranetBundle\Services\TaskLogger
         arguments: [@security.token_storage, @doctrine.orm.default_entity_manager]
 

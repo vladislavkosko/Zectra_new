@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\User;
 use ZectranetBundle\Entity\TaskStatus;
+use ZectranetBundle\Services\TaskLogger;
 
 /**
  * Task
@@ -186,6 +187,13 @@ class Task
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      */
     private $owner;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="TaskLog", mappedBy="task")
+     */
+    private $logs;
+
     /**
      * Constructor
      */
@@ -770,6 +778,70 @@ class Task
     }
 
     /**
+     * Add subtasks
+     *
+     * @param \ZectranetBundle\Entity\Notification $subtasks
+     * @return Task
+     */
+    public function addSubtask(Notification $subtasks)
+    {
+        $this->subtasks[] = $subtasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove subtasks
+     * @param \ZectranetBundle\Entity\Notification $subtasks
+     */
+    public function removeSubtask(Notification $subtasks)
+    {
+        $this->subtasks->removeElement($subtasks);
+    }
+
+    /**
+     * Get subtasks
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSubtasks()
+    {
+        return $this->subtasks;
+    }
+
+    /**
+     * Add logs
+     *
+     * @param \ZectranetBundle\Entity\TaskLog $logs
+     * @return Task
+     */
+    public function addLog(\ZectranetBundle\Entity\TaskLog $logs)
+    {
+        $this->logs[] = $logs;
+
+        return $this;
+    }
+
+    /**
+     * Remove logs
+     *
+     * @param \ZectranetBundle\Entity\TaskLog $logs
+     */
+    public function removeLog(\ZectranetBundle\Entity\TaskLog $logs)
+    {
+        $this->logs->removeElement($logs);
+    }
+
+    /**
+     * Get logs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLogs()
+    {
+        return $this->logs;
+    }
+
+    /**
      * @param EntityManager $em
      * @param User $user
      * @param int $project_id
@@ -837,36 +909,25 @@ class Task
     }
 
     /**
-     * Add subtasks
-     *
-     * @param \ZectranetBundle\Entity\Notification $subtasks
+     * @param EntityManager $em
+     * @param TaskLogger $logger
+     * @param int $task_id
+     * @param string $description
      * @return Task
      */
-    public function addSubtask(Notification $subtasks)
-    {
-        $this->subtasks[] = $subtasks;
+    public static function editTaskDescription(EntityManager $em, TaskLogger $logger, $task_id, $description) {
+        $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
+        $logger->valueChanged(1, $task_id, $task->getDescription(), $description);
+        $task->setDescription($description);
+        $em->persist($task);
+        $em->flush();
 
-        return $this;
+        return $task;
     }
 
     /**
-     * Remove subtasks
-     * @param \ZectranetBundle\Entity\Notification $subtasks
+     * @return array
      */
-    public function removeSubtask(Notification $subtasks)
-    {
-        $this->subtasks->removeElement($subtasks);
-    }
-
-    /**
-     * Get subtasks
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSubtasks()
-    {
-        return $this->subtasks;
-    }
-
     public function getInArray() {
         $subtasks = array();
         if ($this->subtasks) {

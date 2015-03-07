@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use ZectranetBundle\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use ZectranetBundle\Services\TaskLogger;
 
 class TaskController extends Controller {
     /**
@@ -78,8 +79,14 @@ class TaskController extends Controller {
         return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
     }
 
-    public function editDescriptionAction ($task_id) {
+    public function editDescriptionAction (Request $request, $task_id) {
         $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var TaskLogger $logger */
+        $logger = $this->get('zectranet.tasklogger');
+        $description = $request->request->get('description');
+        $task = Task::editTaskDescription($em, $logger, $task_id, $description);
         return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
     }
 }
