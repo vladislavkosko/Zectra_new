@@ -25,58 +25,6 @@
 									<i class="fa fa-search"></i>
 								</a>
 							</span>
-
-							<ul ng-if="searchInput.length >= 0" class="dropdown-menu open dropdown-search-ul" role="menu" style="width: 200%;" aria-labelledby="dLabel">
-								<li ng-if="searchCount == 0" style="overflow-x: auto;">
-									<a tabindex="-1">
-										<i>Search for [[searchInput]]...</i>
-									</a>
-								</li>
-
-								<li style="background-color: #495b79; color: whitesmoke;" ng-if="(searchCount > 0) && (searchInput.length > 0) && (search_projects.length > 0)">
-									<p align="center" class="dropdown-header" tabindex="-1"
-									   style="color: whitesmoke; padding: 1px 0; margin: 0;"></p>
-								</li>
-								<li ng-if="(searchCount > 0) && (searchInput.length > 0)" ng-repeat="res in search_projects" style="border-top: solid darkgray 1px;">
-									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}office/[[res.id]]">
-										<span style="font-size: 14px;" class="quicksearch-result blue-color-links"><i class="fa fa-user" style="font-size: 14px;"></i> [[res.name]]</span>
-										<span style="font-size: 11px;" class="quicksearch-source">[[res.Office.name]]</span>
-									</a>
-								</li>
-
-								<li style="background-color: #495b79; color: whitesmoke;" ng-if="(searchCount > 0) && (searchInput.length > 0) && (search_tasks.length > 0)">
-									<p align="center" class="dropdown-header" tabindex="-1"
-									   style="color: whitesmoke; padding: 1px 0; margin: 0;"></p>
-								</li>
-								<li ng-if="(searchCount > 0) && (searchInput.length > 0)" ng-repeat="res in search_tasks" style="border-top: solid darkgray 1px;">
-									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}office/[[res.officeid]]/[[searchInput]]">
-										<span style="font-size: 14px;" class="quicksearch-result blue-color-links"><i class="fa fa-filter" style="font-size: 14px;"></i> [[res.name]]</span>
-										<span style="font-size: 11px;" class="quicksearch-source">[[res.Office.name]]</span>
-									</a>
-								</li>
-								<li ng-if="(searchCount > 0) && (searchInput.length > 0)" ng-repeat="res in search_task_posts" style="border-top: solid darkgray 1px;">
-									<a tabindex="-1" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}office/[[res.Office.officeid]]/[[searchInput]]">
-										<span style="font-size: 14px;" class="quicksearch-result blue-color-links"><i class="fa fa-filter" style="font-size: 14px;"></i> [[res.message]]</span>
-										<span style="font-size: 11px;" class="quicksearch-source">[[res.Office.name]]</span>
-									</a>
-								</li>
-
-								<li style="background-color: #495b79;" ng-if="(searchCount > 0) && (searchInput.length > 0) && (search_chats.length > 0)">
-									<p align="center" class="dropdown-header" tabindex="-1"
-									   style="color: whitesmoke; padding: 1px 0; margin: 0;"></p>
-								</li>
-								<li ng-if="(searchCount > 0) && (searchInput.length > 0)" ng-repeat="res in search_chats" style="border-top: solid darkgray 1px;">
-									<a tabindex="-1" ng-if="res.Topics == null" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}office/[[res.officeid]]/[[searchInput]]">
-										<span class="quicksearch-result blue-color-links"><i class="fa fa-comments" style="font-size: 14px;"></i> [[res.message]]</span>
-										<span style="font-size: 11px;" class="quicksearch-source">[[res.Offices.name]]</span>
-									</a>
-									<a tabindex="-1" ng-if="res.Offices == null" style="padding: 3px 10px; text-overflow: ellipsis; overflow: hidden; " ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}topic/[[res.topicid]]/[[searchInput]]">
-										<span class="quicksearch-result blue-color-links"><i class="fa fa-comments" style="font-size: 14px;"></i> [[res.message]]</span>
-										<span style="font-size: 11px;" class="quicksearch-source">[[res.Topics.name]]</span>
-									</a>
-								</li>
-							</ul>
-
 						</div>
 					</li>
 				</ul>
@@ -92,10 +40,10 @@
 					</li>
 
 					<li class="active">
-						<a>
+						<div style="position: relative; display: block; padding: 10px 15px; background-color: #eee;">
 							<i class='fa fa-sitemap'></i>
 							<span>Offices</span>
-						</a>
+						</div>
 						<ul class="nav nav-second-level">
 							<li>
 								<a href="#">
@@ -141,10 +89,10 @@
 					</li>
 
 					<li class="active">
-						<a>
+						<div style="position: relative; display: block; padding: 10px 15px; background-color: #eee;">
 							<i class='fa fa-briefcase'></i>
 							<span>Projects</span>
-						</a>
+						</div>
 						<ul class="nav nav-second-level">
 							<li>
 								<a href="#">

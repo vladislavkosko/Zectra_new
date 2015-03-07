@@ -5,7 +5,7 @@
 {% block body %}
     <div ng-cloak>
 
-        <div class="row">
+        <div class="row" style="margin-top: 20px;">
             <!--Begin of Main Task Info-->
             <form class="col-md-6" action="{{ path('zectranet_task_edit_main_info', { 'task_id': task.id }) }}" method="post">
                 <div class="page-header" style="margin-top: 0;">
@@ -159,12 +159,6 @@
 
                 <!-- SAVE BUTTON -->
                 <div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="page-header" style="margin-top: 0;"></div>
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
@@ -379,7 +373,7 @@
         <!-- End of Task Nav Tabs -->
 
         <div id="tasks-tab-content" class="tab-content">
-            <div id="task-logs" class="tab-pane fade in active" style="max-height: 400px; overflow-y: auto;" aria-labelledby="task-logs-tab" role="tabpanel">
+            <div id="task-logs" class="tab-pane fade in active" style="max-height: 500px; overflow-y: auto;" aria-labelledby="task-logs-tab" role="tabpanel">
                 <table class="table">
                     <thead>
                         <tr>
