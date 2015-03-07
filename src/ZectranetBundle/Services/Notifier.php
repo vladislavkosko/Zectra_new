@@ -142,17 +142,15 @@ class Notifier
             $method = true;
 
         if (in_array($type, array("private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
-            $method = "no_method";
+            $method = true;
 
-        if($method == "no_method"){
+        if($method == true)
 			$this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
-		} else {
-			if($user_settings->getDisableAllOnEmail() == false ) {
-				if($method == true) {
-					$this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
-				}
-			}
-		}
+		else
+        {
+			if(($user_settings->getDisableAllOnEmail() == false) and ($method == true))
+                $this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
+        }
 	}
 
     /**

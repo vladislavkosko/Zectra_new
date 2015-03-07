@@ -169,7 +169,7 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\OneToOne(targetEntity="UserSettings", mappedBy="user")
-     * @var ArrayCollection
+     * @var UserSettings
      */
     private $userSettings;
 

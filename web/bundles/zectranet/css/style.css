@@ -282,3 +282,13 @@
     position: relative;
     top: 45%;
 }
+
+.notifier{
+    width: 500px !important;
+}
+
+@media screen and (max-width: 500px){
+    .notifier{
+        width: 300px !important;
+    }
+}

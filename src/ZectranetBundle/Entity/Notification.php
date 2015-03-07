@@ -252,4 +252,74 @@ class Notification
             'activated' => $this->getActivated()
         );
     }
+
+    /**
+     * @param User $user
+     * @return array
+     */
+    public static function prepareNotifications($user)
+    {
+        /** @var UserSettings $user_settings */
+        $user_settings = $user->getUserSettings();
+
+        /** @var array $user_notifications */
+        $user_notifications = $user->getNotifications();
+
+        $temp_user_notifications = array();
+
+        if ($user_settings->getDisableAllOnSite() == false)
+        {
+            for ($i = 0; $i < count($user_notifications); $i++)
+            {
+                $method = null;
+
+                switch ($user_notifications[$i]->getType())
+                {
+                    case "message_office":
+                        $method = $user_settings->getMsgSiteMessageOffice();
+                        break;
+
+                    case "message_project":
+                        $method = $user_settings->getMsgSiteMessageProject();
+                        break;
+
+                    case "message_epic_story":
+                        $method = $user_settings->getMsgSiteMessageEpicStory();
+                        break;
+
+                    case "message_task":
+                        $method = $user_settings->getMsgSiteMessageTask();
+                        break;
+
+                    //-----------------------------------------------------------------
+
+                    case "task_added":
+                        $method = $user_settings->getMsgSiteTaskAdded();
+                        break;
+
+                    case "epic_story_added":
+                        $method = $user_settings->getMsgSiteEpicStoryAdded();
+                        break;
+
+                    case "task_deleted":
+                        $method = $user_settings->getMsgSiteTaskDeleted();
+                        break;
+
+                    case "epic_story_deleted":
+                        $method = $user_settings->getMsgSiteEpicStoryDeleted();
+                        break;
+                }
+
+                if (in_array($user_notifications[$i]->getType(), array("request_office", "request_user_project", "request_project", "request_assign_task","private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
+                    $method = true;
+
+                if ($method == true)
+                    $temp_user_notifications[] = $user_notifications[$i];
+            }
+        }
+
+        else $user_notifications = null;
+
+        return $temp_user_notifications;
+    }
 }
