@@ -18,6 +18,7 @@
                     <span style="font-size: 20px;">Task Info</span>
                 </div>
 
+                <!-- Begin of Task NAME Edit -->
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-3">
                         <div class="input-group">
@@ -32,7 +33,27 @@
 
                     </div>
                 </div>
+                <!-- End of Task NAME Edit -->
 
+                <!-- Begin Of Task OWNER Details -->
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Owner:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <a href="{{ path('zectranet_user_page', {'user_id': task.ownerid }) }}" class="btn form-control-static text-info">
+                                {{ task.owner.name ~ ' ' ~ task.owner.surname ~ ' (' ~ task.owner.username ~ ')'}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Of Task OWNER Details -->
+
+                <!-- Begin of Task TYPE Select -->
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-3">
                         <div class="input-group">
@@ -55,20 +76,111 @@
                         </div>
                     </div>
                 </div>
+                <!-- End of Task TYPE Select -->
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="page-header" style="margin-top: 0;"></div>
+                <!-- Begin of Task PRIORITY Select -->
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Priority:</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-default btn-primary">Save</button>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <select class="form-control" style="border: none;">
+                                {% for priority in task_priority %}
+                                    <option style="color: {{ priority.color }}" value="{{ priority.id }}"
+                                            {% if priority.id == task.type.id %}
+                                        selected="selected"
+                                            {% endif %}>
+                                        {{ priority.label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                 </div>
+                <!-- End of Task PRIORITY Select -->
+
+                <!-- Begin of Task STATUS Select -->
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Status:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <select class="form-control" style="border: none;">
+                                {% for status in task_statuses %}
+                                    <option style="color: {{ status.color }}" value="{{ status.id }}"
+                                            {% if status.id == task.type.id %}
+                                        selected="selected"
+                                            {% endif %}>
+                                        {{ status.label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of Task STATUS Select -->
+
+                <!-- Begin of Task PROJECT/STORY Select -->
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Project/Epic Story:</label>
+                        </div>
+                    </div>
+
+                    {% set project = (task.project.parent) ? task.project.parent : task.project %}
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <select class="form-control" style="border: none;">
+                                <optgroup style="margin: 0; padding: 0;" label="Project">
+                                <option {% if project.id == task.project.id %}selected="selected"{% endif %} value="{{ project.id }}">{{ project.name }}</option>
+                                </optgroup>
+                                {% if project.epicStories | length > 0 %}
+                                    <optgroup style="margin: 0" label="Epic Stories">
+                                {% endif %}
+                                {% for epicStory in project.epicStories %}
+                                    <option value="{{ epicStory.id }}"
+                                            {% if epicStory.id == task.project.id %}
+                                                selected="selected"
+                                            {% endif %}>
+                                        {{ epicStory.name }}
+                                    </option>
+                                {% endfor %}
+                                {% if project.epicStories | length > 0 %}
+                                    </optgroup>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of Task PROJECT/STORY Select -->
+
+                <!-- SAVE BUTTON -->
+                <div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="page-header" style="margin-top: 0;"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-default btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- SAVE BUTTON -->
+
             </form>
             <!--End of Main Task Info-->
 
@@ -79,6 +191,7 @@
                     <span style="font-size: 20px;">Task Details</span>
                 </div>
 
+                <!-- Begin Of Task ASSIGNED Select -->
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-3">
                         <div class="input-group">
@@ -103,8 +216,9 @@
                         </div>
                     </div>
                 </div>
+                <!-- End Of Task ASSIGNED Select -->
 
-                <!-- Begin Of Task Progress Details -->
+                <!-- Begin Of Task PROGRESS Selection -->
                 <div class="row">
                     <div class="col-md-3">
                         <div class="input-group">
@@ -140,21 +254,101 @@
                         </div>
                     </div>
                 </div>
+                <!-- End Of Task PROGRESS Selection -->
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="page-header" style="margin-top: 0;"></div>
+                <!-- Begin Of Task ESTIMATED HOURS Select -->
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Estimated Hours:</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-default btn-primary">Save</button>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <select class="form-control" style="border: none;">
+                                {% for i in 0..48 %}
+                                    <option value="{{ i }}" {% if task.estimatedHours == i %}selected="selected"{% endif %}>{{ i }} h</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                 </div>
-                <!-- End Of Task Progress Details -->
+                <!-- End Of Task ESTIMATED HOURS Select -->
+
+                <!-- Begin Of Task ESTIMATED MINUTES Select -->
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Estimated Minutes:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <select class="form-control" style="border: none;">
+                                <option value="0" {% if task.estimatedMinutes == 0 %}selected="selected"{% endif %}>0 m</option>
+                                <option value="10" {% if task.estimatedMinutes == 10 %}selected="selected"{% endif %}>10 m</option>
+                                <option value="20" {% if task.estimatedMinutes == 20 %}selected="selected"{% endif %}>20 m</option>
+                                <option value="30" {% if task.estimatedMinutes == 30 %}selected="selected"{% endif %}>30 m</option>
+                                <option value="40" {% if task.estimatedMinutes == 40 %}selected="selected"{% endif %}>40 m</option>
+                                <option value="50" {% if task.estimatedMinutes == 50 %}selected="selected"{% endif %}>50 m</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Of Task ESTIMATED MINUTES Select -->
+
+                <!-- Begin Of Task START DATE Select -->
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">Start Date:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <input class="form-control" style="border: none;" type="date" value="{{ task.startdate | date('Y-m-d') }}">
+                        </div>
+                    </div>
+                </div>
+                <!-- End Of Task START DATE Select -->
+
+                <!-- Begin Of Task END DATE Select -->
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <label class="text-muted form-control-static">End Date:</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            <input class="form-control" style="border: none;" type="date" value="{{ task.enddate | date('Y-m-d') }}">
+                        </div>
+                    </div>
+                </div>
+                <!-- End Of Task END DATE Select -->
+
+                <!-- SAVE BUTTON -->
+                <div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="page-header" style="margin-top: 0;"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-group">
+                                <button type="submit" class="btn btn-default btn-primary">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- SAVE BUTTON -->
+
             </form>
             <!--End of Task Details-->
         </div>

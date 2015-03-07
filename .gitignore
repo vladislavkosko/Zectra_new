@@ -7,6 +7,4 @@
 /build/
 /vendor/
 /bin/
-/.idea/*.iml
-/.idea/*.xml
 /composer.phar

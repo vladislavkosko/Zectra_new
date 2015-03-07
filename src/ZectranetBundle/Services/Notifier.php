@@ -2,23 +2,30 @@
 
 namespace ZectranetBundle\Services;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\Office;
+use ZectranetBundle\Entity\Task;
 use ZectranetBundle\Entity\User;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 
 
 class Notifier
 {
-	private $user = null;
-	private $em = null;
-    /** @var Router  */
-	private $router = null;
-	private $mailer = null;
+	/** @var User $user */
+	private $user;
+	/** @var EntityManager $em */
+	private $em;
+    /** @var Router $router */
+	private $router;
+	/** @var \Swift_Mailer $mailer */
+	private $mailer;
 
+	/** @var array $types */
 	private $types = array(
         //for admin
         //"removed_office",
@@ -47,9 +54,15 @@ class Notifier
         "private_message_task",           // -
     );
 
-	public function __construct($securityContext, $em, $router, $mailer)
+	/**
+	 * @param TokenStorage $tokenStorage
+	 * @param EntityManager $em
+	 * @param Router $router
+	 * @param \Swift_Mailer $mailer
+	 */
+	public function __construct(TokenStorage $tokenStorage, EntityManager $em, Router $router, \Swift_Mailer $mailer)
 	{
-		$this->user = $securityContext->getToken()->getUser();
+		$this->user = $tokenStorage->getToken()->getUser();
 		$this->em = $em;
 		$this->router = $router;
 		$this->mailer = $mailer;
@@ -61,7 +74,7 @@ class Notifier
      * @param $resourceid
      * @param $destinationid
      * @param $message
-     * @param null $post
+     * @param object|null $post
      */
 	private function postNotification($user, $type, $resourceid, $destinationid, $message, $post = null)
 	{
@@ -87,6 +100,8 @@ class Notifier
 		$user_settings = $user->getUserSettings();
 		if(!isset($user_settings))
 			return;
+
+		$method = null;
 
 		switch ($type){
 
@@ -132,7 +147,7 @@ class Notifier
         if($method == "no_method"){
 			$this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
 		} else {
-			if($user_settings->getDisableAllOnEmail() == false ){
+			if($user_settings->getDisableAllOnEmail() == false ) {
 				if($method == true) {
 					$this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
 				}
@@ -145,7 +160,7 @@ class Notifier
      * @param $message
      * @param $type
      * @param $destinationid
-     * @param null $post
+     * @param object|null $post
      */
 	private function sendNotificationEmail($user, $message, $type, $destinationid, $post = null)
 	{
@@ -239,15 +254,18 @@ class Notifier
 
     /**
      * @param $type
-     * @param $resource
+     * @param User|Project|Task $resource
      * @param User $user
-     * @param $destination
-     * @param null $user_to_send_name
-     * @param null $post
+     * @param Project|Office $destination
+     * @param string|null $user_to_send_name
+     * @param object|null $post
      * @return bool
      */
-	public function createNotification($type, $resource, $user, $destination, $user_to_send_name = null, $post = null)
+	public function createNotification($type, $resource, User $user, $destination, $user_to_send_name = null, $post = null)
 	{
+		$users = null;
+		$message = null;
+
 		if (!in_array($type, $this->types)) return false;
 
         elseif (in_array($type, array("message_office", "message_project", "message_epic_story")))
@@ -263,7 +281,7 @@ class Notifier
         {
             $message = 'New comment around the task "'.$resource->getName().'"';
             $users = $destination->getUsers();
-            $userAsigned = $resource->getUser();
+            $userAsigned = $resource->getAssigned();
             if ($userAsigned != null) $users[] = $userAsigned;
         }
 

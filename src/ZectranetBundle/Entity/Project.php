@@ -58,11 +58,17 @@ class Project
     private $parentid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Project")
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="epicStories")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      * @var Project
      */
     protected $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Project", mappedBy="parent")
+     * @var ArrayCollection
+     */
+    private $epicStories;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="projects", fetch="EXTRA_LAZY")
@@ -452,5 +458,25 @@ class Project
 
         $em->remove($project);
         $em->flush();
+    }
+
+    /**
+     * Remove epicStories
+     *
+     * @param \ZectranetBundle\Entity\Project $epicStories
+     */
+    public function removeEpicStory(\ZectranetBundle\Entity\Project $epicStories)
+    {
+        $this->epicStories->removeElement($epicStories);
+    }
+
+    /**
+     * Get epicStories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEpicStories()
+    {
+        return $this->epicStories;
     }
 }
