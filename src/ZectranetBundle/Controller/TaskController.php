@@ -67,4 +67,19 @@ class TaskController extends Controller {
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+
+    public function editMainInfoAction ($task_id) {
+        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
+    }
+
+    public function editDetailInfoAction ($task_id) {
+        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
+    }
+
+    public function editDescriptionAction ($task_id) {
+        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
+    }
 }

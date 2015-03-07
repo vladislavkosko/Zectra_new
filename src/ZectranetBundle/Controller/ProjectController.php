@@ -38,13 +38,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @return Response
-     */
-    public function renderAddTaskAction() {
-        return $this->render('taskAdd.html.twig');
-    }
-
-    /**
      * @Route("/project/add")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request

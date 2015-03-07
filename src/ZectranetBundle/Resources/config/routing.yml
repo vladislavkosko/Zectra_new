@@ -175,11 +175,23 @@ zectranet_task_show:
     requirements:
         task_id: \d+
 
-zectranet_task_add_show:
-    pattern: /project/{project_id}/showAddTask
-    defaults: { _controller: ZectranetBundle:Project:renderAddTask }
+zectranet_task_edit_main_info:
+    pattern: /task/{task_id}/edit_main_info
+    defaults: { _controller: ZectranetBundle:Task:editMainInfo }
     requirements:
-        project_id: \d+
+        task_id: \d+
+
+zectranet_task_edit_detail_info:
+    pattern: /task/{task_id}/edit_detail_info
+    defaults: { _controller: ZectranetBundle:Task:editDetailInfo }
+    requirements:
+        task_id: \d+
+
+zectranet_task_edit_descritpion:
+    pattern: /task/{task_id}/edit_description
+    defaults: { _controller: ZectranetBundle:Task:editDescription }
+    requirements:
+        task_id: \d+
 
 zectranet_task_delete:
     pattern: /task/{task_id}/deleteTask

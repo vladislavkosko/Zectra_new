@@ -11,12 +11,12 @@
             <!-- Begin of Project controll buttons -->
             {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
                 <div class="pull-right">
-                <a style="cursor: pointer; text-decoration: none;">
-                    <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
-                </a>
-                <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
-                    <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
-                </a>
+                    <a style="cursor: pointer; text-decoration: none;">
+                        <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
+                    </a>
+                    <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
+                        <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
+                    </a>
                 </div>
             {% endif %}
             <!-- End of Project controll buttons -->
@@ -206,12 +206,11 @@
         <div ng-init="changeCurrentPage('{{ project.id }}')"></div>
     </div>
 
-        {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
-            <!-- Begin of Delete Private Project Modal -->
-            {% include '@Zectranet/projectDelete.html.twig' %}
-            <!-- End of Delete Private Project Modal -->
-        {% endif %}
-
+    {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
+        <!-- Begin of Delete Private Project Modal -->
+        {% include '@Zectranet/projectDelete.html.twig' %}
+        <!-- End of Delete Private Project Modal -->
+    {% endif %}
 
 {% endblock %}
 
