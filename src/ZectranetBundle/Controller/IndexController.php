@@ -167,10 +167,10 @@ class IndexController extends Controller
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $userid = $recordFromKey->getUserid();
-        $allRecords = $em->getRepository('ZectranetBundle:ForgotPassword')->findBy(array('userid' => $userid));
-        foreach ($allRecords as $record)
-            $em->remove($record);
-        $em->flush();
+        //$allRecords = $em->getRepository('ZectranetBundle:ForgotPassword')->findBy(array('userid' => $userid));
+        //foreach ($allRecords as $record)
+            //$em->remove($record);
+        //$em->flush();
         return $this->render("@Zectranet/resetPassword.html.twig", array('userid' => $userid));
     }
 
