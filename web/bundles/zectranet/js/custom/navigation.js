@@ -35,9 +35,9 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
                     {
                         StartNotify();
                         document.getElementById('notif_sound').play();
+                        $scope.notifications = prepareNotifications(response.result);
                         $scope.notificationsLength = response.result.length;
                     }
-                    $scope.notifications = prepareNotifications(response.result);
                 }
 
                 else {
