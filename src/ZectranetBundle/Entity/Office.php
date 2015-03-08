@@ -95,6 +95,7 @@ class Office
     {
         $this->users = new ArrayCollection();
         $this->projects = new ArrayCollection();
+        $this->visible = false;
     }
 
     /**

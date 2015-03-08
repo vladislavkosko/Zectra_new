@@ -3,6 +3,7 @@
 namespace ZectranetBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,6 @@ use ZectranetBundle\Entity\User;
 
 class ProjectController extends Controller
 {
-
     /**
      * @Route("/project/{project_id}")
      * @Security("has_role('ROLE_USER')")
@@ -35,6 +35,36 @@ class ProjectController extends Controller
             'task_types' => $task_types
             )
         );
+    }
+
+    /**
+     * @Route("/project/{project_id}/settings")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $project_id
+     * @return Response
+     */
+    public function settingsAction($project_id)
+    {
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+        $users = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findAll();
+        return $this->render('@Zectranet/projectSettings.html.twig', array(
+            'project' => $project,
+            'users' => $users,
+        ));
+    }
+
+    public function getMembersAction($project_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $jsonProjectUsers = Project::getJsonProjectMembers($em, $project_id);
+        $jsonNotProjectUsers = Project::getJsonNotProjectMembers($em, $project_id);
+
+        $response = new Response(json_encode(array(
+            'projectMembers' => $jsonProjectUsers,
+            'users' => $jsonNotProjectUsers
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace ZectranetBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -110,6 +111,7 @@ class Project
         $this->offices = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->postsProject = new ArrayCollection();
+        $this->visible = false;
     }
 
     /**
@@ -508,5 +510,51 @@ class Project
     public function getVisible()
     {
         return $this->visible;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @return array
+     */
+    public static function getJsonProjectMembers(EntityManager $em, $project_id) {
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $jsonProjectUsers = array();
+        /** @var User $user */
+        foreach ($project->getUsers() as $user) {
+            $jsonProjectUsers[] = $user->getInArray();
+        }
+        return $jsonProjectUsers;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @return array
+     */
+    public static function getJsonNotProjectMembers(EntityManager $em, $project_id) {
+        /** @var \Doctrine\ORM\QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $user_ids = array();
+        /** @var User $user */
+        foreach ($project->getUsers() as $user) {
+            $user_ids[] = $user->getId();
+        }
+
+        $query = $qb->select('u')
+            ->from('ZectranetBundle:User', 'u')
+            ->where($qb->expr()->notIn('u.id', $user_ids))
+            ->getQuery();
+        $notProjectUsers = $query->getResult();
+
+        $jsonNotProjectUsers = array();
+        /** @var User $user */
+        foreach ($notProjectUsers as $user) {
+            $jsonNotProjectUsers[] = $user->getInArray();
+        }
+
+        return $jsonNotProjectUsers;
     }
 }

@@ -121,6 +121,18 @@ zectranet_show_project:
     requirements:
         project_id: \d+
 
+zectranet_settings_project:
+    pattern: /project/{project_id}/settings
+    defaults: { _controller: ZectranetBundle:Project:settings }
+    requirements:
+        project_id: \d+
+
+zectranet_get_project_members:
+    pattern: /project/{project_id}/getMembers
+    defaults: { _controller: ZectranetBundle:Project:getMembers }
+    requirements:
+        project_id: \d+
+
 zectranet_add_project:
     path: /project/add
     defaults: { _controller: ZectranetBundle:Project:addProject }
