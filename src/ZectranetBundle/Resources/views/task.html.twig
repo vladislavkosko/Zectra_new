@@ -5,6 +5,22 @@
 {% block body %}
     <div ng-cloak>
 
+        <div class="row">
+            <ol class="breadcrumb" style="margin: 0 -30px;">
+                <li>
+                    <a href="{{ path('zectranet_user_home') }}">Summary</a>
+                </li>
+                <li>
+                    <a href="{{ path('zectranet_show_project', { 'project_id': task.project.id }) }}">
+                        {{ task.project.name }}
+                    </a>
+                </li>
+                <li class="active">
+                    {{ task.name }}
+                </li>
+            </ol>
+        </div>
+
         <div class="row" style="margin-top: 20px;">
             <!--Begin of Main Task Info-->
             <form class="col-md-6" action="{{ path('zectranet_task_edit_main_info', { 'task_id': task.id }) }}" method="post">
