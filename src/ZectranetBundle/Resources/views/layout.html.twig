@@ -228,7 +228,7 @@
                         </audio>
 
                         <ul ng-if="notifications.length > 0" class="notifier dropdown-menu dropdown-alerts">
-                            <li ng-repeat="notification in notifications| limitTo: 20">
+                            <li ng-repeat="notification in notifications| limitTo: 5">
 
                                 <a ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
                                     || (notification.type == 'task_added') || (notification.type == 'task_deleted') || (notification.type == 'epic_story_added') || (notification.type == 'epic_story_deleted')"
