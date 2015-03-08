@@ -69,6 +69,8 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
             for (i = 0; i < idsToRemove.length; i++) {
                 $scope.users.splice(findElementById(idsToRemove[i], $scope.users), 1);
             }
+
+            $scope.saveMembersState();
         };
 
         $scope.removeUsersFromProject = function () {
@@ -83,14 +85,14 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
             for (i = 0; i < idsToRemove.length; i++) {
                 $scope.projectMembers.splice(findElementById(idsToRemove[i], $scope.projectMembers), 1);
             }
+
+            $scope.saveMembersState();
         };
 
         $scope.saveMembersState = function () {
             $scope.membersPromise = $http
                 .post($scope.urlSaveProjectMembers, { 'users': $scope.projectMembers })
-                .success(function (response) {
-
-                });
+                .success(function (response) { });
         };
 
         console.log('Project Controller was loaded...');

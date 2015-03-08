@@ -39,12 +39,14 @@
             </div>
             {% if officesCount > 3 %}
                 <a data-toggle="collapse" href="#private_office_collapse" aria-expanded="false"
-                   class="collapsed list-group-item text-center btn">
+                   class="collapsed btn btn-default form-control">
+                    <i class="fa fa-list-alt"></i>
                     Show all
                 </a>
             {% endif %}
 
-            <a href="#" class="list-group-item text-center btn" data-toggle="modal" data-target="#add_private_office">
+            <a href="#" class="form-control btn btn-default btn-success" data-toggle="modal" data-target="#add_private_office">
+                <i class="fa fa-plus-circle"></i>
                 <span>Add New Office</span>
             </a>
         </div>
@@ -56,7 +58,13 @@
                 <i class="fa fa-briefcase"></i>
                 Private Projects
             </div>
-            {% set projectsCount = app.user.ownedProjects | length %}
+
+            {% set projectsCount = 0 %}
+            {% for project in app.user.ownedProjects %}
+                {% if project.parent == null %}
+                    {% set projectsCount = projectsCount + 1 %}
+                {% endif %}
+            {% endfor %}
 
             {% if projectsCount == 0 %}
                 <div class="list-group-item">
@@ -84,12 +92,14 @@
             </div>
             {% if projectsCount > 3 %}
                 <a data-toggle="collapse" href="#private_project_collapse" aria-expanded="false"
-                   class="collapsed list-group-item text-center btn btn-default">
+                   class="collapsed btn btn-default form-control">
+                    <i class="fa fa-list-alt"></i>
                     Show all
                 </a>
             {% endif %}
 
-            <a href="#" class="list-group-item text-center btn btn-default" data-toggle="modal" data-target="#add_private_project">
+            <a href="#" class="form-control btn btn-default btn-success" data-toggle="modal" data-target="#add_private_project">
+                <i class="fa fa-plus-circle"></i>
                 <span>Add New Project</span>
             </a>
         </div>
@@ -135,7 +145,8 @@
             </div>
             {% if sprintsCount > 3 %}
                 <a data-toggle="collapse" href="#connected_sprint_collapse" aria-expanded="false"
-                   class="collapsed list-group-item text-center btn btn-default">
+                   class="collapsed btn btn-default form-control">
+                    <i class="fa fa-list-alt"></i>
                     Show all
                 </a>
             {% endif %}
@@ -178,7 +189,8 @@
             </div>
             {% if officesCount > 3 %}
                 <a data-toggle="collapse" href="#connected_office_collapse" aria-expanded="false"
-                   class="collapsed list-group-item text-center btn btn-default">
+                   class="collapsed btn btn-default form-control">
+                    <i class="fa fa-list-alt"></i>
                     Show all
                 </a>
             {% endif %}
@@ -219,7 +231,8 @@
             </div>
             {% if projectsCount > 3 %}
                 <a data-toggle="collapse" href="#connected_project_collapse" aria-expanded="false"
-                   class="collapsed list-group-item text-center btn btn-default">
+                   class="collapsed btn btn-default form-control">
+                    <i class="fa fa-list-alt"></i>
                     Show all
                 </a>
             {% endif %}
@@ -266,7 +279,8 @@
             </div>
             {% if projectsCount > 3 %}
                 <a data-toggle="collapse" href="#connected_sprint_collapse" aria-expanded="false"
-                   class="collapsed list-group-item text-center btn btn-default">
+                   class="collapsed btn btn-default form-control">
+                    <i class="fa fa-list-alt"></i>
                     Show all
                 </a>
             {% endif %}

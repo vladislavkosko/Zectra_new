@@ -115,24 +115,28 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="owner")
+     * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection
      */
     private $ownedTasks;
 
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="assigned")
+     * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection
      */
     private $assignedTasks;
 
     /**
      * @ORM\OneToMany(targetEntity="Project", mappedBy="owner")
+     * @ORM\OrderBy({"parentid" = "DESC"})
      * @var ArrayCollection
      */
     private $ownedProjects;
 
     /**
      * @ORM\ManyToMany(targetEntity="Project", mappedBy="users")
+     * @ORM\OrderBy({"parentid" = "DESC"})
      * @var ArrayCollection
      */
     private $projects;
@@ -157,12 +161,14 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\OneToMany(targetEntity="Document", mappedBy="user")
+     * @ORM\OrderBy({"uploaded" = "DESC"})
      * @var ArrayCollection
      */
     private $documents;
 
     /**
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+     * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection
      */
     private $notifications;

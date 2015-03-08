@@ -394,25 +394,21 @@ class Office
         /** @var OfficeRole $role */
         foreach ($office->getOfficeUserRoles() as $role) {
             $office->removeOfficeUserRole($role);
-            $em->remove($role);
         }
 
         /** @var OfficePost $post */
         foreach ($office->getPostsOffice() as $post) {
             $office->removePostsOffice($post);
-            $em->remove($post);
         }
 
         /** @var Project $project */
         foreach ($office->getProjects() as $project) {
             $office->removeProject($project);
-            $em->remove($project);
         }
 
         /** @var User $user */
         foreach ($office->getUsers() as $user) {
             $office->removeUser($user);
-            $em->remove($user);
         }
 
         $em->remove($office);

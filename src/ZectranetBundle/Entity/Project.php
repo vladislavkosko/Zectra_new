@@ -550,11 +550,16 @@ class Project
             $user_ids[] = $user->getId();
         }
 
-        $query = $qb->select('u')
-            ->from('ZectranetBundle:User', 'u')
-            ->where($qb->expr()->notIn('u.id', $user_ids))
-            ->getQuery();
-        $notProjectUsers = $query->getResult();
+        $notProjectUsers = array();
+        if (count($user_ids) > 0) {
+            $query = $qb->select('u')
+                ->from('ZectranetBundle:User', 'u')
+                ->where($qb->expr()->notIn('u.id', $user_ids))
+                ->getQuery();
+            $notProjectUsers = $query->getResult();
+        } else {
+            $notProjectUsers = $em->getRepository('ZectranetBundle:User')->findAll();
+        }
 
         $jsonNotProjectUsers = array();
         /** @var User $user */
