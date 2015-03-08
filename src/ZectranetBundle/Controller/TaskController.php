@@ -62,8 +62,20 @@ class TaskController extends Controller {
     public function deleteTaskAction($task_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        $project = $task->getProject();
 
         Task::deleteTask($em, $task_id);
+
+        $nameEpicStory = null;
+        if ($project->getParent())
+        {
+            $nameEpicStory = $project->getName();
+            $project = $project->getParent();
+        }
+        $this->get('zectranet.notifier')->createNotification("task_deleted", $project, $user, $project, $nameEpicStory);
 
         $response = new Response(json_encode(null));
         $response->headers->set('Content-Type', 'application/json');

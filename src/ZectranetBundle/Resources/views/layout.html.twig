@@ -228,11 +228,17 @@
                         </audio>
 
                         <ul ng-if="notifications.length > 0" class="notifier dropdown-menu dropdown-alerts">
-                            <li ng-repeat="notification in notifications| limitTo: 5">
+                            <li ng-repeat="notification in notifications| limitTo: 20">
 
-                                <a ng-if="notification.type == 'message_office'" href="[[notification.href]]"
-                                   style="text-decoration: none; color: #000;">
-                                    <i class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
+                                <a ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
+                                    || (notification.type == 'task_added') || (notification.type == 'task_deleted') || (notification.type == 'epic_story_added') || (notification.type == 'epic_story_deleted')"
+                                    href="[[notification.href]]"
+                                    style="text-decoration: none; color: #000;">
+                                    <i ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')"
+                                       class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
+                                    <i ng-if="(notification.type == 'task_added')" class="fa fa-tasks fa-fw"></i>
+                                    <i ng-if="(notification.type == 'epic_story_added')" class="fa fa-briefcase fa-fw"></i>
+                                    <i ng-if="(notification.type == 'task_deleted') || (notification.type == 'epic_story_deleted')" class="fa fa-trash-o fa-fw"></i>
                                     <div style="word-wrap: break-word; display: inline-block" ng-bind-html="notification.message"></div>
                                     <div class="text-muted small" style="text-align: right">
                                         <i class="fa fa-clock-o"></i>

@@ -40,7 +40,7 @@ class Notifier
 
         "task_added",                     // +
         "epic_story_added",               // +
-        "task_deleted",                   // -
+        "task_deleted",                   // +
         "epic_story_deleted",             // -
 
         "request_office",                 // -
@@ -165,7 +165,7 @@ class Notifier
 		if (in_array($type, array("message_office", "request_office", "private_message_office")))
             $link = $this->router->generate('zectranet_show_office', array('office_id' => $destinationid), true);
 
-        elseif (in_array($type, array("message_task", "task_added", "task_deleted", "request_assign_task", "private_message_task")))
+        elseif (in_array($type, array("message_task", "request_assign_task", "private_message_task")))
             $link = $this->router->generate('zectranet_task_show', array('task_id' => $destinationid), true);
 
         else
@@ -325,7 +325,10 @@ class Notifier
 
                 case "task_added":
                 {
-                    $message = 'New task in "'.$destination->getName().'"';
+                    if ($user_to_send_name != null)
+                        $message = 'New task in "'.$user_to_send_name.'"';
+                    else
+                        $message = 'New task in "'.$destination->getName().'"';
                     $users = $destination->getUsers();
                     break;
                 }
@@ -339,7 +342,10 @@ class Notifier
 
                 case "task_deleted":
                 {
-                    $message = 'Deleted task in "'.$destination->getName().'"';
+                    if ($user_to_send_name != null)
+                        $message = 'Deleted task in "'.$user_to_send_name.'"';
+                    else
+                        $message = 'Deleted task in "'.$destination->getName().'"';
                     $users = $destination->getUsers();
                     break;
                 }

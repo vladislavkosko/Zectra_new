@@ -157,7 +157,13 @@ class ProjectController extends Controller
 
         $task = Task::addNewTask($em, $user, $project_id, $parameters);
 
-        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project);
+        $nameEpicStory = null;
+        if ($project->getParent())
+        {
+            $nameEpicStory = $project->getName();
+            $project = $project->getParent();
+        }
+        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory);
 
         $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
@@ -192,7 +198,14 @@ class ProjectController extends Controller
 
         $task = Task::addNewSubTask($em, $user, $project_id, $parameters);
 
-        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project);
+        $nameEpicStory = null;
+        if ($project->getParent())
+        {
+            $nameEpicStory = $project->getName();
+            $project = $project->getParent();
+        }
+        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory);
+
 
         $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
         $response->headers->set('Content-Type', 'application/json');

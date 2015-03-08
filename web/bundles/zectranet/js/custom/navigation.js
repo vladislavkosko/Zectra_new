@@ -10,7 +10,6 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
 	$scope.notifications = [];
 	$scope.notifyHandler = null;
     $scope.notificationsLength = null;
-	$scope.NewNotificationsCount = 0;
 
 	function Notify() {
 		title.text((title.text() == titleValue) ? 'Incoming notifications!' : titleValue);
@@ -52,17 +51,13 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
 		notifications = _.map(notifications, function(n) {
 			if (["message_office", "request_office", "private_message_office"].indexOf(n.type) != -1)
                 n.href = officeShowUrlBase.replace('0', n.destinationid);
-            else if (["message_task", "task_added", "task_deleted", "request_assign_task", "private_message_task"].indexOf(n.type) != -1)
+            else if (["message_task", "request_assign_task", "private_message_task"].indexOf(n.type) != -1)
                 n.href = taskShowUrlBase.replace('0', n.destinationid);
             else {
 				n.href = projectShowUrlBase.replace('0', n.destinationid);
 			}
 
 			return n;
-		});
-
-		notifications = _.filter(notifications, function(n){
-			return n.href != window.location.href;
 		});
 
 		return notifications;
