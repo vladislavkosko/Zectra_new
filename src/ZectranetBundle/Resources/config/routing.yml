@@ -133,6 +133,12 @@ zectranet_get_project_members:
     requirements:
         project_id: \d+
 
+zectranet_save_project_members:
+    pattern: /project/{project_id}/saveMembersState
+    defaults: { _controller: ZectranetBundle:Project:saveMembers }
+    requirements:
+        project_id: \d+
+
 zectranet_add_project:
     path: /project/add
     defaults: { _controller: ZectranetBundle:Project:addProject }

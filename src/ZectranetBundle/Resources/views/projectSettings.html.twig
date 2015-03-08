@@ -5,13 +5,16 @@
 {% block body %}
     <div ng-controller="ProjectController" ng-init="getMembers()">
         <div class="page-header">
-            <h4><i class="fa fa-users"></i>Users Managment</h4>
+            <h4><i class="fa fa-users"></i> Users Managment</h4>
         </div>
 
         <div class="row">
             <div class="col-md-offset-1 col-md-4" cg-busy="membersPromise">
                 <div class="list-group">
-                    <div class="list-group-item active">Users</div>
+                    <div class="list-group-item active">
+                        <i class="fa fa-users"></i>
+                        Users Without Office
+                    </div>
                     <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
                         <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in users" ng-init="user.selected = false; user.index = $index"
                            ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
@@ -30,7 +33,10 @@
 
             <div class="col-md-offset-1 col-md-4" cg-busy="membersPromise">
                 <div class="list-group">
-                    <div class="list-group-item active">Project Members</div>
+                    <div class="list-group-item active">
+                        <i class="fa fa-users"></i>
+                        Project Members
+                    </div>
                     <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
                         <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in projectMembers" ng-init="user.selected = false; user.index = $index"
                            ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
@@ -39,7 +45,7 @@
                         </a>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="form-control btn btn-default btn-danger">
+                        <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeUsersFromProject()">
                             <i class="fa fa-trash"></i>
                             Delete Users From Project
                         </button>
@@ -48,6 +54,16 @@
             </div>
         </div>
 
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-offset-1 col-md-9">
+                <div class="form-group">
+                    <button class="form-control btn btn-default btn-primary" ng-click="saveMembersState()">
+                        <i class="fa fa-check-circle"></i>
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
@@ -56,5 +72,6 @@
     <script src="{{ asset('bundles/zectranet/js/custom/projectController.js') }}"></script>
     <script>
         JSON_URLS.getMembers = "{{ path('zectranet_get_project_members', { 'project_id': project.id }) }}";
+        JSON_URLS.saveMembers = "{{ path('zectranet_save_project_members', { 'project_id': project.id }) }}";
     </script>
 {% endblock %}

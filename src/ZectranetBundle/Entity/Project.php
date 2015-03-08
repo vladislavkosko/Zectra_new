@@ -320,6 +320,13 @@ class Project
     }
 
     /**
+     * @param $users
+     */
+    public function setUsers($users) {
+        $this->users = $users;
+    }
+
+    /**
      * Get users
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -552,7 +559,9 @@ class Project
         $jsonNotProjectUsers = array();
         /** @var User $user */
         foreach ($notProjectUsers as $user) {
-            $jsonNotProjectUsers[] = $user->getInArray();
+            if (count($user->getAssignedOffices()) == 0 && count($user->getOwnedOffices()) == 0) {
+                $jsonNotProjectUsers[] = $user->getInArray();
+            }
         }
 
         return $jsonNotProjectUsers;

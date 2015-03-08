@@ -9,10 +9,12 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
         $scope.urlGetEpicStories = JSON_URLS.getEpicStories;
         $scope.urlAddEpicStory = JSON_URLS.addEpicStory;
         $scope.urlGetProjectMembers = JSON_URLS.getMembers;
+        $scope.urlSaveProjectMembers = JSON_URLS.saveMembers;
 
         $scope.getEpicStories = function (project_id) {
             $scope.currentProjectId = project_id;
-            $scope.promiseProject = $http.get($scope.urlGetEpicStories)
+            $scope.promiseProject = $http
+                .get($scope.urlGetEpicStories)
                 .success(function(response) {
                     $scope.epicStories = response.EpicStories;
                 });
@@ -27,7 +29,8 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
         $scope.addNewEpicStory = function (story) {
             if (story.name && story.description) {
                 $('#add_epic_story').modal('hide');
-                $scope.promiseProject = $http.post($scope.urlAddEpicStory, {'story': story})
+                $scope.promiseProject = $http
+                    .post($scope.urlAddEpicStory, {'story': story})
                     .success(function (response) {
                        $scope.epicStories.push(response.EpicStory);
                     });
@@ -35,26 +38,59 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
         };
 
         $scope.getMembers = function () {
-            $scope.membersPromise = $http.get($scope.urlGetProjectMembers)
+            $scope.membersPromise = $http
+                .get($scope.urlGetProjectMembers)
                 .success(function (response) {
                     $scope.projectMembers = response.projectMembers;
                     $scope.users = response.users;
                 });
         };
+        
+        function findElementById(what, from) {
+            var index = -1;
+            for (var i = 0; i < from.length; i++) {
+                if (what.id == from[i].id) {
+                    index = i;
+                    break;
+                }
+            }
+            return index;
+        }
 
         $scope.addUsersToProject = function () {
-            var users_array = $scope.users;
-            _.map(users_array, function (user) {
-                if (user.selected) {
-                    $scope.projectMembers.push(user);
-                    $scope.users.splice(user.index, 1);
+            var idsToRemove = [];
+            for (var i = 0; i < $scope.users.length; i++) {
+                if ($scope.users[i].selected) {
+                    $scope.projectMembers.push($scope.users[i]);
+                    idsToRemove.push($scope.users[i]);
                 }
-            });
+            }
+
+            for (i = 0; i < idsToRemove.length; i++) {
+                $scope.users.splice(findElementById(idsToRemove[i], $scope.users), 1);
+            }
         };
 
-        $scope.removeFromProject = function (user) {
-            $scope.users.push(user);
-            $scope.projectMembers.remove(user);
+        $scope.removeUsersFromProject = function () {
+            var idsToRemove = [];
+            for (var i = 0; i < $scope.projectMembers.length; i++) {
+                if ($scope.projectMembers[i].selected) {
+                    $scope.users.push($scope.projectMembers[i]);
+                    idsToRemove.push($scope.projectMembers[i]);
+                }
+            }
+
+            for (i = 0; i < idsToRemove.length; i++) {
+                $scope.projectMembers.splice(findElementById(idsToRemove[i], $scope.projectMembers), 1);
+            }
+        };
+
+        $scope.saveMembersState = function () {
+            $scope.membersPromise = $http
+                .post($scope.urlSaveProjectMembers, { 'users': $scope.projectMembers })
+                .success(function (response) {
+
+                });
         };
 
         console.log('Project Controller was loaded...');

@@ -11,7 +11,7 @@
             <!-- Begin of Project controll buttons -->
             {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
                 <div class="pull-right">
-                    <a style="cursor: pointer; text-decoration: none;">
+                    <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_settings_project', {'project_id': project.id }) }}">
                         <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
                     </a>
                     <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
