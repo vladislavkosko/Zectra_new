@@ -94,6 +94,13 @@ class Project
      * @var array
      */
     private $postsProject;
+
+    /**
+     * @var bool $visible
+     * @ORM\Column(name="visible", type="boolean", options={"default" = false})
+     */
+    private $visible;
+
     /**
      * Constructor
      */
@@ -478,5 +485,28 @@ class Project
     public function getEpicStories()
     {
         return $this->epicStories;
+    }
+
+    /**
+     * Set visible
+     *
+     * @param boolean $visible
+     * @return Project
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible
+     *
+     * @return boolean 
+     */
+    public function getVisible()
+    {
+        return $this->visible;
     }
 }

@@ -1,7 +1,7 @@
 var taskController = Zectranet.controller('TaskController', ['$scope', '$http', '$rootScope','$paginator',
     function($scope, $http, $rootScope, $paginator) {
 
-        $scope.task = {
+        $scope.taskModel = {
             'id': null, 'name': null, 'description': null, 'type': null,
             'priority': null, 'startdate': null, 'enddate': null, 'parent': null
         };
@@ -70,7 +70,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         };
 
         $scope.addDeleteTaskId = function (task_id) {
-            $scope.task.id = task_id;
+            $scope.taskModel.id = task_id;
         };
 
         $scope.deleteTask = function (task_id) {

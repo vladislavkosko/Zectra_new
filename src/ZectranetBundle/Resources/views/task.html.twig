@@ -85,8 +85,8 @@
                             <select class="form-control" name="priority" style="border: none;">
                                 {% for priority in task_priority %}
                                     <option style="color: {{ priority.color }}" value="{{ priority.id }}"
-                                            {% if priority.id == task.type.id %}
-                                        selected="selected"
+                                            {% if priority.id == task.priority.id %}
+                                                selected="selected"
                                             {% endif %}>
                                         {{ priority.label }}
                                     </option>
@@ -110,8 +110,8 @@
                             <select class="form-control" name="status" style="border: none;">
                                 {% for status in task_statuses %}
                                     <option style="color: {{ status.color }}" value="{{ status.id }}"
-                                            {% if status.id == task.type.id %}
-                                        selected="selected"
+                                            {% if status.id == task.status.id %}
+                                                selected="selected"
                                             {% endif %}>
                                         {{ status.label }}
                                     </option>

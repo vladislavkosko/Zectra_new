@@ -83,6 +83,12 @@ class Office
     private $officeUserRoles;
 
     /**
+     * @var bool $visible
+     * @ORM\Column(name="visible", type="boolean", options={"default" = false})
+     */
+    private $visible;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -410,5 +416,28 @@ class Office
 
         $em->remove($office);
         $em->flush();
+    }
+
+    /**
+     * Set visible
+     *
+     * @param boolean $visible
+     * @return Office
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible
+     *
+     * @return boolean 
+     */
+    public function getVisible()
+    {
+        return $this->visible;
     }
 }

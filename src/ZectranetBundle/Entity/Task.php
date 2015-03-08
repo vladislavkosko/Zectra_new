@@ -1006,17 +1006,17 @@ class Task
         }
 
         if ($progress != $task->getProgress()) {
-            $logger->valueChanged(7, $task_id, $task->getProgress(), $progress);
+            $logger->valueChanged(7, $task_id, $task->getProgress() . '%', $progress . '%');
             $task->setProgress($progress);
         }
 
         if ($estimatedHours != $task->getEstimatedHours()) {
-            $logger->valueChanged(8, $task_id, $task->getEstimatedHours(), $estimatedHours);
+            $logger->valueChanged(8, $task_id, $task->getEstimatedHours() . ' h', $estimatedHours . ' h');
             $task->setEstimatedHours($estimatedHours);
         }
 
         if ($estimatedMinutes != $task->getEstimatedMinutes()) {
-            $logger->valueChanged(9, $task_id, $task->getEstimatedMinutes(), $estimatedMinutes);
+            $logger->valueChanged(9, $task_id, $task->getEstimatedMinutes() . ' m', $estimatedMinutes . ' m');
             $task->setEstimatedMinutes($estimatedMinutes);
         }
 

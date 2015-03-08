@@ -41,6 +41,10 @@ zectranet_wde:
     path: /wde
     defaults: { _controller: ZectranetBundle:User:wde }
 
+zectranet_public_market:
+    path: /public_market
+    defaults: { _controller: ZectranetBundle:PublicMarket:index }
+
 zectranet_user_page:
     path: /userProfile/{user_id}
     defaults: { _controller: ZectranetBundle:User:index, user_id: null }

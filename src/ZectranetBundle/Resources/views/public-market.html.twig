@@ -1,17 +1,37 @@
 {% extends '@Zectranet/index.html.twig' %}
 
-{% block title %}{{ task.name }}{% endblock %}
+{% block title %}Public Market{% endblock %}
 
 {% block body %}
     <div ng-cloak>
         <div class="row">
+            <div class="page-header">
+                <h1 class="text-danger text-center">PAGE UNDER CONSTRUCTION</h1>
+            </div>
+
             <div class="col-md-12">
                 <div class="page-header">
                     Offices
                 </div>
 
+                <div class="row">
+                    <ul>
+                        {% for office in offices %}
+                            <li>{{ office.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
                 <div class="page-header">
                     Projects
+                </div>
+
+                <div class="row">
+                    <ul>
+                        {% for project in projects %}
+                            <li>{{ project.name }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
