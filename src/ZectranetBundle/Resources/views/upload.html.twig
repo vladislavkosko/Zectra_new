@@ -3,52 +3,63 @@
 {% block title %}Upload Files{% endblock %}
 
 {% block body %}
-    <div class="page-header">
-        <i class="fa fa-user fa-2x"></i>
-        <span style="font-size: 25px;">Upload Files</span>
-    </div>
-    <div class="panel panel-cascade" ng-controller="DocumentsController">
-        <div class="panel-body" style="margin: 0px;border: 0px;">
-            <form id="upload" method="post" action="{{ path('zectranet_document_upload') }}" enctype="multipart/form-data">
-                <div id="drop_upload">
-                    <p> Drop Here</p>
-                    <p>
-                        <a>Browse</a>
-                        <input type="file" name="upl" multiple />
-                    </p>
-                </div>
-                <ul></ul>
-            </form>
 
-            <div class="file-list row">
-                <div ng-repeat="doc in documents" style="position: relative;margin-bottom: 30px;" class="col-md-4" >
-                    <document style="display: block;" name="[[doc.name]]" width="250px" height="250px" file="[[doc.url]]"></document>
-                    <a href="#" data-toggle="dropdown" class="dropdown" style="text-align: center;">More options</a>
-                    <div class="dropdown-menu open" style="position: absolute; top: 60%; left: 0;width: 100%; padding-bottom: 0; transition: 0.25s linear display;">
-                        <a href="#" ng-click="delete([[ doc.id ]])" style="display: block;"><i class="fa fa-trash-o"></i> Delete file</a>
-                        <a href="#" ng-click="setCurrentDocId(doc.id)" style="display: block;" data-toggle="modal" data-target="#rename-modal-dialog"><i class="fa fa-edit"></i> Rename file</a>
+    <div class="row">
+        <ol class="breadcrumb" style="margin: 0 -30px;">
+            <li>
+                <a href="{{ path('zectranet_user_page', {'user_id': app.user.id}) }}">{{ app.user.username }}</a>
+            </li>
+            <li class="active">Documents</li>
+        </ol>
+
+        <div class="page-header">
+            <i class="fa fa-user fa-2x"></i>
+            <span style="font-size: 25px;">Upload Files</span>
+        </div>
+
+        <div class="panel panel-cascade" ng-controller="DocumentsController">
+            <div class="panel-body" style="margin: 0;border: 0;">
+                <form id="upload" method="post" action="{{ path('zectranet_document_upload') }}" enctype="multipart/form-data">
+                    <div id="drop_upload">
+                        <p> Drop Here</p>
+                        <p>
+                            <a>Browse</a>
+                            <input type="file" name="upl" multiple />
+                        </p>
+                    </div>
+                    <ul></ul>
+                </form>
+
+                <div class="file-list row">
+                    <div ng-repeat="doc in documents" style="position: relative;margin-bottom: 30px;" class="col-md-4" >
+                        <document style="display: block;" name="[[doc.name]]" width="250px" height="250px" file="[[doc.url]]"></document>
+                        <a href="#" data-toggle="dropdown" class="dropdown" style="text-align: center;">More options</a>
+                        <div class="dropdown-menu open" style="position: absolute; top: 60%; left: 0;width: 100%; padding-bottom: 0; transition: 0.25s linear display;">
+                            <a href="#" ng-click="delete([[ doc.id ]])" style="display: block;"><i class="fa fa-trash-o"></i> Delete file</a>
+                            <a href="#" ng-click="setCurrentDocId(doc.id)" style="display: block;" data-toggle="modal" data-target="#rename-modal-dialog"><i class="fa fa-edit"></i> Rename file</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal fade" id="rename-modal-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form action="#">
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control" placeholder="input new name" aria-describedby="sizing-addon3" ng-model="newName"/>
-                            </div>
+            <div class="modal fade" id="rename-modal-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="#">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" placeholder="input new name" aria-describedby="sizing-addon3" ng-model="newName"/>
+                                </div>
 
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" ng-click="rename(curr_doc_id);" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" ng-click="rename(curr_doc_id);" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                        </div>
                     </div>
                 </div>
             </div>

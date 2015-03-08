@@ -4,7 +4,8 @@ var Zectranet = angular.module('Zectranet', ['ngRoute','ui.bootstrap','ngSanitiz
 			$interpolateProvider.startSymbol('[[');
 			$interpolateProvider.endSymbol(']]');
 			$httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
-		}]);
+		}
+	]);
 
 Zectranet.factory('$paginator', function() {
     var paginator = {};
@@ -139,7 +140,7 @@ Zectranet.directive('document', function() {
 
 			var img = null;
 			if (extension != '.png' && extension != '.gif' && extension != '.jpeg' && extension != '.jpg') {
-				img = JSON_URLS.asset + 'bundles/intranet/' + extensions[extension];
+				img = JSON_URLS.asset + 'bundles/zectranet/' + extensions[extension];
 				image.css('cursor', 'pointer');
 				image.bind('click', function () {
 					document.location = JSON_URLS.asset + file;

@@ -5,6 +5,17 @@
 {% block body %}
     <div ng-controller="ProjectController" ng-init="getMembers(); getOffices();">
         <div class="row">
+            <ol class="breadcrumb" style="margin: 0 -30px;">
+                <li>
+                    <a href="{{ path('zectranet_user_home') }}">Summary</a>
+                </li>
+                <li>
+                    <a href="{{ path('zectranet_show_project', {'project_id': project.id}) }}">
+                        {{ project.name }}
+                    </a>
+                </li>
+                <li class="active">Settings</li>
+            </ol>
             <div class="col-md-12">
                 <div class="page-header">
                     <h4><i class="fa fa-briefcase"></i> Project Managment</h4>
@@ -25,7 +36,7 @@
 
                 <div class="tab-content">
                     <!-- Begin of Users Manage Panel -->
-                    <div id="users-manage" style="margin-top: 10px;" class="tab-pane fade in active">
+                    <div id="users-manage" style="margin-top: 25px;" class="tab-pane fade in active">
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-6" cg-busy="membersPromise">
@@ -77,7 +88,7 @@
                     <!-- End of Users Manage Panel -->
 
                     <!-- Begin of Offices Manage Panel -->
-                    <div id="offices-manage" style="margin-top: 10px;" class="tab-pane fade">
+                    <div id="offices-manage" style="margin-top: 25px;" class="tab-pane fade">
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-6" cg-busy="officesPromise">

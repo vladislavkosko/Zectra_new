@@ -3,6 +3,18 @@
 {% block title %}{{ office.name }} {% endblock %}
 
 {% block body %}
+
+    <div class="row">
+        <ol class="breadcrumb" style="margin: 0 -30px;">
+            <li>
+                <a href="{{ path('zectranet_user_home') }}">Summary</a>
+            </li>
+            <li class="active">
+                {{ office.name }}
+            </li>
+        </ol>
+    </div>
+
     <div class="page-header">
         {% if office.owner.id == app.user.id %}
             <i class="fa fa-home fa-2x"></i>
