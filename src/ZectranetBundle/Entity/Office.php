@@ -437,4 +437,14 @@ class Office
     {
         return $this->visible;
     }
+
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'description' => $this->getDescription(),
+            'name' => $this->getName(),
+            'owner' => $this->getOwner()->getInArray(),
+            'visible' => $this->getVisible(),
+        );
+    }
 }

@@ -139,6 +139,18 @@ zectranet_save_project_members:
     requirements:
         project_id: \d+
 
+zectranet_get_project_offices:
+    pattern: /project/{project_id}/getOffices
+    defaults: { _controller: ZectranetBundle:Project:getOffices }
+    requirements:
+        project_id: \d+
+
+zectranet_save_project_offices:
+    pattern: /project/{project_id}/saveOfficesState
+    defaults: { _controller: ZectranetBundle:Project:saveOffices }
+    requirements:
+        project_id: \d+
+
 zectranet_add_project:
     path: /project/add
     defaults: { _controller: ZectranetBundle:Project:addProject }

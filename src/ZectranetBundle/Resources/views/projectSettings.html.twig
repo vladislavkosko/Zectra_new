@@ -3,137 +3,133 @@
 {% block title %}{{ project.name }} Settings{% endblock %}
 
 {% block body %}
-    <div ng-controller="ProjectController" ng-init="getMembers()">
+    <div ng-controller="ProjectController" ng-init="getMembers(); getOffices();">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h4><i class="fa fa-briefcase"></i> Project Managment</h4>
+                </div>
 
-        <ul id="myTab" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
-                <a data-toggle="tab" id="users-manage-tab" class="btn" href="#users-manage" role="tab" aria-expanded="true">
-                    Project Users Manage
-                </a>
-            </li>
-            <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation">
-                <a data-toggle="tab" id="offices-manage-tab" class="btn" href="#offices-manage" role="tab" aria-expanded="false">
-                    Project Offices Manage
-                </a>
-            </li>
-        </ul>
+                <ul id="project-manage-tabs" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#users-manage" data-toggle="tab" class="btn">
+                            Single Users Manage
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#offices-manage" data-toggle="tab" class="btn">
+                            Offices Manage
+                        </a>
+                    </li>
+                </ul>
 
-        <div id="tasks-tab-content" class="tab-content">
-
-            <!-- Begin of Users Manage Panel -->
-            <div id="users-manage" class="tab-pane fade in active" aria-labelledby="users-manage-tab" role="tabpanel">
-                <div class="col-md-6">
-                    <div class="page-header">
-                        <h4><i class="fa fa-users"></i> Users Managment</h4>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6" cg-busy="membersPromise">
-                            <div class="list-group">
-                                <div class="list-group-item active">
-                                    <i class="fa fa-users"></i>
-                                    Users Without Office
+                <div class="tab-content">
+                    <!-- Begin of Users Manage Panel -->
+                    <div id="users-manage" style="margin-top: 10px;" class="tab-pane fade in active">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6" cg-busy="membersPromise">
+                                    <div class="list-group">
+                                        <div class="list-group-item active">
+                                            <i class="fa fa-users"></i>
+                                            Users Without Office
+                                        </div>
+                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in users" ng-init="user.selected = false; user.index = $index"
+                                               ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
+                                                <i class="fa fa-user"></i>
+                                                [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
+                                            </a>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" ng-click="addUsersToProject()" class="form-control btn btn-default btn-success">
+                                                <i class="fa fa-plus-circle"></i>
+                                                Add Users To Project
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                    <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in users" ng-init="user.selected = false; user.index = $index"
-                                       ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
-                                        <i class="fa fa-user"></i>
-                                        [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
-                                    </a>
-                                </div>
-                                <div class="form-group">
-                                    <button type="button" ng-click="addUsersToProject()" class="form-control btn btn-default btn-success">
-                                        <i class="fa fa-plus-circle"></i>
-                                        Add Users To Project
-                                    </button>
+
+                                <div class="col-md-6" cg-busy="membersPromise">
+                                    <div class="list-group">
+                                        <div class="list-group-item active">
+                                            <i class="fa fa-users"></i>
+                                            Project Members
+                                        </div>
+                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in projectMembers" ng-init="user.selected = false; user.index = $index"
+                                               ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
+                                                <i class="fa fa-user"></i>
+                                                [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
+                                            </a>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeUsersFromProject()">
+                                                <i class="fa fa-trash"></i>
+                                                Delete Users From Project
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <!-- End of Users Manage Panel -->
 
-                        <div class="col-md-6" cg-busy="membersPromise">
-                            <div class="list-group">
-                                <div class="list-group-item active">
-                                    <i class="fa fa-users"></i>
-                                    Project Members
+                    <!-- Begin of Offices Manage Panel -->
+                    <div id="offices-manage" style="margin-top: 10px;" class="tab-pane fade">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6" cg-busy="officesPromise">
+                                    <div class="list-group">
+                                        <div class="list-group-item active">
+                                            <i class="fa fa-home"></i>
+                                            Offices
+                                        </div>
+                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="office in offices" ng-init="office.selected = false;"
+                                               ng-class="{ 'active': office.selected }" ng-click="office.selected = !office.selected">
+                                                <i class="fa fa-home"></i>
+                                                [[ office.name ]]
+                                            </a>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" ng-click="addOfficesToProject()" class="form-control btn btn-default btn-success">
+                                                <i class="fa fa-plus-circle"></i>
+                                                Add Offices To Project
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                    <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in projectMembers" ng-init="user.selected = false; user.index = $index"
-                                       ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
-                                        <i class="fa fa-user"></i>
-                                        [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
-                                    </a>
-                                </div>
-                                <div class="form-group">
-                                    <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeUsersFromProject()">
-                                        <i class="fa fa-trash"></i>
-                                        Delete Users From Project
-                                    </button>
+
+                                <div class="col-md-6" cg-busy="officesPromise">
+                                    <div class="list-group">
+                                        <div class="list-group-item active">
+                                            <i class="fa fa-home"></i>
+                                            Project Offices
+                                        </div>
+                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="office in projectOffices" ng-init="office.selected = false;"
+                                               ng-class="{ 'active': office.selected }" ng-click="office.selected = !office.selected">
+                                                <i class="fa fa-home"></i>
+                                                [[ office.name ]]
+                                            </a>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeOfficesFromProject()">
+                                                <i class="fa fa-trash"></i>
+                                                Remove Offices From Project
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- End of Offices Manage Panel -->
                 </div>
             </div>
-            <!-- End of Users Manage Panel -->
-
-
-            <!-- Begin of Offices Manage Panel -->
-            <div id="offices-manage" class="tab-pane fade" aria-labelledby="offices-manage-tab" role="tabpanel">
-                <div class="col-md-6">
-                    <div class="page-header">
-                        <h4><i class="fa fa-users"></i> Offices Managment</h4>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6" cg-busy="membersPromise">
-                            <div class="list-group">
-                                <div class="list-group-item active">
-                                    <i class="fa fa-users"></i>
-                                    Offices
-                                </div>
-                                <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                    <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in users" ng-init="user.selected = false; user.index = $index"
-                                       ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
-                                        <i class="fa fa-user"></i>
-                                        [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
-                                    </a>
-                                </div>
-                                <div class="form-group">
-                                    <button type="button" ng-click="addUsersToProject()" class="form-control btn btn-default btn-success">
-                                        <i class="fa fa-plus-circle"></i>
-                                        Add Users To Project
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6" cg-busy="membersPromise">
-                            <div class="list-group">
-                                <div class="list-group-item active">
-                                    <i class="fa fa-users"></i>
-                                    Project Members
-                                </div>
-                                <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                    <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in projectMembers" ng-init="user.selected = false; user.index = $index"
-                                       ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
-                                        <i class="fa fa-user"></i>
-                                        [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
-                                    </a>
-                                </div>
-                                <div class="form-group">
-                                    <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeUsersFromProject()">
-                                        <i class="fa fa-trash"></i>
-                                        Delete Users From Project
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End of Offices Manage Panel -->
         </div>
-
     </div>
 {% endblock %}
 
@@ -143,5 +139,12 @@
     <script>
         JSON_URLS.getMembers = "{{ path('zectranet_get_project_members', { 'project_id': project.id }) }}";
         JSON_URLS.saveMembers = "{{ path('zectranet_save_project_members', { 'project_id': project.id }) }}";
+        JSON_URLS.getOffices = "{{ path('zectranet_get_project_offices', { 'project_id': project.id }) }}";
+        JSON_URLS.saveOffices = "";
+
+        $('#project-manage-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
     </script>
 {% endblock %}

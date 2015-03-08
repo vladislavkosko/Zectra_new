@@ -1,99 +1,183 @@
 Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
     function ($scope, $http, $rootScope) {
 
-        $scope.currentProjectId = null;
-        $scope.epicStories = null;
-        $scope.projectMembers = null;
-        $scope.users = null;
+        // -------------------- Begin of Scope Variables --------------------\\
+        {
+            $scope.currentProjectId = null;
+            $scope.epicStories = null;
 
-        $scope.urlGetEpicStories = JSON_URLS.getEpicStories;
-        $scope.urlAddEpicStory = JSON_URLS.addEpicStory;
-        $scope.urlGetProjectMembers = JSON_URLS.getMembers;
-        $scope.urlSaveProjectMembers = JSON_URLS.saveMembers;
+            $scope.projectMembers = null;
+            $scope.users = null;
 
-        $scope.getEpicStories = function (project_id) {
-            $scope.currentProjectId = project_id;
-            $scope.promiseProject = $http
-                .get($scope.urlGetEpicStories)
-                .success(function(response) {
-                    $scope.epicStories = response.EpicStories;
-                });
-        };
+            $scope.projectOffices = null;
+            $scope.offices = null;
 
-        $scope.changeCurrentPage = function(project_id) {
-            $scope.urlCurrentProject = project_id;
-            $rootScope.initTaskController(project_id);
-            $rootScope.initChatController(project_id);
-        };
-
-        $scope.addNewEpicStory = function (story) {
-            if (story.name && story.description) {
-                $('#add_epic_story').modal('hide');
-                $scope.promiseProject = $http
-                    .post($scope.urlAddEpicStory, {'story': story})
-                    .success(function (response) {
-                       $scope.epicStories.push(response.EpicStory);
-                    });
-            }
-        };
-
-        $scope.getMembers = function () {
-            $scope.membersPromise = $http
-                .get($scope.urlGetProjectMembers)
-                .success(function (response) {
-                    $scope.projectMembers = response.projectMembers;
-                    $scope.users = response.users;
-                });
-        };
-        
-        function findElementById(what, from) {
-            var index = -1;
-            for (var i = 0; i < from.length; i++) {
-                if (what.id == from[i].id) {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
+            $scope.urlGetEpicStories = JSON_URLS.getEpicStories;
+            $scope.urlAddEpicStory = JSON_URLS.addEpicStory;
+            $scope.urlGetProjectMembers = JSON_URLS.getMembers;
+            $scope.urlSaveProjectMembers = JSON_URLS.saveMembers;
+            $scope.urlgetProjectOffices = JSON_URLS.getOffices;
+            $scope.urlSaveProjectOffices = JSON_URLS.saveOffices;
         }
+        // -------------------- End of Scope Variables ----------------------\\
 
-        $scope.addUsersToProject = function () {
-            var idsToRemove = [];
-            for (var i = 0; i < $scope.users.length; i++) {
-                if ($scope.users[i].selected) {
-                    $scope.projectMembers.push($scope.users[i]);
-                    idsToRemove.push($scope.users[i]);
+
+
+        // -------------------- Begin of Project Functions --------------------\\
+        {
+            $scope.getEpicStories = function (project_id) {
+                $scope.currentProjectId = project_id;
+                $scope.promiseProject = $http
+                    .get($scope.urlGetEpicStories)
+                    .success(function (response) {
+                        $scope.epicStories = response.EpicStories;
+                    });
+            };
+
+            $scope.changeCurrentPage = function (project_id) {
+                $scope.urlCurrentProject = project_id;
+                $rootScope.initTaskController(project_id);
+                $rootScope.initChatController(project_id);
+            };
+
+            $scope.addNewEpicStory = function (story) {
+                if (story.name && story.description) {
+                    $('#add_epic_story').modal('hide');
+                    $scope.promiseProject = $http
+                        .post($scope.urlAddEpicStory, {'story': story})
+                        .success(function (response) {
+                            $scope.epicStories.push(response.EpicStory);
+                        });
                 }
-            }
+            };
 
-            for (i = 0; i < idsToRemove.length; i++) {
-                $scope.users.splice(findElementById(idsToRemove[i], $scope.users), 1);
-            }
-
-            $scope.saveMembersState();
-        };
-
-        $scope.removeUsersFromProject = function () {
-            var idsToRemove = [];
-            for (var i = 0; i < $scope.projectMembers.length; i++) {
-                if ($scope.projectMembers[i].selected) {
-                    $scope.users.push($scope.projectMembers[i]);
-                    idsToRemove.push($scope.projectMembers[i]);
+            function findElementById(what, from) {
+                var index = -1;
+                for (var i = 0; i < from.length; i++) {
+                    if (what.id == from[i].id) {
+                        index = i;
+                        break;
+                    }
                 }
+                return index;
             }
+        }
+        // -------------------- End of Project Functions ----------------------\\
 
-            for (i = 0; i < idsToRemove.length; i++) {
-                $scope.projectMembers.splice(findElementById(idsToRemove[i], $scope.projectMembers), 1);
-            }
 
-            $scope.saveMembersState();
-        };
 
-        $scope.saveMembersState = function () {
-            $scope.membersPromise = $http
-                .post($scope.urlSaveProjectMembers, { 'users': $scope.projectMembers })
-                .success(function (response) { });
-        };
+        // -------------------- Begin of Single Users Manage --------------------\\
+        {
+            $scope.getMembers = function () {
+                $scope.membersPromise = $http
+                    .get($scope.urlGetProjectMembers)
+                    .success(function (response) {
+                        $scope.projectMembers = response.projectMembers;
+                        $scope.users = response.users;
+                    });
+            };
+
+            $scope.addUsersToProject = function () {
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.users.length; i++) {
+                    if ($scope.users[i].selected) {
+                        $scope.projectMembers.push($scope.users[i]);
+                        idsToRemove.push($scope.users[i]);
+                    }
+                }
+
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.users.splice(findElementById(idsToRemove[i], $scope.users), 1);
+                }
+
+                if (idsToRemove.length > 0) {
+                    $scope.saveMembersState();
+                }
+            };
+
+            $scope.removeUsersFromProject = function () {
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.projectMembers.length; i++) {
+                    if ($scope.projectMembers[i].selected) {
+                        $scope.users.push($scope.projectMembers[i]);
+                        idsToRemove.push($scope.projectMembers[i]);
+                    }
+                }
+
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.projectMembers.splice(findElementById(idsToRemove[i], $scope.projectMembers), 1);
+                }
+
+                if (idsToRemove.length > 0) {
+                    $scope.saveMembersState();
+                }
+            };
+
+            $scope.saveMembersState = function () {
+                $scope.membersPromise = $http
+                    .post($scope.urlSaveProjectMembers, {'users': $scope.projectMembers})
+                    .success(function (response) {
+                    });
+            };
+        }
+        // -------------------- End of Single Users Manage ----------------------\\
+
+
+
+        // -------------------- Begin of Offices Manage --------------------\\
+        {
+            $scope.getOffices = function () {
+                $scope.officesPromise = $http
+                    .get($scope.urlgetProjectOffices)
+                    .success(function (response) {
+                        $scope.projectOffices = response.projectOffices;
+                        $scope.offices = response.offices;
+                    });
+            };
+
+            $scope.addOfficesToProject = function () {
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.offices.length; i++) {
+                    if ($scope.offices[i].selected) {
+                        $scope.projectOffices.push($scope.offices[i]);
+                        idsToRemove.push($scope.offices[i]);
+                    }
+                }
+
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.offices.splice(findElementById(idsToRemove[i], $scope.offices), 1);
+                }
+                if (idsToRemove.length > 0) {
+                    $scope.saveOfficesState();
+                }
+            };
+
+            $scope.removeOfficesFromProject = function () {
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.projectOffices.length; i++) {
+                    if ($scope.projectOffices[i].selected) {
+                        $scope.offices.push($scope.projectOffices[i]);
+                        idsToRemove.push($scope.projectOffices[i]);
+                    }
+                }
+
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.projectMembers.splice(findElementById(idsToRemove[i], $scope.projectOffices), 1);
+                }
+
+                if (idsToRemove.length > 0) {
+                    $scope.saveOfficesState();
+                }
+            };
+
+            $scope.saveOfficesState = function () {
+                $scope.officesPromise = $http
+                    .post($scope.urlSaveProjectOffices, {'offices': $scope.projectOffices});
+            };
+        }
+        // -------------------- End of Offices Manage ----------------------\\
 
         console.log('Project Controller was loaded...');
     }]);
+
+

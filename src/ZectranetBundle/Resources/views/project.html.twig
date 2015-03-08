@@ -72,7 +72,7 @@
                     <div cg-busy="promise" class="panel-body">
 
                         <!-- Begin of Task Nav Tabs -->
-                        <ul id="myTab" class="nav nav-tabs" role="tablist">
+                        <ul id="task-view-tabs" class="nav nav-tabs" role="tablist">
                             <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
                                 <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
                                     <i class="fa fa-table fa-2x"></i>
@@ -225,6 +225,11 @@
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        $('#task-view-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
         });
 
         JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': 0 }) }}";

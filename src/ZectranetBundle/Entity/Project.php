@@ -123,7 +123,8 @@ class Project
             'parentid' => $this->getParentid(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
-            'ownerid' => $this->getOwnerid()
+            'owner' => $this->getOwner()->getInArray(),
+            'visible' => $this->getVisible(),
         );
     }
 
@@ -570,5 +571,57 @@ class Project
         }
 
         return $jsonNotProjectUsers;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @return array
+     */
+    public static function getJsonProjectOffices(EntityManager $em, $project_id) {
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $jsonProjectOffices = array();
+        /** @var Office $office */
+        foreach ($project->getOffices() as $office) {
+            $jsonProjectOffices[] = $office->getInArray();
+        }
+        return $jsonProjectOffices;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @return array
+     */
+    public static function getJsonNotProjectOffices(EntityManager $em, $project_id) {
+        /** @var \Doctrine\ORM\QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $office_ids = array();
+        /** @var Office $office */
+        foreach ($project->getOffices() as $office) {
+            $office_ids[] = $office->getId();
+        }
+
+        $notProjectOffices = array();
+        if (count($office_ids) > 0) {
+            $query = $qb->select('o')
+                ->from('ZectranetBundle:Office', 'o')
+                ->where($qb->expr()->notIn('o.id', $office_ids))
+                ->andWhere('o.visible = 1')
+                ->getQuery();
+            $notProjectOffices = $query->getResult();
+        } else {
+            $notProjectOffices = $em->getRepository('ZectranetBundle:Office')->findAll();
+        }
+
+        $jsonNotProjectOffices = array();
+        /** @var Office $office */
+        foreach ($notProjectOffices as $office) {
+            $jsonNotProjectOffices[] = $office->getInArray();
+        }
+
+        return $jsonNotProjectOffices;
     }
 }
