@@ -227,37 +227,35 @@
                             <source src='{{ asset('bundles/zectranet/sound/notify_sound.mp3') }}' type='audio/mpeg'/>
                         </audio>
 
-						<ul class="notifier dropdown-menu dropdown-alerts">
-                            {% if app.user.notifications|length > 0 %}
-                                {% for notification in app.user.notifications %}
-                                    {% if notification.type == "message_office" %}
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
-                                                <div style="word-wrap: break-word; display: inline-block" ng-bind-html="'{{ notification.message }}'"></div>
-                                                <div class="text-muted small" style="text-align: right">{{ notification.activated.date| date('Y-m-d H:i')}}</div>
-                                            </a>
-                                        </li>
-                                        <li class="divider"></li>
-                                    {% endif %}
-                                {% endfor %}
+                        <ul ng-if="notifications.length > 0" class="notifier dropdown-menu dropdown-alerts">
+                            <li ng-repeat="notification in notifications| limitTo: 5">
 
-                                <li>
-                                    <a class="text-center" href="#">
-                                        <strong>See All Alerts</strong>
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
+                                <a ng-if="notification.type == 'message_office'" href="[[notification.href]]"
+                                   style="text-decoration: none; color: #000;">
+                                    <i class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
+                                    <div style="word-wrap: break-word; display: inline-block" ng-bind-html="notification.message"></div>
+                                    <div class="text-muted small" style="text-align: right">
+                                        <i class="fa fa-clock-o"></i>
+                                        [[ notification.activated.date.substring(0, 16) ]]
+                                    </div>
+                                </a>
 
-                                </li>
 
-                            {% else %}
-                                <li class="text-center">
-                                    You don't have notifications!
-                                </li>
+                                <div class="divider"></div>
+                            </li>
 
-                            {% endif %}
+                            <li>
+                                <a class="text-center" href="#">
+                                    <strong>See All Alerts</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>
 
-						</ul>
+                        <div ng-if="notifications.length == 0" class="notifier dropdown-menu dropdown-alerts" style="text-align: center;">
+                            You don't have notifications!
+                        </div>
+
 					</li>
 
 					<li class="dropdown">

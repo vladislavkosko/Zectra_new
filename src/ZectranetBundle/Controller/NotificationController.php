@@ -32,7 +32,7 @@ class NotificationController extends Controller
 
         $user_notifications = Notification::prepareNotifications($user);
 
-        $response = new Response(json_encode(array("result" => $user_notifications)));
+        $response = new Response(json_encode(array("result" => array_map(function($e){return $e->getInArray();}, $user_notifications))));
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }

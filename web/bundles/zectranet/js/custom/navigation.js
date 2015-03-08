@@ -32,16 +32,19 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
 				if (response.result && response.result.length > 0)
 				{
                     if (response.result.length != $scope.notificationsLength)
+                    {
+                        StartNotify();
                         document.getElementById('notif_sound').play();
-                    $scope.notificationsLength = response.result.length;
-                    prepareNotifications(response.result);
-                    StartNotify();
+                        $scope.notificationsLength = response.result.length;
+                    }
+                    $scope.notifications = prepareNotifications(response.result);
                 }
+
                 else {
 					StopNotify();
 					$scope.notifications = [];
 				}
-				setTimeout(getNotifications, 3000);
+				setTimeout(getNotifications, 5000);
 			})
 	};
 
