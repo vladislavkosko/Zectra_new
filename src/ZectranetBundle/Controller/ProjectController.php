@@ -52,10 +52,8 @@ class ProjectController extends Controller
     public function settingsAction($project_id)
     {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
-        $users = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findAll();
         return $this->render('@Zectranet/projectSettings.html.twig', array(
             'project' => $project,
-            'users' => $users,
         ));
     }
 

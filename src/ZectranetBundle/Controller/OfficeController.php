@@ -77,6 +77,91 @@ class OfficeController extends Controller
         return $this->redirectToRoute('zectranet_user_page');
     }
 
+    /**
+     * @Route("/office/{office_id}/settings")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $office_id
+     * @return Response
+     */
+    public function settingsAction($office_id)
+    {
+        $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+        return $this->render('@Zectranet/officeSettings.html.twig', array(
+            'office' => $office
+        ));
+    }
+
+    /**
+     * @Route("/office/{office_id}/settings/visibleStateChange")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $office_id
+     * @return Response
+     */
+    public function visibleStateChangeAction(Request $request, $office_id)
+    {
+        $data = json_decode($request->getContent(), true);
+        $data = (object)$data;
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+        $office->setVisible($data->visible);
+        $em->persist($office);
+        $em->flush();
+
+        $response = new Response(json_encode(array('success' => true)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Route("/office/{office_id}/getMembers")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $office_id
+     * @return Response
+     */
+    public function getMembersAction($office_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $jsonOfficeUsers = Office::getJsonOfficeMembers($em, $office_id);
+        $jsonNotOfficeUsers = Office::getJsonNotOfficeMembers($em, $office_id);
+
+        $response = new Response(json_encode(array(
+            'officeMembers' => $jsonOfficeUsers,
+            'users' => $jsonNotOfficeUsers
+        )));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Route("/office/{office_id}/saveMembersState")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $office_id
+     * @return Response
+     */
+    public function saveMembersAction(Request $request, $office_id) {
+        $data = json_decode($request->getContent(), true);
+        $ids = array();
+        foreach ($data['users'] as $user) {
+            $user = (object) $user;
+            $ids[] = $user->id;
+        }
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+        $users = $em->getRepository('ZectranetBundle:User')->findBy(array('id' => $ids));
+        $office->setUsers($users);
+
+        $em->persist($office);
+        $em->flush();
+
+        $response = new Response(json_encode(array('success' => true)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 
     /**
      * @Route("/office/{office_id}/addNewPost")

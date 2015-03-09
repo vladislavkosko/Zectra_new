@@ -103,6 +103,30 @@ zectranet_delete_office:
     requirements:
         office_id: \d+
 
+zectranet_settings_office:
+    pattern: /office/{office_id}/settings
+    defaults: { _controller: ZectranetBundle:Office:settings }
+    requirements:
+        office_id: \d+
+
+zectranet_get_office_members:
+    pattern: /office/{office_id}/getMembers
+    defaults: { _controller: ZectranetBundle:Office:getMembers }
+    requirements:
+        office_id: \d+
+
+zectranet_save_office_members:
+    pattern: /office/{office_id}/saveMembersState
+    defaults: { _controller: ZectranetBundle:Office:saveMembers }
+    requirements:
+        office_id: \d+
+
+zectranet_office_change_visible_state:
+    pattern: /office/{office_id}/settings/visibleStateChange
+    defaults: { _controller: ZectranetBundle:Office:visibleStateChange }
+    requirements:
+        office_id: \d+
+
 zectranet_office_add_post:
     pattern: /office/{office_id}/addNewPost
     defaults: { _controller: ZectranetBundle:OfficePost:addPost }

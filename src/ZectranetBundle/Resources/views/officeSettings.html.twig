@@ -1,0 +1,250 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}{{ office.name }} Settings{% endblock %}
+
+{% block body %}
+    <div ng-controller="OfficeController" ng-cloak ng-init="getMembers()">
+        <div class="row">
+            <ol class="breadcrumb" style="margin: 0 -15px;">
+                <li>
+                    <a href="{{ path('zectranet_user_home') }}">Summary</a>
+                </li>
+                <li>
+                    <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                        {{ office.name }}
+                    </a>
+                </li>
+                <li class="active">Settings</li>
+            </ol>
+
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h4><i class="fa fa-home"></i> Office Managment</h4>
+                </div>
+
+                <div class="row" style="margin-bottom: 25px;">
+                    <form class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon" cg-busy="visiblePromise" ng-init="officeVisible={{ office.visible }}">
+                                <input id="change-visible-state" type="checkbox" ng-model="officeVisible" ng-checked="[[officeVisible]]">
+                            </span>
+                            <label for="change-visible-state" class="form-control form-control-static">Office visible</label>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-success" ng-click="changeVisibleState(officeVisible);">Save</button>
+                            </span>
+                        </div>
+                        <div class="input-group">
+                        </div>
+                    </form>
+                </div>
+
+                <ul id="project-manage-tabs" class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#users-manage" data-toggle="tab" class="btn">
+                            Single Users Manage
+                        </a>
+                    </li>
+                    {#
+                    <li>
+                        <a href="#offices-manage" data-toggle="tab" class="btn">
+                            Offices Manage
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#epic-stories-manage" data-toggle="tab" class="btn">
+                            Epic Stories Manage
+                        </a>
+                    </li>
+                    #}
+                </ul>
+
+                <div class="tab-content">
+                    <!-- Begin of Users Manage Panel -->
+                    <div id="users-manage" style="margin-top: 25px;" class="tab-pane fade in active">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6" cg-busy="membersPromise">
+                                    <div class="list-group">
+                                        <div class="list-group-item active">
+                                            <i class="fa fa-users"></i>
+                                            Users
+                                        </div>
+                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in users" ng-init="user.selected = false; user.index = $index"
+                                               ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
+                                                <i class="fa fa-user"></i>
+                                                [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
+                                            </a>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" ng-click="addUsersToOffice()" class="form-control btn btn-default btn-success">
+                                                <i class="fa fa-plus-circle"></i>
+                                                Add Users To Office
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6" cg-busy="membersPromise">
+                                    <div class="list-group">
+                                        <div class="list-group-item active">
+                                            <i class="fa fa-users"></i>
+                                            Office Members
+                                        </div>
+                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in officeMembers" ng-init="user.selected = false; user.index = $index"
+                                               ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
+                                                <i class="fa fa-user"></i>
+                                                [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
+                                            </a>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeUsersFromOffice()">
+                                                <i class="fa fa-trash"></i>
+                                                Remove Users From Office
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of Users Manage Panel -->
+
+                    <div>
+                        {#
+                        <!-- Begin of Offices Manage Panel -->
+                        <div id="offices-manage" style="margin-top: 25px;" class="tab-pane fade">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6" cg-busy="promiseProject">
+                                        <div class="list-group">
+                                            <div class="list-group-item active">
+                                                <i class="fa fa-home"></i>
+                                                Offices
+                                            </div>
+                                            <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                                <a style="cursor: pointer;" class="list-group-item" ng-repeat="office in offices" ng-init="office.selected = false;"
+                                                   ng-class="{ 'active': office.selected }" ng-click="office.selected = !office.selected">
+                                                    <i class="fa fa-home"></i>
+                                                    [[ office.name ]]
+                                                </a>
+                                                <div class="list-group-item" ng-if="offices.length == 0">
+                                                    <h4 class="text-center text-info">No available offices to show</h4>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" ng-click="addOfficesToProject()" class="form-control btn btn-default btn-success">
+                                                    <i class="fa fa-plus-circle"></i>
+                                                    Add Offices To Project
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6" cg-busy="promiseProject">
+                                        <div class="list-group">
+                                            <div class="list-group-item active">
+                                                <i class="fa fa-home"></i>
+                                                Project Offices
+                                            </div>
+                                            <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                                <a style="cursor: pointer;" class="list-group-item" ng-repeat="office in projectOffices" ng-init="office.selected = false;"
+                                                   ng-class="{ 'active': office.selected }" ng-click="office.selected = !office.selected">
+                                                    <i class="fa fa-home"></i>
+                                                    [[ office.name ]]
+                                                </a>
+                                                <div class="list-group-item" ng-if="projectOffices.length == 0">
+                                                    <h4 class="text-center text-info">Project Offices will be displayed here</h4>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeOfficesFromProject()">
+                                                    <i class="fa fa-trash"></i>
+                                                    Remove Offices From Project
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Offices Manage Panel -->
+
+                        <!-- Begin of Epic Stories Manage Panel -->
+                        <div id="epic-stories-manage" style="margin-top: 25px;" class="tab-pane fade">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-2 col-md-8 col-xs-12" cg-busy="promiseProject">
+                                        <div class="list-group">
+                                            <div class="list-group-item active">
+                                                <i class="fa fa-home"></i>
+                                                Epic Stories
+                                            </div>
+                                            <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
+                                                <a style="cursor: pointer;" class="list-group-item" ng-repeat="epicStory in epicStories" ng-init="epicStory.selected = false;"
+                                                   ng-class="{ 'active': epicStory.selected }" ng-click="epicStory.selected = !epicStory.selected">
+                                                    <i class="fa fa-home"></i>
+                                                    [[ epicStory.name ]]
+                                                </a>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" data-toggle="modal" data-target="#add_epic_story" class="form-control btn btn-default btn-success">
+                                                    <i class="fa fa-plus-circle"></i>
+                                                    Add New Epic Story
+                                                </button>
+                                                <button type="button" data-toggle="modal" data-target="#delete_project_epic_story" class="form-control btn btn-default btn-danger">
+                                                    <i class="fa fa-trash"></i>
+                                                    Delete Selected Epic Stories
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Epic Stories Manage Panel -->
+                        #}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {#
+        <!-- BEGIN OF EPIC STORY ADD MODAL -->
+        {% include '@Zectranet/projectAddEpicStory.html.twig' %}
+        <!-- END OF EPIC STORY ADD MODAL -->
+
+        <!-- BEGIN OF EPIC STORY DELETE MODAL -->
+        {% include '@Zectranet/projectDeleteEpicStory.html.twig' %}
+        <!-- END OF EPIC STORY DELETE MODAL -->
+        #}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/zectranet/js/custom/officeController.js') }}"></script>
+    <script>
+        JSON_URLS.changeVisibleState = "{{ path('zectranet_office_change_visible_state', { 'office_id': office.id }) }}";
+
+        JSON_URLS.getMembers = "{{ path('zectranet_get_office_members', { 'office_id': office.id }) }}";
+        JSON_URLS.saveMembers = "{{ path('zectranet_save_office_members', { 'office_id': office.id }) }}";
+        {#
+        JSON_URLS.getOffices = "{{ path('zectranet_get_project_offices', { 'project_id': project.id }) }}";
+        JSON_URLS.addOffices = "{{ path('zectranet_project_add_offices', {'project_id': project.id}) }}";
+        JSON_URLS.removeOffices = "{{ path('zectranet_project_remove_offices', {'project_id': project.id}) }}";
+        JSON_URLS.getEpicStories = "{{ path('zectranet_project_get_epic_stories', { 'project_id': project.id }) }}";
+        JSON_URLS.addEpicStory = "{{ path('zectranet_project_add_epic_story', { 'project_id': project.id }) }}";
+        JSON_URLS.deleteEpicStories = "{{ path('zectranet_project_delete_epic_stories', { 'project_id': project.id }) }}";
+
+
+        $('#project-manage-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+        #}
+    </script>
+{% endblock %}

@@ -418,6 +418,13 @@ class Office
         return $this->visible;
     }
 
+    /**
+     * @param $users
+     */
+    public function setUsers($users) {
+        $this->users = $users;
+    }
+
     public function getInArray() {
         return array(
             'id' => $this->getId(),
@@ -426,5 +433,60 @@ class Office
             'owner' => $this->getOwner()->getInArray(),
             'visible' => $this->getVisible(),
         );
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $office_id
+     * @return array
+     */
+    public static function getJsonOfficeMembers(EntityManager $em, $office_id) {
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+        $jsonOfficeUsers = array();
+        /** @var User $user */
+        foreach ($office->getUsers() as $user) {
+            $jsonOfficeUsers[] = $user->getInArray();
+        }
+        return $jsonOfficeUsers;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $office_id
+     * @return array
+     */
+    public static function getJsonNotOfficeMembers(EntityManager $em, $office_id) {
+        /** @var \Doctrine\ORM\QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+        $user_ids = array();
+        /** @var User $user */
+        foreach ($office->getUsers() as $user) {
+            $user_ids[] = $user->getId();
+        }
+
+        $notOfficeUsers = array();
+        if (count($user_ids) > 0) {
+            $query = $qb->select('u')
+                ->from('ZectranetBundle:User', 'u')
+                ->where($qb->expr()->notIn('u.id', $user_ids))
+                ->getQuery();
+            $notOfficeUsers = $query->getResult();
+        } else {
+            $notOfficeUsers = $em->getRepository('ZectranetBundle:User')->findAll();
+        }
+
+        $jsonNotOfficeUsers = array();
+        /** @var User $user */
+        foreach ($notOfficeUsers as $user) {
+            if (!$user->getAssignedOffices()->contains($office)
+                && !$user->getOwnedOffices()->contains($office)) {
+                $jsonNotOfficeUsers[] = $user->getInArray();
+            }
+
+        }
+
+        return $jsonNotOfficeUsers;
     }
 }
