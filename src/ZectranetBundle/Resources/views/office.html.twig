@@ -16,25 +16,31 @@
     </div>
 
     <div class="page-header">
-        <i class="fa fa-home fa-2x"></i>
-        <span style="font-size: 25px;">{{ office.name }}</span>
-        <!-- Begin of Office controll buttons -->
-        {% if (office.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
-            <div class="pull-right">
-                <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Office">
-                    <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_office">
-                        <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
-                    </a>
-                </div>
-
-                <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Office Settings">
-                    <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_settings_office', { 'office_id': office.id }) }}">
-                        <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
-                    </a>
-                </div>
+        <div class="row">
+            <div class="col-md-6">
+                <i class="fa fa-home fa-2x"></i>
+                <span style="font-size: 25px;">{{ office.name }}</span>
             </div>
-        {% endif %}
-        <!-- End of Office controll buttons -->
+            <div class="col-md-6">
+                <!-- Begin of Office controll buttons -->
+                {% if (office.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                    <div class="pull-right">
+                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Office">
+                            <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_office">
+                                <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
+                            </a>
+                        </div>
+
+                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Office Settings">
+                            <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_settings_office', { 'office_id': office.id }) }}">
+                                <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+                <!-- End of Office controll buttons -->
+            </div>
+        </div>
     </div>
 
     <div class="row">
@@ -117,7 +123,7 @@
                     Office Sprints
                 </div>
                 {% for sprint in office.sprints %}
-                    <a class="list-group-item" href="#">
+                    <a class="list-group-item" href="{{ path('zectranet_show_sprint', {'sprint_id': sprint.id, 'office_id': office.id }) }}">
                         <i class="fa fa-repeat"></i>
                         <span>{{ sprint.name}}</span>
                     </a>
@@ -127,9 +133,17 @@
                         <h4 class="text-info text-center">Sprints will be displayed here</h4>
                     </div>
                 {% endif %}
+                <a class="btn btn-default btn-success form-control" data-toggle="modal" data-target="#add_sprint">
+                    <i class="fa fa-plus-circle"></i>
+                    Add New Sprint
+                </a>
             </div>
         </div>
         <!-- END OF SPRINT LIST -->
+
+        <!-- Begin of Add Sprint Modal -->
+        {% include '@Zectranet/officeAddSprint.html.twig' %}
+        <!-- End of Add Sprint Modal -->
     </div>
 
     <div class="chat-panel list-group" ng-controller="ChatController" ng-init="getPosts(0, 100)">
@@ -228,18 +242,15 @@
 {% block javascripts %}
 {{ parent() }}
     <script>
-
         var DeleteLastScreenshot = function() {
             var img;
             setTimeout(function() {
                 img = $('.img-screenshot');
-                console.log(img);
                 return img;
             },100);
 
             if($('.img-screenshot').length == 1) {
                 $('#slide-down-menu-screenshots').fadeOut(500);
-
             }
         };
 

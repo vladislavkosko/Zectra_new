@@ -258,4 +258,22 @@ class Sprint
         $this->setStatus(SprintStatus::getOpenStatus($em));
         $this->setStatusid(1);
     }
+
+    /**
+     * @param EntityManager $em
+     * @param int $office_id
+     * @param array $params
+     * @return Sprint
+     */
+    public static function addNewSprint(EntityManager $em, $office_id, $params) {
+        $sprint = new Sprint($em);
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+        $sprint->setOffice($office);
+        $sprint->setName($params['name']);
+        $sprint->setDescription($params['description']);
+        $em->persist($sprint);
+        $em->flush();
+
+        return $sprint;
+    }
 }

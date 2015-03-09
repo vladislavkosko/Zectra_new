@@ -16,26 +16,31 @@
         </div>
 
         <div class="page-header">
-            <i class="fa fa-briefcase fa-2x"></i>
-            <span style="font-size: 25px;">{{ project.name }}</span>
-
-            <!-- Begin of Project controll buttons -->
-            {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
-                <div class="pull-right">
-                    <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
-                        <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
-                            <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
-                        </a>
-                    </div>
-
-                    <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Settings">
-                        <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_settings_project', {'project_id': project.id }) }}">
-                            <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
-                        </a>
-                    </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <i class="fa fa-briefcase fa-2x"></i>
+                    <span style="font-size: 25px;">{{ project.name }}</span>
                 </div>
-            {% endif %}
-            <!-- End of Project controll buttons -->
+                <div class="col-md-6">
+                    <!-- Begin of Project controll buttons -->
+                    {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
+                        <div class="pull-right">
+                            <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
+                                <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
+                                    <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
+                                </a>
+                            </div>
+
+                            <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Settings">
+                                <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_settings_project', {'project_id': project.id }) }}">
+                                    <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!-- End of Project controll buttons -->
+                </div>
+            </div>
         </div>
 
         <div class="row">
@@ -104,11 +109,13 @@
                                     <i class="fa fa-table fa-2x"></i>
                                 </a>
                             </li>
+                            {#
                             <li data-toggle="tooltip" data-placement="top" title="List view" role="presentation">
                                 <a data-toggle="tab" id="task-view-list" class="btn" href="#list-view" aria-controls="list-view" role="tab" aria-expanded="false">
                                     <i class="fa fa-list fa-2x"></i>
                                 </a>
                             </li>
+                            #}
                             <li data-toggle="tooltip" data-placement="top" title="Agile view" role="presentation">
                                 <a data-toggle="tab" id="task-view-agile"  class="btn" href="#agile-view" aria-controls="agile-view" role="tab" aria-expanded="false">
                                     <i class="fa fa-th fa-2x"></i>
@@ -130,11 +137,13 @@
                             </div>
                             <!-- End of Task Table View -->
 
+                            {#
                             <!-- Begin of Task List View -->
                             <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
                                 <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
                             </div>
                             <!-- End of Task List View -->
+                            #}
 
                             <!-- Begin of Task Agile View -->
                             <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
