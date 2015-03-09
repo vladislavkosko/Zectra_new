@@ -25,6 +25,11 @@ class OfficeController extends Controller
      */
     public function indexAction($office_id) {
         $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user->getAssignedOffices()->contains($office) && !$user->getOwnedOffices()->contains($office)) {
+            return $this->redirectToRoute('zectranet_user_home');
+        }
         return $this->render('@Zectranet/office.html.twig', array('office' => $office));
     }
 

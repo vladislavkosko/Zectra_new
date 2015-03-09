@@ -27,6 +27,12 @@ class ProjectController extends Controller
     public function indexAction($project_id)
     {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user->getProjects()->contains($project) && !$user->getOwnedProjects()->contains($project)) {
+            return $this->redirectToRoute('zectranet_user_home');
+        }
+
         $task_priority = $this->getDoctrine()->getRepository('ZectranetBundle:TaskPriority')->findAll();
         $task_types = $this->getDoctrine()->getRepository('ZectranetBundle:TaskType')->findAll();
         return $this->render('@Zectranet/project.html.twig', array(
