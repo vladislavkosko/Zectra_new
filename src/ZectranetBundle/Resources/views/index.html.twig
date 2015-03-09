@@ -129,6 +129,26 @@
 										</li>
 										{% endif %}
 									{% endfor %}
+									{% for office in app.user.assignedOffices %}
+										{% for project in office.projects if project.parent == null and project not in app.user.ownedProjects %}
+											<li>
+												<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+													<i class='fa fa-briefcase'></i>
+													<span>{{ project.name }}</span>
+												</a>
+											</li>
+										{% endfor %}
+									{% endfor %}
+									{% for office in app.user.ownedOffices %}
+										{% for project in office.projects if project.parent == null and project not in app.user.ownedProjects %}
+											<li>
+												<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+													<i class='fa fa-briefcase'></i>
+													<span>{{ project.name }}</span>
+												</a>
+											</li>
+										{% endfor %}
+									{% endfor %}
 								</ul>
 							</li>
 

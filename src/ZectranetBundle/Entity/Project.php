@@ -659,7 +659,6 @@ class Project
         /** @var Office $office */
         foreach ($offices as $office) {
             if ($projectOffices->contains($office)) {
-                var_dump($office->getId());
                 $project->removeOffice($office);
             }
         }
