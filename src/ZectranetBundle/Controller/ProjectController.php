@@ -123,29 +123,46 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/{project_id}/saveOfficesState")
+     * @Route("/project/{project_id}/addOffices")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @param int $project_id
      * @return Response
      */
-    public function saveOfficesAction(Request $request, $project_id) {
+    public function addOfficesAction(Request $request, $project_id) {
         $data = json_decode($request->getContent(), true);
         $ids = array();
-        foreach ($data['users'] as $user) {
-            $user = (object) $user;
-            $ids[] = $user->id;
+        foreach ($data['offices'] as $office) {
+            $office = (object) $office;
+            $ids[] = $office->id;
         }
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $users = $em->getRepository('ZectranetBundle:User')->findBy(array('id' => $ids));
-        $project->setUsers($users);
+        Project::addOfficesToProject($em, $ids, $project_id);
+        $response = new Response(json_encode(array('success' => true)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 
-        $em->persist($project);
-        $em->flush();
+    /**
+     * @Route("/project/{project_id}/removeOffices")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $project_id
+     * @return Response
+     */
+    public function removeOfficesAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $ids = array();
+        foreach ($data['offices'] as $office) {
+            $office = (object) $office;
+            $ids[] = $office->id;
+        }
 
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        Project::removeOfficesFromProject($em, $ids, $project_id);
         $response = new Response(json_encode(array('success' => true)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -193,6 +210,43 @@ class ProjectController extends Controller
         }
 
         return $this->redirectToRoute('zectranet_user_page');
+    }
+
+    /**
+     * @Route("/project/{project_id}/deleteEpicStories")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $project_id
+     * @return RedirectResponse
+     */
+    public function deleteEpicStoriesAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        /** @var array $ids */
+        $ids = $data['epicStories'];
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var AuthorizationChecker $auth_checker */
+        $auth_checker = $this->get('security.authorization_checker');
+
+        /** @var array of Project $epicStories */
+        $epicStories = $em->getRepository('ZectranetBundle:Project')->findBy(array('id' => $ids));
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (count($epicStories) > 0) {
+            foreach ($epicStories as $story) {
+                if ($story->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN')) {
+                    Project::deleteProject($em, $story->getId());
+                }
+            }
+        }
+
+        $response = new Response(json_encode(array('success' => 'success')));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     /**

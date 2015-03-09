@@ -14,10 +14,12 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
 
             $scope.urlGetEpicStories = JSON_URLS.getEpicStories;
             $scope.urlAddEpicStory = JSON_URLS.addEpicStory;
+            $scope.urlDeleteEpicStories = JSON_URLS.deleteEpicStories;
             $scope.urlGetProjectMembers = JSON_URLS.getMembers;
             $scope.urlSaveProjectMembers = JSON_URLS.saveMembers;
             $scope.urlgetProjectOffices = JSON_URLS.getOffices;
-            $scope.urlSaveProjectOffices = JSON_URLS.saveOffices;
+            $scope.urlAddOffices = JSON_URLS.addOffices;
+            $scope.urlRemoveOffices = JSON_URLS.removeOffices;
         }
         // -------------------- End of Scope Variables ----------------------\\
 
@@ -40,6 +42,18 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                 $rootScope.initChatController(project_id);
             };
 
+            $scope.highlightCurrentEpicStory = function (epic_story_id) {
+                for (var i = 0; i < $scope.epicStories.length; i++) {
+                    $scope.epicStories[i].selected = ($scope.epicStories[i].id == epic_story_id);
+                }
+            };
+
+            $scope.removeHighlightFromEpicStories = function () {
+                for (var i = 0; i < $scope.epicStories.length; i++) {
+                    $scope.epicStories[i].selected = false;
+                }
+            };
+
             $scope.addNewEpicStory = function (story) {
                 if (story.name && story.description) {
                     $('#add_epic_story').modal('hide');
@@ -48,6 +62,30 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                         .success(function (response) {
                             $scope.epicStories.push(response.EpicStory);
                         });
+                }
+            };
+            
+            $scope.deleteEpicStories = function () {
+                $('#delete_project_epic_story').modal('hide');
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.epicStories.length; i++) {
+                    if ($scope.epicStories[i].selected) {
+                        idsToRemove.push($scope.epicStories[i]);
+                    }
+                }
+
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.epicStories.splice(findElementById(idsToRemove[i], $scope.epicStories), 1);
+                }
+
+                var ids = [];
+                for (i = 0; i < idsToRemove.length; i++) {
+                    ids.push(idsToRemove[i].id);
+                }
+
+                if (idsToRemove.length > 0) {
+                    $scope.promiseProject = $http
+                        .post($scope.urlDeleteEpicStories, { 'epicStories': ids });
                 }
             };
 
@@ -147,8 +185,10 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                 for (i = 0; i < idsToRemove.length; i++) {
                     $scope.offices.splice(findElementById(idsToRemove[i], $scope.offices), 1);
                 }
+
                 if (idsToRemove.length > 0) {
-                    $scope.saveOfficesState();
+                    $scope.promiseProject = $http
+                        .post($scope.urlAddOffices, { 'offices': idsToRemove });
                 }
             };
 
@@ -162,17 +202,13 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                 }
 
                 for (i = 0; i < idsToRemove.length; i++) {
-                    $scope.projectMembers.splice(findElementById(idsToRemove[i], $scope.projectOffices), 1);
+                    $scope.projectOffices.splice(findElementById(idsToRemove[i], $scope.projectOffices), 1);
                 }
 
                 if (idsToRemove.length > 0) {
-                    $scope.saveOfficesState();
+                    $scope.promiseProject = $http
+                        .post($scope.urlRemoveOffices, { 'offices': idsToRemove });
                 }
-            };
-
-            $scope.saveOfficesState = function () {
-                $scope.officesPromise = $http
-                    .post($scope.urlSaveProjectOffices, {'offices': $scope.projectOffices});
             };
         }
         // -------------------- End of Offices Manage ----------------------\\

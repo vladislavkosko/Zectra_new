@@ -5,7 +5,7 @@
 {% block body %}
     <div ng-controller="ProjectController" ng-init="getEpicStories({{ project.id }})">
         <div class="row">
-            <ol class="breadcrumb" style="margin: 0 -30px;">
+            <ol class="breadcrumb" style="margin: 0 -15px;">
                 <li>
                     <a href="{{ path('zectranet_user_home') }}">Summary</a>
                 </li>
@@ -22,12 +22,17 @@
             <!-- Begin of Project controll buttons -->
             {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
                 <div class="pull-right">
-                    <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_settings_project', {'project_id': project.id }) }}">
-                        <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
-                    </a>
-                    <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
-                        <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
-                    </a>
+                    <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
+                        <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
+                            <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
+                        </a>
+                    </div>
+
+                    <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Settings">
+                        <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_settings_project', {'project_id': project.id }) }}">
+                            <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
+                        </a>
+                    </div>
                 </div>
             {% endif %}
             <!-- End of Project controll buttons -->
@@ -39,7 +44,8 @@
                     <div class="list-group-item active">
                         Project
                     </div>
-                    <a class="list-group-item" style="cursor: pointer;" ng-click="changeCurrentPage({{ project.id }})">
+                    <a class="list-group-item" style="cursor: pointer;"
+                       ng-click="changeCurrentPage({{ project.id }}); removeHighlightFromEpicStories();">
                         <i class="fa fa-briefcase"></i>
                         {{ project.name }}
                     </a>
@@ -53,14 +59,23 @@
                         Epic Stories
                     </div>
                     <div cg-busy="promiseProject">
-                        <a class="list-group-item" ng-repeat="story in epicStories" style="cursor: pointer;" ng-click="changeCurrentPage(story.id)">
+                        <a class="list-group-item" ng-repeat="story in epicStories" style="cursor: pointer;"
+                           ng-init="story.selected = false;" ng-class="{'list-group-item-success': story.selected }"
+                           ng-click="changeCurrentPage(story.id); highlightCurrentEpicStory(story.id);">
                             <i class="fa fa-briefcase"></i>
                             [[ story.name ]]
                         </a>
-                        <a class="list-group-item list-group-item-text" style="cursor: pointer;" data-toggle="modal" data-target="#add_epic_story">
-                            <i class="fa fa-plus-circle"></i>
-                            Add Epic Story
-                        </a>
+                        <div class="list-group-item" ng-if="epicStories.length == 0">
+                            <h4 class="text-center text-info">Epic Stories will be displayed here</h4>
+                        </div>
+                        {% if app.user.id == project.owner.id %}
+                            <div class="form-group">
+                                <button type="button" data-toggle="modal" data-target="#add_epic_story" class="form-control btn btn-default btn-success">
+                                    <i class="fa fa-plus-circle"></i>
+                                    Add New Epic Story
+                                </button>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -152,6 +167,7 @@
                     </div>
                     <div class="list-group-item">
                         <div class="row">
+                            {% set projectUsersCount = project.users | length %}
                             {% for user in project.users %}
                                 <div class="col-md-2 col-xs-4">
                                     <div class="user-chat center-block">
@@ -165,6 +181,29 @@
                                     </div>
                                 </div>
                             {% endfor %}
+
+                            {% for office in project.offices %}
+                                {% set projectUsersCount = projectUsersCount + office.users | length %}
+                                {% for user in office.users %}
+                                    <div class="col-md-2 col-xs-4">
+                                        <div class="user-chat center-block">
+                                            <a href="{{ path('zectranet_user_page', {'user_id': user.id}) }}" style="display: block; text-decoration: none;">
+                                                <p class="text-muted label label-default label-primary text-center center-block" style="margin-bottom: 1px;">Manager</p>
+                                                <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-responsive center-block" style="width: 60px; height: 60px;">
+                                            </a>
+                                            <a style="cursor: pointer;">
+                                                <p class="text-center" style="font-weight: bold;">{{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user .username ~ ')'}}</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+
+                            {% if projectUsersCount == 0 %}
+                                <div class="col-md-12">
+                                    <h4 class="text-center text-info">Members will be displayed here</h4>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

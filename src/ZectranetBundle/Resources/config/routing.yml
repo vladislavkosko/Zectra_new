@@ -145,9 +145,15 @@ zectranet_get_project_offices:
     requirements:
         project_id: \d+
 
-zectranet_save_project_offices:
-    pattern: /project/{project_id}/saveOfficesState
-    defaults: { _controller: ZectranetBundle:Project:saveOffices }
+zectranet_project_add_offices:
+    pattern: /project/{project_id}/addOffices
+    defaults: { _controller: ZectranetBundle:Project:addOffices }
+    requirements:
+        project_id: \d+
+
+zectranet_project_remove_offices:
+    pattern: /project/{project_id}/removeOffices
+    defaults: { _controller: ZectranetBundle:Project:removeOffices }
     requirements:
         project_id: \d+
 
@@ -200,6 +206,12 @@ zectranet_project_get_epic_stories:
 zectranet_project_add_epic_story:
     pattern: /project/{project_id}/addNewEpicStory
     defaults: { _controller: ZectranetBundle:Project:addNewEpicStory }
+    requirements:
+        project_id: \d+
+
+zectranet_project_delete_epic_stories:
+    pattern: /project/{project_id}/deleteEpicStories
+    defaults: { _controller: ZectranetBundle:Project:deleteEpicStories }
     requirements:
         project_id: \d+
 

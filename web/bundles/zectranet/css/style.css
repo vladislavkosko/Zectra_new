@@ -292,3 +292,18 @@
         width: 300px !important;
     }
 }
+
+.user-names-highlight {
+    color: darkblue;
+    text-shadow: 0 0 black;
+}
+
+.global-msg-highlight {
+    color: darkred;
+    text-shadow: 0 0 black;
+}
+
+.global-office-msg-highlight, .global-project-msg-highlight {
+    color: brown;
+    text-shadow: 0 0 black;
+}

@@ -132,4 +132,39 @@ Zectranet.directive('document', function() {
 	}
 });
 
+Zectranet.directive('highlight', ['$sce', function($sce) {
+	return {
+		restrict: 'A',
+		link: function($scope, element, attrs) {
+			var username = true;
+
+			//var message = $sce.getTrustedHtml($scope.post.message);
+			var message = $scope.post.message;
+
+			regex = new RegExp('@all', 'mig');
+			matches = message.match(regex);
+			if (matches) {
+				username = false;
+				message = message.replace(regex,
+					'<span class="global-msg-highlight">' + matches[0] + '</span>');
+			}
+
+			var msg = message;
+			if (username) {
+				var regex = new RegExp('@[A-Za-z]{1,20}', 'mig');
+				var matches = msg.match(regex);
+				if (matches != null) {
+					for (var i = 0; i < matches.length; i++) {
+						msg = msg.replace(matches[i],
+							'<span class="user-names-highlight">' + matches[i] + '</span>');
+					}
+					message = msg;
+				}
+			}
+			//$scope.post.message = $sce.trustAsHtml(message);
+			$scope.post.message = message;
+		}
+	}
+}]);
+
 console.log('Angular core is loaded...');

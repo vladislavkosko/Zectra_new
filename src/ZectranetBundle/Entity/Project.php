@@ -613,7 +613,7 @@ class Project
                 ->getQuery();
             $notProjectOffices = $query->getResult();
         } else {
-            $notProjectOffices = $em->getRepository('ZectranetBundle:Office')->findAll();
+            $notProjectOffices = $em->getRepository('ZectranetBundle:Office')->findBy(array('visible' => true));
         }
 
         $jsonNotProjectOffices = array();
@@ -624,4 +624,48 @@ class Project
 
         return $jsonNotProjectOffices;
     }
+
+    /**
+     * @param EntityManager $em
+     * @param array $office_ids
+     * @param int $project_id
+     */
+    public static function addOfficesToProject(EntityManager $em, $office_ids, $project_id) {
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $offices = $em->getRepository('ZectranetBundle:Office')->findBy(array('id' => $office_ids));
+        /** @var ArrayCollection $projectOffices */
+        $projectOffices = $project->getOffices();
+        /** @var Office $office */
+        foreach ($offices as $office) {
+            if (!$projectOffices->contains($office)) {
+                $project->addOffice($office);
+            }
+        }
+
+        $em->persist($project);
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param array $office_ids
+     * @param int $project_id
+     */
+    public static function removeOfficesFromProject(EntityManager $em, $office_ids, $project_id) {
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $offices = $em->getRepository('ZectranetBundle:Office')->findBy(array('id' => $office_ids));
+        /** @var ArrayCollection $projectOffices */
+        $projectOffices = $project->getOffices();
+        /** @var Office $office */
+        foreach ($offices as $office) {
+            if ($projectOffices->contains($office)) {
+                var_dump($office->getId());
+                $project->removeOffice($office);
+            }
+        }
+
+        $em->persist($project);
+        $em->flush();
+    }
 }
+

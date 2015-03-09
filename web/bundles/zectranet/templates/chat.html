@@ -1,5 +1,5 @@
 <ul class="chat">
-    <li ng-repeat="post in posts" class="clearfix" ng-class="{'right': USER_ID == post.user.id, 'left': USER_ID != post.user.id }">
+    <li highlight ng-repeat="post in posts" class="clearfix" ng-class="{'right': USER_ID == post.user.id, 'left': USER_ID != post.user.id }">
         <span class="chat-img"
               ng-class="{'pull-right': USER_ID == post.user.id, 'pull-left': USER_ID != post.user.id }"
               ng-init="avatar = generateAsset(urlAsset, 'documents/' + post.user.avatar)">
