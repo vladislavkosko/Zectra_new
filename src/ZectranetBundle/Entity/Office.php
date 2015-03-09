@@ -391,26 +391,6 @@ class Office
         /** @var Office $office */
         $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
 
-        /** @var OfficeRole $role */
-        foreach ($office->getOfficeUserRoles() as $role) {
-            $office->removeOfficeUserRole($role);
-        }
-
-        /** @var OfficePost $post */
-        foreach ($office->getPostsOffice() as $post) {
-            $office->removePostsOffice($post);
-        }
-
-        /** @var Project $project */
-        foreach ($office->getProjects() as $project) {
-            $office->removeProject($project);
-        }
-
-        /** @var User $user */
-        foreach ($office->getUsers() as $user) {
-            $office->removeUser($user);
-        }
-
         $em->remove($office);
         $em->flush();
     }
