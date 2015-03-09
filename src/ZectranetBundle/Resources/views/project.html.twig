@@ -115,7 +115,7 @@
                                 </a>
                             </li>
                             <li data-toggle="tooltip" data-placement="top" title="Add new task" role="presentation">
-                                <a style="cursor: pointer" data-toggle="modal" data-target="#add_new_task">
+                                <a id="add_new_task_btn" style="cursor: pointer" data-toggle="modal" data-target="#add_new_task">
                                     <i class="fa fa-plus fa-2x"></i>
                                 </a>
                             </li>
@@ -278,8 +278,10 @@
         });
 
         $('#task-view-tabs a').click(function (e) {
+            if ($(this).id != $('a#add_new_task_btn').id) {
+                $(this).tab('show');
+            }
             e.preventDefault();
-            $(this).tab('show');
         });
 
         JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': 0 }) }}";

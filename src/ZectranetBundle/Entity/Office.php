@@ -64,20 +64,20 @@ class Office
     private $projects;
 
     /**
-     * @ORM\OneToMany(targetEntity="Sprint", mappedBy="office")
+     * @ORM\OneToMany(targetEntity="Sprint", mappedBy="office", cascade={"remove"})
      * @var ArrayCollection
      */
     private $sprints;
 
     /**
-     * @ORM\OneToMany(targetEntity="OfficePost", mappedBy="office")
+     * @ORM\OneToMany(targetEntity="OfficePost", mappedBy="office", cascade={"remove"})
      * @ORM\OrderBy({"posted" = "DESC"})
      * @var ArrayCollection
      */
     private $postsOffice;
 
     /**
-     * @ORM\OneToMany(targetEntity="OfficeRole", mappedBy="office")
+     * @ORM\OneToMany(targetEntity="OfficeRole", mappedBy="office", cascade={"remove"})
      * @var ArrayCollection
      */
     private $officeUserRoles;

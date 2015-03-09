@@ -102,7 +102,7 @@ class User implements UserInterface, \Serializable
     private $avatar;
 
     /**
-     * @ORM\OneToMany(targetEntity="Office", mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="Office", mappedBy="owner", cascade={"remove"})
      * @var ArrayCollection
      */
     private $ownedOffices;
@@ -114,7 +114,7 @@ class User implements UserInterface, \Serializable
     private $assignedOffices;
 
     /**
-     * @ORM\OneToMany(targetEntity="Task", mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="owner", cascade={"remove"})
      * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection
      */
@@ -128,7 +128,7 @@ class User implements UserInterface, \Serializable
     private $assignedTasks;
 
     /**
-     * @ORM\OneToMany(targetEntity="Project", mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="Project", mappedBy="owner", cascade={"remove"})
      * @ORM\OrderBy({"parentid" = "DESC"})
      * @var ArrayCollection
      */
@@ -142,45 +142,45 @@ class User implements UserInterface, \Serializable
     private $projects;
 
     /**
-     * @ORM\OneToMany(targetEntity="OfficePost", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="OfficePost", mappedBy="user", cascade={"remove"})
      * @var ArrayCollection
      */
     private $postsOffice;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProjectPost", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="ProjectPost", mappedBy="user", cascade={"remove"})
      * @var ArrayCollection
      */
     private $postsProject;
 
     /**
-     * @ORM\OneToMany(targetEntity="TaskPost", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="TaskPost", mappedBy="user", cascade={"remove"})
      * @var ArrayCollection
      */
     private $postsTask;
 
     /**
-     * @ORM\OneToMany(targetEntity="Document", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Document", mappedBy="user", cascade={"remove"})
      * @ORM\OrderBy({"uploaded" = "DESC"})
      * @var ArrayCollection
      */
     private $documents;
 
     /**
-     * @ORM\OneToMany(targetEntity="Notification", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Notification", mappedBy="user", cascade={"remove"})
      * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection
      */
     private $notifications;
 
     /**
-     * @ORM\OneToOne(targetEntity="UserSettings", mappedBy="user")
+     * @ORM\OneToOne(targetEntity="UserSettings", mappedBy="user", cascade={"remove"})
      * @var UserSettings
      */
     private $userSettings;
 
     /**
-     * @ORM\OneToMany(targetEntity="DailyTimeSheet", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="DailyTimeSheet", mappedBy="user", cascade={"remove"})
      * @ORM\OrderBy({"date" = "DESC"})
      * @var ArrayCollection
      */

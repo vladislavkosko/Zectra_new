@@ -54,7 +54,7 @@ class Project
 
     /**
      * @var integer
-     * @ORM\Column(name="parent_id", type="integer", nullable=true, options={"default":NULL})
+     * @ORM\Column(name="parent_id", type="integer", nullable=true, options={"default" = NULL})
      */
     private $parentid;
 
@@ -66,7 +66,7 @@ class Project
     protected $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="Project", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Project", mappedBy="parent", cascade={"remove"})
      * @var ArrayCollection
      */
     private $epicStories;
@@ -84,13 +84,13 @@ class Project
     private $offices;
 
     /**
-     * @ORM\OneToMany(targetEntity="Task", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="project", cascade={"remove"})
      * @var array
      */
     private $tasks;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProjectPost", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="ProjectPost", mappedBy="project", cascade={"remove"})
      * @ORM\OrderBy({"posted" = "DESC"})
      * @var array
      */
@@ -668,4 +668,3 @@ class Project
         $em->flush();
     }
 }
-

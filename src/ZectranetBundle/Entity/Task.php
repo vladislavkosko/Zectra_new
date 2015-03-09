@@ -97,7 +97,7 @@ class Task
     protected $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="Task", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="parent", cascade={"remove"})
      * @var ArrayCollection
      */
     private $subtasks;
@@ -155,7 +155,7 @@ class Task
     private $status;
 
     /**
-     * @ORM\OneToMany(targetEntity="TaskPost", mappedBy="task")
+     * @ORM\OneToMany(targetEntity="TaskPost", mappedBy="task", cascade={"remove"})
      * @var array
      */
     private $posts;
@@ -190,7 +190,7 @@ class Task
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="TaskLog", mappedBy="task")
+     * @ORM\OneToMany(targetEntity="TaskLog", mappedBy="task", cascade={"remove"})
      * @ORM\OrderBy({"date" = "DESC"})
      */
     private $logs;
