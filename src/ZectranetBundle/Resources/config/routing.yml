@@ -127,6 +127,12 @@ zectranet_settings_project:
     requirements:
         project_id: \d+
 
+zectranet_project_change_visible_state:
+    pattern: /project/{project_id}/settings/visibleStateChange
+    defaults: { _controller: ZectranetBundle:Project:visibleStateChange }
+    requirements:
+        project_id: \d+
+
 zectranet_get_project_members:
     pattern: /project/{project_id}/getMembers
     defaults: { _controller: ZectranetBundle:Project:getMembers }

@@ -12,6 +12,8 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
             $scope.projectOffices = null;
             $scope.offices = null;
 
+            $scope.projectVisible = null;
+
             $scope.urlGetEpicStories = JSON_URLS.getEpicStories;
             $scope.urlAddEpicStory = JSON_URLS.addEpicStory;
             $scope.urlDeleteEpicStories = JSON_URLS.deleteEpicStories;
@@ -20,6 +22,7 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
             $scope.urlgetProjectOffices = JSON_URLS.getOffices;
             $scope.urlAddOffices = JSON_URLS.addOffices;
             $scope.urlRemoveOffices = JSON_URLS.removeOffices;
+            $scope.urlChangeVisibleState = JSON_URLS.changeVisibleState;
         }
         // -------------------- End of Scope Variables ----------------------\\
 
@@ -87,6 +90,11 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                     $scope.promiseProject = $http
                         .post($scope.urlDeleteEpicStories, { 'epicStories': ids });
                 }
+            };
+
+            $scope.changeVisibleState = function (visible) {
+                $scope.visiblePromise = $http
+                    .post($scope.urlChangeVisibleState, { 'visible': visible });
             };
 
             function findElementById(what, from) {

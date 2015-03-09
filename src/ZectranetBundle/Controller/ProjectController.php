@@ -60,6 +60,29 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/project/{project_id}/settings/visibleStateChange")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $project_id
+     * @return Response
+     */
+    public function visibleStateChangeAction(Request $request, $project_id)
+    {
+        $data = json_decode($request->getContent(), true);
+        $data = (object)$data;
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $project->setVisible($data->visible);
+        $em->persist($project);
+        $em->flush();
+
+        $response = new Response(json_encode(array('success' => true)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
      * @Route("/project/{project_id}/getMembers")
      * @Security("has_role('ROLE_USER')")
      * @param int $project_id

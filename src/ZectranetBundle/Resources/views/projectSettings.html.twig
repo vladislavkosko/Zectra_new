@@ -21,6 +21,22 @@
                     <h4><i class="fa fa-briefcase"></i> Project Managment</h4>
                 </div>
 
+                <div class="row" style="margin-bottom: 25px;">
+                    <form class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-addon" cg-busy="visiblePromise">
+                                <input id="change-visible-state" type="checkbox" ng-model="projectVisible" value="{{ project.visible }}">
+                            </span>
+                            <label for="change-visible-state" class="form-control form-control-static">Project visible</label>
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default btn-success" ng-click="changeVisibleState(projectVisible);">Save</button>
+                            </span>
+                        </div>
+                        <div class="input-group">
+                        </div>
+                    </form>
+                </div>
+
                 <ul id="project-manage-tabs" class="nav nav-tabs">
                     <li class="active">
                         <a href="#users-manage" data-toggle="tab" class="btn">
@@ -201,6 +217,7 @@
     {{ parent() }}
     <script src="{{ asset('bundles/zectranet/js/custom/projectController.js') }}"></script>
     <script>
+        JSON_URLS.changeVisibleState = "{{ path('zectranet_project_change_visible_state', { 'project_id': project.id }) }}";
         JSON_URLS.getMembers = "{{ path('zectranet_get_project_members', { 'project_id': project.id }) }}";
         JSON_URLS.saveMembers = "{{ path('zectranet_save_project_members', { 'project_id': project.id }) }}";
         JSON_URLS.getOffices = "{{ path('zectranet_get_project_offices', { 'project_id': project.id }) }}";
