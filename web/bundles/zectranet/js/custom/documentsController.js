@@ -1,4 +1,5 @@
-Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', function($scope, $http, $modal){
+Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', '$compile', '$sce',
+    function($scope, $http, $modal, $compile, $sce) {
     console.log('DocumentsController was loaded!');
 
     $scope.promise = null;
@@ -44,7 +45,10 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', functi
                docsinchat = $scope.documents[i];
                console.log($scope.documents[i]);
 
-               textarea.val( textarea.val() + ' ' + '<img src =\" ' + $scope.asset + $scope.documents[i].url + '\"' +'>');
+               var compiledTags = $sce.trustAsHtml('<document name=\"' + docsinchat.name +'\" width=\"100px\" height=\"100px\" file=\"' + docsinchat.url + '\"></document>');
+               compiledTags = $sce.trustAsJs(compiledTags[0]);
+               textarea.val(textarea.val() +  '<br>');
+               //textarea.val( textarea.val() + ' ' + '<img src =\" ' + $scope.asset + $scope.documents[i].url + '\"' +'>');
            }
         }
         $('#add_dialog').modal('hide');

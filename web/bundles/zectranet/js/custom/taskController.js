@@ -1,9 +1,11 @@
 var taskController = Zectranet.controller('TaskController', ['$scope', '$http', '$rootScope',
     function($scope, $http, $rootScope) {
 
+        $scope.now = new Date('');
+
         $scope.taskModel = {
             'id': null, 'name': null, 'description': null, 'type': null,
-            'priority': null, 'startdate': null, 'enddate': null, 'parent': null
+            'priority': null, 'startdate': $scope.now, 'enddate': new Date(), 'parent': null
         };
 
         $scope.subtask = {
@@ -113,4 +115,5 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         };
         
         console.log('Task Controller was loaded');
-    }]);
+    }
+]);

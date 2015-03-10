@@ -1,5 +1,5 @@
-var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope','$paginator',
-    function($scope, $http, $rootScope, $paginator) {
+var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope', '$sce', '$paginator',
+    function($scope, $http, $rootScope, $sce, $paginator) {
 
         // ------------ BEGIN OF SCOPE VARIABLES ------------ \\
         {
@@ -23,9 +23,16 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         $scope.getPosts = function (offset, count) {
             $scope.promise = $http.post($scope.urlGetPosts, {'offset': offset , 'count': count})
                 .success(function (response) {
-                   $scope.posts = response.Posts;
+                   $scope.posts = preparePosts(response.Posts);
                 });
         };
+
+        function preparePosts(posts) {
+            for (var post in posts) {
+                post.message = $sce.trustAsHtml(post.message);
+            }
+            return posts;
+        }
 
         $scope.generateAsset = function (asset, url) {
             return asset + url;

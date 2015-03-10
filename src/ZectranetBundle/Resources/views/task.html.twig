@@ -404,7 +404,7 @@
                     <tbody>
                         {% for i, log in task.logs %}
                             <tr>
-                                <td>{{ i }}</td>
+                                <td>{{ i + 1 }}</td>
                                 <td>{{ log.user.name ~ ' ' ~ log.user.surname ~ ' (' ~ log.user.username ~ ')' }}</td>
                                 <td>{{ log.type }}</td>
                                 <td>{{ log.valueBefore }}</td>
