@@ -330,3 +330,10 @@ zectranet_sprint_get_tasks:
     defaults: { _controller: ZectranetBundle:Sprint:getTasks }
     requirements:
         sprint_id: \d+
+
+zectranet_sprint_change_state:
+    pattern: /sprint/{sprint_id}/changeState/{state}
+    defaults: { _controller: ZectranetBundle:Sprint:changeSprintState }
+    requirements:
+        sprint_id: \d+
+        state: \d+

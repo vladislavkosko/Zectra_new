@@ -114,7 +114,7 @@ class SprintController extends Controller {
      * @return Response
      */
     public function getTasksAction($sprint_id) {
-        /** @var EntityManager $em */
+        /** @var Task $tasks */
         $tasks = $this->getDoctrine()->getRepository('ZectranetBundle:Task')
             ->findBy(array('sprintid' => $sprint_id), array('id' => 'DESC'));
         $jsonTasks = array();
@@ -125,6 +125,27 @@ class SprintController extends Controller {
         $response = new Response(json_encode(array('Tasks' => $jsonTasks)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    /**
+     * @Route("/sprint/{sprint_id}/changeState/{state}")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $sprint_id
+     * @param int $state
+     * @return Response
+     */
+    public function changeSprintStateAction($sprint_id, $state) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $sprint = $em->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
+        $sprint->setStatus($em->getRepository('ZectranetBundle:SprintStatus')->find($state));
+        $em->persist($sprint);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_sprint', array(
+            'office_id' => $sprint->getOfficeid(),
+            'sprint_id' => $sprint->getId(),
+        ));
     }
 }
 

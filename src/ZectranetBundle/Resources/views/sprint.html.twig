@@ -40,7 +40,7 @@
                                 </a>
                             </div>
 
-                            <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Sprint Settings">
+                            <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="## Under Construction ##">
                                 <a style="cursor: pointer; text-decoration: none;">
                                     <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
                                 </a>
@@ -48,13 +48,13 @@
 
                             {% if sprint.status.label == 'Open' %}
                                 <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Start Sprint">
-                                    <a style="cursor: pointer; text-decoration: none;">
+                                    <a href="{{ path('zectranet_sprint_change_state', {'sprint_id': sprint.id, 'state': 2}) }}" style="text-decoration: none;">
                                         <i class="fa fa-fw fa-play-circle fa-2x" style="color: {{ sprint_status[1].color }}"></i>
                                     </a>
                                 </div>
                             {% elseif sprint.status.label == 'In-Progress' %}
                                 <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Stop Sprint">
-                                    <a style="cursor: pointer; text-decoration: none;">
+                                    <a href="{{ path('zectranet_sprint_change_state', {'sprint_id': sprint.id, 'state': 3}) }}" style="text-decoration: none;">
                                         <i class="fa fa-fw fa-pause fa-2x" style="color: {{ sprint_status[2].color }}"></i>
                                     </a>
                                 </div>
