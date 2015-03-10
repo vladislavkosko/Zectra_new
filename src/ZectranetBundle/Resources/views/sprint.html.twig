@@ -3,7 +3,7 @@
 {% block title %}Sprint page{% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row" ng-controller="SprintController" ng-init="getTasks();">
         <ol class="breadcrumb" style="margin: 0 -15px;">
             <li>
                 <a href="{{ path('zectranet_user_home') }}">Summary</a>
@@ -65,16 +65,86 @@
                 </div>
             </div>
         </div>
-
         {% include '@Zectranet/sprintDelete.html.twig' %}
+
+        <!-- Begin of Tasks -->
+        <div class="col-md-12">
+            <div class="panel panel-default list-group">
+                <div class="list-group-item active">
+                    <i class="fa fa-tasks"></i>
+                    <span>Tasks</span>
+                </div>
+                <div cg-busy="promise" class="panel-body">
+
+                    <!-- Begin of Task Nav Tabs -->
+                    <ul id="task-view-tabs" class="nav nav-tabs" role="tablist">
+                        <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
+                            <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
+                                <i class="fa fa-table fa-2x"></i>
+                            </a>
+                        </li>
+                        {#
+                        <li data-toggle="tooltip" data-placement="top" title="List view" role="presentation">
+                            <a data-toggle="tab" id="task-view-list" class="btn" href="#list-view" aria-controls="list-view" role="tab" aria-expanded="false">
+                                <i class="fa fa-list fa-2x"></i>
+                            </a>
+                        </li>
+                        #}
+                        <li data-toggle="tooltip" data-placement="top" title="Agile view" role="presentation">
+                            <a data-toggle="tab" id="task-view-agile"  class="btn" href="#agile-view" aria-controls="agile-view" role="tab" aria-expanded="false">
+                                <i class="fa fa-th fa-2x"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- End of Task Nav Tabs -->
+
+                    <div id="tasks-tab-content" class="tab-content">
+
+                        <!-- Begin of Task Table View -->
+                        <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
+                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-table-sprint.html') ~ '\'' }}"></ng-include>
+                        </div>
+                        <!-- End of Task Table View -->
+
+                        {#
+                        <!-- Begin of Task List View -->
+                        <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
+                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
+                        </div>
+                        <!-- End of Task List View -->
+                        #}
+
+                        <!-- Begin of Task Agile View -->
+                        <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
+                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-agile.html') ~ '\'' }}"></ng-include>
+                        </div>
+                        <!-- End of Task Agile View -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Tasks -->
     </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
+        JSON_URLS.getTasks = "{{ path('zectranet_sprint_get_tasks', { 'sprint_id': sprint.id }) }}";
+        JSON_URLS.showTask = "{{ path('zectranet_task_show', { 'task_id': 0 }) }}";
+    </script>
+
+    <script src="{{ asset('bundles/zectranet/js/custom/sprintController.js') }}" type="text/javascript"></script>
+    <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
+        });
+
+        $('#task-view-tabs a').click(function (e) {
+            if ($(this).id != $('a#add_new_task_btn').id) {
+                $(this).tab('show');
+            }
+            e.preventDefault();
         });
     </script>
 {% endblock %}

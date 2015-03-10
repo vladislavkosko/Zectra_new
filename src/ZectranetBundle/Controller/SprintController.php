@@ -106,6 +106,26 @@ class SprintController extends Controller {
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+
+    /**
+     * @Route("/sprint/{sprint_id}/getTasks")
+     * @Security("has_role('ROLE_USER')")
+     * @param $sprint_id
+     * @return Response
+     */
+    public function getTasksAction($sprint_id) {
+        /** @var EntityManager $em */
+        $tasks = $this->getDoctrine()->getRepository('ZectranetBundle:Task')
+            ->findBy(array('sprintid' => $sprint_id), array('id' => 'DESC'));
+        $jsonTasks = array();
+        /** @var Task $task */
+        foreach($tasks as $task) {
+            $jsonTasks[] = $task->getInArray();
+        }
+        $response = new Response(json_encode(array('Tasks' => $jsonTasks)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 }
 
 

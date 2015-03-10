@@ -336,3 +336,9 @@ zectranet_sprint_add_tasks:
     defaults: { _controller: ZectranetBundle:Sprint:addTasksToSprint }
     requirements:
         sprint_id: \d+
+
+zectranet_sprint_get_tasks:
+    pattern: /sprint/{sprint_id}/getTasks
+    defaults: { _controller: ZectranetBundle:Sprint:getTasks }
+    requirements:
+        sprint_id: \d+

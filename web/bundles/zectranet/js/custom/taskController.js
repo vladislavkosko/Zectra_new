@@ -37,7 +37,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         };
 
         $scope.getTasks = function () {
-            $scope.promise = $http.post($scope.urlGetTasks)
+            $scope.promise = $http.get($scope.urlGetTasks)
                 .success(function (response) {
                     $scope.tasks = response.Tasks;
                 });
