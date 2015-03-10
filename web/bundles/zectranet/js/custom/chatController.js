@@ -4,7 +4,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         // ------------ BEGIN OF SCOPE VARIABLES ------------ \\
         {
             $scope.posts = null;
-            $scope.message = '';
+            $rootScope.message = '';
 
             $scope.urlAddPost = JSON_URLS.addPost;
             $scope.urlGetPosts = JSON_URLS.getPosts;
@@ -28,8 +28,8 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         };
 
         function preparePosts(posts) {
-            for (var post in posts) {
-                post.message = $sce.trustAsHtml(post.message);
+            for (var i = 0; i < posts.length; i++) {
+                posts[i].message = $sce.trustAsHtml(posts[i].message);
             }
             return posts;
         }
@@ -39,7 +39,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         };
 
         $scope.SendPost = function (message) {
-            $scope.message = '';
+            $rootScope.message = '';
             var usersForPrivateMessage = $scope.getUsersForPrivateMessage(message);
 
             $http.post($scope.urlAddPost, {'message': message, 'usersForPrivateMessage': usersForPrivateMessage})

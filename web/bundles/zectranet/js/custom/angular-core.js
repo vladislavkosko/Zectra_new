@@ -138,8 +138,8 @@ Zectranet.directive('highlight', ['$sce', function($sce) {
 		link: function($scope, element, attrs) {
 			var username = true;
 
-			//var message = $sce.getTrustedHtml($scope.post.message);
-			var message = $scope.post.message;
+			var message = $sce.getTrustedHtml($scope.post.message);
+			//var message = $scope.post.message;
 
 			regex = new RegExp('@all', 'mig');
 			matches = message.match(regex);
@@ -161,8 +161,8 @@ Zectranet.directive('highlight', ['$sce', function($sce) {
 					message = msg;
 				}
 			}
-			//$scope.post.message = $sce.trustAsHtml(message);
-			$scope.post.message = message;
+			$scope.post.message = $sce.trustAsHtml(message);
+			//$scope.post.message = message;
 		}
 	}
 }]);

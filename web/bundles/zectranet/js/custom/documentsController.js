@@ -1,5 +1,5 @@
-Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', '$compile', '$sce',
-    function($scope, $http, $modal, $compile, $sce) {
+Zectranet.controller('DocumentsController', ['$scope', '$http', '$rootScope', '$modal','$sce','$compile',
+    function($scope, $http, $rootScope, $modal , $sce ,$compile){
     console.log('DocumentsController was loaded!');
 
     $scope.promise = null;
@@ -43,12 +43,11 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', '$comp
            if($scope.documents[i].checked)
            {
                docsinchat = $scope.documents[i];
-               console.log($scope.documents[i]);
+               var Tags = ' <a data-lightbox=\"some\" class=\"doc-show\"  href=\"'+ $scope.asset + $scope.documents[i].url +'\" > '+
+                           ' <img src=\"'+$scope.asset + $scope.documents[i].url +'\" class=\"zoom-images\" /> '+
+                           ' </a> ';
 
-               var compiledTags = $sce.trustAsHtml('<document name=\"' + docsinchat.name +'\" width=\"100px\" height=\"100px\" file=\"' + docsinchat.url + '\"></document>');
-               compiledTags = $sce.trustAsJs(compiledTags[0]);
-               textarea.val(textarea.val() +  '<br>');
-               //textarea.val( textarea.val() + ' ' + '<img src =\" ' + $scope.asset + $scope.documents[i].url + '\"' +'>');
+               $rootScope.message += Tags;
            }
         }
         $('#add_dialog').modal('hide');
