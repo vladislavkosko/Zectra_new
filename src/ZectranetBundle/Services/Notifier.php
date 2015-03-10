@@ -285,7 +285,8 @@ class Notifier
                 $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $user_to_send_name . '"';
             else
                 $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
-            $users  = $temp;
+            if ($temp != null) $users  = $temp;
+            else $users = $destination->getUsers();
         }
 
         else

@@ -29,7 +29,14 @@ class OfficePostController extends Controller
         $new_post = OfficePost::addNewPost($em, $user->getId(), $office_id, $post->message);
 
         $usersName = array();
-        if ($post->usersForPrivateMessage != null)
+        $privateForAll = false;
+        if ($post->usersForPrivateMessage == 'all')
+        {
+            $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post);
+            $privateForAll = true;
+        }
+
+        if (($post->usersForPrivateMessage != null) and ($privateForAll == false))
         {
             $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $post->usersForPrivateMessage));
             if (count($usersEmail) > 0)
@@ -38,9 +45,11 @@ class OfficePostController extends Controller
                     $usersName[] = $userEmail->getUsername();
                 $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, $usersEmail);
             }
+
         }
 
-        $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $office, null, $post, $usersName);
+        if ($privateForAll == false)
+            $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $office, null, $post, $usersName);
 
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');

@@ -51,6 +51,10 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             if (matches != null){
                 for (var i = 0; i < matches.length; i++){
                     matches[i] = matches[i].replace('@', '');
+                    if (matches[i].toLowerCase() == 'all'){
+                        matches = 'all';
+                        break;
+                    }
                 }
             }
 
