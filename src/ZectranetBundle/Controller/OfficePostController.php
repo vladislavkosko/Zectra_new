@@ -35,6 +35,11 @@ class OfficePostController extends Controller
         return $response;
     }
 
+    public function sendPrivateMessageAction(Request $request, $office_id)
+    {
+
+    }
+
 
     public function getPostsAction(Request $request, $office_id) {
         /** @var EntityManager $em */

@@ -1,6 +1,5 @@
 var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope','$paginator',
     function($scope, $http, $rootScope, $paginator) {
-        console.log('Chat Controller was loaded');
 
         // ------------ BEGIN OF SCOPE VARIABLES ------------ \\
         {
@@ -9,6 +8,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
 
             $scope.urlAddPost = JSON_URLS.addPost;
             $scope.urlGetPosts = JSON_URLS.getPosts;
+            $scope.urlSendPrivateMessage = JSON_URLS.sendPrivateMessage;
 
             $scope.urlAsset = JSON_URLS.asset;
             $scope.USER_ID = USER_ID;
@@ -34,10 +34,31 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
 
         $scope.SendPost = function (message) {
             $scope.message = '';
+            var usersForPrivateMessage = $scope.getUsersForPrivateMessage(message);
+            if (usersForPrivateMessage != null){
+                $http.post($scope.urlSendPrivateMessage, {'usersForPrivateMessage': usersForPrivateMessage});
+            }
+
             $http.post($scope.urlAddPost, {'message': message})
                 .success(function (response) {
                     $scope.getPosts(0, 100);
                 });
+        };
+
+        // ---- generate users for send private message to Email ----
+
+        $scope.getUsersForPrivateMessage = function(msg){
+
+            var regex = new RegExp('@[A-Za-z]{1,20}', 'mig');
+            var matches = msg.match(regex);
+
+            if (matches != null){
+                for (var i = 0; i < matches.length; i++){
+                    matches[i] = matches[i].replace('@', '');
+                }
+            }
+
+            return matches;
         };
 
         //InsertScreenshots ctrl + V
@@ -79,5 +100,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             };
         }
         //End InsertScreenshots ctrl + V
+
+        console.log('Chat Controller was loaded');
 
     }]);

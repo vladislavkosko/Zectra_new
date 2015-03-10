@@ -40,6 +40,11 @@ class ProjectPostController extends Controller
         return $response;
     }
 
+    public function sendPrivateMessageAction(Request $request, $project_id)
+    {
+
+    }
+
     public function getPostsAction(Request $request, $project_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();

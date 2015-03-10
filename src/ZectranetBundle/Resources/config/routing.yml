@@ -133,6 +133,12 @@ zectranet_office_add_post:
     requirements:
         office_id: \d+
 
+zectranet_offise_send_private_message:
+    pattern: /office/{office_id}/addNewPost
+    defaults: { _controller: ZectranetBundle:OfficePost:sendPrivateMessage }
+    requirements:
+        office_id: \d+
+
 zectranet_office_get_post:
     pattern: /office/{office_id}/getPosts
     defaults: { _controller: ZectranetBundle:OfficePost:getPosts }
@@ -200,6 +206,12 @@ zectranet_delete_project:
 zectranet_project_add_post:
     pattern: /project/{project_id}/addNewPost
     defaults: { _controller: ZectranetBundle:ProjectPost:addPost }
+    requirements:
+        project_id: \d+
+
+zectranet_project_send_private_message:
+    pattern: /project/{project_id}/addNewPost
+    defaults: { _controller: ZectranetBundle:ProjectPost:sendPrivateMessage }
     requirements:
         project_id: \d+
 
