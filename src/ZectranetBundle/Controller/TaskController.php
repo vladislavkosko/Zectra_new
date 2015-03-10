@@ -75,7 +75,7 @@ class TaskController extends Controller {
             $nameEpicStory = $project->getName();
             $project = $project->getParent();
         }
-        $this->get('zectranet.notifier')->createNotification("task_deleted", $project, $user, $project, $nameEpicStory);
+        $this->get('zectranet.notifier')->createNotification("task_deleted", $project, $user, $project, $nameEpicStory, null, $task->getName());
 
         $response = new Response(json_encode(null));
         $response->headers->set('Content-Type', 'application/json');

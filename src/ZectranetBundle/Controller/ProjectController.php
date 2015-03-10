@@ -267,6 +267,7 @@ class ProjectController extends Controller
             foreach ($epicStories as $story) {
                 if ($story->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN')) {
                     Project::deleteProject($em, $story->getId());
+                    $this->get('zectranet.notifier')->createNotification("epic_story_deleted", $story->getParent(), $user, $story->getParent(), null, null, $story->getName());
                 }
             }
         }
@@ -328,7 +329,7 @@ class ProjectController extends Controller
             $nameEpicStory = $project->getName();
             $project = $project->getParent();
         }
-        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory);
+        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory, null, $parameters['name']);
 
         $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
@@ -369,7 +370,7 @@ class ProjectController extends Controller
             $nameEpicStory = $project->getName();
             $project = $project->getParent();
         }
-        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory);
+        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory, null, $parameters['name']);
 
 
         $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
@@ -416,7 +417,7 @@ class ProjectController extends Controller
 
         $epicStory = Project::addEpicStory($em, $project_id, $user, $data);
 
-        $this->get('zectranet.notifier')->createNotification("epic_story_added", $project, $user, $project);
+        $this->get('zectranet.notifier')->createNotification("epic_story_added", $project, $user, $project, null, null, $data->name);
 
         $response = new Response(json_encode(array('EpicStory' => $epicStory->getInArray())));
         $response->headers->set('Content-Type', 'application/json');

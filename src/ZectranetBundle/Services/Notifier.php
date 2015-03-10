@@ -2,6 +2,7 @@
 
 namespace ZectranetBundle\Services;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -41,16 +42,16 @@ class Notifier
         "task_added",                     // +
         "epic_story_added",               // +
         "task_deleted",                   // +
-        "epic_story_deleted",             // -
+        "epic_story_deleted",             // +
 
         "request_office",                 // -
         "request_user_project",           // -
         "request_project",                // -
         "request_assign_task",            // -
 
-        "private_message_office",         // -
-        "private_message_project",        // -
-        "private_message_epic_story",     // -
+        "private_message_office",         // +
+        "private_message_project",        // +
+        "private_message_epic_story",     // +
         "private_message_task",           // -
     );
 
@@ -105,22 +106,6 @@ class Notifier
 
 		switch ($type){
 
-			case "message_office":
-				$method = $user_settings->getMsgEmailMessageOffice();
-				break;
-
-			case "message_project":
-				$method = $user_settings->getMsgEmailMessageProject();
-				break;
-
-			case "message_epic_story":
-				$method = $user_settings->getMsgEmailMessageEpicStory();
-				break;
-
-			case "message_task":
-				$method = $user_settings->getMsgEmailMessageTask();
-				break;
-//-----------------------------------------------------------------------------------
 			case "task_added":
 				$method = $user_settings->getMsgEmailTaskAdded();
 				break;
@@ -142,6 +127,9 @@ class Notifier
             $method = true;
 
         if (in_array($type, array("private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
+            $method = true;
+
+        if (in_array($type, array("message_office", "message_project", "message_epic_story", "message_task")))
             $method = true;
 
         if($method == true)
@@ -257,9 +245,10 @@ class Notifier
      * @param Project|Office $destination
      * @param string|null $user_to_send_name
      * @param object|null $post
+     * @param array|null $temp
      * @return bool
      */
-	public function createNotification($type, $resource, User $user, $destination, $user_to_send_name = null, $post = null)
+	public function createNotification($type, $resource, User $user, $destination, $user_to_send_name = null, $post = null, $temp = null)
 	{
 		$users = null;
 		$message = null;
@@ -272,7 +261,14 @@ class Notifier
                 $message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$user_to_send_name.'"';
             else
                 $message = 'New message from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
-            $users = $destination->getUsers();
+            if (count($temp) > 0)
+            {
+                $users = array();
+                foreach ($destination->getUsers() as $usr)
+                    if (!in_array($usr->getUsername(), $temp)) $users[] = $usr;
+            }
+            else
+                $users = $destination->getUsers();
         }
 
         elseif (in_array($type, array("message_task")))
@@ -285,10 +281,11 @@ class Notifier
 
         elseif (in_array($type, array("private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
         {
-            if ($resource) {
+            if ($user_to_send_name != null)
+                $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $user_to_send_name . '"';
+            else
                 $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
-                $users = User::getUserByUsername($this->em, $user_to_send_name);
-            }
+            $users  = $temp;
         }
 
         else
@@ -326,16 +323,16 @@ class Notifier
                 case "task_added":
                 {
                     if ($user_to_send_name != null)
-                        $message = 'New task in "'.$user_to_send_name.'"';
+                        $message = 'New task "'. $temp . '"' . ' in "'.$user_to_send_name.'"';
                     else
-                        $message = 'New task in "'.$destination->getName().'"';
+                        $message = 'New task "'. $temp . '"' . ' in "'.$destination->getName().'"';
                     $users = $destination->getUsers();
                     break;
                 }
 
                 case "epic_story_added":
                 {
-                    $message = 'New epic story in "'.$destination->getName().'"';
+                    $message = 'New epic story "'. $temp . '"' . ' in "' . $destination->getName().'"';
                     $users = $destination->getUsers();
                     break;
                 }
@@ -343,16 +340,16 @@ class Notifier
                 case "task_deleted":
                 {
                     if ($user_to_send_name != null)
-                        $message = 'Deleted task in "'.$user_to_send_name.'"';
+                        $message = 'Deleted task "'. $temp . '"' . ' in "'.$user_to_send_name.'"';
                     else
-                        $message = 'Deleted task in "'.$destination->getName().'"';
+                        $message = 'Deleted task "'. $temp . '"' . ' in "'.$destination->getName().'"';
                     $users = $destination->getUsers();
                     break;
                 }
 
                 case "epic_story_deleted":
                 {
-                    $message = 'Deleted epic story in "'.$destination->getName().'"';
+                    $message = 'Deleted epic story "'. $temp . '"' . ' in "'.$destination->getName().'"';
                     $users = $destination->getUsers();
                     break;
                 }

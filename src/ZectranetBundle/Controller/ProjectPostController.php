@@ -24,25 +24,32 @@ class ProjectPostController extends Controller
         /** @var User $user */
         $user = $this->getUser();
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
-
-        $new_post = ProjectPost::addNewPost($em, $user->getId(), $project_id, $post->message);
-
         $nameEpicStory = null;
         if ($project->getParent())
         {
             $nameEpicStory = $project->getName();
             $project = $project->getParent();
         }
-        $this->get('zectranet.notifier')->createNotification("message_project", $user, $user, $project, $nameEpicStory, $post);
+
+        $new_post = ProjectPost::addNewPost($em, $user->getId(), $project_id, $post->message);
+
+        $usersName = array();
+        if ($post->usersForPrivateMessage != null)
+        {
+            $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $post->usersForPrivateMessage));
+            if (count($usersEmail) > 0)
+            {
+                foreach ($usersEmail as $userEmail)
+                    $usersName[] = $userEmail->getUsername();
+                $this->get('zectranet.notifier')->createNotification("private_message_project", $user, $user, $project, $nameEpicStory, $post, $usersEmail);
+            }
+        }
+
+        $this->get('zectranet.notifier')->createNotification("message_project", $user, $user, $project, $nameEpicStory, $post, $usersName);
 
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
-    }
-
-    public function sendPrivateMessageAction(Request $request, $project_id)
-    {
-
     }
 
     public function getPostsAction(Request $request, $project_id) {

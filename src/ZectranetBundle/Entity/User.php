@@ -953,16 +953,6 @@ class User implements UserInterface, \Serializable
 
     /**
      * @param EntityManager $em
-     * @param string $username
-     * @return User
-     */
-    public static function getUserByUsername($em, $username)
-    {
-        return $em->getRepository('ZectranetBundle:User')->findOneBy(array('username' => $username));
-    }
-
-    /**
-     * @param EntityManager $em
      * @param EncoderFactory $encoderFactory
      * @param array $parameters
      * @return User
