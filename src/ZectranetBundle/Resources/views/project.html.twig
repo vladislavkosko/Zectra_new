@@ -333,7 +333,7 @@
                     <div class="list-group-item">
                         <form class="input-group input-group-lg">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" style="height: 65px;">
+                                <button class="btn btn-default" type="button" style="height: 65px;"  data-placement="top" id="add_dialog_btn"  data-toggle="modal" data-target="#add_dialog">
                                     <i class="fa fa-file"></i>
                                 </button>
                             </span>
@@ -353,6 +353,7 @@
                     </div>
                 </div>
                 <!-- END OF CHAT PANEL -->
+                {% include '@Zectranet/dialogAdd.html.twig' %}
             </div>
         </div>
 
@@ -407,4 +408,18 @@
     <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/taskController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/projectController.js') }}" type="text/javascript"></script>
+
+    <script src="{{ asset('bundles/zectranet/js/custom/documentsController.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/jquery.knob.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/jquery.ui.widget.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/jquery.iframe-transport.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/jquery.fileupload.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/script.js') }}" type="text/javascript"></script>
+
+    <script>
+        var getDocuments_;
+        JSON_URLS.documentsGet = "{{ path('zectranet_document_get') }}";
+        JSON_URLS.deleteFile  = "{{ path('zectranet_document_delete', { fileid : 0 }) }}";
+        JSON_URLS.renameFile  = "{{ path('zectranet_document_rename', { fileid : 0 }) }}";
+    </script>
 {% endblock %}

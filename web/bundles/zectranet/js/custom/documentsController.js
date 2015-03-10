@@ -6,6 +6,7 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', functi
     $scope.urlDeleteFile = JSON_URLS.deleteFile;
     $scope.urlRenameFile = JSON_URLS.renameFile;
     $scope.urlsDocumentsGet = JSON_URLS.documentsGet;
+    $scope.asset = JSON_URLS.asset;
     $scope.curr_doc_id = null;
     $scope.newName = null;
 
@@ -30,6 +31,24 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$modal', functi
                 if(response.message = "OK")
                     getDocuments();
             })
+    };
+
+    $scope.addDocInChat = function()
+    {
+        var docsinchat = [];
+        var textarea = $('#textarea-post');
+        for(var i=0;i < $scope.documents.length;i++)
+        {
+           if($scope.documents[i].checked)
+           {
+               docsinchat = $scope.documents[i];
+               console.log($scope.documents[i]);
+
+               textarea.val( textarea.val() + ' ' + '<img src =\" ' + $scope.asset + $scope.documents[i].url + '\"' +'>');
+           }
+        }
+        $('#add_dialog').modal('hide');
+        textarea.focus();
     };
 
     $scope.rename = function() {
