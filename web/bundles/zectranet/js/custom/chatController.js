@@ -45,7 +45,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
 
         $scope.getUsersForPrivateMessage = function(msg){
 
-            var regex = new RegExp('@[A-Za-z]{1,20}', 'mig');
+            var regex = new RegExp('@[A-Za-z0-9]{1,20}', 'mig');
             var matches = msg.match(regex);
 
             if (matches != null){
