@@ -134,7 +134,7 @@ zectranet_office_add_post:
         office_id: \d+
 
 zectranet_offise_send_private_message:
-    pattern: /office/{office_id}/addNewPost
+    pattern: /office/{office_id}/send_pivate_message
     defaults: { _controller: ZectranetBundle:OfficePost:sendPrivateMessage }
     requirements:
         office_id: \d+
@@ -210,7 +210,7 @@ zectranet_project_add_post:
         project_id: \d+
 
 zectranet_project_send_private_message:
-    pattern: /project/{project_id}/addNewPost
+    pattern: /project/{project_id}/send_pivate_message
     defaults: { _controller: ZectranetBundle:ProjectPost:sendPrivateMessage }
     requirements:
         project_id: \d+
