@@ -161,6 +161,8 @@
             {% include '@Zectranet/taskAddSub.html.twig' %}
 
             {% include '@Zectranet/taskDelete.html.twig' %}
+
+            {% include '@Zectranet/projectAddTaskToSprint.html.twig' %}
             <!-- End of Task operations modals -->
 
         </div>
@@ -305,6 +307,9 @@
 
         JSON_URLS.getEpicStories = "{{ path('zectranet_project_get_epic_stories', { 'project_id': project.id }) }}";
         JSON_URLS.addEpicStory = "{{ path('zectranet_project_add_epic_story', { 'project_id': project.id }) }}";
+
+        JSON_URLS.showSprint = "{{ path('zectranet_show_sprint', { 'office_id': 0, 'sprint_id': 1 }) }}";
+        JSON_URLS.sprintAddTasks = "{{ path('zectranet_sprint_add_tasks', { 'sprint_id': 0 }) }}";
 
     </script>
 

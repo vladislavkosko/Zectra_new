@@ -330,3 +330,9 @@ zectranet_sprint_delete:
     requirements:
         office_id: \d+
         sprint_id: \d+
+
+zectranet_sprint_add_tasks:
+    pattern: /sprint/{sprint_id}/addTasksToSprint
+    defaults: { _controller: ZectranetBundle:Sprint:addTasksToSprint }
+    requirements:
+        sprint_id: \d+

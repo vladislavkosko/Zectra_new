@@ -10,9 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
-use ZectranetBundle\Entity\Project;
-use ZectranetBundle\Entity\ProjectPost;
+use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Task;
 use ZectranetBundle\Entity\User;
 use ZectranetBundle\Entity\Sprint;
@@ -75,15 +73,39 @@ class SprintController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $sprint = $em->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
-        $em->remove($sprint);
-        $em->flush();
+        if ($sprint) {
+            $em->remove($sprint);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('zectranet_show_office', array(
             'office_id' => $office_id
         ));
     }
 
+    /**
+     * @Route("/sprint/{sprint_id}/addTasksToSprint")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $sprint_id
+     * @return Response
+     */
+    public function addTasksToSprintAction(Request $request, $sprint_id) {
+        $data = json_decode($request->getContent(), true);
+        $tasks = (object) $data['tasks'];
+        $ids = array();
+        foreach ($tasks as $task) {
+            $ids[] = $task['id'];
+        }
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
 
+        Sprint::addTasksToSprint($em, $sprint_id, $ids);
+
+        $response = new Response(json_encode(array('success' => true)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 }
 
 

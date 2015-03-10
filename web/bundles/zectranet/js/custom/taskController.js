@@ -1,5 +1,5 @@
-var taskController = Zectranet.controller('TaskController', ['$scope', '$http', '$rootScope','$paginator',
-    function($scope, $http, $rootScope, $paginator) {
+var taskController = Zectranet.controller('TaskController', ['$scope', '$http', '$rootScope',
+    function($scope, $http, $rootScope) {
 
         $scope.taskModel = {
             'id': null, 'name': null, 'description': null, 'type': null,
@@ -11,14 +11,18 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             'startdate': null, 'enddate': null, 'parent': null
         };
 
+        $scope.sprint_id = null;
         $scope.tasks = null;
+
+        $scope.USER_ID = USER_ID;
+
         $scope.urlGetTasks = null;
         $scope.urlAddTask  = null;
         $scope.urlAddSubTask = null;
         $scope.urlDeleteTask = JSON_URLS.deleteTask;
         $scope.urlShowTask = JSON_URLS.showTask;
-
-        $scope.USER_ID = USER_ID;
+        $scope.urlAddTasksToSprint = JSON_URLS.sprintAddTasks;
+        $scope.urlShowSprint = JSON_URLS.showSprint;
 
         $scope.urlTaskTable = JSON_URLS.urlTaskTable;
         $scope.urlTaskList = JSON_URLS.urlTaskList;
@@ -84,8 +88,28 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             }
         };
 
+        $scope.addTaskToSprint = function (task, sprint_id) {
+            if (task.id && sprint_id) {
+                $('#add_task_to_sprint').modal('hide');
+                var tasks = []; tasks.push(task);
+                $scope.promise = $http
+                    .post($scope.urlAddTasksToSprint.replace('0', sprint_id), { 'tasks': tasks })
+                    .success(function (response) {
+                        if (response.success) {
+                            $scope.getTasks();
+                        }
+                    }
+                );
+            }
+        };
+
         $scope.assignTaskHref = function (task_id) {
             return $scope.urlShowTask.replace('0', task_id);
+        };
+
+        $scope.assignSprintHref = function (office_id, sprint_id) {
+            var url = $scope.urlShowSprint.replace('0', 'office_id').replace('1', 'sprint_id');
+            return url.replace('office_id', office_id).replace('sprint_id', sprint_id);
         };
         
         console.log('Task Controller was loaded');

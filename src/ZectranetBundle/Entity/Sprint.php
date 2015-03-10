@@ -260,6 +260,19 @@ class Sprint
     }
 
     /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'officeid' => $this->getOfficeid(),
+            'status' => $this->getStatus()->getInArray(),
+        );
+    }
+
+    /**
      * @param EntityManager $em
      * @param int $office_id
      * @param array $params
@@ -275,5 +288,24 @@ class Sprint
         $em->flush();
 
         return $sprint;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $sprint_id
+     * @param array $task_ids
+     */
+    public static function addTasksToSprint(EntityManager $em, $sprint_id, $task_ids) {
+        $tasks = $em->getRepository('ZectranetBundle:Task')
+            ->findBy(array('id' => $task_ids));
+        if (count($tasks) > 0) {
+            $sprint = $em->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
+            /** @var Task $task */
+            foreach ($tasks as $task) {
+                $task->setSprint($sprint);
+                $em->persist($task);
+            }
+            $em->flush();
+        }
     }
 }

@@ -1064,7 +1064,8 @@ class Task
             'status' => $this->getStatus()->getInArray(),
             'type' => $this->getType()->getInArray(),
             'priority' => $this->getPriority()->getInArray(),
-            'subtasks' => $subtasks
+            'subtasks' => $subtasks,
+            'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
         );
     }
 }

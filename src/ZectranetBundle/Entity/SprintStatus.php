@@ -159,4 +159,15 @@ class SprintStatus
     public static function getClosedStatus(EntityManager $em) {
         return $em->getRepository('ZectranetBundle:SprintStatus')->find(3);
     }
+
+    /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'color' => $this->getColor(),
+            'label' => $this->getLabel(),
+        );
+    }
 }
