@@ -116,49 +116,63 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-tasks noclose">
-                            {% if (app.user.assignedTasks | length > 0) or (app.user.ownedtasks | length > 0   ) %}
+
+                            {% set tasksAssigned = [] %}
+
+                            {% for task in app.user.assignedTasks if task.status.label == 'in-progress'  %}
+                                {% set tasksAssigned = tasksAssigned | merge([task]) %}
+                            {% endfor %}
+
+                            {% set tasksOwned = [] %}
+
+                            {% for task in app.user.OwnedTasks if task.status.label == 'in-progress'  %}
+                                {% set tasksOwned = tasksOwned | merge([task]) %}
+                            {% endfor %}
+
+                            {% if (tasksAssigned | length > 0) or (tasksOwned | length > 0) %}
+
                                 <li class="text-center" style="margin-top: 5px;"><b>TASKS  <span style="color: violet;">IN-PROGRESS </span></b></li>
+
+                                {% for task in tasksAssigned | slice(0, 1) %}
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a href="{{ path('zectranet_task_show', {task_id: task.id}) }}">
+                                            <div>
+                                                <p>
+                                                    <span style="display: inline-block; width: 70%; word-wrap: break-word;"><b>{{ task.name  }}</b></span>
+                                                    <span class="pull-right text-muted" style="display: inline-block; width: 28%; text-align: right;">{{ task.progress }}% Complete</span>
+                                                </p>
+                                                <div class="progress progress-striped active">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ task.progress }}%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+
+                                {% for task in tasksOwned | slice(0, 2) %}
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a href="{{ path('zectranet_task_show', {task_id: task.id}) }}">
+                                            <div>
+                                                <p>
+                                                    <span style="display: inline-block; width: 70%; word-wrap: break-word;"><b>{{ task.name  }}</b></span>
+                                                    <span class="pull-right text-muted" style="display: inline-block; width: 28%; text-align: right;">{{ task.progress }}% Complete</span>
+                                                </p>
+                                                <div class="progress progress-striped active">
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ task.progress }}%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+
+                                {% endfor %}
+
                             {% endif %}
-                            {% for task in app.user.assignedTasks | slice(0, 1) %}
-                                <li class="divider"></li>
-
-                                <li>
-                                    <a href="{{ path('zectranet_task_show', {task_id: task.id}) }}">
-                                        <div>
-                                            <p>
-                                                <span style="display: inline-block; width: 70%; word-wrap: break-word;"><b>{{ task.name  }}</b></span>
-                                                <span class="pull-right text-muted" style="display: inline-block; width: 28%; text-align: right;">{{ task.progress }}% Complete</span>
-                                            </p>
-                                            <div class="progress progress-striped active">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ task.progress }}%">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            {% endfor %}
-
-
-                            {% for task in app.user.ownedTasks | slice(0, 2) %}
-                                <li class="divider"></li>
-
-                                <li>
-                                    <a href="{{ path('zectranet_task_show', {task_id: task.id}) }}">
-                                        <div>
-                                            <p>
-                                                <span style="display: inline-block; width: 70%; word-wrap: break-word;"><b>{{ task.name  }}</b></span>
-                                                <span class="pull-right text-muted" style="display: inline-block; width: 28%; text-align: right;">{{ task.progress }}% Complete</span>
-                                            </p>
-                                            <div class="progress progress-striped active">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ task.progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ task.progress }}%">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-
-                            {% endfor %}
-
 
                             <li class="divider"></li>
 
