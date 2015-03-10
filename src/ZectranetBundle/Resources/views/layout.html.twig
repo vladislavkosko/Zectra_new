@@ -116,8 +116,9 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-tasks noclose">
-                            <li class="text-center" style="margin-top: 5px;"><b>TASKS  <span style="color: violet;">IN-PROGRESS </span></b></li>
-
+                            {% if (app.user.assignedTasks | length > 0) or (app.user.ownedtasks | length > 0   ) %}
+                                <li class="text-center" style="margin-top: 5px;"><b>TASKS  <span style="color: violet;">IN-PROGRESS </span></b></li>
+                            {% endif %}
                             {% for task in app.user.assignedTasks | slice(0, 1) %}
                                 <li class="divider"></li>
 
