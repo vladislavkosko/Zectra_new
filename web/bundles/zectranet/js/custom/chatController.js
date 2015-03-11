@@ -46,7 +46,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             {
                 documents = documents + $rootScope.DocumentsInChat[i]
             }
-            $http.post($scope.urlAddPost, {'message': message + documents, 'usersForPrivateMessage': usersForPrivateMessage})
+            $http.post($scope.urlAddPost, {'message': message + '<br>' + documents, 'usersForPrivateMessage': usersForPrivateMessage})
                 .success(function (response) {
                     $scope.getPosts(0, 100);
                     $rootScope.DocumentsInChat = [];
