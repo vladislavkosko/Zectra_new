@@ -41,7 +41,7 @@ class Request
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\Column(name="user_id", type="integer", nullable=true)
      */
     private $userid;
 
@@ -55,12 +55,12 @@ class Request
     /**
      * @var integer
      *
-     * @ORM\Column(name="project_id", type="integer")
+     * @ORM\Column(name="project_id", type="integer", nullable=true)
      */
     private $projectid;
 
     /**
-     * @var User
+     * @var Project
      * @ORM\ManyToOne(targetEntity="Project")
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
@@ -69,16 +69,30 @@ class Request
     /**
      * @var integer
      *
-     * @ORM\Column(name="office_id", type="integer")
+     * @ORM\Column(name="office_id", type="integer", nullable=true)
      */
     private $officeid;
 
     /**
-     * @var User
+     * @var Office
      * @ORM\ManyToOne(targetEntity="Office")
      * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
      */
     private $office;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="task_id", type="integer", nullable=true)
+     */
+    private $taskid;
+
+    /**
+     * @var Task
+     * @ORM\ManyToOne(targetEntity="Task")
+     * @ORM\JoinColumn(name="task_id", referencedColumnName="id")
+     */
+    private $task;
 
     /**
      * Get id
@@ -272,5 +286,51 @@ class Request
     public function getOffice()
     {
         return $this->office;
+    }
+
+    /**
+     * Set taskid
+     *
+     * @param integer $taskid
+     * @return Request
+     */
+    public function setTaskid($taskid)
+    {
+        $this->taskid = $taskid;
+
+        return $this;
+    }
+
+    /**
+     * Get taskid
+     *
+     * @return integer 
+     */
+    public function getTaskid()
+    {
+        return $this->taskid;
+    }
+
+    /**
+     * Set task
+     *
+     * @param \ZectranetBundle\Entity\Task $task
+     * @return Request
+     */
+    public function setTask(\ZectranetBundle\Entity\Task $task = null)
+    {
+        $this->task = $task;
+
+        return $this;
+    }
+
+    /**
+     * Get task
+     *
+     * @return \ZectranetBundle\Entity\Task 
+     */
+    public function getTask()
+    {
+        return $this->task;
     }
 }
