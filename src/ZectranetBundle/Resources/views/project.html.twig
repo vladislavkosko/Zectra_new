@@ -63,14 +63,16 @@
                         Epic Stories
                     </div>
                     <div cg-busy="promiseProject">
-                        <a class="list-group-item" ng-repeat="story in epicStories" style="cursor: pointer;"
-                           ng-init="story.selected = false;" ng-class="{'list-group-item-success': story.selected }"
-                           ng-click="changeCurrentPage(story.id); highlightCurrentEpicStory(story.id);">
-                            <i class="fa fa-briefcase"></i>
-                            [[ story.name ]]
-                        </a>
-                        <div class="list-group-item" ng-if="epicStories.length == 0">
-                            <h4 class="text-center text-info">Epic Stories will be displayed here</h4>
+                        <div style="max-height: 168px; overflow-y: auto;">
+                            <a class="list-group-item" ng-repeat="story in epicStories" style="cursor: pointer;"
+                               ng-init="story.selected = false;" ng-class="{'list-group-item-success': story.selected }"
+                               ng-click="changeCurrentPage(story.id); highlightCurrentEpicStory(story.id);">
+                                <i class="fa fa-briefcase"></i>
+                                [[ story.name ]]
+                            </a>
+                            <div class="list-group-item" ng-if="epicStories.length == 0">
+                                <h4 class="text-center text-info">Epic Stories will be displayed here</h4>
+                            </div>
                         </div>
                         {% if app.user.id == project.owner.id %}
                             <div class="form-group">
