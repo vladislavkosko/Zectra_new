@@ -10,8 +10,8 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$rootScope', '$
     $scope.asset = JSON_URLS.asset;
     $scope.curr_doc_id = null;
     $scope.newName = null;
-
     $scope.getDocuments_ = getDocuments;
+    $rootScope.DocumentsInChat = [];
 
     getDocuments();
 
@@ -43,11 +43,16 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$rootScope', '$
            if($scope.documents[i].checked)
            {
                docsinchat = $scope.documents[i];
-               var Tags = ' <a data-lightbox=\"some\" class=\"doc-show\"  href=\"'+ $scope.asset + $scope.documents[i].url +'\" > '+
-                           ' <img src=\"'+$scope.asset + $scope.documents[i].url +'\" class=\"zoom-images\" /> '+
-                           ' </a> ';
-
-               $rootScope.message += Tags;
+               var Tags = '<img style=\"display: inline !important;width: 150px;height: 150px;margin: 10px;border: 4px solid #495b79;border-radius: 5%; \" src=\"'+$scope.asset + $scope.documents[i].url +'\" class=\"img-screenshots\" /> ';
+                Tags = $compile(Tags)($scope);
+               document.getElementById('div-screenshot').style.display = 'block';
+               $('#slide-down-menu-screenshots').fadeIn(1500);
+               $('#div-screenshot').append(Tags);
+               $(Tags).fadeIn(1500);
+               var a = ' <a data-lightbox=\"some\" class=\"doc-show\"  href=\"'+$scope.asset + $scope.documents[i].url  +'\" > '+
+                   '<img style=\"display: inline !important;width: 150px;height: 150px;margin: 10px;border: 4px solid #495b79;border-radius: 5%; \" src=\"'+$scope.asset + $scope.documents[i].url +'\" class=\"zoom-images\" /> '+
+                   ' </a> ';
+               $rootScope.DocumentsInChat.push(a) ;
            }
         }
         $('#add_dialog').modal('hide');

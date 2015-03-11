@@ -41,10 +41,20 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         $scope.SendPost = function (message) {
             $rootScope.message = '';
             var usersForPrivateMessage = $scope.getUsersForPrivateMessage(message);
-
-            $http.post($scope.urlAddPost, {'message': message, 'usersForPrivateMessage': usersForPrivateMessage})
+            var documents = '';
+            for(var i=0;i < $rootScope.DocumentsInChat.length;i++)
+            {
+                documents = documents + $rootScope.DocumentsInChat[i]
+            }
+            $http.post($scope.urlAddPost, {'message': message + documents, 'usersForPrivateMessage': usersForPrivateMessage})
                 .success(function (response) {
                     $scope.getPosts(0, 100);
+                    $rootScope.DocumentsInChat = [];
+                    $('#slide-down-menu-screenshots').fadeOut(1500);
+                    setTimeout(function () {
+                        $('.img-screenshots').remove();
+                    }, 1500);
+
                 });
         };
 
@@ -86,11 +96,11 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                                 var im = new Image();
                                 im.src = this.result;
                                 im.style.display = 'block';
-                                im.setAttribute('class', 'img-screenshot');
+                                im.setAttribute('class', 'img-screenshots');
                                 im.setAttribute('onclick', '$(this).remove(DeleteLastScreenshot());');
-                                document.getElementById('div-screenshot').style.display = 'block';
+                                $('#div-screenshot').css('display','block');
                                 $('#slide-down-menu-screenshots').fadeIn(1500);
-                                document.getElementById('div-screenshot').appendChild(im);
+                                $('#div-screenshot').append(im);
                                 $(im).fadeIn(1500);
                                 atachments.push($(im).attr('src'));
                             };
