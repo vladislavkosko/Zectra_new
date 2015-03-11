@@ -16,12 +16,12 @@
                             <form class="form-horizontal">
                                 <div class="form-group">
                                     <label for="add_task_name" class="control-label">Task Name:</label>
-                                    <input type="text" id="add_task_name" class="form-control" name="name" ng-model="taskModel.Name" required>
+                                    <input type="text" id="add_task_name" class="form-control" name="name" ng-model="taskModel.name" required>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="add_task_type" class="control-label">Task Type:</label>
-                                    <select id="add_task_type" class="form-control" name="type" ng-model="taskModel.Type" required>
+                                    <select id="add_task_type" class="form-control" name="type" ng-model="taskModel.type" required>
                                         {% for type in task_types %}
                                             <option value="{{ type.id }}">
                                                 {{ type.label }}
@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="add_task_priority" class="control-label">Task Priority:</label>
-                                    <select id="add_task_priority" class="form-control" name="priority" ng-model="taskModel.Priority" required>
+                                    <select id="add_task_priority" class="form-control" name="priority" ng-model="taskModel.priority" required>
                                         {% for priority in task_priority %}
                                             <option value="{{ priority.id }}">
                                                 {{ priority.label }}
@@ -42,15 +42,15 @@
 
                                 <div class="form-group">
                                     <label for="add_task_startdate" class="control-label">Task Start Date:</label>
-                                    <input type="date" id="add_task_startdate" class="form-control" name="startdate" ng-model="taskModel.StartDate" required>
+                                    <input type="date" id="add_task_startdate" class="form-control" name="startdate" ng-model="taskModel.startdate" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="add_task_enddate" class="control-label">Task End Date:</label>
-                                    <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="taskModel.EndDate" required>
+                                    <input type="date" id="add_task_enddate" class="form-control" name="enddate" ng-model="taskModel.enddate" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="add_task_description" class="control-label">Task Description:</label>
-                                    <textarea id="add_task_description" class="form-control" name="description" ng-model="taskModel.Description" required style="height: 100px;"></textarea>
+                                    <textarea id="add_task_description" class="form-control" name="description" ng-model="taskModel.description" required style="height: 100px;"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <button type="button" class="btn btn-primary" ng-click="addTask(taskModel)">Add</button>

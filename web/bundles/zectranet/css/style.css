@@ -307,3 +307,11 @@
     color: brown;
     text-shadow: 0 0 black;
 }
+
+.tasks-order-by-underline {
+    border-bottom: solid #449d44 1px;
+}
+
+.tasks-filter-by-underline {
+    border-bottom: solid brown 1px;
+}

@@ -8,7 +8,7 @@
             <div class="page-header text-center">Story</div>
 
             <div class="list-group">
-                <div class="row" ng-repeat="task in tasks">
+                <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter">
                     <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                         <span ng-if="task.status.label == 'story'">
                             <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
@@ -62,7 +62,7 @@
         <div class="col-md-3">
             <div class="page-header text-center">Todo</div>
 
-            <div class="row" ng-repeat="task in tasks">
+            <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter">
                 <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                     <div ng-if="task.status.label == 'todo'">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
@@ -117,7 +117,7 @@
         <div class="col-md-3">
             <div class="page-header text-center">In-progress</div>
 
-            <div class="row" ng-repeat="task in tasks">
+            <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter">
                 <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                     <div ng-if="task.status.label == 'in-progress'">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
@@ -173,7 +173,7 @@
         <div class="col-md-3">
             <div class="page-header text-center">Done</div>
 
-            <div class="row" ng-repeat="task in tasks">
+            <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter">
                 <div class="col-md-12" ng-if="task.parentid == null" ng-init="parentTask = task">
                     <div ng-if="task.status.label == 'done'">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"

@@ -307,12 +307,12 @@ class ProjectController extends Controller
         $data = (object) $data['task'];
 
         $parameters = array(
-            'name' => $data->Name,
-            'description' => $data->Description,
-            'type' => $data->Type,
-            'priority' => $data->Priority,
-            'startdate' => date('Y-m-d', strtotime($data->StartDate)),
-            'enddate' => date('Y-m-d', strtotime($data->EndDate)),
+            'name' => $data->name,
+            'description' => $data->description,
+            'type' => $data->type,
+            'priority' => $data->priority,
+            'startdate' => date('Y-m-d', strtotime($data->startdate)),
+            'enddate' => date('Y-m-d', strtotime($data->enddate)),
         );
 
         /** @var EntityManager $em */

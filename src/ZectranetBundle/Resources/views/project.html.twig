@@ -42,7 +42,6 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-xs-12 col-md-6">
                 <div class="list-group">
@@ -97,96 +96,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default list-group">
 
-                    <div class="list-group-item active">
-                        <i class="fa fa-tasks"></i>
-                        <span>Filter:</span>
-                    </div>
-                    <div class="panel-body">
-
-                        <div class="btn-group">
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Priority <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a style="cursor: pointer;">Sort A-Z</a></li>
-                                    <li><a style="cursor: pointer;">Sort Z-A</a></li>
-                                    <li class="divider"></li>
-                                    <li><a style="cursor: pointer;">low</a></li>
-                                    <li><a style="cursor: pointer;">medium</a></li>
-                                    <li><a style="cursor: pointer;">high</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Status <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Progress <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Owner <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Assigned <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                    Sprint <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Action</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#">Separated link</a></li>
-                                </ul>
-                            </div>
-
-                        </div>
-
-                    </div>
+                    {% include '@Zectranet/filter.html.twig' %}
 
                     <div class="list-group-item active">
                         <i class="fa fa-tasks"></i>
@@ -421,5 +331,10 @@
         JSON_URLS.documentsGet = "{{ path('zectranet_document_get') }}";
         JSON_URLS.deleteFile  = "{{ path('zectranet_document_delete', { fileid : 0 }) }}";
         JSON_URLS.renameFile  = "{{ path('zectranet_document_rename', { fileid : 0 }) }}";
+        var NOW = '{{ "now" | date('Y-m-d') }}';
+
+        $('.noclose').bind('click', function (e) {
+            e.stopPropagation();
+        });
     </script>
 {% endblock %}

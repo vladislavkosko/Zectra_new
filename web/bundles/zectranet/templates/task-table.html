@@ -19,7 +19,8 @@
         </tr>
     </thead>
 
-    <tbody ng-repeat="task in tasks" ng-init="task.expand = false; parentTask = task">
+    <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter"
+           ng-init="task.expand = false; parentTask = task">
     <tr ng-if="task.parentid == null">
         <td class="col-xs-1">
             [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
@@ -45,24 +46,16 @@
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.username ]]</td>
+        <td class="col-xs-1 hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
         <td class="col-xs-1 hidden-xs">
-            <span ng-if="task.assigned">
-                [[ task.assigned.name + ' ' + task.assigned.surname ]]
-            </span>
-            <span ng-if="task.assigned == null">
-                <span ng-init="task.assigned = { 'name': none }"></span>
-                [[ task.assigned.name ]]
-            </span>
-        </td>
-        <td class="col-xs-1 hidden-xs">
-            <div ng-if="task.sprint">
+            <div ng-if="task.sprint.name != 'none'">
                 <a ng-init="task.sprint.href = assignSprintHref(task.sprint.officeid, task.sprint.id)"
                    ng-href="[[task.sprint.href]]">
                     [[task.sprint.name]]
                 </a>
             </div>
-            <div ng-if="!task.sprint">-</div>
+            <div ng-if="task.sprint.name == 'none'">none</div>
         </td>
         <td class="col-xs-1">
             <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask"
@@ -101,16 +94,8 @@
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.name + ' ' + task.owner.surname ]]</td>
-        <td class="col-xs-1 hidden-xs">
-            <span ng-if="task.assigned">
-                [[ task.assigned.name + ' ' + task.assigned.surname ]]
-            </span>
-            <span ng-if="task.assigned == null">
-                <span ng-init="task.assigned = { 'name': none }"></span>
-                [[ task.assigned.name ]]
-            </span>
-        </td>
+        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.username ]]</td>
+        <td class="col-xs-1 hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
         <td></td>
         <td class="col-xs-1">
             <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
