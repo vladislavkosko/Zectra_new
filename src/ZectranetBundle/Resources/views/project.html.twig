@@ -195,7 +195,6 @@
                             {% endfor %}
 
                             {% for office in project.offices %}
-                                {% set projectUsersCount = projectUsersCount + office.users | length %}
                                 {% for user in office.users %}
                                     <div class="col-md-2 col-xs-4">
                                         <div class="user-chat center-block">

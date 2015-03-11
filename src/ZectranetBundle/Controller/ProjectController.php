@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\ProjectPost;
 use ZectranetBundle\Entity\Task;
@@ -29,8 +30,27 @@ class ProjectController extends Controller
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
         /** @var User $user */
         $user = $this->getUser();
-        if (!$user->getProjects()->contains($project) && !$user->getOwnedProjects()->contains($project)) {
-            return $this->redirectToRoute('zectranet_user_home');
+
+        $isUserInProject = false;
+        if (!$user->getProjects()->contains($project)
+            && !$user->getOwnedProjects()->contains($project)) {
+            /** @var Office $office */
+            foreach ($user->getAssignedOffices() as $office) {
+                if ($office->getProjects()->contains($project)) {
+                    $isUserInProject = true; break;
+                }
+            }
+
+            /** @var Office $office */
+            foreach ($user->getOwnedOffices() as $office) {
+                if ($office->getProjects()->contains($project)) {
+                    $isUserInProject = true; break;
+                }
+            }
+
+            if (!$isUserInProject) {
+                return $this->redirectToRoute('zectranet_user_home');
+            }
         }
 
         $task_priority = $this->getDoctrine()->getRepository('ZectranetBundle:TaskPriority')->findAll();
