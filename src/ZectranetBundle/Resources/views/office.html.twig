@@ -61,32 +61,38 @@
                     Connected Users
                 </div>
                 <div class="list-group-item">
-                    {% if office.users|length > 0 %}
-                        <table class="table" style="margin-bottom: 0">
-                            <thead>
+                    <table class="table" style="margin-bottom: 0">
+                        <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
                             <tr>
-                                <th>User</th>
-                                <th>Role</th>
+                                <td>
+                                    <a href="{{ path('zectranet_user_page', {'user_id': office.owner.id }) }}" style="display: block; text-decoration: none;">
+                                        <img src="{{ asset('') ~ 'documents/' ~ office.owner.avatar }}" class="img-circle"
+                                             style="width: 20px; height: 20px;">
+                                        {{ office.owner.name ~ ' ' ~ office.owner.surname ~ ' (' ~ office.owner.username ~ ')'}}
+                                    </a>
+                                </td>
+                                <td>Owner</td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for user in office.users %}
-                                <tr>
-                                    <td>
-                                        <a href="#" style="display: block; text-decoration: none;">
-                                            <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-circle"
-                                                 style="width: 20px; height: 20px;">
-                                            {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')'}}
-                                        </a>
-                                    </td>
-                                    <td>Manager</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    {% elseif office.users|length == 0 %}
-                        <h4 class="text-info text-center">Users will be displayed here</h4>
-                    {% endif %}
+                        {% for user in office.users %}
+                            <tr>
+                                <td>
+                                    <a href="{{ path('zectranet_user_page', {'user_id': user.id }) }}" style="display: block; text-decoration: none;">
+                                        <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-circle"
+                                             style="width: 20px; height: 20px;">
+                                        {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')'}}
+                                    </a>
+                                </td>
+                                <td>Manager</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

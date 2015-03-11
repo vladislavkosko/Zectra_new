@@ -4,14 +4,12 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.timeNow = NOW;
         $scope.USER_ID = USER_ID;
 
-        // Model for task
         $scope.taskModel = {
             'id': null, 'name': null, 'description': null, 'type': null,
             'priority': null, 'startdate': new Date($scope.timeNow),
             'enddate': new Date($scope.timeNow), 'parent': null
         };
 
-        // Model for subtask
         $scope.subtask = {
             'id': null, 'name': null, 'description': null, 'type': null,
             'priority': null, 'startdate': new Date($scope.timeNow),
@@ -77,6 +75,76 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             });
         };
 
+        $scope.generateAsset = function (asset, url) {
+            return asset + url;
+        };
+
+        $scope.addTask = function (task) {
+            if (task && task.name && task.description && task.priority && task.type
+                && task.startdate && task.enddate) {
+                $('#add_new_task').modal('hide');
+                $scope.promise = $http.post($scope.urlAddTask, {'task': task})
+                    .success(function (response) {
+                        $scope.getTasks();
+                    }
+                );
+            }
+        };
+        
+        $scope.addParentIdToSubTask = function (parent_id) {
+            $scope.subtask.parent = parent_id;
+        };
+        
+        $scope.addSubTask = function (task) {
+            if (task && task.name && task.description && task.priority && task.type
+                && task.startdate && task.enddate) {
+                $('#add_new_subtask').modal('hide');
+                $scope.promise = $http.post($scope.urlAddSubTask, {'task': task})
+                    .success(function (response) {
+                        $scope.getTasks();
+                    });
+            }
+        };
+
+        $scope.addDeleteTaskId = function (task_id) {
+            $scope.taskModel.id = task_id;
+        };
+
+        $scope.deleteTask = function (task_id) {
+            if (task_id) {
+                $('#delete_task').modal('hide');
+                var url = $scope.urlDeleteTask.replace('0', task_id);
+                $scope.promise = $http.post(url, {'task_id': task_id})
+                    .success(function (response) {
+                        $scope.getTasks();
+                    });
+            }
+        };
+
+        $scope.addTaskToSprint = function (task, sprint_id) {
+            if (task.id && sprint_id) {
+                $('#add_task_to_sprint').modal('hide');
+                var tasks = []; tasks.push(task);
+                $scope.promise = $http
+                    .post($scope.urlAddTasksToSprint.replace('0', sprint_id), { 'tasks': tasks })
+                    .success(function (response) {
+                        if (response.success) {
+                            $scope.getTasks();
+                        }
+                    }
+                );
+            }
+        };
+
+        $scope.assignTaskHref = function (task_id) {
+            return $scope.urlShowTask.replace('0', task_id);
+        };
+
+        $scope.assignSprintHref = function (office_id, sprint_id) {
+            var url = $scope.urlShowSprint.replace('0', 'office_id').replace('1', 'sprint_id');
+            return url.replace('office_id', office_id).replace('sprint_id', sprint_id);
+        };
+
         // ------------ Begin of filter functions ------------ \\
         {
             function initFilter() {
@@ -96,21 +164,14 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
                 $scope.uniqueFilterOptions =
                 {
-                    'id': [],
-                    'priority': [],
-                    'status': [],
-                    'progress': [],
-                    'owner': [],
-                    'assigned': [],
-                    'sprint': [],
-                    'uniques':
+                    'id': [], 'priority': [],
+                    'status': [], 'progress': [],
+                    'owner': [], 'assigned': [],
+                    'sprint': [], 'uniques':
                     {
-                        'id': [],
-                        'priority': [],
-                        'status': [],
-                        'progress': [],
-                        'owner': [],
-                        'assigned': [],
+                        'id': [], 'priority': [],
+                        'status': [], 'progress': [],
+                        'owner': [], 'assigned': [],
                         'sprint': []
                     }
                 };
@@ -204,7 +265,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     }
                 }
             };
-            
+
             $scope.execTaskFilter = function (obj) {
                 if (obj.selectedInFilter.id && obj.selectedInFilter.priority &&
                     obj.selectedInFilter.status && obj.selectedInFilter.progress &&
@@ -216,76 +277,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             };
         }
         // ------------ End of filter functions -------------- \\
-
-        $scope.generateAsset = function (asset, url) {
-            return asset + url;
-        };
-
-        $scope.addTask = function (task) {
-            if (task && task.name && task.description && task.priority && task.type
-                && task.startdate && task.enddate) {
-                $('#add_new_task').modal('hide');
-                $scope.promise = $http.post($scope.urlAddTask, {'task': task})
-                    .success(function (response) {
-                        $scope.getTasks();
-                    }
-                );
-            }
-        };
-        
-        $scope.addParentIdToSubTask = function (parent_id) {
-            $scope.subtask.parent = parent_id;
-        };
-        
-        $scope.addSubTask = function (task) {
-            if (task && task.name && task.description && task.priority && task.type
-                && task.startdate && task.enddate) {
-                $('#add_new_subtask').modal('hide');
-                $scope.promise = $http.post($scope.urlAddSubTask, {'task': task})
-                    .success(function (response) {
-                        $scope.getTasks();
-                    });
-            }
-        };
-
-        $scope.addDeleteTaskId = function (task_id) {
-            $scope.taskModel.id = task_id;
-        };
-
-        $scope.deleteTask = function (task_id) {
-            if (task_id) {
-                $('#delete_task').modal('hide');
-                var url = $scope.urlDeleteTask.replace('0', task_id);
-                $scope.promise = $http.post(url, {'task_id': task_id})
-                    .success(function (response) {
-                        $scope.getTasks();
-                    });
-            }
-        };
-
-        $scope.addTaskToSprint = function (task, sprint_id) {
-            if (task.id && sprint_id) {
-                $('#add_task_to_sprint').modal('hide');
-                var tasks = []; tasks.push(task);
-                $scope.promise = $http
-                    .post($scope.urlAddTasksToSprint.replace('0', sprint_id), { 'tasks': tasks })
-                    .success(function (response) {
-                        if (response.success) {
-                            $scope.getTasks();
-                        }
-                    }
-                );
-            }
-        };
-
-        $scope.assignTaskHref = function (task_id) {
-            return $scope.urlShowTask.replace('0', task_id);
-        };
-
-        $scope.assignSprintHref = function (office_id, sprint_id) {
-            var url = $scope.urlShowSprint.replace('0', 'office_id').replace('1', 'sprint_id');
-            return url.replace('office_id', office_id).replace('sprint_id', sprint_id);
-        };
         
         console.log('Task Controller was loaded');
     }

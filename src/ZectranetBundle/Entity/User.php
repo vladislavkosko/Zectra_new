@@ -11,6 +11,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Filesystem\Filesystem;
+use ZectranetBundle\Entity\Request;
+use ZectranetBundle\Entity\Project;
+use ZectranetBundle\Entity\Office;
+use ZectranetBundle\Entity\Notification;
 
 /**
  * User
@@ -165,6 +169,13 @@ class User implements UserInterface, \Serializable
      * @var ArrayCollection
      */
     private $documents;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Request", mappedBy="user", cascade={"remove"})
+     * @ORM\OrderBy({"id" = "DESC"})
+     * @var ArrayCollection
+     */
+    private $requsts;
 
     /**
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="user", cascade={"remove"})
@@ -1076,5 +1087,38 @@ class User implements UserInterface, \Serializable
         $user = $em->getRepository('ZectranetBundle:User')->find($user->getId());
         $user->setAvatar($user->getUsername() . '/avatar/' . $file_name . '.jpeg');
         $em->flush();
+    }
+
+    /**
+     * Add requsts
+     *
+     * @param \ZectranetBundle\Entity\Request $requsts
+     * @return User
+     */
+    public function addRequst(\ZectranetBundle\Entity\Request $requsts)
+    {
+        $this->requsts[] = $requsts;
+
+        return $this;
+    }
+
+    /**
+     * Remove requsts
+     *
+     * @param \ZectranetBundle\Entity\Request $requsts
+     */
+    public function removeRequst(\ZectranetBundle\Entity\Request $requsts)
+    {
+        $this->requsts->removeElement($requsts);
+    }
+
+    /**
+     * Get requsts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRequsts()
+    {
+        return $this->requsts;
     }
 }

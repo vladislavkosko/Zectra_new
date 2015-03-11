@@ -180,7 +180,6 @@
                     </div>
                     <div class="list-group-item">
                         <div class="row">
-                            {% set projectUsersCount = project.users | length %}
                             {% for user in project.users %}
                                 <div class="col-md-2 col-xs-4">
                                     <div class="user-chat center-block">
@@ -212,11 +211,17 @@
                                 {% endfor %}
                             {% endfor %}
 
-                            {% if projectUsersCount == 0 %}
-                                <div class="col-md-12">
-                                    <h4 class="text-center text-info">Members will be displayed here</h4>
+                            <div class="col-md-2 col-xs-4">
+                                <div class="user-chat center-block">
+                                    <a href="{{ path('zectranet_user_page', {'user_id': project.owner.id}) }}" style="display: block; text-decoration: none;">
+                                        <p class="text-muted label label-default label-primary text-center center-block" style="margin-bottom: 1px;">Owner</p>
+                                        <img src="{{ asset('') ~ 'documents/' ~ project.owner.avatar }}" class="img-responsive center-block" style="width: 60px; height: 60px;">
+                                    </a>
+                                    <a style="cursor: pointer;">
+                                        <p class="text-center" style="font-weight: bold;">{{ project.owner.name ~ ' ' ~ project.owner.surname ~ ' (' ~ project.owner .username ~ ')'}}</p>
+                                    </a>
                                 </div>
-                            {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
