@@ -250,9 +250,6 @@
 
         var getDocuments_;
         JSON_URLS.documentsGet = "{{ path('zectranet_document_get') }}";
-        JSON_URLS.deleteFile  = "{{ path('zectranet_document_delete', { fileid : 0 }) }}";
-        JSON_URLS.renameFile  = "{{ path('zectranet_document_rename', { fileid : 0 }) }}";
-
         JSON_URLS.addPost = "{{ path('zectranet_office_add_post', { 'office_id': office.id }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_office_get_post', { 'office_id': office.id }) }}";
         JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";

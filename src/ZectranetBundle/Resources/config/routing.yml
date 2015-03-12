@@ -341,3 +341,16 @@ zectranet_sprint_change_state:
 zectranet_InsertScreenshotsInPHP:
     pattern: /upload/insertscreenshots
     defaults: { _controller: ZectranetBundle:Upload:Insert_Screenshots_InPHP }
+
+zectranet_task_get_post:
+    pattern: /task/{task_id}/getPosts
+    defaults: { _controller: ZectranetBundle:Task:getPosts }
+    requirements:
+        office_id: \d+
+
+zectranet_task_add_post:
+    pattern: /task/{task_id}/addPosts
+    defaults: { _controller: ZectranetBundle:Task:addPost }
+    requirements:
+        office_id: \d+
+

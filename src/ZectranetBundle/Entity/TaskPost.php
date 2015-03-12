@@ -2,6 +2,7 @@
 
 namespace ZectranetBundle\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -254,5 +255,43 @@ class TaskPost
     public function getUser()
     {
         return $this->user;
+    }
+
+
+    /**
+     * @param EntityManager $em
+     * @param int $taskid
+     * @param int $offset
+     * @param int $count
+     * @return array
+     */
+    public static function getPostsOffset(EntityManager $em, $taskid, $offset, $count) {
+        return $em->getRepository('ZectranetBundle:TaskPost')
+            ->findBy(array('taskid' => $taskid), array('id' => 'DESC'), $count, $offset);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $taskid
+     * @param string $message
+     * @return OfficePost
+     */
+    public static function addNewPost(EntityManager $em, $user_id, $taskid, $message) {
+        $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
+        $task = $em->getRepository('ZectranetBundle:Task')->find($taskid);
+
+        $post = new TaskPost();
+        $post->setUser($user);
+        $post->setEdited(null);
+        $post->setMessage($message);
+        $post->setTask($task);
+        $post->setPosted(new \DateTime());
+        $post->setEdited(new \DateTime());
+
+        $em->persist($post);
+        $em->flush();
+
+        return $post;
     }
 }

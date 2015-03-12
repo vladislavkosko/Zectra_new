@@ -8,6 +8,7 @@ use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\Task;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use ZectranetBundle\Entity\TaskPost;
 use ZectranetBundle\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -162,5 +163,66 @@ class TaskController extends Controller {
         $description = $request->request->get('description');
         $task = Task::editTaskDescription($em, $logger, $task_id, $description);
         return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
+    }
+
+    public function getPostsAction(Request $request, $task_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $data = json_decode($request->getContent(), true);
+        $data = (object) $data;
+
+        $phpPosts = TaskPost::getPostsOffset($em,$task_id, $data->offset, $data->count);
+        $jsonPosts = array();
+        /** @var TaskPost $post */
+        foreach ($phpPosts as $post) {
+            $jsonPosts[] = $post->getInArray();
+        }
+
+        $response = new Response(json_encode(array('Posts' => $jsonPosts)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+
+    }
+
+    public function addPostAction(Request $request, $task_id)
+    {
+        $post = json_decode($request->getContent(), true);
+        $post = (object)$post;
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+
+        $new_post = TaskPost::addNewPost($em, $user->getId(), $task_id, $post->message);
+
+        $usersName = array();
+        $privateForAll = false;
+        /*if ($post->usersForPrivateMessage == 'all')
+        {
+            $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $task, null, $post);
+            $privateForAll = true;
+        }
+
+        if (($post->usersForPrivateMessage != null) and ($privateForAll == false))
+        {
+            $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $post->usersForPrivateMessage));
+            if (count($usersEmail) > 0)
+            {
+                foreach ($usersEmail as $userEmail)
+                    $usersName[] = $userEmail->getUsername();
+                $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $task, null, $post, $usersEmail);
+            }
+
+        }
+
+        if ($privateForAll == false)
+            $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $task, null, $post, $usersName);
+        */
+
+        $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 }

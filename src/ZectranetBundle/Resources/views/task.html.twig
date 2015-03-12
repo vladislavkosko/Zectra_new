@@ -393,6 +393,9 @@
                     Logs
                 </a>
             </li>
+            <li class="" role="presentation">
+                <a id="coments-tab" aria-controls="coments" data-toggle="tab" role="tab" href="#coments" aria-expanded="false">Comments</a>
+            </li>
         </ul>
         <!-- End of Task Nav Tabs -->
 
@@ -423,7 +426,65 @@
                     </tbody>
                 </table>
             </div>
+            <div id="coments" class="tab-pane fade" aria-labelledby="coments-tab" role="tabpanel" ng-controller="ChatController" ng-init="getPosts(0, 100)" >
+
+                <div class="coment" ng-repeat="post in posts">
+
+                    <div class="coment">
+                        <p style="margin-top: 25px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + post.user.avatar)">
+                            <img ng-src="[[avatar]]" alt="User Avatar" class="img-circle""/> <a href="#"><strong>[[post.user.name]]</strong></a> added a comment - [[ post.posted.date ]]
+                        </p>
+                        <p style="margin: -10px 0 0 83px;" ng-bind-html="post.message"></p>
+                        <hr>
+                    </div>
+
+
+                </div>
+
+                <div class="list-group-item">
+                    <form class="input-group input-group-lg">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" style="height: 65px;" data-placement="top" id="add_dialog_btn"  data-toggle="modal" data-target="#add_dialog">
+                                <i class="fa fa-file"></i>
+                            </button>
+                        </span>
+                                <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
+                                    <span>Post</span>
+                                </button>
+                        </span>
+                    </form>
+                    <div id="slide-down-menu-screenshots" cg-busy="documentPromise" style="display: none;">
+                        <div id="div-screenshot" style="display: none; width: auto;height: auto;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% include '@Zectranet/dialogAdd.html.twig' %}
         </div>
 
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+
+        var getDocuments_;
+        JSON_URLS.documentsGet = "{{ path('zectranet_document_get') }}";
+        JSON_URLS.addPost = "{{ path('zectranet_task_add_post', { 'task_id': task.id }) }}";
+        JSON_URLS.getPosts = "{{ path('zectranet_task_get_post', { 'task_id': task.id }) }}";
+        JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";
+    </script>
+    <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/custom/documentsController.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/jquery.knob.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/jquery.ui.widget.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/jquery.iframe-transport.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/jquery.fileupload.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/upload/script.js') }}" type="text/javascript"></script>
+
 {% endblock %}
