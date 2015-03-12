@@ -333,4 +333,23 @@ class Request
     {
         return $this->task;
     }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @param RequestType $type
+     * @param Project $project
+     */
+    public static function addRequestUserProject($em, $user, $type, $project)
+    {
+        /** @var Request $request_user_project */
+        $request_user_project = new Request();
+
+        $request_user_project->setType($type);
+        $request_user_project->setUser($user);
+        $request_user_project->setProject($project);
+
+        $em->persist($request_user_project);
+        $em->flush();
+    }
 }
