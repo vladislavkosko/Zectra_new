@@ -23,8 +23,8 @@
 
         <div class="row" style="margin-top: 20px;">
             <!--Begin of Main Task Info-->
-            <form class="col-md-6" action="{{ path('zectranet_task_edit_main_info', { 'task_id': task.id }) }}" method="post">
-                <div class="page-header" style="margin-top: 0;">
+            <form class="col-md-6" style="border-bottom: 1px solid #eee;" action="{{ path('zectranet_task_edit_main_info', { 'task_id': task.id }) }}" method="post">
+                <div class="page-header" style="margin-top: 0;border-bottom: 0px;">
                     <span style="font-size: 20px;">Task Info</span>
                 </div>
 
@@ -189,9 +189,9 @@
             <!--End of Main Task Info-->
 
             <!--Begin of Task Details-->
-            <form class="col-md-6" action="{{ path('zectranet_task_edit_detail_info', { 'task_id': task.id }) }}" method="post">
+            <form class="col-md-6" action="{{ path('zectranet_task_edit_detail_info', { 'task_id': task.id }) }}" method="post" style="border-bottom: 1px solid #eee;">
 
-                <div class="page-header" style="margin-top: 0;">
+                <div class="page-header" style="margin-top: 0;border: 0px;">
                     <span style="font-size: 20px;">Task Details</span>
                 </div>
 
@@ -347,12 +347,12 @@
                 <div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="page-header" style="margin-top: 0;"></div>
+                            <div class="page-header" style="margin-top: 0;border: 0px;"></div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="margin-bottom: 15px;">
                             <form class="form-group">
                                 <button type="submit" class="btn btn-default btn-primary">Save</button>
                             </form>
@@ -368,7 +368,7 @@
         <!-- Begin of Desciption Section -->
         <div class="row">
             <div class="col-md-12">
-                <div class="page-header">
+                <div class="page-header" style="border: 0px;">
                     <h4>Description</h4>
                 </div>
 
