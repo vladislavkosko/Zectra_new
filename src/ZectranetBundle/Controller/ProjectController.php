@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\ProjectPost;
+use ZectranetBundle\Entity\RequestType;
 use ZectranetBundle\Entity\Task;
 use ZectranetBundle\Entity\User;
 
@@ -52,6 +53,8 @@ class ProjectController extends Controller
                 return $this->redirectToRoute('zectranet_user_home');
             }
         }
+
+        $this->get('zectranet.notifier')->clearNotificationsByProjectId($project_id);
 
         $task_priority = $this->getDoctrine()->getRepository('ZectranetBundle:TaskPriority')->findAll();
         $task_types = $this->getDoctrine()->getRepository('ZectranetBundle:TaskType')->findAll();
@@ -137,10 +140,65 @@ class ProjectController extends Controller
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        /** @var Project $project */
         $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
         $users = $em->getRepository('ZectranetBundle:User')->findBy(array('id' => $ids));
-        $project->setUsers($users);
 
+        if ($data['status'] == 1)
+        {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            /** @var RequestType $type */
+            $type = $this->getDoctrine()->getRepository('ZectranetBundle:RequestType')->find(2);
+
+            $usersProject = $project->getUsers();
+            $usersNames = array();
+            foreach ($usersProject as $user)
+                $usersNames[] = $user->getUsername();
+
+            $usersRequest = array();
+            foreach ($users as $user)
+            {
+                if (!in_array($user->getUsername(), $usersNames))
+                    $usersRequest[] = $user;
+            }
+
+            foreach ($usersRequest as $user)
+                \ZectranetBundle\Entity\Request::addRequestUserProject($em, $user, $type, $project);
+
+            /** @var User $user */
+            $user = $this->getUser();
+            $this->get('zectranet.notifier')->createNotification("request_user_project", $user, $usersRequest, $project);
+        }
+
+        $project->setUsers($users);
+        $em->persist($project);
+        $em->flush();
+
+        $response = new Response(json_encode(array('success' => true)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Route("/project/{project_id}/acceptRequestUserProject")
+     * @Security("has_role('ROLE_USER')")
+     * @param $project_id
+     * @return Response
+     */
+    public function acceptRequestUserProjectAction($project_id)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var Project $project */
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+
+        $usersProject = $project->getUsers();
+        $usersProject[] = $user;
+
+        $project->setUsers($usersProject);
         $em->persist($project);
         $em->flush();
 

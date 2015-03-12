@@ -45,7 +45,7 @@ class Notifier
         "epic_story_deleted",             // +
 
         "request_office",                 // -
-        "request_user_project",           // -
+        "request_user_project",           // coding
         "request_project",                // -
         "request_assign_task",            // -
 
@@ -130,7 +130,7 @@ class Notifier
             $method = true;
 
         if (in_array($type, array("message_office", "message_project", "message_epic_story", "message_task")))
-            $method = true;
+            $method = false;
 
         if($method == true)
 			$this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
@@ -184,9 +184,7 @@ class Notifier
 		$qb->delete('ZectranetBundle:Notification', 'n')
 			->where("n.userid = :userid")
 			->andWhere("n.destinationid = :destinationid")
-			->andWhere("n.type = 'message_office'
-    	   		    OR n.type = 'request_office'
-    	   		    OR n.type = 'private_message_office'")
+			->andWhere("n.type = 'message_office' OR n.type = 'private_message_office'")
 			->setParameter("userid", $this->user->getId())
 			->setParameter("destinationid", $office_id);
 
@@ -194,25 +192,25 @@ class Notifier
 	}
 
     /**
-     * @param $topic_id
+     * @param $project_id
      * @return mixed
      */
-	public function clearNotificationsByProjectId($topic_id)
+	public function clearNotificationsByProjectId($project_id)
 	{
 		$qb = $this->em->createQueryBuilder();
 		$qb->delete('ZectranetBundle:Notification', 'n')
 			->where("n.userid = :userid")
 			->andWhere("n.destinationid = :destinationid")
 			->andWhere("n.type = 'message_project'
-    			    OR n.type = 'request_user_project'
-    			    OR n.type = 'request_project'
     			    OR n.type = 'private_message_project'
     			    OR n.type = 'message_epic_story'
+    			    OR n.type = 'private_message_epic_story'
     			    OR n.type = 'epic_story_added'
     			    OR n.type = 'epic_story_deleted'
-    	   			OR n.type = 'private_message_epic_story'")
+    			    OR n.type = 'task_added'
+                    OR n.type = 'task_deleted'")
 			->setParameter("userid", $this->user->getId())
-			->setParameter("destinationid", $topic_id);
+			->setParameter("destinationid", $project_id);
 
 		return $qb->getQuery()->getResult();
 	}
@@ -228,9 +226,6 @@ class Notifier
 			->where("n.userid = :userid")
 			->andWhere("n.resourceid = :resourceid")
 			->andWhere("n.type = 'message_task'
-                    OR n.type = 'task_added'
-                    OR n.type = 'task_deleted'
-                    OR n.type = 'request_assign_task'
     				OR n.type = 'private_message_task'")
 			->setParameter("userid", $this->user->getId())
 			->setParameter("resourceid", $taskId);
@@ -241,14 +236,14 @@ class Notifier
     /**
      * @param $type
      * @param User|Project|Task $resource
-     * @param User $user
+     * @param $usersRequest
      * @param Project|Office $destination
      * @param string|null $user_to_send_name
      * @param object|null $post
      * @param array|null $temp
      * @return bool
      */
-	public function createNotification($type, $resource, User $user, $destination, $user_to_send_name = null, $post = null, $temp = null)
+	public function createNotification($type, $resource, $usersRequest, $destination, $user_to_send_name = null, $post = null, $temp = null)
 	{
 		$users = null;
 		$message = null;
@@ -293,31 +288,31 @@ class Notifier
         {
             switch ($type)
             {
-                case "request_assign_task":
+                case "request_office":
                 {
                     $message = 'You assign the new task "'.$resource->getName().'"';
-                    $users = array($user);
+                    $users = $usersRequest;
                     break;
                 }
 
-                case "request_assign_office":
+                case "request_user_project":
                 {
-                    $message = 'You assign the new office "'.$resource->getName().'"';
-                    $users = array($user);
+                    $message = 'You have a new assign request from "'.$resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
+                    $users = $usersRequest;
                     break;
                 }
 
-                case "request_assign_project":
+                case "request_project":
                 {
                     $message = 'You assign the new project "'.$resource->getName().'"';
-                    $users = array($user);
+                    $users = $usersRequest;
                     break;
                 }
 
-                case "request_assign_epic_story":
+                case "request_assign_task":
                 {
                     $message = 'You assign the new epic story "'.$resource->getName().'"';
-                    $users = array($user);
+                    $users = $usersRequest;
                     break;
                 }
 

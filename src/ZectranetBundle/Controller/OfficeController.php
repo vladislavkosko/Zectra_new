@@ -30,6 +30,9 @@ class OfficeController extends Controller
         if (!$user->getAssignedOffices()->contains($office) && !$user->getOwnedOffices()->contains($office)) {
             return $this->redirectToRoute('zectranet_user_home');
         }
+
+        $this->get('zectranet.notifier')->clearNotificationsByOfficeId($office_id);
+
         return $this->render('@Zectranet/office.html.twig', array('office' => $office));
     }
 

@@ -24,6 +24,9 @@ class TaskController extends Controller {
         $task_priority = $this->getDoctrine()->getRepository('ZectranetBundle:TaskPriority')->findAll();
         $task_types = $this->getDoctrine()->getRepository('ZectranetBundle:TaskType')->findAll();
         $task_statuses = $this->getDoctrine()->getRepository('ZectranetBundle:TaskStatus')->findAll();
+
+        $this->get('zectranet.notifier')->clearNotificationsByTaskId($task_id);
+
         return $this->render('@Zectranet/task.html.twig', array(
             'task' => $task,
             'task_priority' => $task_priority,
