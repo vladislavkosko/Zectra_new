@@ -27,7 +27,7 @@ class Project
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
@@ -67,13 +67,14 @@ class Project
 
     /**
      * @ORM\OneToMany(targetEntity="Project", mappedBy="parent", cascade={"remove"})
+     * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection
      */
     private $epicStories;
 
     /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="projects", fetch="EXTRA_LAZY")
-     * @var array
+     * @var ArrayCollection
      */
     private $users;
 

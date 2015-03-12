@@ -4,15 +4,15 @@
 
 {% block body %}
     <div ng-cloak>
-
         <div class="row">
             <ol class="breadcrumb" style="margin: 0 -15px;">
                 <li>
                     <a href="{{ path('zectranet_user_home') }}">Summary</a>
                 </li>
                 <li>
-                    <a href="{{ path('zectranet_show_project', { 'project_id': task.project.id }) }}">
-                        {{ task.project.name }}
+                    {% set projectBreadcrums = (task.project.parent) ? task.project.parent : task.project %}
+                    <a href="{{ path('zectranet_show_project', { 'project_id': projectBreadcrums.id }) }}">
+                        {{ projectBreadcrums.name }}
                     </a>
                 </li>
                 <li class="active">
@@ -205,18 +205,26 @@
 
                     <div class="col-md-9">
                         <div class="input-group">
-                            {% if task.project.users | length > 0 %}
-                                <select class="form-control" name="assigned" style="border: none;">
-                                    {% for user in task.project.users %}
-                                        {% if user.id != task.owner.id %}
-                                            <option value="{{ user.id }}" {% if task.assigned == user %}selected="selected"{% endif %}>{{ user.name }}</option>
-                                        {% endif %}
+                            <select class="form-control" name="assigned" style="border: none;">
+                                {% set usersForAssign = [] %}
+                                {% for user in task.project.users if user not in usersForAssign %}
+                                    {% set usersForAssign = usersForAssign | merge([user]) %}
+                                {% endfor %}
+                                {% set taskProject = (task.project.parent) ? task.project.parent : task.project %}
+                                {% for office in taskProject.offices %}
+                                    {% for user in office.users if user not in usersForAssign %}
+                                        {% set usersForAssign = usersForAssign | merge([user]) %}
                                     {% endfor %}
-                                    <option {% if task.assigned == null %}selected="selected"{% endif %}>Not Assigned</option>
-                                </select>
-                            {% else %}
-                                <p class="form-control-static">Not Assigned</p>
-                            {% endif %}
+                                {% endfor %}
+
+                                {% for user in usersForAssign %}
+                                    {% if user.id != task.owner.id %}
+                                        <option value="{{ user.id }}" {% if task.assigned == user %}selected="selected"{% endif %}>{{ user.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                                <option value="{{ task.owner.id }}" {% if task.assigned == task.owner %}selected="selected"{% endif %}>{{ task.owner.name }}</option>
+                                <option {% if task.assigned == null %}selected="selected"{% endif %}>Not Assigned</option>
+                            </select>
                         </div>
                     </div>
                 </div>

@@ -222,7 +222,7 @@ class Notifier
 	public function clearNotificationsByTaskId($taskId)
 	{
 		$qb = $this->em->createQueryBuilder();
-		$qb->delete('IntranetMainBundle:Notification', 'n')
+		$qb->delete('ZectranetBundle:Notification', 'n')
 			->where("n.userid = :userid")
 			->andWhere("n.resourceid = :resourceid")
 			->andWhere("n.type = 'message_task'

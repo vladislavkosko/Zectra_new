@@ -4,6 +4,7 @@ namespace ZectranetBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\Task;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,13 +44,19 @@ class TaskController extends Controller {
      */
     public function getTasksAction($project_id) {
         /** @var EntityManager $em */
-        $tasks = $this->getDoctrine()->getRepository('ZectranetBundle:Task')
-            ->findBy(array('projectid' => $project_id), array('id' => 'DESC'));
-        $jsonTasks = array();
-        /** @var Task $task */
-        foreach($tasks as $task) {
-            $jsonTasks[] = $task->getInArray();
+        $em = $this->getDoctrine()->getManager();
+        $project = $em->getRepository('ZectranetBundle:Project')
+            ->find($project_id);
+        $jsonTasks = Task::arrayToJson($project->getTasks());
+        if (count($project->getEpicStories()) > 0) {
+            /** @var Project $story */
+            foreach ($project->getEpicStories() as $story) {
+                $jsonTasks = array_merge($jsonTasks,
+                    Task::arrayToJson($story->getTasks()));
+            }
         }
+
+
         $response = new Response(json_encode(array('Tasks' => $jsonTasks)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;

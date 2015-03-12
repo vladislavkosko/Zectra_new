@@ -1036,6 +1036,15 @@ class Task
         return $task;
     }
 
+    public static function arrayToJson($array) {
+        $jsonArray = array();
+        /** @var Task $task */
+        foreach ($array as $task) {
+            $jsonArray[] = $task->getInArray();
+        }
+        return $jsonArray;
+    }
+
     /**
      * @return array
      */

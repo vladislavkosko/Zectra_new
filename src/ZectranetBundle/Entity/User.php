@@ -1052,7 +1052,15 @@ class User implements UserInterface, \Serializable
             array(210, 8, 0),
             array(167, 0, 219),
             array(15, 0, 226),
-            array(244, 0, 114)
+            array(244, 0, 114),
+            array(91, 162, 0),
+            array(16, 32, 53),
+            array(36, 203, 222),
+            array(36, 80, 223),
+            array(150, 36, 223),
+            array(223, 36, 199),
+            array(0, 150, 203),
+            array(151, 100, 38),
         );
 
         $rnd_clr = rand(0, count($text_colors) - 1);
