@@ -202,7 +202,7 @@
                     </button>
                 </span>
             </form>
-            <div id="slide-down-menu-screenshots" style="display: none;">
+            <div id="slide-down-menu-screenshots" cg-busy="documentPromise" style="display: none;">
                 <div id="div-screenshot" style="display: none; width: auto;height: auto;">
 
                 </div>
@@ -265,6 +265,7 @@
 
         JSON_URLS.addPost = "{{ path('zectranet_office_add_post', { 'office_id': office.id }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_office_get_post', { 'office_id': office.id }) }}";
+        JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";
     </script>
     <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/documentsController.js') }}" type="text/javascript"></script>

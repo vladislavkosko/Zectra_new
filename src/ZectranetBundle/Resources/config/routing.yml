@@ -337,3 +337,7 @@ zectranet_sprint_change_state:
     requirements:
         sprint_id: \d+
         state: \d+
+
+zectranet_InsertScreenshotsInPHP:
+    pattern: /upload/insertscreenshots
+    defaults: { _controller: ZectranetBundle:Upload:Insert_Screenshots_InPHP }

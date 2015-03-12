@@ -315,3 +315,12 @@
 .tasks-filter-by-underline {
     border-bottom: solid brown 1px;
 }
+
+.img-screenshots {
+    display: inline !important;
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+    border: 4px solid #495b79;
+    border-radius: 5%;
+}

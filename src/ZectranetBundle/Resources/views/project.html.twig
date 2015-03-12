@@ -260,7 +260,7 @@
                             </button>
                         </span>
                         </form>
-                        <div id="slide-down-menu-screenshots" style="display: none;">
+                        <div id="slide-down-menu-screenshots" style="display: none;" cg-busy="documentPromise">
                             <div id="div-screenshot" style="display: none; width: auto;height: auto;">
 
                             </div>
@@ -347,6 +347,7 @@
         JSON_URLS.documentsGet = "{{ path('zectranet_document_get') }}";
         JSON_URLS.deleteFile  = "{{ path('zectranet_document_delete', { fileid : 0 }) }}";
         JSON_URLS.renameFile  = "{{ path('zectranet_document_rename', { fileid : 0 }) }}";
+        JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";
         var NOW = '{{ "now" | date('Y-m-d') }}';
 
         $('.noclose').bind('click', function (e) {

@@ -113,6 +113,66 @@ class UploadController extends Controller
         }
     }
 
+    public function Insert_Screenshots_InPHPAction()
+    {
+        $user_name = $this->getUser()->GetUserName();
+        $user = $this->getUser();
+        $imgs_in_base64 = json_decode(trim(file_get_contents('php://input')), true);
+
+        $FS = new Filesystem();
+        if (!$FS->exists(__DIR__ . '/../../../web/documents/' . $user_name.'/'.'attachments')) {
+            $FS->mkdir(__DIR__ . '/../../../web/documents/' .$user_name.'/'.'attachments');
+        }
+        $documents = array();
+        foreach($imgs_in_base64 as $img_in_base64 ) {
+            $in_bd = 0;
+            while($in_bd == 0 )
+            {
+                $em = $this->getDoctrine();
+                $name_img = rand(0, 999999);
+                $document_clone = $em->getRepository('ZectranetBundle:Document')->findByName($name_img . '.png');
+
+                if (count($document_clone) == 0)
+                {
+                    $document = new Document($user);
+                    $document->setName($name_img . '.png');
+                    $document->setPath($user_name . '/' . 'attachments/' . $name_img . ".png");
+                    $document->setUserid($user->getId());
+                    $document->setUser($user);
+                    $document->setUploaded(new \DateTime());
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($document);
+                    $em->flush();
+
+                    $img_in_base64 = str_replace('data:image/png;base64,', '', $img_in_base64);
+                    $img_in_base64 = str_replace(' ', '+', $img_in_base64);
+                    $img_in_base64 = base64_decode($img_in_base64);
+
+                    $fpng = fopen(__DIR__ . '/../../../web/documents/' . $user_name . '/' . 'attachments/' . $name_img . ".png", "w");
+                    $path_to_img = __DIR__ . '/../../../web/documents/' . $user_name . '/' . 'attachments/' . $name_img . ".png";
+                    fwrite($fpng, $img_in_base64);
+                    fclose($fpng);
+
+                    $documents[] = $document;
+
+                    $in_bd =1;
+                }
+                else
+                    {
+                        $in_bd =0;
+                    }
+            }
+        }
+        $new_doc = array();
+        foreach($documents as $document)
+        {
+            $new_doc[] = $document->getInArray();
+        }
+        $response = new Response(json_encode(array("result" => $new_doc)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
     public function getDocumentsAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
