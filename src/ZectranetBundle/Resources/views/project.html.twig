@@ -332,17 +332,7 @@
     <script src="{{ asset('bundles/zectranet/js/upload/script.js') }}" type="text/javascript"></script>
 
     <script>
-        var DeleteLastScreenshot = function() {
-            var img;
-            setTimeout(function() {
-                img = $('.img-screenshot');
-                return img;
-            }, 100);
 
-            if($('.img-screenshot').length == 1) {
-                $('#slide-down-menu-screenshots').fadeOut(500);
-            }
-        };
         var getDocuments_;
         JSON_URLS.documentsGet = "{{ path('zectranet_document_get') }}";
         JSON_URLS.deleteFile  = "{{ path('zectranet_document_delete', { fileid : 0 }) }}";

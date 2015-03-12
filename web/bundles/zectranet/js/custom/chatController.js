@@ -1,5 +1,5 @@
-var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope', '$sce', '$paginator',
-    function($scope, $http, $rootScope, $sce, $paginator) {
+var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope', '$sce', '$paginator','$compile',
+    function($scope, $http, $rootScope, $sce, $paginator, $compile) {
 
         // ------------ BEGIN OF SCOPE VARIABLES ------------ \\
         {
@@ -97,9 +97,6 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                             fr.onload = function () {
                                 var im = new Image();
                                 im.src = this.result;
-                                im.style.display = 'block';
-                                im.setAttribute('class', 'img-screenshots');
-                                im.setAttribute('onclick', '$(this).remove(DeleteLastScreenshot());');
                                 atachments.push($(im).attr('src'));
                                     if (atachments.length > 0) {
                                         $scope.documentPromise = $http({
@@ -109,14 +106,16 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                                         })
                                             .success(function (response) {
                                                 if (response.result) {
-                                                    $('#div-screenshot').css('display','block');
-                                                    $('#slide-down-menu-screenshots').fadeIn(1500);
-                                                    $('#div-screenshot').append(im);
-                                                    $(im).fadeIn(1500);
                                                     var screenshots = response.result;
 
                                                     for(var i=0;i<screenshots.length;i++)
                                                     {
+                                                       var Tags = '<img  src=\"' + $scope.urlAsset + screenshots[i].url + '\" class=\"img-screenshots\" /> ';
+                                                        Tags = $compile(Tags)($scope);
+                                                        document.getElementById('div-screenshot').style.display = 'block';
+                                                        $('#slide-down-menu-screenshots').fadeIn(1500);
+                                                        $('#div-screenshot').append(Tags);
+                                                        $(Tags).fadeIn(1500);
                                                         atachments = [];
                                                        var a = ' <div style=\" display: inline-block;width: 120px; \"  ><a data-lightbox=\"some\" class=\"doc-show\"  href=\"' + $scope.urlAsset + screenshots[i].url + '\" > ' +
                                                         '<img style=\"display: inline !important;width: 100px;height: 100px;margin: 10px;border: 4px solid #495b79;border-radius: 5%; \" src=\"' + $scope.urlAsset + screenshots[i].url + '\" class=\"zoom-images\" /> ' +
