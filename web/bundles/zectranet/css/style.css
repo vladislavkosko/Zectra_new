@@ -324,27 +324,3 @@
     border: 4px solid #495b79;
     border-radius: 5%;
 }
-
-.i-for-screenshots {
-    position: absolute;
-    left: 130px;
-    top: 6px;
-    font-size: 36px;
-    color: rgb(37, 73, 93);
-    opacity: 0.7;
-}
-
-.i-for-screenshots:hover {
-    position: absolute;
-    left: 130px;
-    top: 6px;
-    font-size: 36px;
-    color: rgb(37, 73, 93);
-    opacity: 1;
-}
-
-.one-div-screenshots{
-    display: inline-block;
-    width: 100px;
-    height: 100px;
-}
