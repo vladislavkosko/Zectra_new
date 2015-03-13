@@ -46,7 +46,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="list-group">
-                <div class="list-group-item active">Office Description:</div>
+                <div class="list-group-item active">Office Description</div>
                 <div class="list-group-item">{{ office.description }}</div>
             </div>
         </div>
@@ -162,7 +162,7 @@
                 <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
             {% endif %}
             <ul class="chat">
-                <li ng-repeat="post in posts" highlight class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
+                <li ng-repeat="post in posts" highlight style="border-bottom: none;"  class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
                     <span class="chat-img"
                         ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }"
                         ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + post.user.avatar)">
@@ -177,7 +177,7 @@
 
                             <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == post.user.id, 'pull-right': {{ app.user.id }} != post.user.id }">
                                 <i class="fa fa-clock-o fa-fw"></i>
-                                Posted on [[post.posted]]
+                                Posted on <span style="color: #000000; font-style: italic">[[post.posted]]</span>
                                 <i ng-if="post.edited" class="fa fa-edit"></i>
                             </small>
                         </div>

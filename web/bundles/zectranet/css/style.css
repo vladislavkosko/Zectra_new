@@ -349,7 +349,15 @@
 .coments:hover{
     background-color: #f8f8f8;
     cursor: pointer;
-    -webkit-box-shadow: 4px 4px 12px 0px rgba(50, 50, 50, 0.34);
-    -moz-box-shadow:    4px 4px 12px 0px rgba(50, 50, 50, 0.34);
-    box-shadow:         4px 4px 12px 0px rgba(50, 50, 50, 0.34);
+    -webkit-box-shadow: 4px 4px 12px 0 rgba(50, 50, 50, 0.34);
+    -moz-box-shadow:    4px 4px 12px 0 rgba(50, 50, 50, 0.34);
+    box-shadow:         4px 4px 12px 0 rgba(50, 50, 50, 0.34);
+}
+
+.hidden-element {
+    display: none;
+}
+
+.visible-element {
+    display: inherit !important;
 }

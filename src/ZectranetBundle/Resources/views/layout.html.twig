@@ -429,7 +429,7 @@
 			<div class="row">
 				<div class="col-xs-12">
 
-                    <div ng-if="requests.length > 0">
+                    <div ng-if="requests.length > 0" class="hidden-element" ng-class="{'visible-element': requests.length > 0}">
                         <div ng-repeat="request in requests | limitTo: 1">
                             <div class="panel panel-info request" ng-if="(request.type.label == 'request_user_project')">
                                 <div class="panel-body">

@@ -421,7 +421,10 @@
                                 <td>{{ log.type }}</td>
                                 <td>{{ log.valueBefore }}</td>
                                 <td>{{ log.valueAfter }}</td>
-                                <td>{{ log.date | date('Y-m-d') }}</td>
+                                <td>
+                                    {{ log.date | date('Y-m-d') }}<br>
+                                    {{ log.date | date('H:i') }}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -437,7 +440,7 @@
                             <span style="vertical-align: top;">
                                 <strong style="vertical-align: top;">[[post.user.name]]
                                 </strong>
-                                added a comment - [[ post.posted.date ]]
+                                added a comment - [[ post.posted ]]
                             </span>
 
                         </p>

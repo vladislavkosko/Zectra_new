@@ -81,7 +81,7 @@ class TaskPost
             'userid' => $this->getUserid(),
             'user' => $this->getUser()->getInArray(),
             'message' => $this->getMessage(),
-            'posted' => $this->getPosted(),
+            'posted' => $this->getPosted()->format('Y-m-d H:i:s'),
             'edited' => $this->getEdited()
         );
     }
