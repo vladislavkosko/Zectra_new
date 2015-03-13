@@ -24,7 +24,7 @@
                         </a>
                     </li>
                     <li class="divider"></li>
-                    <li ng-repeat="priority in uniqueFilterOptions.priority | filter: filterForPriority">
+                    <li ng-repeat="priority in uniqueFilterOptions.priority">
                         <a style="cursor: pointer;" ng-click="priority.checked = !priority.checked; filterByPriority(priority);">
                             <input type="checkbox" ng-model="priority.checked" class="checkbox checkbox-inline">
                             [[ priority.priority.label ]]
