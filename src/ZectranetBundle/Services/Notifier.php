@@ -318,7 +318,16 @@ class Notifier
             else
                 $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
             if ($temp != null) $users  = $temp;
-            else $users = $destination->getUsers();
+            else
+            {
+                $users = $destination->getUsers();
+                if (count($destination->getOffices()) > 0)
+                {
+                    foreach ($destination->getOffices() as $office)
+                        foreach ($office->getUsers() as $user)
+                            $users[] = $user;
+                }
+            }
         }
 
         else
