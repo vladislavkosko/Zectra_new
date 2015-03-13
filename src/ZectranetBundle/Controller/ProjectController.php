@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\ProjectPost;
@@ -134,8 +135,11 @@ class ProjectController extends Controller
         $data = json_decode($request->getContent(), true);
         $ids = array();
         foreach ($data['users'] as $user) {
-            $user = (object) $user;
-            $ids[] = $user->id;
+            if ((!isset($user['request'])) or ((isset($user['request'])) and ($user['request'] == 2)))
+            {
+                $user = (object) $user;
+                $ids[] = $user->id;
+            }
         }
 
         /** @var EntityManager $em */
@@ -171,9 +175,12 @@ class ProjectController extends Controller
             $this->get('zectranet.notifier')->createNotification("request_user_project", $user, $usersRequest, $project);
         }
 
-        $project->setUsers($users);
-        $em->persist($project);
-        $em->flush();
+        if ($data['status'] == 0)
+        {
+            $project->setUsers($users);
+            $em->persist($project);
+            $em->flush();
+        }
 
         $response = new Response(json_encode(array('success' => true)));
         $response->headers->set('Content-Type', 'application/json');
@@ -194,17 +201,48 @@ class ProjectController extends Controller
         $user = $this->getUser();
         /** @var Project $project */
         $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        /** @var Request $request */
+        $request = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'projectid' => $project_id, 'typeid' => 2));
+        /** @var Notification $notification */
+        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_user_project'));
 
         $usersProject = $project->getUsers();
         $usersProject[] = $user;
 
         $project->setUsers($usersProject);
         $em->persist($project);
+        $em->remove($request);
+        $em->remove($notification);
         $em->flush();
 
-        $response = new Response(json_encode(array('success' => true)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+    }
+
+    /**
+     * @Route("/project/{project_id}/declineRequestUserProject")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $project_id
+     * @return RedirectResponse
+     */
+    public function declineRequestUserProjectAction(Request $request, $project_id)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        /** @var Request $request */
+        $requestUser = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'projectid' => $project_id, 'typeid' => 2));
+        /** @var Notification $notification */
+        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_user_project'));
+
+        $em->remove($requestUser);
+        $em->remove($notification);
+        $em->flush();
+
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
     }
 
     /**
@@ -312,6 +350,7 @@ class ProjectController extends Controller
 
         if ($project && ($project->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN'))) {
             Project::deleteProject($em, $project_id);
+            $this->get('zectranet.notifier')->clearAllNotificationsByProjectId($project_id);
         }
 
         return $this->redirectToRoute('zectranet_user_page');

@@ -30,9 +30,14 @@ class NotificationController extends Controller
     {
         $user = $this->getUser();
 
+        $user_requests = $this->getDoctrine()->getRepository('ZectranetBundle:Request')->findBy(array('user' => $user));
+
         $user_notifications = Notification::prepareNotifications($user);
 
-        $response = new Response(json_encode(array("result" => array_map(function($e){return $e->getInArray();}, $user_notifications))));
+        $response = new Response(json_encode(array("result" => array(
+            'notifications' => array_map(function($e){return $e->getInArray();}, $user_notifications),
+            'requests' => array_map(function($e){return $e->getInArray();}, $user_requests)
+        ))));
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;
     }

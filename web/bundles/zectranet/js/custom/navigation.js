@@ -6,8 +6,11 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
 	var officeShowUrlBase = JSON_URLS.officeShow;
 	var projectShowUrlBase = JSON_URLS.projectShow;
 	var taskShowUrlBase = JSON_URLS.taskShow;
+    var acceptRequestUserProject = JSON_URLS.acceptRequestUserProject;
+    var declineRequestUserProject = JSON_URLS.declineRequestUserProject;
 
-	$scope.notifications = [];
+    $scope.requests = [];
+    $scope.notifications = [];
 	$scope.notifyHandler = null;
     $scope.notificationsLength = null;
 
@@ -28,14 +31,18 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
 	$scope.getNotification =  function getNotifications() {
 		$http.get(notificationsGetUrl)
 			.success(function(response){
-				if (response.result && response.result.length > 0)
-				{
-                    if (response.result.length != $scope.notificationsLength)
-                    {
+                if (response.result.requests && response.result.requests.length > 0){
+                    $scope.requests = response.result.requests;
+                }
+
+                else $scope.requests = [];
+
+                if (response.result.notifications && response.result.notifications.length > 0){
+                    if (response.result.notifications.length != $scope.notificationsLength){
                         StartNotify();
                         document.getElementById('notif_sound').play();
-                        $scope.notifications = prepareNotifications(response.result);
-                        $scope.notificationsLength = response.result.length;
+                        $scope.notifications = prepareNotifications(response.result.notifications);
+                        $scope.notificationsLength = response.result.notifications.length;
                     }
                 }
 
@@ -45,7 +52,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
 				}
 				setTimeout(getNotifications, 5000);
 			})
-	};
+    };
 
 	function prepareNotifications(notifications) {
 		notifications = _.map(notifications, function(n) {
@@ -62,6 +69,14 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
 
 		return notifications;
 	}
+
+    $scope.acceptRequestUserProject = function(request_id){
+        window.location.href = acceptRequestUserProject.replace('0', request_id);
+    };
+
+    $scope.declineRequestUserProject = function(request_id){
+        window.location.href = declineRequestUserProject.replace('0', request_id);
+    };
 
     console.log('NavigationController was loaded!');
 

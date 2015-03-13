@@ -127,6 +127,7 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                 var idsToRemove = [];
                 for (var i = 0; i < $scope.users.length; i++) {
                     if ($scope.users[i].selected) {
+                        $scope.users[i].request = 2;
                         $scope.projectMembers.push($scope.users[i]);
                         idsToRemove.push($scope.users[i]);
                     }
@@ -137,7 +138,7 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                 }
 
                 if (idsToRemove.length > 0) {
-                    $scope.saveMembersState();
+                    $scope.saveMembersState(1);
                 }
             };
 
@@ -155,15 +156,19 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                 }
 
                 if (idsToRemove.length > 0) {
-                    $scope.saveMembersState();
+                    $scope.saveMembersState(0);
                 }
             };
 
-            $scope.saveMembersState = function () {
+            $scope.saveMembersState = function (status) {
                 $scope.membersPromise = $http
-                    .post($scope.urlSaveProjectMembers, {'users': $scope.projectMembers})
+                    .post($scope.urlSaveProjectMembers, {'users': $scope.projectMembers, 'status': status})
                     .success(function (response) {
                     });
+            };
+
+            $scope.selectUser = function (user) {
+                if (!user.request) user.selected = !user.selected;
             };
         }
         // -------------------- End of Single Users Manage ----------------------\\

@@ -33,17 +33,6 @@ class RequestType
     private $color;
 
     /**
-     * @return array
-     */
-    public function getInArray() {
-        return array(
-            'id' => $this->getId(),
-            'label' => $this->getLabel(),
-            'color' => $this->getColor(),
-        );
-    }
-
-    /**
      * Get id
      *
      * @return integer 
@@ -97,5 +86,16 @@ class RequestType
     public function getColor()
     {
         return $this->color;
+    }
+
+    /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'label' => $this->getLabel(),
+            'color' => $this->getColor(),
+        );
     }
 }

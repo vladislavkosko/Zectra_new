@@ -310,8 +310,11 @@ class Notification
                         break;
                 }
 
-                if (in_array($user_notifications[$i]->getType(), array("request_office", "request_user_project", "request_project", "request_assign_task","private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
+                if (in_array($user_notifications[$i]->getType(), array("private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
                     $method = true;
+
+                if (in_array($user_notifications[$i]->getType(), array("request_office", "request_user_project", "request_project", "request_assign_task")))
+                    $method = false;
 
                 if ($method == true)
                     $temp_user_notifications[] = $user_notifications[$i];

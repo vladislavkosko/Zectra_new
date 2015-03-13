@@ -116,9 +116,10 @@
                                         </div>
                                         <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
                                             <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in projectMembers" ng-init="user.selected = false; user.index = $index"
-                                               ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
+                                               ng-class="{ 'active': user.selected }" ng-click="selectUser(user)">
                                                 <i class="fa fa-user"></i>
                                                 [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
+                                                <label ng-if="user.request" class="pull-right label label-default">Request sended</label>
                                             </a>
                                         </div>
                                         <div class="form-group">

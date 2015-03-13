@@ -520,6 +520,17 @@ class Project
         foreach ($project->getUsers() as $user) {
             $jsonProjectUsers[] = $user->getInArray();
         }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 2));
+        if (count($requests) > 0)
+        {
+            foreach ($requests as $request){
+                $usr = $request->getUser()->getInArray();
+                $usr['request'] = 1;
+                $jsonProjectUsers[] = $usr;
+            }
+        }
+
         return $jsonProjectUsers;
     }
 
@@ -538,6 +549,11 @@ class Project
         foreach ($project->getUsers() as $user) {
             $user_ids[] = $user->getId();
         }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 2));
+        if (count($requests) > 0)
+            foreach ($requests as $request)
+                $user_ids[] = $request->getUserid();
 
         $notProjectUsers = array();
         if (count($user_ids) > 0) {

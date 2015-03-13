@@ -192,6 +192,21 @@ class Notifier
 	}
 
     /**
+     * @param $office_id
+     * @return mixed
+     */
+    public function clearAllNotificationsByOfficeId($office_id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->delete('ZectranetBundle:Notification', 'n')
+            ->where("n.destinationid = :destinationid")
+            ->andWhere("n.type = 'message_office' OR n.type = 'private_message_office'")
+            ->setParameter("destinationid", $office_id);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * @param $project_id
      * @return mixed
      */
@@ -214,6 +229,28 @@ class Notifier
 
 		return $qb->getQuery()->getResult();
 	}
+
+    /**
+     * @param $project_id
+     * @return mixed
+     */
+    public function clearAllNotificationsByProjectId($project_id)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->delete('ZectranetBundle:Notification', 'n')
+            ->where("n.destinationid = :destinationid")
+            ->andWhere("n.type = 'message_project'
+    			    OR n.type = 'private_message_project'
+    			    OR n.type = 'message_epic_story'
+    			    OR n.type = 'private_message_epic_story'
+    			    OR n.type = 'epic_story_added'
+    			    OR n.type = 'epic_story_deleted'
+    			    OR n.type = 'task_added'
+                    OR n.type = 'task_deleted'")
+            ->setParameter("destinationid", $project_id);
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * @param $taskId

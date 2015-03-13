@@ -75,6 +75,7 @@ class OfficeController extends Controller
 
         if ($office && ($office->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN'))) {
             Office::deleteOffice($em, $office_id);
+            $this->get('zectranet.notifier')->clearAllNotificationsByOfficeId($office_id);
         }
 
         return $this->redirectToRoute('zectranet_user_page');

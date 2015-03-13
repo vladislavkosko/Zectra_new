@@ -169,6 +169,18 @@ zectranet_save_project_members:
     requirements:
         project_id: \d+
 
+zectranet_accept_request_user_project:
+    pattern: /project/{project_id}/acceptRequestUserProject
+    defaults: { _controller: ZectranetBundle:Project:acceptRequestUserProject }
+    requirements:
+        project_id: \d+
+
+zectranet_decline_request_user_project:
+    pattern: /project/{project_id}/declineRequestUserProject
+    defaults: { _controller: ZectranetBundle:Project:declineRequestUserProject }
+    requirements:
+        project_id: \d+
+
 zectranet_get_project_offices:
     pattern: /project/{project_id}/getOffices
     defaults: { _controller: ZectranetBundle:Project:getOffices }

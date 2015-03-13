@@ -334,6 +334,22 @@ class Request
         return $this->task;
     }
 
+    public function getInArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'type' => $this->getType()->getInArray(),
+            'user' =>$this->getUser()->getInArray(),
+            'project' => (($this->getType()->getLabel() == 'request_user_project')
+                or ($this->getType()->getLabel() == 'request_project'))
+                ? $this->getProject()->getInArray() : null,
+            'office' => ($this->getType()->getLabel() == 'request_office')
+                ? $this->getOffice()->getInArray() : null,
+            'task' => ($this->getType()->getLabel() == 'request_office')
+                ? $this->getTask()->getInArray() : null
+        );
+    }
+
     /**
      * @param EntityManager $em
      * @param User $user
