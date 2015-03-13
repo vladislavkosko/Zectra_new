@@ -39,45 +39,47 @@
 						</a>
 					</li>
 
+					<li>
+						<a href="#">
+							<i class='fa fa-home'></i>
+							<span>Private Offices</span>
+						</a>
+						<ul class="nav nav-second-level">
+							{% for office in app.user.ownedOffices %}
+								<li>
+									<a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+										<i class='fa fa-home'></i>
+										<span>{{ office.name }}</span>
+									</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</li>
+
+					<li>
+						<a href="#">
+							<i class='fa fa-sitemap'></i>
+							<span>Connected Offices</span>
+						</a>
+						<ul class="nav nav-second-level">
+							{% for office in app.user.assignedOffices %}
+								<li>
+									<a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+										<i class='fa fa-sitemap'></i>
+										<span>{{ office.name }}</span>
+									</a>
+								</li>
+							{% endfor %}
+						</ul>
+					</li>
+
+					{#
 					<li class="active">
 						<div style="position: relative; display: block; padding: 10px 15px; background-color: #eee;">
 							<i class='fa fa-sitemap'></i>
 							<span>Offices</span>
 						</div>
 						<ul class="nav nav-second-level">
-							<li>
-								<a href="#">
-									<i class='fa fa-home'></i>
-									<span>Private Offices</span>
-								</a>
-								<ul class="nav nav-third-level">
-									{% for office in app.user.ownedOffices %}
-										<li>
-											<a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
-												<i class='fa fa-home'></i>
-												<span>{{ office.name }}</span>
-											</a>
-										</li>
-									{% endfor %}
-								</ul>
-							</li>
-
-							<li>
-								<a href="#">
-									<i class='fa fa-sitemap'></i>
-									<span>Connected Offices</span>
-								</a>
-								<ul class="nav nav-third-level">
-									{% for office in app.user.assignedOffices %}
-										<li>
-											<a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
-												<i class='fa fa-sitemap'></i>
-												<span>{{ office.name }}</span>
-											</a>
-										</li>
-									{% endfor %}
-								</ul>
-							</li>
 
 							<li style="display: none;">
 								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_office">
@@ -87,70 +89,73 @@
 							</li>
 						</ul>
 					</li>
+					#}
 
+					<li>
+						<a href="#">
+							<i class='fa fa-briefcase'></i>
+							<span>Private Projects</span>
+						</a>
+						<ul class="nav nav-second-level">
+							{% for project in app.user.ownedProjects %}
+								{% if project.parent == null %}
+									<li>
+										<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+											<i class='fa fa-briefcase'></i>
+											<span>{{ project.name }}</span>
+										</a>
+									</li>
+								{% endif %}
+							{% endfor %}
+						</ul>
+					</li>
+
+					<li>
+						<a href="#">
+							<i class='fa fa-briefcase'></i>
+							<span>Connected Projects</span>
+						</a>
+						<ul class="nav nav-second-level">
+							{% for project in app.user.projects %}
+								{% if project.parent == null %}
+									<li>
+										<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+											<i class='fa fa-briefcase'></i>
+											<span>{{ project.name }}</span>
+										</a>
+									</li>
+								{% endif %}
+							{% endfor %}
+							{% for office in app.user.assignedOffices %}
+								{% for project in office.projects if project.parent == null and project not in app.user.ownedProjects %}
+									<li>
+										<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+											<i class='fa fa-briefcase'></i>
+											<span>{{ project.name }}</span>
+										</a>
+									</li>
+								{% endfor %}
+							{% endfor %}
+							{% for office in app.user.ownedOffices %}
+								{% for project in office.projects if project.parent == null and project not in app.user.ownedProjects %}
+									<li>
+										<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+											<i class='fa fa-briefcase'></i>
+											<span>{{ project.name }}</span>
+										</a>
+									</li>
+								{% endfor %}
+							{% endfor %}
+						</ul>
+					</li>
+
+					{#
 					<li class="active">
 						<div style="position: relative; display: block; padding: 10px 15px; background-color: #eee;">
 							<i class='fa fa-briefcase'></i>
 							<span>Projects</span>
 						</div>
 						<ul class="nav nav-second-level">
-							<li>
-								<a href="#">
-									<i class='fa fa-briefcase'></i>
-									<span>Private Projects</span>
-								</a>
-								<ul class="nav nav-third-level">
-									{% for project in app.user.ownedProjects %}
-										{% if project.parent == null %}
-										<li>
-											<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-												<i class='fa fa-briefcase'></i>
-												<span>{{ project.name }}</span>
-											</a>
-										</li>
-										{% endif %}
-									{% endfor %}
-								</ul>
-							</li>
-
-							<li>
-								<a href="#">
-									<i class='fa fa-briefcase'></i>
-									<span>Connected Projects</span>
-								</a>
-								<ul class="nav nav-third-level">
-									{% for project in app.user.projects %}
-										{% if project.parent == null %}
-										<li>
-											<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-												<i class='fa fa-briefcase'></i>
-												<span>{{ project.name }}</span>
-											</a>
-										</li>
-										{% endif %}
-									{% endfor %}
-									{% for office in app.user.assignedOffices %}
-										{% for project in office.projects if project.parent == null and project not in app.user.ownedProjects %}
-											<li>
-												<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-													<i class='fa fa-briefcase'></i>
-													<span>{{ project.name }}</span>
-												</a>
-											</li>
-										{% endfor %}
-									{% endfor %}
-									{% for office in app.user.ownedOffices %}
-										{% for project in office.projects if project.parent == null and project not in app.user.ownedProjects %}
-											<li>
-												<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-													<i class='fa fa-briefcase'></i>
-													<span>{{ project.name }}</span>
-												</a>
-											</li>
-										{% endfor %}
-									{% endfor %}
-								</ul>
-							</li>
 
 							<li style="display: none;">
 								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_project">
@@ -160,6 +165,7 @@
 							</li>
 						</ul>
 					</li>
+					#}
 				</ul>
 				<!-- END OF SITE TREE -->
 
