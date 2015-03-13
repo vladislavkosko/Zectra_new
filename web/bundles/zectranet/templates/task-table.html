@@ -5,7 +5,8 @@
     <thead>
         <tr>
             <th class="col-xs-1">ID</th>
-            <th class="col-xs-1">Name</th>
+            <th class="hidden-sm hidden-xs">Type</th>
+            <th class="col-xs-2">Name</th>
             <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
             <th class="col-xs-1 hidden-sm hidden-xs">Status</th>
             <th class="col-xs-1 hidden-xs">Progress</th>
@@ -22,9 +23,18 @@
     <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter"
            ng-init="task.expand = false; parentTask = task">
     <tr ng-if="task.parentid == null">
-        <td class="col-xs-1">
-            [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+        <td class="col-xs-1" style="font-size: 10px;">
+            <span style="vertical-align: middle;">
+                [[ task.id ]]
+            </span>
         </td>
+
+        <td class="hidden-sm hidden-xs">
+            <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
+            <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
+            <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
+        </td>
+
         <td class="col-xs-3">
             <a ng-show="task.subtasks.length > 0" ng-click="task.expand = !task.expand" style="text-decoration: none; cursor: pointer;">
                 <i ng-hide="task.expand" class="fa fa-plus"></i>
@@ -74,8 +84,15 @@
     </tr>
 
     <tr ng-show="parentTask.expand" class="angular-show-transition-2-ms" ng-repeat="task in task.subtasks">
-        <td class="col-xs-1">
-            [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+        <td class="col-xs-1" style="font-size: 10px;">
+            <span style="vertical-align: middle;">
+                [[ parentTask.id ]].[[ $index + 1 ]]
+            </span>
+        </td>
+        <td>
+            <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
+            <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
+            <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
         </td>
         <td class="col-xs-3">
             <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]">[[ task.name ]]</a>

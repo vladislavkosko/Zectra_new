@@ -24,7 +24,7 @@
                         </a>
                     </li>
                     <li class="divider"></li>
-                    <li ng-repeat="priority in uniqueFilterOptions.priority">
+                    <li ng-repeat="priority in uniqueFilterOptions.priority | filter: filterForPriority">
                         <a style="cursor: pointer;" ng-click="priority.checked = !priority.checked; filterByPriority(priority);">
                             <input type="checkbox" ng-model="priority.checked" class="checkbox checkbox-inline">
                             [[ priority.priority.label ]]
@@ -70,7 +70,7 @@
                            ng-class="{'btn-warning': orderByProgress == 2}">Sort Z-A</a></li>
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = null; orderByProgress = 0;">Disable sort by this field</a></li>
                     <li class="divider"></li>
-                    <li ng-repeat="progress in uniqueFilterOptions.progress">
+                    <li ng-repeat="progress in uniqueFilterOptions.progress | filter: filterForProgress">
                         <a style="cursor: pointer;" ng-click="progress.checked = !progress.checked; filterByProgress(progress);">
                             <input type="checkbox" ng-model="progress.checked" class="checkbox checkbox-inline">
                             [[ progress.progress ]]%
@@ -91,7 +91,7 @@
                            ng-class="{'btn-warning': orderByOwner == 2}">Sort Z-A</a></li>
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = null; orderByOwner = 0;">Disable sort by this field</a></li>
                     <li class="divider"></li>
-                    <li ng-repeat="owner in uniqueFilterOptions.owner">
+                    <li ng-repeat="owner in uniqueFilterOptions.owner | filter: filterForOwner">
                         <a style="cursor: pointer;" ng-click="owner.checked = !owner.checked; filterByOwner(owner);">
                             <input type="checkbox" ng-model="owner.checked" class="checkbox checkbox-inline">
                             [[ owner.owner.username ]]
@@ -112,7 +112,7 @@
                            ng-class="{'btn-warning': orderByAssigned == 2}">Sort Z-A</a></li>
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = null; orderByAssigned = 0;">Disable sort by this field</a></li>
                     <li class="divider"></li>
-                    <li ng-repeat="assigned in uniqueFilterOptions.assigned">
+                    <li ng-repeat="assigned in uniqueFilterOptions.assigned | filter: filterForAssigned">
                         <a style="cursor: pointer;" ng-click="assigned.checked = !assigned.checked; filterByAssigned(assigned);">
                             <input type="checkbox" ng-model="assigned.checked" class="checkbox checkbox-inline">
                             [[ assigned.assigned.username ]]
@@ -133,7 +133,7 @@
                            ng-class="{'btn-warning': orderBySprint == 2}">Sort Z-A</a></li>
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = null; orderBySprint = 0;">Disable sort by this field</a></li>
                     <li class="divider"></li>
-                    <li ng-repeat="sprint in uniqueFilterOptions.sprint">
+                    <li ng-repeat="sprint in uniqueFilterOptions.sprint | filter: filterForSprint">
                         <a style="cursor: pointer;" ng-click="sprint.checked = !sprint.checked; filterBySprint(sprint);">
                             <input type="checkbox" ng-model="sprint.checked" class="checkbox checkbox-inline">
                             [[ sprint.sprint.name ]]

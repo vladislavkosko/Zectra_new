@@ -69,9 +69,11 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                             initUniqueFilterOptions(tasks[i]);
                         }
                         $scope.tasksFilter.push(tasks[i]);
+                        tasks[i].excludedBy = null;
                     }
                 }
                 $scope.tasks = tasks;
+                calculateUniques($scope.tasks);
             });
         };
 
@@ -211,13 +213,11 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 }
             }
 
-            $scope.excludedFromFilter = [];
-
             $scope.filterByID = function (id) {
                 for (var i = 0; i < $scope.tasks.length; i++) {
                     if ($scope.tasks[i].id == id.id) {
                         $scope.tasks[i].selectedInFilter.id = id.checked;
-                        $scope.tasks[i].excludedBy = (id.checked) ? 'id' : null;
+                        $scope.tasks[i].excludedBy = (!id.checked) ? 'id' : null;
                     }
                 }
                 calculateUniques($scope.tasks);
@@ -227,7 +227,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 for (var i = 0; i < $scope.tasks.length; i++) {
                     if ($scope.tasks[i].priority.label == priority.priority.label) {
                         $scope.tasks[i].selectedInFilter.priority = priority.checked;
-                        $scope.tasks[i].excludedBy = (priority.checked) ? 'priority' : null;
+                        $scope.tasks[i].excludedBy = (!priority.checked) ? 'priority' : null;
                     }
                 }
                 calculateUniques($scope.tasks);
@@ -237,8 +237,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 for (var i = 0; i < $scope.tasks.length; i++) {
                     if ($scope.tasks[i].status.id == status.status.id) {
                         $scope.tasks[i].selectedInFilter.status = status.checked;
-                        $scope.tasks[i].excludedBy = (status.checked) ? 'status' : null;
-                        console.log('task.id: ' + $scope.tasks[i].id + '; status.checked: ' + status.checked);
+                        $scope.tasks[i].excludedBy = (!status.checked) ? 'status' : null;
                     }
                 }
                 calculateUniques($scope.tasks);
@@ -248,7 +247,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 for (var i = 0; i < $scope.tasks.length; i++) {
                     if ($scope.tasks[i].progress == progress.progress) {
                         $scope.tasks[i].selectedInFilter.progress = progress.checked;
-                        $scope.tasks[i].excludedBy = (progress.checked) ? 'progress' : null;
+                        $scope.tasks[i].excludedBy = (!progress.checked) ? 'progress' : null;
                     }
                 }
                 calculateUniques($scope.tasks);
@@ -258,7 +257,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 for (var i = 0; i < $scope.tasks.length; i++) {
                     if ($scope.tasks[i].owner.id == owner.owner.id) {
                         $scope.tasks[i].selectedInFilter.owner = owner.checked;
-                        $scope.tasks[i].excludedBy = (owner.checked) ? 'owner' : null;
+                        $scope.tasks[i].excludedBy = (!owner.checked) ? 'owner' : null;
                     }
                 }
             };
@@ -267,7 +266,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 for (var i = 0; i < $scope.tasks.length; i++) {
                     if ($scope.tasks[i].assigned.id == assigned.assigned.id) {
                         $scope.tasks[i].selectedInFilter.assigned = assigned.checked;
-                        $scope.tasks[i].excludedBy = (assigned.checked) ? 'assigned' : null;
+                        $scope.tasks[i].excludedBy = (!assigned.checked) ? 'assigned' : null;
                     }
                 }
             };
@@ -276,16 +275,16 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 for (var i = 0; i < $scope.tasks.length; i++) {
                     if ($scope.tasks[i].sprint.id == sprint.sprint.id) {
                         $scope.tasks[i].selectedInFilter.sprint = sprint.checked;
-                        $scope.excludedBy = (sprint.checked) ? 'sprint' : null;
+                        $scope.excludedBy = (!sprint.checked) ? 'sprint' : null;
                     }
                 }
             };
 
             $scope.execTaskFilter = function (obj) {
-                if (obj.selectedInFilter && obj.selectedInFilter.id && obj.selectedInFilter.priority &&
-                    obj.selectedInFilter.status && obj.selectedInFilter.progress &&
-                    obj.selectedInFilter.owner && obj.selectedInFilter.assigned &&
-                    obj.selectedInFilter.sprint)
+                if (obj.selectedInFilter && obj.selectedInFilter.id &&
+                    obj.selectedInFilter.priority && obj.selectedInFilter.status &&
+                    obj.selectedInFilter.progress && obj.selectedInFilter.owner &&
+                    obj.selectedInFilter.assigned && obj.selectedInFilter.sprint)
                 {
                     return obj;
                 }
@@ -335,13 +334,56 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     }
                 }
             }
-            
+
+            $scope.filterForID = function (obj) {
+                if (obj.id in $scope.uniqesCount.id &&
+                    $scope.uniqesCount.id[obj.id] > 0) {
+                    return obj;
+                }
+            };
+
+            $scope.filterForPriority = function (obj) {
+                if (obj.priority.label in $scope.uniqesCount.priority &&
+                    $scope.uniqesCount.priority[obj.priority.label] > 0) {
+                    return obj;
+                }
+            };
+
             $scope.filterForStatus = function (obj) {
                 if (obj.status.label in $scope.uniqesCount.status &&
                     $scope.uniqesCount.status[obj.status.label] > 0) {
                     return obj;
                 }
-            }
+            };
+
+            $scope.filterForProgress = function (obj) {
+                if (obj.progress in $scope.uniqesCount.progress &&
+                    $scope.uniqesCount.progress[obj.progress] > 0) {
+                    return obj;
+                }
+            };
+
+            $scope.filterForOwner = function (obj) {
+                if (obj.owner.username in $scope.uniqesCount.owner &&
+                    $scope.uniqesCount.owner[obj.owner.username] > 0) {
+                    return obj;
+                }
+            };
+
+            $scope.filterForAssigned = function (obj) {
+                if (obj.assigned.username in $scope.uniqesCount.assigned &&
+                    $scope.uniqesCount.assigned[obj.assigned.username] > 0) {
+                    return obj;
+                }
+            };
+
+            $scope.filterForSprint = function (obj) {
+                if (obj.sprint.name in $scope.uniqesCount.sprint &&
+                    $scope.uniqesCount.sprint[obj.sprint.name] > 0) {
+                    return obj;
+                }
+            };
+
         }
         // ------------ End of filter functions -------------- \\
 
