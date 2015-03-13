@@ -13,7 +13,9 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$rootScope', '$
     $scope.getDocuments_ = getDocuments;
     $rootScope.DocumentsInChat = [];
 
-    getDocuments();
+        getDocuments_ = getDocuments;
+
+        getDocuments();
 
     function getDocuments()
     {

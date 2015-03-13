@@ -24,7 +24,16 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             $scope.promise = $http.post($scope.urlGetPosts, {'offset': offset , 'count': count})
                 .success(function (response) {
                    $scope.posts = preparePosts(response.Posts);
+                    $scope.posts.reverse();
+                    $('#posts-panel').animate({"scrollTop":$('#posts-panel').height()+3500},1000);
+
                 });
+        };
+
+        $scope.userHref = function (user_id) {
+
+            return JSON_URLS.userPage.replace('0', user_id );
+
         };
 
         function preparePosts(posts) {
@@ -47,7 +56,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             {
                 documents = documents + $rootScope.DocumentsInChat[i]
             }
-
+            $('#textarea-post').val('');
           $scope.documentPromise = $http.post($scope.urlAddPost, {'message': message + '<br>' + documents, 'usersForPrivateMessage': usersForPrivateMessage})
                 .success(function (response) {
                     $scope.getPosts(0, 100);
@@ -78,6 +87,13 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             }
 
             return matches;
+        };
+
+        $scope.ScrollComments = function() {
+            $('body').animate({"scrollTop":($('body').height())},200);
+                setTimeout(function(){
+                    $('#posts-panel').animate({"scrollTop":$('#posts-panel').height()+3500},100);
+                },200);
         };
 
         //InsertScreenshots ctrl + V

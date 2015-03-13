@@ -387,13 +387,14 @@
         <!-- End of Desciption Section -->
 
         <!-- Begin of Task Nav Tabs -->
+        <div ng-controller="ChatController">
         <ul id="myTab" class="nav nav-tabs" role="tablist">
             <li data-toggle="tooltip" data-placement="top" title="Logs" role="presentation" class="active">
                 <a data-toggle="tab" id="task-logs-tab" class="btn" href="#task-logs" aria-controls="task-logs" role="tab" aria-expanded="true">
                     Logs
                 </a>
             </li>
-            <li class="" role="presentation">
+            <li class="" role="presentation" ng-click="ScrollComments()">
                 <a id="coments-tab" aria-controls="coments" data-toggle="tab" role="tab" href="#coments" aria-expanded="false">Comments</a>
             </li>
         </ul>
@@ -426,19 +427,23 @@
                     </tbody>
                 </table>
             </div>
-            <div id="coments" class="tab-pane fade" aria-labelledby="coments-tab" role="tabpanel" ng-controller="ChatController" ng-init="getPosts(0, 100)" >
-
-                <div class="coment" ng-repeat="post in posts">
-
-                    <div class="coment">
+            <div id="coments"  class="tab-pane fade" aria-labelledby="coments-tab" role="tabpanel"  ng-init="getPosts(0, 100)">
+                <div style="overflow-y: auto;height: 500px; " id="posts-panel">
+                <div class="coments" ng-repeat="post in posts">
                         <p style="margin-top: 25px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + post.user.avatar)">
-                            <img ng-src="[[avatar]]" alt="User Avatar" class="img-circle""/> <a href="#"><strong>[[post.user.name]]</strong></a> added a comment - [[ post.posted.date ]]
+                            <a ng-init="Href = userHref(post.user.id)" ng-href="[[Href]]" style="display: inline-block; text-decoration: none;">
+                                <img style="width: 50px;height: 50px; object-fit: cover;" ng-src="[[avatar]]" alt="User Avatar" class="img-circle"/>
+                            </a>
+                            <span style="vertical-align: top;">
+                                <strong style="vertical-align: top;">[[post.user.name]]
+                                </strong>
+                                added a comment - [[ post.posted.date ]]
+                            </span>
+
                         </p>
                         <p style="margin: -10px 0 0 83px;" ng-bind-html="post.message"></p>
                         <hr>
-                    </div>
-
-
+                </div>
                 </div>
 
                 <div class="list-group-item">
@@ -464,6 +469,7 @@
             </div>
             {% include '@Zectranet/dialogAdd.html.twig' %}
         </div>
+        </div>
 
     </div>
 {% endblock %}
@@ -478,6 +484,7 @@
         JSON_URLS.addPost = "{{ path('zectranet_task_add_post', { 'task_id': task.id }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_task_get_post', { 'task_id': task.id }) }}";
         JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";
+        JSON_URLS.userPage = "{{ path('zectranet_user_page', {'user_id': 0}) }}";
     </script>
     <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/documentsController.js') }}" type="text/javascript"></script>
