@@ -86,9 +86,12 @@ class Notifier
 		$notification->setDestinationid($destinationid);
 		$notification->setType($type);
 
+        $message = preg_replace("/<[\W\w]{1,255}>/", "", $message);
 		$localMessage = $message;
 		if ($post != null) {
-			$localMessage = $localMessage . '<br>Message: <i>' . substr($post->message, 0, 100) . '</i>';
+			$localMessage = $localMessage . '<br>Message: <i>'
+                . substr(preg_replace("/<[\W\w]{1,255}>/", "", $post->message), 0, 100)
+                . '</i>';
 			if (strlen($post->message) >= 100) {
 				$localMessage .= '...';
 			}
