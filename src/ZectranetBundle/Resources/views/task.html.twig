@@ -151,7 +151,7 @@
                             {% set project = (task.project.parent) ? task.project.parent : task.project %}
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <select class="form-control" name="project" ng-model="taskInfoEdit.project.id" style="border: none;">
+                                    <select class="form-control" name="project" ng-model="taskInfoEdit.projectid" style="border: none;">
                                         <optgroup style="margin: 0; padding: 0;" label="Project">
                                             <option {% if project.id == task.project.id %}selected="selected"{% endif %} value="{{ project.id }}">{{ project.name }}</option>
                                         </optgroup>

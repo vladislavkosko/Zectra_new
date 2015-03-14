@@ -1063,6 +1063,7 @@ class Task
             'name' => $this->getName(),
             'description' => $this->getDescription(),
             'parentid' => $this->getParentid(),
+            'projectid' => $this->getProjectid(),
             'progress' => $this->getProgress(),
             'assigned' => ($this->assigned) ? $this->getAssigned()->getInArray() : null,
             'startDate' => $this->getStartdate()->format('Y-m-d'),

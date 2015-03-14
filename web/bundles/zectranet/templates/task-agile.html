@@ -18,6 +18,10 @@
                                     'local-green': task.priority.id == 1
                                     }">
                                <h4 class="list-group-item-heading">
+                                    <span style="color: black;">
+                                        [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                        &nbsp;
+                                    </span>
                                     [[ task.name ]]
                                </h4>
                                <p class="list-group-item-text">

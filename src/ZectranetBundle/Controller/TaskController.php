@@ -115,27 +115,21 @@ class TaskController extends Controller {
         $data = (object) $data['task'];
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $this->getUser();
-        /** @var Task $task */
-        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
         /** @var TaskLogger $logger */
         $logger = $this->get('zectranet.tasklogger');
 
         $parameters = array(
-            'name' => $data->name,
-            'type' => $data->type['id'],
+            'name' => $data->name, 'type' => $data->type['id'],
             'priority' => $data->priority['id'],
             'status' => $data->status['id'],
-            'project' => $data->project['id'],
+            'project' => $data->projectid,
         );
 
-        Task::editMainInfo($em, $logger, $task_id, $parameters);
+        $task = Task::editMainInfo($em, $logger, $task_id, $parameters);
 
-        $response = new Response(json_encode(array('success' => true)));
+        $response = new Response(json_encode(array('task' => $task)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
-
     }
 
     /**
