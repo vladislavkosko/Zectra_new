@@ -263,6 +263,12 @@ zectranet_task_show:
     requirements:
         task_id: \d+
 
+zectranent_task_get_single:
+    pattern: /task/get/{task_id}
+    defaults: { _controller: ZectranetBundle:Task:getSingleTask }
+    requirements:
+        task_id: \d+
+
 zectranet_task_edit_main_info:
     pattern: /task/{task_id}/edit_main_info
     defaults: { _controller: ZectranetBundle:Task:editMainInfo }

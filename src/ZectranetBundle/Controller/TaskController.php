@@ -93,12 +93,26 @@ class TaskController extends Controller {
         return $response;
     }
 
+
+    /**
+     * @param int $task_id
+     * @return Request
+     */
+    public function getSingleTaskAction ($task_id) {
+        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
+        $response = new Response(json_encode(array('task' => $task->getInArray())));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
     /**
      * @param Request $request
      * @param int $task_id
      * @return RedirectResponse
      */
     public function editMainInfoAction (Request $request, $task_id) {
+        $data = json_decode($request->getContent(), true);
+        $data = (object) $data['task'];
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
@@ -109,15 +123,19 @@ class TaskController extends Controller {
         $logger = $this->get('zectranet.tasklogger');
 
         $parameters = array(
-            'name' => $request->request->get('name'),
-            'type' => $request->request->get('type'),
-            'priority' => $request->request->get('priority'),
-            'status' => $request->request->get('status'),
-            'project' => $request->request->get('project'),
+            'name' => $data->name,
+            'type' => $data->type['id'],
+            'priority' => $data->priority['id'],
+            'status' => $data->status['id'],
+            'project' => $data->project['id'],
         );
 
-        $task = Task::editMainInfo($em, $logger, $task_id, $parameters);
-        return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
+        Task::editMainInfo($em, $logger, $task_id, $parameters);
+
+        $response = new Response(json_encode(array('success' => true)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+
     }
 
     /**

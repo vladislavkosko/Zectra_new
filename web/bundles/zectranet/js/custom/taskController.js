@@ -1,8 +1,8 @@
 var taskController = Zectranet.controller('TaskController', ['$scope', '$http', '$rootScope',
     function($scope, $http, $rootScope) {
 
-        $scope.timeNow = NOW;
-        $scope.USER_ID = USER_ID;
+        $scope.timeNow = TEMPPARAMS.NOW;
+        $scope.USER_ID = TEMPPARAMS.USER_ID;
 
         $scope.taskModel = {
             'id': null, 'name': null, 'description': null, 'type': null,
@@ -24,6 +24,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.tasks = null;
         $scope.tasksFilter = null;
         $scope.promise = null;
+        $scope.taskInfoEdit = null;
 
         $scope.urlGetTasks = null;
         $scope.urlAddTask = null;
@@ -33,6 +34,8 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.urlAddTasksToSprint = JSON_URLS.sprintAddTasks;
         $scope.urlShowSprint = JSON_URLS.showSprint;
         $scope.urlAsset = JSON_URLS.asset;
+        $scope.urlgetSingleTask = JSON_URLS.getSingleTask;
+        $scope.urlSaveTaskMainInfo = JSON_URLS.saveMainTaskInfo;
 
         $rootScope.initTaskController = function (page_id) {
             $scope.urlGetTasks = JSON_URLS.getTasks.replace('0', page_id);
@@ -75,6 +78,20 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 $scope.tasks = tasks;
                 calculateUniques($scope.tasks);
             });
+        };
+
+        $scope.getSingleTask = function () {
+            $scope.taskPromise = $http
+                .get($scope.urlgetSingleTask)
+                .success(function (response) {
+                    $scope.taskInfoEdit = response.task;
+                }
+            );
+        };
+
+        $scope.saveSingleTaskMainInfo = function (task) {
+            $scope.mainInfoPromise = $http
+                .post($scope.urlSaveTaskMainInfo, { 'task': task });
         };
 
         $scope.generateAsset = function (asset, url) {

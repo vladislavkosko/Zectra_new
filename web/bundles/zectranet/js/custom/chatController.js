@@ -10,7 +10,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             $scope.urlGetPosts = JSON_URLS.getPosts;
             $scope.InsertScreenshotsInPHP = JSON_URLS.InsertScreenshotsInPHP;
             $scope.urlAsset = JSON_URLS.asset;
-            $scope.USER_ID = USER_ID;
+            $scope.USER_ID = TEMPPARAMS.USER_ID;
         }
         // ------------ END OF SCOPE VARIABLES --------------- \\
 

@@ -534,6 +534,8 @@
             urlOfficeForTasks: "{{ path('intranet_show_office', {office_id: 0}) }}",#}
 		};
 
+        var TEMPPARAMS = {};
+
 		var SearchText = null;
 		{% if searchText is defined and searchText != null %}
 			SearchText = '{{ searchText }}';
