@@ -32,24 +32,30 @@ class OfficePostController extends Controller
         $privateForAll = false;
         if ($post->usersForPrivateMessage == 'all')
         {
-            $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post);
+            $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, null, 'office');
             $privateForAll = true;
         }
 
         if (($post->usersForPrivateMessage != null) and ($privateForAll == false))
         {
-            $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $post->usersForPrivateMessage));
-            if (count($usersEmail) > 0)
+            $usersOffice = $office->getUsers();
+            $usersOfficeNames = array();
+            foreach ($usersOffice as $user)
+                $usersOfficeNames[] = $user->getUsername();
+            foreach ($post->usersForPrivateMessage as $userName)
+                if (in_array($userName, $usersOfficeNames))
+                    $usersName[] = $userName;
+
+            if (count($usersName) > 0)
             {
-                foreach ($usersEmail as $userEmail)
-                    $usersName[] = $userEmail->getUsername();
-                $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, $usersEmail);
+                $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $usersName));
+                $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, $usersEmail, 'office');
             }
 
         }
 
         if ($privateForAll == false)
-            $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $office, null, $post, $usersName);
+            $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $office, null, $post, $usersName, 'office');
 
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');

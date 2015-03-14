@@ -45,7 +45,7 @@ class Notifier
         "epic_story_deleted",             // +
 
         "request_office",                 // -
-        "request_user_project",           // coding
+        "request_user_project",           // +
         "request_project",                // -
         "request_assign_task",            // -
 
@@ -278,9 +278,10 @@ class Notifier
      * @param string|null $user_to_send_name
      * @param object|null $post
      * @param array|null $temp
+     * @param bool|null $isOffice
      * @return bool
      */
-	public function createNotification($type, $resource, $usersRequest, $destination, $user_to_send_name = null, $post = null, $temp = null)
+	public function createNotification($type, $resource, $usersRequest, $destination, $user_to_send_name = null, $post = null, $temp = null, $isOffice = null)
 	{
 		$users = null;
 		$message = null;
@@ -296,11 +297,29 @@ class Notifier
             if (count($temp) > 0)
             {
                 $users = array();
-                foreach ($destination->getUsers() as $usr)
-                    if (!in_array($usr->getUsername(), $temp)) $users[] = $usr;
+                foreach ($destination->getUsers() as $user)
+                    if (!in_array($user->getUsername(), $temp)) $users[] = $user;
+
+                if (($isOffice == null) and (count($destination->getOffices())) > 0)
+                {
+                    foreach ($destination->getOffices() as $office)
+                        foreach ($office->getUsers() as $user)
+                            if (!in_array($user->getUsername(), $temp)) $users[] = $user;
+                }
             }
             else
-                $users = $destination->getUsers();
+            {
+                $users = array();
+                foreach ($destination->getUsers() as $user)
+                    $users[] = $user;
+
+                if (($isOffice == null) and (count($destination->getOffices())) > 0)
+                {
+                    foreach ($destination->getOffices() as $office)
+                        foreach ($office->getUsers() as $user)
+                            $users[] = $user;
+                }
+            }
         }
 
         elseif (in_array($type, array("message_task")))
@@ -320,8 +339,11 @@ class Notifier
             if ($temp != null) $users  = $temp;
             else
             {
-                $users = $destination->getUsers();
-                if (count($destination->getOffices()) > 0)
+                $users = array();
+                foreach ($destination->getUsers() as $user)
+                    $users[] = $user;
+
+                if (($isOffice == null) and (count($destination->getOffices())) > 0)
                 {
                     foreach ($destination->getOffices() as $office)
                         foreach ($office->getUsers() as $user)
@@ -368,14 +390,28 @@ class Notifier
                         $message = 'New task "'. $temp . '"' . ' in "'.$user_to_send_name.'"';
                     else
                         $message = 'New task "'. $temp . '"' . ' in "'.$destination->getName().'"';
-                    $users = $destination->getUsers();
+
+                    $users = array();
+                    foreach ($destination->getUsers() as $user)
+                        $users[] = $user;
+
+                    foreach ($destination->getOffices() as $office)
+                        foreach ($office->getUsers() as $user)
+                            $users[] = $user;
                     break;
                 }
 
                 case "epic_story_added":
                 {
                     $message = 'New epic story "'. $temp . '"' . ' in "' . $destination->getName().'"';
-                    $users = $destination->getUsers();
+
+                    $users = array();
+                    foreach ($destination->getUsers() as $user)
+                        $users[] = $user;
+
+                    foreach ($destination->getOffices() as $office)
+                        foreach ($office->getUsers() as $user)
+                            $users[] = $user;
                     break;
                 }
 
@@ -385,14 +421,28 @@ class Notifier
                         $message = 'Deleted task "'. $temp . '"' . ' in "'.$user_to_send_name.'"';
                     else
                         $message = 'Deleted task "'. $temp . '"' . ' in "'.$destination->getName().'"';
-                    $users = $destination->getUsers();
+
+                    $users = array();
+                    foreach ($destination->getUsers() as $user)
+                        $users[] = $user;
+
+                    foreach ($destination->getOffices() as $office)
+                        foreach ($office->getUsers() as $user)
+                            $users[] = $user;
                     break;
                 }
 
                 case "epic_story_deleted":
                 {
                     $message = 'Deleted epic story "'. $temp . '"' . ' in "'.$destination->getName().'"';
-                    $users = $destination->getUsers();
+
+                    $users = array();
+                    foreach ($destination->getUsers() as $user)
+                        $users[] = $user;
+
+                    foreach ($destination->getOffices() as $office)
+                        foreach ($office->getUsers() as $user)
+                            $users[] = $user;
                     break;
                 }
             }

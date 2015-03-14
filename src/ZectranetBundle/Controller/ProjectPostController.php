@@ -43,11 +43,22 @@ class ProjectPostController extends Controller
 
         if (($post->usersForPrivateMessage != null) and ($privateForAll == false))
         {
-            $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $post->usersForPrivateMessage));
-            if (count($usersEmail) > 0)
+            $usersProject = $project->getUsers();
+            $usersProjectNames = array();
+            foreach ($usersProject as $user)
+                $usersProjectNames[] = $user->getUsername();
+
+            foreach ($project->getOffices() as $office)
+                foreach ($office->getUsers() as $user)
+                    $usersProjectNames[] = $user->getUsername();
+
+            foreach ($post->usersForPrivateMessage as $userName)
+                if (in_array($userName, $usersProjectNames))
+                    $usersName[] = $userName;
+
+            if (count($usersName) > 0)
             {
-                foreach ($usersEmail as $userEmail)
-                    $usersName[] = $userEmail->getUsername();
+                $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $usersName));
                 $this->get('zectranet.notifier')->createNotification("private_message_project", $user, $user, $project, $nameEpicStory, $post, $usersEmail);
             }
         }
