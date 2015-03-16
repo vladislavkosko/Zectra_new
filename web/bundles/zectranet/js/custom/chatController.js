@@ -89,12 +89,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             return matches;
         };
 
-        $scope.ScrollComments = function() {
-            $('body').animate({"scrollTop":($('body').height())},200);
-                setTimeout(function(){
-                    $('#posts-panel').animate({"scrollTop":$('#posts-panel').height()+3500},100);
-                },200);
-        };
+
 
         //InsertScreenshots ctrl + V
         {
