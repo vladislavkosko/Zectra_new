@@ -57,7 +57,6 @@ class TaskController extends Controller {
             }
         }
 
-
         $response = new Response(json_encode(array('Tasks' => $jsonTasks)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -94,7 +93,6 @@ class TaskController extends Controller {
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
-
 
     /**
      * @param int $task_id
@@ -140,27 +138,27 @@ class TaskController extends Controller {
      * @return RedirectResponse
      */
     public function editDetailInfoAction (Request $request, $task_id) {
+        $data = json_decode($request->getContent(), true);
+        $data = (object) $data['task'];
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $this->getUser();
-        /** @var Task $task */
-        $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
         /** @var TaskLogger $logger */
         $logger = $this->get('zectranet.tasklogger');
 
         $parameters = array(
-            'assigned' => $request->request->get('assigned'),
-            'progress' => $request->request->get('progress'),
-            'estimated_hours' => $request->request->get('estimated_hours'),
-            'estimated_minutes' => $request->request->get('estimated_minutes'),
-            'start_date' => $request->request->get('start_date'),
-            'end_date' => $request->request->get('end_date'),
+            'assigned' => $data->assigned,
+            'progress' => $data->progress,
+            'estimated_hours' => $data->estimatedHours,
+            'estimated_minutes' => $data->estimatedMinutes,
+            'start_date' => date('Y-m-d', strtotime($data->startDate)),
+            'end_date' => date('Y-m-d', strtotime($data->endDate)),
         );
 
         $task = Task::editDetailsInfo($em, $logger, $task_id, $parameters);
 
-        return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
+        $response = new Response(json_encode(array('task' => $task)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
     /**

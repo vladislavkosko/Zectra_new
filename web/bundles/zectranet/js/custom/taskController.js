@@ -36,6 +36,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.urlAsset = JSON_URLS.asset;
         $scope.urlgetSingleTask = JSON_URLS.getSingleTask;
         $scope.urlSaveTaskMainInfo = JSON_URLS.saveMainTaskInfo;
+        $scope.urlSaveTaskDetailsInfo = JSON_URLS.saveDetailsTaskInfo;
 
         $rootScope.initTaskController = function (page_id) {
             $scope.urlGetTasks = JSON_URLS.getTasks.replace('0', page_id);
@@ -93,7 +94,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     var estimatedTime = calculateMeanEstimation(tasks[i].subtasks);
                     tasks[i].estimatedHours = estimatedTime.hours;
                     tasks[i].estimatedMinutes = estimatedTime.minutes;
-                    tasks[i].status = calculatemeanStatus(tasks[i].subtasks);
+                    tasks[i].status = calculateMeanStatus(tasks[i].subtasks);
                 }
             }
             return tasks;
@@ -121,7 +122,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             return estimatedTime;
         }
 
-        function calculatemeanStatus (subtasks) {
+        function calculateMeanStatus (subtasks) {
             var statuses = {
                 'story': 0, 'todo': 0,
                 'in_progress': 0, 'done': 0
@@ -160,6 +161,12 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 .get($scope.urlgetSingleTask)
                 .success(function (response) {
                     $scope.taskInfoEdit = response.task;
+                    if ($scope.taskInfoEdit.assigned == null) {
+                        $scope.taskInfoEdit.assigned = 'Not Assigned';
+                    }
+                    $scope.taskInfoEdit.assigned = $scope.taskInfoEdit.assigned.id;
+                    $scope.taskInfoEdit.startDate = new Date($scope.taskInfoEdit.startDate);
+                    $scope.taskInfoEdit.endDate = new Date($scope.taskInfoEdit.endDate);
                 }
             );
         };
@@ -167,6 +174,12 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.saveSingleTaskMainInfo = function (task) {
             $scope.mainInfoPromise = $http
                 .post($scope.urlSaveTaskMainInfo, { 'task': task });
+        };
+        
+        $scope.saveSingleTaskDetailsInfo = function (task) {
+            if (task.assigned == 'Not Assigned') task.assigned = null;
+            $scope.detailsInfoPromise = $http
+                .post($scope.urlSaveTaskDetailsInfo, { 'task': task });
         };
 
         $scope.generateAsset = function (asset, url) {

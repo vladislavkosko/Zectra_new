@@ -984,6 +984,7 @@ class Task
      */
     public static function editDetailsInfo(EntityManager $em, TaskLogger $logger, $task_id, $parameters) {
         $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
+        if (!$task) { return null; }
 
         $assigned_id = $parameters['assigned'];
         $progress = $parameters['progress'];

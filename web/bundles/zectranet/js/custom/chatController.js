@@ -11,6 +11,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             $scope.InsertScreenshotsInPHP = JSON_URLS.InsertScreenshotsInPHP;
             $scope.urlAsset = JSON_URLS.asset;
             $scope.USER_ID = TEMPPARAMS.USER_ID;
+            $rootScope.DocumentsInChat = [];
         }
         // ------------ END OF SCOPE VARIABLES --------------- \\
 
@@ -52,7 +53,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             var usersForPrivateMessage = $scope.getUsersForPrivateMessage(message);
 
             var documents = '';
-            for(var i=0;i < $rootScope.DocumentsInChat.length;i++)
+            for(var i=0; i < $rootScope.DocumentsInChat.length; i++)
             {
                 documents = documents + $rootScope.DocumentsInChat[i]
             }
