@@ -274,7 +274,7 @@
                         <ul ng-if="notifications.length > 0" class="notifier dropdown-menu dropdown-alerts">
                             <li ng-repeat="notification in notifications| limitTo: 5">
 
-                                <a ng-if="(notification.type == 'request_office') || (notification.type == 'request_user_project') || (notification.type == 'request_project') || (notification.type == 'request_assign_task')"
+                                {#<a ng-if="(notification.type == 'request_office') || (notification.type == 'request_user_project') || (notification.type == 'request_project') || (notification.type == 'request_assign_task')"
                                    href="#" style="text-decoration: none; color: #000;">
                                     <i class="fa fa-question fa-fw"></i>
                                     <div style="word-wrap: break-word; display: inline-block" ng-bind-html="notification.message"></div>
@@ -282,7 +282,7 @@
                                         <i class="fa fa-clock-o"></i>
                                         [[ notification.activated.date.substring(0, 16) ]]
                                     </div>
-                                </a>
+                                </a>#}
 
                                 <a ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
                                     || (notification.type == 'private_message_office') || (notification.type == 'private_message_project') || (notification.type == 'private_message_task') || (notification.type == 'private_message_epic_story')

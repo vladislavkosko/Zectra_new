@@ -37,7 +37,7 @@ class Notifier
 		"message_office",                 // +
 		"message_project",                // +
         "message_epic_story",             // +
-        "message_task",                   // -
+        "message_task",                   // +
 
         "task_added",                     // +
         "epic_story_added",               // +
@@ -52,7 +52,7 @@ class Notifier
         "private_message_office",         // +
         "private_message_project",        // +
         "private_message_epic_story",     // +
-        "private_message_task",           // -
+        "private_message_task",           // +
     );
 
 	/**
@@ -259,19 +259,33 @@ class Notifier
      * @param $taskId
      * @return mixed
      */
-	public function clearNotificationsByTaskId($taskId)
+	public function clearAllNotificationsByTaskId($taskId)
 	{
 		$qb = $this->em->createQueryBuilder();
 		$qb->delete('ZectranetBundle:Notification', 'n')
-			->where("n.userid = :userid")
-			->andWhere("n.resourceid = :resourceid")
-			->andWhere("n.type = 'message_task'
-    				OR n.type = 'private_message_task'")
-			->setParameter("userid", $this->user->getId())
-			->setParameter("resourceid", $taskId);
+            ->where("n.destinationid = :destinationid
+                AND (n.type = 'message_task' OR n.type = 'private_message_task')")
+			->setParameter("destinationid", $taskId);
 
 		return $qb->getQuery()->getResult();
 	}
+
+    /**
+     * @param $taskId
+     * @return mixed
+     */
+    public function clearNotificationsByTaskId($taskId)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->delete('ZectranetBundle:Notification', 'n')
+            ->where("n.userid = :userid
+                AND n.destinationid = :destinationid
+                AND (n.type = 'message_task' OR n.type = 'private_message_task')")
+            ->setParameter("userid", $this->user->getId())
+            ->setParameter("destinationid", $taskId);
+
+        return $qb->getQuery()->getResult();
+    }
 
     /**
      * @param $type
@@ -281,10 +295,11 @@ class Notifier
      * @param string|null $user_to_send_name
      * @param object|null $post
      * @param array|null $temp
-     * @param bool|null $isOffice
+     * @param null $isOffice
+     * @param null $task
      * @return bool
      */
-	public function createNotification($type, $resource, $usersRequest, $destination, $user_to_send_name = null, $post = null, $temp = null, $isOffice = null)
+	public function createNotification($type, $resource, $usersRequest, $destination, $user_to_send_name = null, $post = null, $temp = null, $isOffice = null, $task = null)
 	{
 		$users = null;
 		$message = null;
@@ -303,11 +318,18 @@ class Notifier
                 foreach ($destination->getUsers() as $user)
                     if (!in_array($user->getUsername(), $temp)) $users[] = $user;
 
+                if (!in_array($destination->getOwner()->getUsername(), $temp))
+                    $users[] = $destination->getOwner();
+
                 if (($isOffice == null) and (count($destination->getOffices())) > 0)
                 {
                     foreach ($destination->getOffices() as $office)
+                    {
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                            $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             if (!in_array($user->getUsername(), $temp)) $users[] = $user;
+                    }
                 }
             }
             else
@@ -315,44 +337,104 @@ class Notifier
                 $users = array();
                 foreach ($destination->getUsers() as $user)
                     $users[] = $user;
+                if ($this->user->getUsername() != $destination->getOwner()->getUsername())
+                    $users[] = $destination->getOwner();
 
                 if (($isOffice == null) and (count($destination->getOffices())) > 0)
                 {
                     foreach ($destination->getOffices() as $office)
+                    {
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                            $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
+                    }
                 }
             }
         }
 
         elseif (in_array($type, array("message_task")))
         {
-            $message = 'New comment around the task "'.$resource->getName().'"';
-            $users = $destination->getUsers();
-            $userAsigned = $resource->getAssigned();
-            if ($userAsigned != null) $users[] = $userAsigned;
-        }
-
-        elseif (in_array($type, array("private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
-        {
             if ($user_to_send_name != null)
-                $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $user_to_send_name . '"';
+                $message = 'New comment around the task ' . $task->getName() . ' from '.$resource->getName().' '.$resource->getSurname().' in "'.$user_to_send_name.'"';
             else
-                $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
-            if ($temp != null) $users  = $temp;
+                $message = 'New comment around the task ' . $task->getName() . ' from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+
+            if (count($temp) > 0)
+            {
+                $users = array();
+                foreach ($destination->getUsers() as $user)
+                    if (!in_array($user->getUsername(), $temp)) $users[] = $user;
+
+                if (!in_array($destination->getOwner()->getUsername(), $temp))
+                    $users[] = $destination->getOwner();
+
+                foreach ($destination->getOffices() as $office)
+                {
+                    if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                        $users[] = $office->getOwner();
+                    foreach ($office->getUsers() as $user)
+                        if (!in_array($user->getUsername(), $temp)) $users[] = $user;
+                }
+            }
             else
             {
                 $users = array();
                 foreach ($destination->getUsers() as $user)
                     $users[] = $user;
+                if ($this->user->getUsername() != $destination->getOwner()->getUsername())
+                    $users[] = $destination->getOwner();
+
+                foreach ($destination->getOffices() as $office)
+                {
+                    if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                        $users[] = $office->getOwner();
+                    foreach ($office->getUsers() as $user)
+                        $users[] = $user;
+                }
+            }
+            $destination = $task;
+        }
+
+        elseif (in_array($type, array("private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
+        {
+            if ($task != null)
+            {
+                if ($user_to_send_name != null)
+                    $message = 'New private comment around the task ' . $task->getName() . ' from '.$resource->getName().' '.$resource->getSurname().' in "'.$user_to_send_name.'"';
+                else
+                    $message = 'New private comment around the task ' . $task->getName() . ' from '.$resource->getName().' '.$resource->getSurname().' in "'.$destination->getName().'"';
+            }
+
+            else
+            {
+                if ($user_to_send_name != null)
+                    $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $user_to_send_name . '"';
+                else
+                    $message = 'New private message from ' . $resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
+            }
+
+            if ($temp != null) $users = $temp;
+            else
+            {
+                $users = array();
+                foreach ($destination->getUsers() as $user)
+                    $users[] = $user;
+                if ($this->user->getUsername() != $destination->getOwner()->getUsername())
+                    $users[] = $destination->getOwner();
 
                 if (($isOffice == null) and (count($destination->getOffices())) > 0)
                 {
                     foreach ($destination->getOffices() as $office)
+                    {
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                            $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
+                    }
                 }
             }
+            if ($task != null) $destination = $task;
         }
 
         else
@@ -398,9 +480,16 @@ class Notifier
                     foreach ($destination->getUsers() as $user)
                         $users[] = $user;
 
+                    if ($this->user->getUsername() != $destination->getOwner()->getUsername())
+                        $users[] = $destination->getOwner();
+
                     foreach ($destination->getOffices() as $office)
+                    {
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                            $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
+                    }
                     break;
                 }
 
@@ -412,9 +501,16 @@ class Notifier
                     foreach ($destination->getUsers() as $user)
                         $users[] = $user;
 
+                    if ($this->user->getUsername() != $destination->getOwner()->getUsername())
+                        $users[] = $destination->getOwner();
+
                     foreach ($destination->getOffices() as $office)
+                    {
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                            $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
+                    }
                     break;
                 }
 
@@ -429,9 +525,16 @@ class Notifier
                     foreach ($destination->getUsers() as $user)
                         $users[] = $user;
 
+                    if ($this->user->getUsername() != $destination->getOwner()->getUsername())
+                        $users[] = $destination->getOwner();
+
                     foreach ($destination->getOffices() as $office)
+                    {
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                            $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
+                    }
                     break;
                 }
 
@@ -443,9 +546,16 @@ class Notifier
                     foreach ($destination->getUsers() as $user)
                         $users[] = $user;
 
+                    if ($this->user->getUsername() != $destination->getOwner()->getUsername())
+                        $users[] = $destination->getOwner();
+
                     foreach ($destination->getOffices() as $office)
+                    {
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
+                            $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
+                    }
                     break;
                 }
             }

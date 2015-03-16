@@ -86,6 +86,8 @@ class TaskController extends Controller {
             $nameEpicStory = $project->getName();
             $project = $project->getParent();
         }
+        $this->get('zectranet.notifier')->clearAllNotificationsByTaskId($task_id);
+
         $this->get('zectranet.notifier')->createNotification("task_deleted", $project, $user, $project, $nameEpicStory, null, $task->getName());
 
         $response = new Response(json_encode(null));
@@ -207,31 +209,54 @@ class TaskController extends Controller {
         $user = $this->getUser();
         $task = $this->getDoctrine()->getRepository('ZectranetBundle:Task')->find($task_id);
 
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($task->getProjectid());
+        $nameEpicStory = null;
+        if ($project->getParent())
+        {
+            $nameEpicStory = $project->getName();
+            $project = $project->getParent();
+        }
+
         $new_post = TaskPost::addNewPost($em, $user->getId(), $task_id, $post->message);
 
         $usersName = array();
         $privateForAll = false;
-        /*if ($post->usersForPrivateMessage == 'all')
+        if ($post->usersForPrivateMessage == 'all')
         {
-            $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $task, null, $post);
+            $this->get('zectranet.notifier')->createNotification("private_message_task", $user, $user, $project, $nameEpicStory, $post, null, null, $task);
             $privateForAll = true;
         }
 
         if (($post->usersForPrivateMessage != null) and ($privateForAll == false))
         {
-            $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $post->usersForPrivateMessage));
-            if (count($usersEmail) > 0)
+            $usersProjectNames = array();
+            $usersProjectNames[] = $project->getOwner()->getUsername();
+            foreach ($project->getUsers() as $user)
+                $usersProjectNames[] = $user->getUsername();
+
+            foreach ($project->getOffices() as $office)
             {
-                foreach ($usersEmail as $userEmail)
-                    $usersName[] = $userEmail->getUsername();
-                $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $task, null, $post, $usersEmail);
+                $usersProjectNames[] = $office->getOwner()->getUsername();
+                foreach ($office->getUsers() as $user)
+                    $usersProjectNames[] = $user->getUsername();
             }
 
+            foreach ($post->usersForPrivateMessage as $userName)
+                if (in_array($userName, $usersProjectNames))
+                    $usersName[] = $userName;
+
+            if (count($usersName) > 0)
+            {
+                $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $usersName));
+                $user = $this->getUser();
+                $this->get('zectranet.notifier')->createNotification("private_message_task", $user, $user, $project, $nameEpicStory, $post, $usersEmail, null, $task);
+            }
         }
 
+        $user = $this->getUser();
         if ($privateForAll == false)
-            $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $task, null, $post, $usersName);
-        */
+            $this->get('zectranet.notifier')->createNotification("message_task", $user, $user, $project, $nameEpicStory, $post, $usersName, null, $task);
+
 
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');

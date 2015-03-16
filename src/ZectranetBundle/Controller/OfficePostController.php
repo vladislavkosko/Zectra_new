@@ -38,10 +38,11 @@ class OfficePostController extends Controller
 
         if (($post->usersForPrivateMessage != null) and ($privateForAll == false))
         {
-            $usersOffice = $office->getUsers();
             $usersOfficeNames = array();
-            foreach ($usersOffice as $user)
+            $usersOfficeNames[] = $office->getOwner()->getUsername();
+            foreach ($office->getUsers() as $user)
                 $usersOfficeNames[] = $user->getUsername();
+
             foreach ($post->usersForPrivateMessage as $userName)
                 if (in_array($userName, $usersOfficeNames))
                     $usersName[] = $userName;
@@ -49,11 +50,13 @@ class OfficePostController extends Controller
             if (count($usersName) > 0)
             {
                 $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $usersName));
+                $user = $this->getUser();
                 $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, $usersEmail, 'office');
             }
 
         }
 
+        $user = $this->getUser();
         if ($privateForAll == false)
             $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $office, null, $post, $usersName, 'office');
 

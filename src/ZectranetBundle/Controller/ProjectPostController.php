@@ -43,14 +43,17 @@ class ProjectPostController extends Controller
 
         if (($post->usersForPrivateMessage != null) and ($privateForAll == false))
         {
-            $usersProject = $project->getUsers();
             $usersProjectNames = array();
-            foreach ($usersProject as $user)
+            $usersProjectNames[] = $project->getOwner()->getUsername();
+            foreach ($project->getUsers() as $user)
                 $usersProjectNames[] = $user->getUsername();
 
             foreach ($project->getOffices() as $office)
+            {
+                $usersProjectNames[] = $office->getOwner()->getUsername();
                 foreach ($office->getUsers() as $user)
                     $usersProjectNames[] = $user->getUsername();
+            }
 
             foreach ($post->usersForPrivateMessage as $userName)
                 if (in_array($userName, $usersProjectNames))
@@ -59,10 +62,12 @@ class ProjectPostController extends Controller
             if (count($usersName) > 0)
             {
                 $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $usersName));
+                $user = $this->getUser();
                 $this->get('zectranet.notifier')->createNotification("private_message_project", $user, $user, $project, $nameEpicStory, $post, $usersEmail);
             }
         }
 
+        $user = $this->getUser();
         if ($privateForAll == false)
             $this->get('zectranet.notifier')->createNotification("message_project", $user, $user, $project, $nameEpicStory, $post, $usersName);
 
