@@ -382,7 +382,7 @@
                     </div>
 
                     <div class="row">
-                        <form class="col-md-10" action="{{ path('zectranet_task_edit_descritpion', { 'task_id': task.id }) }}" method="post">
+                        <form class="col-md-12" action="{{ path('zectranet_task_edit_descritpion', { 'task_id': task.id }) }}" method="post">
                             <div class="form-group">
                                 <textarea class="form-control" name="description" style="border: none; height: 85px; resize: none;font-weight: bold;">{{ task.description }}</textarea>
                             </div>
@@ -396,7 +396,7 @@
             <!-- End of Desciption Section -->
 
             <!-- Begin of Sub-Task Section -->
-            {% if task.parentid == null %}
+            {% if task.subtasks|length > 0 %}
             <div class="row" style="  margin-bottom: 50px;">
                 <div class="col-md-12">
                     <div class="page-header" style="border: 0;">
@@ -406,8 +406,9 @@
                            <table>
                                <tbody>
                             {% for i,subtask in task.subtasks %}
+
                                   <tr>
-                                      <td >
+                                      <td style="margin-bottom: 10px;">
                                           {{ i + 1 }}.
                                       </td>
 
@@ -427,7 +428,7 @@
                                           {% endif %}
                                       </td>
 
-                                      <td class="col-xs-4">
+                                      <td class="col-xs-4" style="  font-weight: bold;">
                                           {% if subtask.assigned == null  %}
                                               Not Assigned
                                           {% else %}
@@ -435,6 +436,7 @@
                                           {% endif %}
                                       </td>
                                   </tr>
+
                             {% endfor %}
                                </tbody>
                            </table>
