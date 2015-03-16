@@ -27,20 +27,20 @@
                 <form cg-busy="taskPromise" class="col-md-6" style="border-bottom: 1px solid #eee;">
                     <div cg-busy="mainInfoPromise">
                         <div class="page-header" style="margin-top: 0; border-bottom: 0;">
-                            <span style="font-size: 20px;">Task Info</span>
+                            <span style="font-size: 20px;  color: #337ab7;">Task Info</span>
                         </div>
 
                         <!-- Begin of Task NAME Edit -->
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <label class="text-muted form-control-static">Name:</label>
+                                    <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Name:</label>
                                 </div>
                             </div>
 
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <input type="text" name="name" style="border: none;" ng-model="taskInfoEdit.name" class="form-control" value="{{ task.name }}">
+                                    <input type="text" name="name" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.name" class="form-control" value="{{ task.name }}">
                                 </div>
 
                             </div>
@@ -51,13 +51,13 @@
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <label class="text-muted form-control-static">Owner:</label>
+                                    <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Owner:</label>
                                 </div>
                             </div>
 
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <a href="{{ path('zectranet_user_page', {'user_id': task.ownerid }) }}" class="btn form-control-static text-info">
+                                    <a style="font-weight: bold;" href="{{ path('zectranet_user_page', {'user_id': task.ownerid }) }}" class="btn form-control-static text-info">
                                         {{ task.owner.name ~ ' ' ~ task.owner.surname ~ ' (' ~ task.owner.username ~ ')'}}
                                     </a>
                                 </div>
@@ -69,13 +69,13 @@
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <label class="text-muted form-control-static">Type:</label>
+                                    <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Type:</label>
                                 </div>
                             </div>
 
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <select class="form-control" name="type" ng-model="taskInfoEdit.type.id" style="border: none;">
+                                    <select class="form-control" name="type" ng-model="taskInfoEdit.type.id" style="border: none;font-weight: bold;">
                                         {% for type in task_types %}
                                             <option style="color: {{ type.color }}" value="{{ type.id }}"
                                                     {% if type.id == task.type.id %}
@@ -94,13 +94,13 @@
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <label class="text-muted form-control-static">Priority:</label>
+                                    <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Priority:</label>
                                 </div>
                             </div>
 
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <select class="form-control" name="priority" ng-model="taskInfoEdit.priority.id" style="border: none;">
+                                    <select class="form-control" name="priority" ng-model="taskInfoEdit.priority.id" style="border: none;font-weight: bold;">
                                         {% for priority in task_priority %}
                                             <option style="color: {{ priority.color }}" value="{{ priority.id }}"
                                                     {% if priority.id == task.priority.id %}
@@ -119,13 +119,13 @@
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <label class="text-muted form-control-static">Status:</label>
+                                    <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Status:</label>
                                 </div>
                             </div>
 
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;">
+                                    <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;font-weight: bold;">
                                         {% for status in task_statuses %}
                                             <option style="color: {{ status.color }}" value="{{ status.id }}"
                                                     {% if status.id == task.status.id %}
@@ -144,14 +144,14 @@
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <label class="text-muted form-control-static">Project/Epic Story:</label>
+                                    <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Project/Epic Story:</label>
                                 </div>
                             </div>
 
                             {% set project = (task.project.parent) ? task.project.parent : task.project %}
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <select class="form-control" name="project" ng-model="taskInfoEdit.projectid" style="border: none;">
+                                    <select class="form-control" name="project" ng-model="taskInfoEdit.projectid" style="border: none;font-weight: bold;">
                                         <optgroup style="margin: 0; padding: 0;" label="Project">
                                             <option {% if project.id == task.project.id %}selected="selected"{% endif %} value="{{ project.id }}">{{ project.name }}</option>
                                         </optgroup>
@@ -197,20 +197,20 @@
                 <form class="col-md-6" action="{{ path('zectranet_task_edit_detail_info', { 'task_id': task.id }) }}" method="post" style="border-bottom: 1px solid #eee;">
 
                     <div class="page-header" style="margin-top: 0;border: 0px;">
-                        <span style="font-size: 20px;">Task Details</span>
+                        <span style="font-size: 20px;  color: #337ab7;">Task Details</span>
                     </div>
 
                     <!-- Begin Of Task ASSIGNED Select -->
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-3">
                             <div class="input-group">
-                                <label class="text-muted form-control-static">Assigned:</label>
+                                <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Assigned:</label>
                             </div>
                         </div>
 
                         <div class="col-md-9">
                             <div class="input-group">
-                                <select class="form-control" name="assigned" style="border: none;">
+                                <select class="form-control" name="assigned" style="border: none;font-weight: bold;">
                                     {% set usersForAssign = [] %}
                                     {% for user in task.project.users if user not in usersForAssign %}
                                         {% set usersForAssign = usersForAssign | merge([user]) %}
@@ -243,7 +243,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <div class="input-group">
-                                <label class="text-muted  form-control-static">Progress:</label>
+                                <label class="text-muted  form-control-static" style="  color: #A9A9A9;font-weight: 300;">Progress:</label>
                             </div>
                         </div>
                         <div ng-init="selected = '{{ task.progress }}'">
@@ -258,7 +258,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <select class="form-control" name="progress" ng-model="selected" style="border: none;">
+                                    <select class="form-control" name="progress" ng-model="selected" style="border: none;font-weight: bold;">
                                         <option value="0">0%</option>
                                         <option value="10">10%</option>
                                         <option value="20">20%</option>
@@ -281,13 +281,13 @@
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-3">
                             <div class="input-group">
-                                <label class="text-muted form-control-static">Estimated Hours:</label>
+                                <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Estimated Hours:</label>
                             </div>
                         </div>
 
                         <div class="col-md-9">
                             <div class="input-group">
-                                <select class="form-control" name="estimated_hours" style="border: none;">
+                                <select class="form-control" name="estimated_hours" style="border: none;font-weight: bold;">
                                     {% for i in 0..48 %}
                                         <option value="{{ i }}" {% if task.estimatedHours == i %}selected="selected"{% endif %}>{{ i }} h</option>
                                     {% endfor %}
@@ -301,13 +301,13 @@
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-3">
                             <div class="input-group">
-                                <label class="text-muted form-control-static">Estimated Minutes:</label>
+                                <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Estimated Minutes:</label>
                             </div>
                         </div>
 
                         <div class="col-md-9">
                             <div class="input-group">
-                                <select class="form-control" name="estimated_minutes" style="border: none;">
+                                <select class="form-control" name="estimated_minutes" style="border: none;font-weight: bold;">
                                     <option value="0" {% if task.estimatedMinutes == 0 %}selected="selected"{% endif %}>0 m</option>
                                     <option value="10" {% if task.estimatedMinutes == 10 %}selected="selected"{% endif %}>10 m</option>
                                     <option value="20" {% if task.estimatedMinutes == 20 %}selected="selected"{% endif %}>20 m</option>
@@ -324,13 +324,13 @@
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-3">
                             <div class="input-group">
-                                <label class="text-muted form-control-static">Start Date:</label>
+                                <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">Start Date:</label>
                             </div>
                         </div>
 
                         <div class="col-md-9">
                             <div class="input-group">
-                                <input class="form-control" name="start_date" style="border: none;" type="date" value="{{ task.startdate | date('Y-m-d') }}">
+                                <input class="form-control" name="start_date" style="border: none;font-weight: bold;" type="date" value="{{ task.startdate | date('Y-m-d') }}">
                             </div>
                         </div>
                     </div>
@@ -340,13 +340,13 @@
                     <div class="row" style="margin-bottom: 10px;">
                         <div class="col-md-3">
                             <div class="input-group">
-                                <label class="text-muted form-control-static">End Date:</label>
+                                <label class="text-muted form-control-static" style="  color: #A9A9A9;font-weight: 300;">End Date:</label>
                             </div>
                         </div>
 
                         <div class="col-md-9">
                             <div class="input-group">
-                                <input class="form-control" name="end_date" style="border: none;" type="date" value="{{ task.enddate | date('Y-m-d') }}">
+                                <input class="form-control" name="end_date" style="border: none;font-weight: bold;" type="date" value="{{ task.enddate | date('Y-m-d') }}">
                             </div>
                         </div>
                     </div>
@@ -378,13 +378,13 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="page-header" style="border: 0;">
-                        <h4>Description</h4>
+                        <h4 style="  color: #337ab7;">Description</h4>
                     </div>
 
                     <div class="row">
                         <form class="col-md-10" action="{{ path('zectranet_task_edit_descritpion', { 'task_id': task.id }) }}" method="post">
                             <div class="form-group">
-                                <textarea class="form-control" name="description" style="border: none; height: 85px; resize: none;">{{ task.description }}</textarea>
+                                <textarea class="form-control" name="description" style="border: none; height: 85px; resize: none;font-weight: bold;">{{ task.description }}</textarea>
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-default btn-primary">Save</button>
@@ -447,8 +447,8 @@
                             <a ng-init="Href = userHref(post.user.id)" ng-href="[[Href]]" style="display: inline-block; text-decoration: none;">
                                 <img style="width: 50px;height: 50px; object-fit: cover;" ng-src="[[avatar]]" alt="User Avatar" class="img-circle"/>
                             </a>
-                            <span style="vertical-align: top;">
-                                <strong style="vertical-align: top;">[[post.user.name]]
+                            <span style="vertical-align: top;font-weight: bold;">
+                                <strong style="vertical-align: top;color: #337ab7;">[[post.user.name]]
                                 </strong>
                                 added a comment - [[ post.posted ]]
                             </span>
