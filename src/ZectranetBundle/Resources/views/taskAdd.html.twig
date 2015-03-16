@@ -22,8 +22,8 @@
                                 <div class="form-group">
                                     <label for="add_task_type" class="control-label">Task Type:</label>
                                     <select id="add_task_type" class="form-control" name="type" ng-model="taskModel.type" required>
-                                        {% for type in task_types %}
-                                            <option value="{{ type.id }}">
+                                        {% for i, type in task_types %}
+                                            <option selected value="{{ type.id }}">
                                                 {{ type.label }}
                                             </option>
                                         {% endfor %}
@@ -32,8 +32,8 @@
                                 <div class="form-group">
                                     <label for="add_task_priority" class="control-label">Task Priority:</label>
                                     <select id="add_task_priority" class="form-control" name="priority" ng-model="taskModel.priority" required>
-                                        {% for priority in task_priority %}
-                                            <option value="{{ priority.id }}">
+                                        {% for i, priority in task_priority %}
+                                            <option selected value="{{ priority.id }}">
                                                 {{ priority.label }}
                                             </option>
                                         {% endfor %}
