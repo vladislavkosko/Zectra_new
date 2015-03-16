@@ -163,8 +163,9 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     $scope.taskInfoEdit = response.task;
                     if ($scope.taskInfoEdit.assigned == null) {
                         $scope.taskInfoEdit.assigned = 'Not Assigned';
+                    } else {
+                        $scope.taskInfoEdit.assigned = $scope.taskInfoEdit.assigned.id;
                     }
-                    $scope.taskInfoEdit.assigned = $scope.taskInfoEdit.assigned.id;
                     $scope.taskInfoEdit.startDate = new Date($scope.taskInfoEdit.startDate);
                     $scope.taskInfoEdit.endDate = new Date($scope.taskInfoEdit.endDate);
                 }
