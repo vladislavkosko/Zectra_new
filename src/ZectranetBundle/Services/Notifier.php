@@ -325,8 +325,9 @@ class Notifier
                 {
                     foreach ($destination->getOffices() as $office)
                     {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                            $users[] = $office->getOwner();
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
+                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                                $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             if (!in_array($user->getUsername(), $temp)) $users[] = $user;
                     }
@@ -344,8 +345,9 @@ class Notifier
                 {
                     foreach ($destination->getOffices() as $office)
                     {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                            $users[] = $office->getOwner();
+                        if (($this->user->getUsername() != $office->getOwner()->getUsername())
+                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                                $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
                     }
@@ -371,8 +373,9 @@ class Notifier
 
                 foreach ($destination->getOffices() as $office)
                 {
-                    if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                        $users[] = $office->getOwner();
+                    if ($this->user->getUsername() != $office->getOwner()->getUsername()
+                        and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                            $users[] = $office->getOwner();
                     foreach ($office->getUsers() as $user)
                         if (!in_array($user->getUsername(), $temp)) $users[] = $user;
                 }
@@ -387,8 +390,9 @@ class Notifier
 
                 foreach ($destination->getOffices() as $office)
                 {
-                    if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                        $users[] = $office->getOwner();
+                    if ($this->user->getUsername() != $office->getOwner()->getUsername()
+                        and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                            $users[] = $office->getOwner();
                     foreach ($office->getUsers() as $user)
                         $users[] = $user;
                 }
@@ -427,8 +431,9 @@ class Notifier
                 {
                     foreach ($destination->getOffices() as $office)
                     {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                            $users[] = $office->getOwner();
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
+                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                                $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
                     }
@@ -485,8 +490,9 @@ class Notifier
 
                     foreach ($destination->getOffices() as $office)
                     {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                            $users[] = $office->getOwner();
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
+                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                                $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
                     }
@@ -506,8 +512,9 @@ class Notifier
 
                     foreach ($destination->getOffices() as $office)
                     {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                            $users[] = $office->getOwner();
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
+                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                                $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
                     }
@@ -530,8 +537,9 @@ class Notifier
 
                     foreach ($destination->getOffices() as $office)
                     {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                            $users[] = $office->getOwner();
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
+                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                                $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
                     }
@@ -551,8 +559,9 @@ class Notifier
 
                     foreach ($destination->getOffices() as $office)
                     {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername())
-                            $users[] = $office->getOwner();
+                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
+                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
+                                $users[] = $office->getOwner();
                         foreach ($office->getUsers() as $user)
                             $users[] = $user;
                     }
