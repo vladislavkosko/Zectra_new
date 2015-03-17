@@ -1,4 +1,4 @@
-Zectranet.controller('NavigationController', ['$scope', '$http', function($scope, $http){
+Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', function($scope, $http, $rootScope){
 
 	var title = $('title');
 	var titleValue = title.text();
@@ -41,6 +41,26 @@ Zectranet.controller('NavigationController', ['$scope', '$http', function($scope
                     if (response.result.notifications.length != $scope.notificationsLength){
                         StartNotify();
                         document.getElementById('notif_sound').play();
+						var chatUpdate = false;
+						for (var i = 0; i < $scope.notifications.length; i++) {
+							if ($scope.notifications[i].type == 'message_office'
+								|| $scope.notifications[i].type == 'message_project'
+								|| $scope.notifications[i].type == 'message_project'
+								|| $scope.notifications[i].type == 'message_task'
+								|| $scope.notifications[i].type == 'message_epic_story'
+								|| $scope.notifications[i].type == 'private_message_epic_story'
+								|| $scope.notifications[i].type == 'private_message_epic_story'
+								|| $scope.notifications[i].type == 'private_message_epic_story'
+								|| $scope.notifications[i].type == 'private_message_epic_story'
+							) {
+								chatUpdate = true;
+							}
+
+							if (chatUpdate) {
+								$rootScope.updateChat(0, 100);
+							}
+
+						}
                         $scope.notifications = prepareNotifications(response.result.notifications);
                         $scope.notificationsLength = response.result.notifications.length;
                     }

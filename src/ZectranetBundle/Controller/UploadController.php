@@ -163,10 +163,10 @@ class UploadController extends Controller
                     }
             }
         }
-        $new_doc = array();
+        $new_doc = null;
         foreach($documents as $document)
         {
-            $new_doc[] = $document->getInArray();
+            $new_doc = $document->getInArray();
         }
         $response = new Response(json_encode(array("result" => $new_doc)));
         $response->headers->set('Content-Type', 'application/json');
