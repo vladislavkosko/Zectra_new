@@ -175,7 +175,7 @@ class User implements UserInterface, \Serializable
      * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection
      */
-    private $requsts;
+    private $requests;
 
     /**
      * @ORM\OneToMany(targetEntity="Notification", mappedBy="user", cascade={"remove"})
@@ -1098,35 +1098,35 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * Add requsts
+     * Add requests
      *
-     * @param \ZectranetBundle\Entity\Request $requsts
+     * @param \ZectranetBundle\Entity\Request $requests
      * @return User
      */
-    public function addRequst(\ZectranetBundle\Entity\Request $requsts)
+    public function addRequst(\ZectranetBundle\Entity\Request $requests)
     {
-        $this->requsts[] = $requsts;
+        $this->requests[] = $requests;
 
         return $this;
     }
 
     /**
-     * Remove requsts
+     * Remove requests
      *
-     * @param \ZectranetBundle\Entity\Request $requsts
+     * @param \ZectranetBundle\Entity\Request $requests
      */
-    public function removeRequst(\ZectranetBundle\Entity\Request $requsts)
+    public function removeRequst(\ZectranetBundle\Entity\Request $requests)
     {
-        $this->requsts->removeElement($requsts);
+        $this->requests->removeElement($requests);
     }
 
     /**
-     * Get requsts
+     * Get requests
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRequsts()
+    public function getrequests()
     {
-        return $this->requsts;
+        return $this->requests;
     }
 }

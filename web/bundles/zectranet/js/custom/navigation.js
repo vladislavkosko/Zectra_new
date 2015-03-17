@@ -8,6 +8,8 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 	var taskShowUrlBase = JSON_URLS.taskShow;
     var acceptRequestUserProject = JSON_URLS.acceptRequestUserProject;
     var declineRequestUserProject = JSON_URLS.declineRequestUserProject;
+    var acceptRequestOfficeProject = JSON_URLS.acceptRequestOfficeProject;
+    var declineRequestOfficeProject = JSON_URLS.declineRequestOfficeProject;
 
     $scope.requests = [];
     $scope.notifications = [];
@@ -89,12 +91,24 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 		return notifications;
 	}
 
-    $scope.acceptRequestUserProject = function(request_id){
-        window.location.href = acceptRequestUserProject.replace('0', request_id);
+    $scope.acceptRequestUserProject = function(project_id){
+        window.location.href = acceptRequestUserProject.replace('0', project_id);
     };
 
-    $scope.declineRequestUserProject = function(request_id){
-        window.location.href = declineRequestUserProject.replace('0', request_id);
+    $scope.acceptRequestOfficeProject = function(project_id, office_id){
+        window.location.href = acceptRequestOfficeProject
+            .replace('0', 'project_id')
+            .replace('1', 'office_id')
+            .replace('project_id', project_id)
+            .replace('office_id', office_id);
+    };
+
+    $scope.declineRequestUserProject = function(project_id){
+        window.location.href = declineRequestUserProject.replace('0', project_id);
+    };
+
+    $scope.declineRequestOfficeProject = function(project_id){
+        window.location.href = declineRequestOfficeProject.replace('0', project_id);
     };
 
     console.log('NavigationController was loaded!');

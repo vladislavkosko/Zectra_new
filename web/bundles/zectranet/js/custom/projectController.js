@@ -187,21 +187,22 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
             };
 
             $scope.addOfficesToProject = function () {
-                var idsToRemove = [];
+                var idsToAdd = [];
                 for (var i = 0; i < $scope.offices.length; i++) {
                     if ($scope.offices[i].selected) {
+                        $scope.offices[i].request = 2;
                         $scope.projectOffices.push($scope.offices[i]);
-                        idsToRemove.push($scope.offices[i]);
+                        idsToAdd.push($scope.offices[i]);
                     }
                 }
 
-                for (i = 0; i < idsToRemove.length; i++) {
-                    $scope.offices.splice(findElementById(idsToRemove[i], $scope.offices), 1);
+                for (i = 0; i < idsToAdd.length; i++) {
+                    $scope.offices.splice(findElementById(idsToAdd[i], $scope.offices), 1);
                 }
 
-                if (idsToRemove.length > 0) {
+                if (idsToAdd.length > 0) {
                     $scope.promiseProject = $http
-                        .post($scope.urlAddOffices, { 'offices': idsToRemove });
+                        .post($scope.urlAddOffices, { 'offices': idsToAdd });
                 }
             };
 
@@ -222,6 +223,10 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                     $scope.promiseProject = $http
                         .post($scope.urlRemoveOffices, { 'offices': idsToRemove });
                 }
+            };
+
+            $scope.selectOffice = function (office) {
+                if (!office.request) office.selected = !office.selected;
             };
         }
         // -------------------- End of Offices Manage ----------------------\\

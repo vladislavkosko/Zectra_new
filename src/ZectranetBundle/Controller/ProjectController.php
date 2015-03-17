@@ -155,9 +155,8 @@ class ProjectController extends Controller
             /** @var RequestType $type */
             $type = $this->getDoctrine()->getRepository('ZectranetBundle:RequestType')->find(2);
 
-            $usersProject = $project->getUsers();
             $usersNames = array();
-            foreach ($usersProject as $user)
+            foreach ($project->getUsers() as $user)
                 $usersNames[] = $user->getUsername();
 
             $usersRequest = array();
@@ -168,7 +167,7 @@ class ProjectController extends Controller
             }
 
             foreach ($usersRequest as $user)
-                \ZectranetBundle\Entity\Request::addRequestUserProject($em, $user, $type, $project);
+                \ZectranetBundle\Entity\Request::addNewRequest($em, $user, $type, $project);
 
             /** @var User $user */
             $user = $this->getUser();
@@ -191,7 +190,7 @@ class ProjectController extends Controller
      * @Route("/project/{project_id}/acceptRequestUserProject")
      * @Security("has_role('ROLE_USER')")
      * @param $project_id
-     * @return Response
+     * @return RedirectResponse
      */
     public function acceptRequestUserProjectAction($project_id)
     {
@@ -219,6 +218,38 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/project/{project_id}/{office_id}/acceptRequestOfficeProject")
+     * @Security("has_role('ROLE_USER')")
+     * @param $project_id
+     * @param $office_id
+     * @return RedirectResponse
+     */
+    public function acceptRequestOfficeProjectAction($project_id, $office_id)
+    {
+       /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        Project::addOfficeToProject($em, $office_id, $project_id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        /** @var Request $request */
+        $requestOffice = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'projectid' => $project_id, 'typeid' => 3));
+        /** @var Notification $notification */
+        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_project'));
+
+        $em->remove($requestOffice);
+        if ($notification != null)
+            $em->remove($notification);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+    }
+
+    /**
      * @Route("/project/{project_id}/declineRequestUserProject")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
@@ -238,7 +269,36 @@ class ProjectController extends Controller
         $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_user_project'));
 
         $em->remove($requestUser);
-        $em->remove($notification);
+        if ($notification != null)
+            $em->remove($notification);
+        $em->flush();
+
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
+    }
+
+    /**
+     * @Route("/project/{project_id}/declineRequestOfficeProject")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $project_id
+     * @return RedirectResponse
+     */
+    public function declineRequestOfficeProjectAction(Request $request, $project_id)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        /** @var Request $request */
+        $requestOffice = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'projectid' => $project_id, 'typeid' => 3));
+        /** @var Notification $notification */
+        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_project'));
+
+        $em->remove($requestOffice);
+        if ($notification != null)
+            $em->remove($notification);
         $em->flush();
 
         $referer = $request->headers->get('referer');
@@ -275,14 +335,37 @@ class ProjectController extends Controller
     public function addOfficesAction(Request $request, $project_id) {
         $data = json_decode($request->getContent(), true);
         $ids = array();
-        foreach ($data['offices'] as $office) {
-            $office = (object) $office;
-            $ids[] = $office->id;
+        foreach ($data['offices'] as $office)
+        {
+            if ((!isset($office['request'])) or ((isset($office['request'])) and ($office['request'] == 2)))
+            {
+                $office = (object) $office;
+                $ids[] = $office->id;
+            }
         }
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        Project::addOfficesToProject($em, $ids, $project_id);
+        /** @var RequestType $type */
+        $type = $this->getDoctrine()->getRepository('ZectranetBundle:RequestType')->find(3);
+        /** @var Project $project */
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $offices = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->findBy(array('id' => $ids));
+
+        foreach ($offices as $office)
+        {
+            if ($user->getId() != $office->getOwner()->getId())
+            {
+                \ZectranetBundle\Entity\Request::addNewRequest($em, $office->getOwner(), $type, $project, $office);
+                $this->get('zectranet.notifier')->createNotification("request_project", $user, $office->getOwner(), $project, $office);
+            }
+            else
+                Project::addOfficeToProject($em, $office->getId(), $project_id);
+        }
+
         $response = new Response(json_encode(array('success' => true)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;

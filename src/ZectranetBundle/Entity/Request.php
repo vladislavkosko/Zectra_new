@@ -343,7 +343,8 @@ class Request
             'project' => (($this->getType()->getLabel() == 'request_user_project')
                 or ($this->getType()->getLabel() == 'request_project'))
                 ? $this->getProject()->getInArray() : null,
-            'office' => ($this->getType()->getLabel() == 'request_office')
+            'office' => (($this->getType()->getLabel() == 'request_office')
+                or ($this->getType()->getLabel() == 'request_project'))
                 ? $this->getOffice()->getInArray() : null,
             'task' => ($this->getType()->getLabel() == 'request_office')
                 ? $this->getTask()->getInArray() : null
@@ -353,19 +354,22 @@ class Request
     /**
      * @param EntityManager $em
      * @param User $user
-     * @param RequestType $type
-     * @param Project $project
+     * @param $type
+     * @param $project
+     * @param null $office
      */
-    public static function addRequestUserProject($em, $user, $type, $project)
+    public static function addNewRequest($em, $user, $type, $project, $office = null)
     {
-        /** @var Request $request_user_project */
-        $request_user_project = new Request();
+        /** @var Request $new_request */
+        $new_request = new Request();
 
-        $request_user_project->setType($type);
-        $request_user_project->setUser($user);
-        $request_user_project->setProject($project);
+        $new_request->setType($type);
+        $new_request->setUser($user);
+        $new_request->setProject($project);
+        if ($office != null)
+            $new_request->setOffice($office);
 
-        $em->persist($request_user_project);
+        $em->persist($new_request);
         $em->flush();
     }
 }

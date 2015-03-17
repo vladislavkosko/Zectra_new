@@ -431,23 +431,37 @@
 				<div class="col-xs-12">
 
                     <div ng-if="requests.length > 0" class="hidden-element" ng-class="{'visible-element': requests.length > 0}">
-                        <div ng-repeat="request in requests | limitTo: 1">
-                            <div class="panel panel-info request" ng-if="(request.type.label == 'request_user_project')">
-                                <div class="panel-body">
-                                    <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
-                                        You have a new request in "[[request.project.name]]"
+                        <div class="panel panel-info request">
+                            <div class="panel-body">
+                                <div ng-repeat="request in requests | limitTo: 3">
+
+                                    <div ng-if="(request.type.label == 'request_user_project')" style="margin-bottom: 20px;">
+                                        <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
+                                            You have a new request in "[[request.project.name]]"
+                                        </div>
+                                        <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
+                                            <div ng-click="acceptRequestUserProject(request.project.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
+                                            <div ng-click="declineRequestUserProject(request.project.id)" class="btn btn-default">Decline</div>
+                                        </div>
                                     </div>
-                                    <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
-                                        <div ng-click="acceptRequestUserProject(request.project.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
-                                        <div ng-click="declineRequestUserProject(request.project.id)" class="btn btn-default">Decline</div>
+
+                                    <div ng-if="(request.type.label == 'request_project')" style="margin-bottom: 20px;">
+                                        <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
+                                            Your office "[[request.office.name]]" has a new request in "[[request.project.name]]"
+                                        </div>
+                                        <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
+                                            <div ng-click="acceptRequestOfficeProject(request.project.id, request.office.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
+                                            <div ng-click="declineRequestOfficeProject(request.project.id)" class="btn btn-default">Decline</div>
+                                        </div>
                                     </div>
+
                                 </div>
-                                <div class="panel-footer text-center">
-                                    <a href="#" class="seeAllRequest">
-                                        <strong>See All Requests</strong>
-                                        <i class="fa fa-angle-right"></i>
-                                    </a>
-                                </div>
+                            </div>
+                            <div class="panel-footer text-center">
+                                <a href="#" class="seeAllRequest">
+                                    <strong>See All Requests</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -505,6 +519,8 @@
 			projectShow: "{{ url('zectranet_show_project', {project_id: 0}) }}",
             acceptRequestUserProject : "{{ url('zectranet_accept_request_user_project', { 'project_id': 0 }) }}",
             declineRequestUserProject : "{{ url('zectranet_decline_request_user_project', { 'project_id': 0 }) }}",
+            acceptRequestOfficeProject : "{{ url('zectranet_accept_request_project', { 'project_id': 0, 'office_id': 1 }) }}",
+            declineRequestOfficeProject : "{{ url('zectranet_decline_request_project', { 'project_id': 0 }) }}",
             taskShow: "{{ url('zectranet_task_show', {task_id: 0}) }}",
 			documentTemplate: "{{ asset('bundles/zectranet/templates/document.html') }}",
             {#checkUserByUsername: "{{ url('intranet_user_check_username') }}",

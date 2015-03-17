@@ -510,7 +510,7 @@ class Project
 
     /**
      * @param EntityManager $em
-     * @param int $project_id
+     * @param $project_id
      * @return array
      */
     public static function getJsonProjectMembers(EntityManager $em, $project_id) {
@@ -579,16 +579,28 @@ class Project
 
     /**
      * @param EntityManager $em
-     * @param int $project_id
+     * @param $project_id
      * @return array
      */
-    public static function getJsonProjectOffices(EntityManager $em, $project_id) {
+    public static function getJsonProjectOffices(EntityManager $em, $project_id)
+    {
         $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
         $jsonProjectOffices = array();
         /** @var Office $office */
         foreach ($project->getOffices() as $office) {
             $jsonProjectOffices[] = $office->getInArray();
         }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 3));
+        if (count($requests) > 0)
+        {
+            foreach ($requests as $request){
+                $office = $request->getOffice()->getInArray();
+                $office['request'] = 1;
+                $jsonProjectOffices[] = $office;
+            }
+        }
+
         return $jsonProjectOffices;
     }
 
@@ -597,7 +609,8 @@ class Project
      * @param $project_id
      * @return array
      */
-    public static function getJsonNotProjectOffices(EntityManager $em, $project_id) {
+    public static function getJsonNotProjectOffices(EntityManager $em, $project_id)
+    {
         /** @var \Doctrine\ORM\QueryBuilder $qb */
         $qb = $em->createQueryBuilder();
 
@@ -607,6 +620,11 @@ class Project
         foreach ($project->getOffices() as $office) {
             $office_ids[] = $office->getId();
         }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 3));
+        if (count($requests) > 0)
+            foreach ($requests as $request)
+                $office_ids[] = $request->getOfficeid();
 
         $notProjectOffices = array();
         if (count($office_ids) > 0) {
@@ -631,20 +649,14 @@ class Project
 
     /**
      * @param EntityManager $em
-     * @param array $office_ids
-     * @param int $project_id
+     * @param $office_id
+     * @param $project_id
      */
-    public static function addOfficesToProject(EntityManager $em, $office_ids, $project_id) {
+    public static function addOfficeToProject($em, $office_id, $project_id) {
         $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $offices = $em->getRepository('ZectranetBundle:Office')->findBy(array('id' => $office_ids));
-        /** @var ArrayCollection $projectOffices */
-        $projectOffices = $project->getOffices();
-        /** @var Office $office */
-        foreach ($offices as $office) {
-            if (!$projectOffices->contains($office)) {
-                $project->addOffice($office);
-            }
-        }
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+
+        $project->addOffice($office);
 
         $em->persist($project);
         $em->flush();

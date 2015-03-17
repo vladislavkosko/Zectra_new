@@ -292,7 +292,7 @@ class Notifier
      * @param User|Project|Task $resource
      * @param $usersRequest
      * @param Project|Office $destination
-     * @param string|null $user_to_send_name
+     * @param null $user_to_send_name
      * @param object|null $post
      * @param array|null $temp
      * @param null $isOffice
@@ -462,8 +462,8 @@ class Notifier
 
                 case "request_project":
                 {
-                    $message = 'You assign the new project "'.$resource->getName().'"';
-                    $users = $usersRequest;
+                    $message = 'Your office ' . $user_to_send_name->getName() . ' has a new assign request from "'.$resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
+                    $users = array($usersRequest);
                     break;
                 }
 

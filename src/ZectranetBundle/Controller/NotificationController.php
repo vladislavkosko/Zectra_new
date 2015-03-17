@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use ZectranetBundle\Entity\Notification;
+use ZectranetBundle\Entity\User;
 
 class NotificationController extends Controller
 {
@@ -28,15 +29,16 @@ class NotificationController extends Controller
      */
     public function getNotificationsAction()
     {
+        /** @var User $user */
         $user = $this->getUser();
 
-        $user_requests = $this->getDoctrine()->getRepository('ZectranetBundle:Request')->findBy(array('user' => $user));
+        $user_requests = $user->getrequests();
 
         $user_notifications = Notification::prepareNotifications($user);
 
         $response = new Response(json_encode(array("result" => array(
             'notifications' => array_map(function($e){return $e->getInArray();}, $user_notifications),
-            'requests' => array_map(function($e){return $e->getInArray();}, $user_requests)
+            'requests' => array_map(function($e){return $e->getInArray();}, $user_requests->toArray())
         ))));
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;

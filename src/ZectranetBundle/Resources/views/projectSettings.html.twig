@@ -172,9 +172,10 @@
                                         </div>
                                         <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
                                             <a style="cursor: pointer;" class="list-group-item" ng-repeat="office in projectOffices" ng-init="office.selected = false;"
-                                               ng-class="{ 'active': office.selected }" ng-click="office.selected = !office.selected">
+                                               ng-class="{ 'active': office.selected }" ng-click="selectOffice(office)">
                                                 <i class="fa fa-home"></i>
                                                 [[ office.name ]]
+                                                <label ng-if="office.request" class="pull-right label label-default">Request sended</label>
                                             </a>
                                             <div class="list-group-item" ng-if="projectOffices.length == 0">
                                                 <h4 class="text-center text-info">Project Offices will be displayed here</h4>
