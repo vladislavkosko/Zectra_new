@@ -58,7 +58,7 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$rootScope', '$
                    '.htm': 'bundles/zectranet/icons/HTM.png', '.html': 'bundles/zectranet/icons/HTML.png', '.ods': 'bundles/zectranet/icons/ODS.png'
                };
                if (extension == ".png" || extension == ".gif" || extension == ".jpeg" || extension == ".jpg") {
-                   Tags = '<img  src=\"' + $scope.asset + docsinchat.url + '\" class=\"img-screenshots\" /> ';
+                   Tags = '<div  style=\"  display: inline-block;position: relative;\"><img  src=\"' + $scope.asset + docsinchat.url + '\" class=\"img-screenshots\" /> <i  class=\" fa fa-close close-img \" ></i>  </div>';
                    Tags = $compile(Tags)($scope);
                    document.getElementById('div-screenshot').style.display = 'block';
                    $('#slide-down-menu-screenshots').fadeIn(1500);
@@ -75,7 +75,7 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$rootScope', '$
                }
                else
                {
-                   Tags = '<img  src=\"' + $scope.asset +  extensions[extension] + '\" class=\"img-screenshots\" /> ';
+                   Tags = '<div  style=\"  display: inline-block;position: relative;\"><img  src=\"' + $scope.asset +  extensions[extension] + '\" class=\"img-screenshots\" /> <i  class=\" fa fa-close close-img \" ></i>  </div>';
                    Tags = $compile(Tags)($scope);
                    document.getElementById('div-screenshot').style.display = 'block';
                    $('#slide-down-menu-screenshots').fadeIn(1500);
