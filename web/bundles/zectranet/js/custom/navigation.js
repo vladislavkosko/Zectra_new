@@ -45,12 +45,11 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 						for (var i = 0; i < $scope.notifications.length; i++) {
 							if ($scope.notifications[i].type == 'message_office'
 								|| $scope.notifications[i].type == 'message_project'
-								|| $scope.notifications[i].type == 'message_project'
 								|| $scope.notifications[i].type == 'message_task'
 								|| $scope.notifications[i].type == 'message_epic_story'
-								|| $scope.notifications[i].type == 'private_message_epic_story'
-								|| $scope.notifications[i].type == 'private_message_epic_story'
-								|| $scope.notifications[i].type == 'private_message_epic_story'
+								|| $scope.notifications[i].type == 'private_message_office'
+								|| $scope.notifications[i].type == 'private_message_project'
+								|| $scope.notifications[i].type == 'private_message_task'
 								|| $scope.notifications[i].type == 'private_message_epic_story'
 							) {
 								chatUpdate = true;

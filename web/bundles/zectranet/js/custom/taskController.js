@@ -26,6 +26,11 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.promise = null;
         $scope.taskInfoEdit = null;
 
+        $scope.agileStorySubtasks = [];
+        $scope.agileTodoSubtasks = [];
+        $scope.agileInProgressSubtasks = [];
+        $scope.agileDoneSubtasks = [];
+
         $scope.urlGetTasks = null;
         $scope.urlAddTask = null;
         $scope.urlAddSubTask = null;
@@ -54,6 +59,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
             $scope.promise.then(function () {
                 initFilter();
+                $scope.tasks = calculateTasksInfo($scope.tasks);
                 var tasks = $scope.tasks;
                 for (var i = 0; i < tasks.length; i++) {
                     if ($.inArray(tasks[i], $scope.tasksFilter) < 0) {
@@ -87,74 +93,111 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             }
         });
 
-        function calculateTasksInfo (tasks) {
-            for (var i = 0; i < tasks.length; i++) {
-                if (tasks[i].subtasks.length > 0) {
-                    tasks[i].progress = calculateMeanProgress(tasks[i].subtasks);
-                    var estimatedTime = calculateMeanEstimation(tasks[i].subtasks);
-                    tasks[i].estimatedHours = estimatedTime.hours;
-                    tasks[i].estimatedMinutes = estimatedTime.minutes;
-                    tasks[i].status = calculateMeanStatus(tasks[i].subtasks);
+        //// ------- BEGIN OF PREPARE TASKS FUNCTIONS ------- \\\\
+        {
+            function calculateTasksInfo (tasks) {
+                tasks = giveTasksHref(tasks);
+                for (var i = 0; i < tasks.length; i++) {
+                    if (tasks[i].subtasks && tasks[i].subtasks.length > 0) {
+                        tasks[i].subtasks = giveSubtaskIndex(tasks[i].subtasks);
+                        tasks[i].progress = calculateMeanProgress(tasks[i].subtasks);
+                        var estimatedTime = calculateMeanEstimation(tasks[i].subtasks);
+                        tasks[i].estimatedHours = estimatedTime.hours;
+                        tasks[i].estimatedMinutes = estimatedTime.minutes;
+                        tasks[i].status = calculateMeanStatus(tasks[i].subtasks);
+                    }
+                }
+                return tasks;
+            }
+
+            function calculateMeanProgress (subtasks) {
+                var meanNumber = 0;
+                for (var i = 0; i < subtasks.length; i++) {
+                    meanNumber += subtasks[i].progress;
+                }
+                return Math.round(meanNumber / subtasks.length);
+            }
+
+            function calculateMeanEstimation (subtasks) {
+                var estimatedTime = {
+                    'hours': 0, 'minutes': 0
+                };
+                for (var i = 0; i < subtasks.length; i++) {
+                    estimatedTime.hours += subtasks[i].estimatedHours;
+                    estimatedTime.minutes += subtasks[i].estimatedMinutes;
+                }
+                estimatedTime.hours += ~~(estimatedTime.minutes / 60);
+                estimatedTime.minutes = estimatedTime.minutes % 60;
+
+                return estimatedTime;
+            }
+
+            function calculateMeanStatus (subtasks) {
+                var statuses = {
+                    'story': 0, 'todo': 0,
+                    'in_progress': 0, 'done': 0
+                };
+                for (var i = 0; i < subtasks.length; i++) {
+                    if (subtasks[i].type.id != 2) {
+                        switch (subtasks[i].status.id) {
+                            case 1:
+                                statuses.story++;
+                                break;
+                            case 2:
+                                statuses.todo++;
+                                break;
+                            case 3:
+                                statuses.in_progress++;
+                                break;
+                            case 4:
+                                statuses.done++;
+                                break;
+                        }
+                    }
+                }
+                if (statuses.done == subtasks.length) {
+                    return { id: 4, label: 'done', 'color': 'green' };
+                } else if (statuses.in_progress > 0) {
+                    return { id: 3, label: 'in-progress', 'color': 'violet' };
+                } else if (statuses.todo > 0 || statuses.done > 0) {
+                    return { id: 2, label: 'todo', 'color': 'blue' };
+                } else {
+                    return { id: 1, label: 'story', 'color': 'lightgray' };
                 }
             }
-            return tasks;
-        }
 
-        function calculateMeanProgress (subtasks) {
-            var meanNumber = 0;
-            for (var i = 0; i < subtasks.length; i++) {
-                meanNumber += subtasks[i].progress;
-            }
-            return Math.round(meanNumber / subtasks.length);
-        }
-
-        function calculateMeanEstimation (subtasks) {
-            var estimatedTime = {
-                'hours': 0, 'minutes': 0
-            };
-            for (var i = 0; i < subtasks.length; i++) {
-                estimatedTime.hours += subtasks[i].estimatedHours;
-                estimatedTime.minutes += subtasks[i].estimatedMinutes;
-            }
-            estimatedTime.hours += ~~(estimatedTime.minutes / 60);
-            estimatedTime.minutes = estimatedTime.minutes % 60;
-
-            return estimatedTime;
-        }
-
-        function calculateMeanStatus (subtasks) {
-            var statuses = {
-                'story': 0, 'todo': 0,
-                'in_progress': 0, 'done': 0
-            };
-            for (var i = 0; i < subtasks.length; i++) {
-                if (subtasks[i].type.id != 2) {
+            function giveSubtaskIndex(subtasks) {
+                for (var i = 0; i < subtasks.length; i++) {
+                    subtasks[i].subindex = i + 1;
                     switch (subtasks[i].status.id) {
                         case 1:
-                            statuses.story++;
+                            $scope.agileStorySubtasks.push(subtasks[i]);
                             break;
                         case 2:
-                            statuses.todo++;
+                            $scope.agileTodoSubtasks.push(subtasks[i]);
                             break;
                         case 3:
-                            statuses.in_progress++;
+                            $scope.agileInProgressSubtasks.push(subtasks[i]);
                             break;
                         case 4:
-                            statuses.done++;
+                            $scope.agileDoneSubtasks.push(subtasks[i]);
                             break;
                     }
                 }
+                return subtasks;
             }
-            if (statuses.done == subtasks.length) {
-                return { id: 4, label: 'done', 'color': 'green' };
-            } else if (statuses.in_progress > 0) {
-                return { id: 3, label: 'in-progress', 'color': 'violet' };
-            } else if (statuses.todo > 0 || statuses.done > 0) {
-                return { id: 2, label: 'todo', 'color': 'blue' };
-            } else {
-                return { id: 1, label: 'story', 'color': 'lightgray' };
+
+            function giveTasksHref (tasks) {
+                for (var i = 0; i < tasks.length; i++) {
+                    tasks[i].href = $scope.assignTaskHref(tasks[i].id);
+                    if (tasks[i].subtasks.length > 0) {
+                        tasks[i].subtasks = giveTasksHref(tasks[i].subtasks);
+                    }
+                }
+                return tasks;
             }
         }
+        //// ------- END OF PREPARE TASKS FUNCTIONS --------- \\\\
 
         $scope.getSingleTask = function () {
             $scope.taskPromise = $http
@@ -176,7 +219,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             $scope.mainInfoPromise = $http
                 .post($scope.urlSaveTaskMainInfo, { 'task': task });
         };
-        
+
         $scope.saveSingleTaskDetailsInfo = function (task) {
             if (task.assigned == 'Not Assigned') task.assigned = null;
             $scope.detailsInfoPromise = $http

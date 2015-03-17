@@ -27,7 +27,18 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                 .success(function (response) {
                    $scope.posts = preparePosts(response.Posts);
                     $scope.posts.reverse();
-                    $('#posts-panel').animate({"scrollTop":$('#posts-panel').height()+3500},1000);
+                    var chatList = $('.chat');
+                    setTimeout(function () {
+                        var postsPanel = $('#posts-panel');
+                        postsPanel.animate(
+                            {
+                                'scrollTop': $(this).height() + chatList.height() + 500
+                            }, 1000
+                        );
+                        console.log(chatList.height());
+                        console.log(postsPanel.height());
+                        return false;
+                    }, 200);
 
                 });
         };
@@ -125,7 +136,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
 
                                                     for(var i=$scope.screenshots.length - 1;i< $scope.screenshots.length;i++)
                                                     {
-                                                       var Tags = '<div  id=\"screenshot'+ i +'\" \"  style=\"  display: inline-block;position: relative;\"><img  src=\"' + $scope.urlAsset +  $scope.screenshots[i].url + '\" class=\"img-screenshots\" /><i ng-click=\"deleteScreenshot(' + i + ')\" class=\" fa fa-close close-screenshot \" ></i> </div>';
+                                                       var Tags = '<div id=\"screenshot'+ i +'\" \"  style=\"  display: inline-block;position: relative;\"><img  src=\"' + $scope.urlAsset +  $scope.screenshots[i].url + '\" class=\"img-screenshots\" /><i ng-click=\"deleteScreenshot(' + i + ')\" class=\" fa fa-close close-screenshot \" ></i> </div>';
                                                         Tags = $compile(Tags)($scope);
                                                         document.getElementById('div-screenshot').style.display = 'block';
                                                         $('#slide-down-menu-screenshots').fadeIn(1500);
