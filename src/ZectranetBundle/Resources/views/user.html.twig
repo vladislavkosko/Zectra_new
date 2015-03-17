@@ -9,55 +9,82 @@
 
     <!-- Begin of Private block -->
     <div class="row">
+
+
         <!-- Begin of Private Offices -->
-        <div class="list-group col-md-4">
-            <div class="list-group-item active">
-                <i class="fa fa-home"></i>
-                Private Offices
-            </div>
-            {% set officesCount = app.user.ownedOffices | length %}
-
-            {% if officesCount == 0 %}
-                <div class="list-group-item">
-                    <h4 class="text-info text-center">Offices will be displayed here</h4>
+        <div class="col-md-4 private-office">
+            <div class="panel panel-default" style=" border-radius: 0px;">
+                <div class="panel-heading" style="background:#ddedf4; color:#606060; border-radius: 0px;">
+                    <h4 class="private-office"><i class="fa fa-home"></i> Private Offices</h4>
                 </div>
-            {% endif %}
+                <div class="row">
+                    {% set officesCount = app.user.ownedOffices | length %}
 
-            {% for office in app.user.ownedOffices | reverse | slice(0, 3) %}
-                <a class="list-group-item" href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
-                    <i class="fa fa-home"></i>
-                    {{ office.name }}
-                </a>
-            {% endfor %}
-            <div id="private_office_collapse" class="panel-collapse collapse" aria-expanded="false">
-                {% for office in app.user.ownedOffices | reverse | slice(3, officesCount) %}
-                    <a class="list-group-item" href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
-                        <i class="fa fa-home"></i>
-                        {{ office.name }}
+                    {% if officesCount == 0 %}
+                        <div class="col-xs-12" style="min-height: 50px;">
+                            <div style=" min-height: 50px;">
+                                <h4 class="text-center" style="padding-top:15px;color:#606060;">Offices will be displayed here</h4>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% for office in app.user.ownedOffices | reverse | slice(0, 3) %}
+                        <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                            <div class="col-xs-3" style="margin-top:5px;">
+                                <img src="{{ asset('bundles/zectranet/img/officeimg.png') }}" height="80">
+                            </div>
+                            <div class="col-xs-9" style="min-height: 85px;">
+                                <h4> <i class="fa fa-home"></i> {{ office.name }} </h4>
+                                <p style="padding-left:8px;"> {{ office.description }}</p>
+                            </div>
+                        </a>
+                    {% endfor %}
+
+                    <div id="private_office_collapse" class="panel-collapse collapse" aria-expanded="false">
+                        {% for office in app.user.ownedOffices | reverse | slice(3, officesCount) %}
+                            <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                                <div class="col-xs-3" style="margin-top:5px;">
+                                    <img src="{{ asset('bundles/zectranet/img/officeimg.png') }}" height="80">
+                                </div>
+                                <div class="col-xs-9" style="min-height: 85px;">
+                                    <h4> <i class="fa fa-home"></i> {{ office.name }} </h4>
+                                    <p style="padding-left:8px;"> Hello world its to</p>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+
+
+                    {% if officesCount > 3 %}
+                    <a data-toggle="collapse" href="#private_office_collapse" aria-expanded="false"  class="text-center">
+                        <div class="col-xs-12 text-center" style="min-height: 20px;">
+                            <i class="fa fa-list-alt"></i> Show all
+                        </div>
                     </a>
-                {% endfor %}
-            </div>
-            {% if officesCount > 3 %}
-                <a data-toggle="collapse" href="#private_office_collapse" aria-expanded="false"
-                   class="collapsed btn btn-default form-control">
-                    <i class="fa fa-list-alt"></i>
-                    Show all
-                </a>
-            {% endif %}
+                    {% endif %}
 
-            <a href="#" class="form-control btn btn-default btn-success" data-toggle="modal" data-target="#add_private_office">
-                <i class="fa fa-plus-circle"></i>
-                <span>Add New Office</span>
-            </a>
+                    <div class="col-xs-12" style="min-height: 50px;">
+                        <a href="#" class="addnew-btn-hover"  data-toggle="modal" data-target="#add_private_office">
+                            <div class="addnew-btn">
+                                <h4 class="text-center" style="padding-top:15px;color:#606060;"> <i class="fa fa-plus-circle"></i> Add new Offices</h4>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            {#ends.panel default#}
         </div>
         <!-- End of Private Offices -->
 
+
         <!-- Begin of Private Projects -->
-        <div class="list-group col-md-4">
-            <div class="list-group-item active">
-                <i class="fa fa-briefcase"></i>
-                Private Projects
-            </div>
+    <div class="col-md-4 private-office">
+    <div class="panel panel-default" style=" border-radius: 0px;">
+        <div class="panel-heading" style="background:#ddedf4; color:#606060; border-radius: 0px;">
+            <h4 class="private-office"><i class="fa fa-briefcase"></i> Private Projects </h4>
+        </div>
+        <div class="row">
 
             {% set projectsCount = 0 %}
             {% for project in app.user.ownedProjects %}
@@ -67,50 +94,71 @@
             {% endfor %}
 
             {% if projectsCount == 0 %}
-                <div class="list-group-item">
-                    <h4 class="text-info text-center">Projects will be displayed here</h4>
+                <div class="col-xs-12" style="min-height: 50px;">
+                    <div style=" min-height: 50px;">
+                        <h4 class="text-center" style="padding-top:15px;color:#606060;">Projects will be displayed here</h4>
+                    </div>
                 </div>
             {% endif %}
 
             {% for project in app.user.ownedProjects | reverse | slice(0, 3) %}
                 {% if project.parent == null %}
-                    <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                        <i class="fa fa-briefcase"></i>
-                        {{ project.name }}
+                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                        <div class="col-xs-3" style="margin-top:5px;">
+                            <img src="{{ asset('bundles/zectranet/img/projectimg.png') }}" height="80">
+                        </div>
+                        <div class="col-xs-9" style="min-height: 85px;">
+                            <h4> <i class="fa fa-home"></i> {{ project.name }}</h4>
+                            <p style="padding-left:8px;"> {{ project.description }}</p>
+                        </div>
                     </a>
                 {% endif %}
             {% endfor %}
+
             <div id="private_project_collapse" class="panel-collapse collapse" aria-expanded="false">
                 {% for project in app.user.ownedProjects | reverse | slice(3, projectsCount) %}
                     {% if project.parent == null %}
-                        <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                            <i class="fa fa-briefcase"></i>
-                            {{ project.name }}
+                        <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                            <div class="col-xs-3" style="margin-top:5px;">
+                                <img src="{{ asset('bundles/zectranet/img/projectimg.png') }}" height="80">
+                            </div>
+                            <div class="col-xs-9" style="min-height: 85px;">
+                                <h4> <i class="fa fa-home"></i> {{ project.name }}</h4>
+                                <p style="padding-left:8px;"> {{ project.description }}</p>
+                            </div>
                         </a>
                     {% endif %}
                 {% endfor %}
             </div>
+
+
             {% if projectsCount > 3 %}
-                <a data-toggle="collapse" href="#private_project_collapse" aria-expanded="false"
-                   class="collapsed btn btn-default form-control">
-                    <i class="fa fa-list-alt"></i>
-                    Show all
+                <a data-toggle="collapse" href="#private_project_collapse" aria-expanded="false" class="text-center">
+                    <div class="col-xs-12 text-center" style="min-height: 20px;">
+                        <i class="fa fa-list-alt"></i> Show all
+                    </div>
                 </a>
             {% endif %}
+            <div class="col-xs-12" style="min-height: 50px;">
+                <a href="#" class="addnew-btn-hover" data-toggle="modal" data-target="#add_private_project">
+                    <div class="addnew-btn">
+                        <h4 class="text-center" style="padding-top:15px;color:#606060;"> <i class="fa fa-plus-circle"></i> Add new Project</h4>
+                    </div>
+                </a>
+            </div>
 
-            <a href="#" class="form-control btn btn-default btn-success" data-toggle="modal" data-target="#add_private_project">
-                <i class="fa fa-plus-circle"></i>
-                <span>Add New Project</span>
-            </a>
+            </div>
+        </div>
         </div>
         <!-- End of Private Projects -->
 
         <!-- Begin of Private Sprints -->
-        <div class="list-group col-md-4">
-            <div class="list-group-item active">
-                <i class="fa fa-repeat"></i>
-                Owned Sprints
+        <div class="col-md-4 private-office">
+        <div class="panel panel-default" style=" border-radius: 0px;">
+            <div class="panel-heading" style="background:#ddedf4; color:#606060; border-radius: 0px;">
+            <h4 class="private-office"><i class="fa fa-repeat"></i> Owned Sprints </h4>
             </div>
+            <div class="row">
 
             {% set sharedSprints = [] %}
             {% for office in app.user.ownedOffices %}
@@ -124,32 +172,46 @@
             {% set sprintsCount = sharedSprints | length %}
 
             {% if sprintsCount == 0 %}
-                <div class="list-group-item">
-                    <h4 class="text-info text-center">Sprints will be displayed here</h4>
+                <div class="col-xs-12" style="min-height: 50px;">
+                    <div style=" min-height: 50px;">
+                        <h4 class="text-center" style="padding-top:15px;color:#606060;">Sprints will be displayed here</h4>
+                    </div>
                 </div>
             {% endif %}
 
             {% for sprint in sharedSprints | reverse | slice(0, 3) %}
-                <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
-                    <i class="fa fa-repeat"></i>
-                    {{ sprint.name }}
+                <a href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
+                    <div class="col-xs-3" style="margin-top:5px;">
+                        <img src="{{ asset('bundles/zectranet/img/sprintimg.png') }}" height="80">
+                    </div>
+                    <div class="col-xs-9" style="min-height: 85px;">
+                        <h4> <i class="fa fa-home"></i> {{ sprint.name }}</h4>
+                        <p style="padding-left:8px;"> {{ sprint.description }}</p>
+                    </div>
                 </a>
             {% endfor %}
             <div id="connected_sprint_collapse" class="panel-collapse collapse" aria-expanded="false">
                 {% for sprint in sharedSprints | reverse | slice(3, sprintsCount) %}
-                    <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
-                        <i class="fa fa-repeat"></i>
-                        {{ sprint.name }}
+                    <a href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
+                        <div class="col-xs-3" style="margin-top:5px;">
+                            <img src="{{ asset('bundles/zectranet/img/sprintimg.png') }}" height="80">
+                        </div>
+                        <div class="col-xs-9" style="min-height: 85px;">
+                            <h4> <i class="fa fa-home"></i> {{ sprint.name }}</h4>
+                            <p style="padding-left:8px;"> {{ sprint.description }}</p>
+                        </div>
                     </a>
                 {% endfor %}
             </div>
             {% if sprintsCount > 3 %}
-                <a data-toggle="collapse" href="#connected_sprint_collapse" aria-expanded="false"
-                   class="collapsed btn btn-default form-control">
-                    <i class="fa fa-list-alt"></i>
-                    Show all
+                <a data-toggle="collapse" href="#connected_sprint_collapse" aria-expanded="false" class="text-center">
+                    <div class="col-xs-12 text-center" style="min-height: 32px; margin-top: 15px;">
+                        <i class="fa fa-list-alt"></i> Show all
+                    </div>
                 </a>
             {% endif %}
+            </div>
+            </div>
         </div>
         <!-- End of Shared Sprints -->
 
@@ -160,91 +222,126 @@
     <div class="row">
 
         <!-- Begin of Shared Offices -->
-        <div class="list-group col-md-4">
-            <div class="list-group-item active">
-                <i class="fa fa-sitemap"></i>
-                Connected Offices
-            </div>
+    <div class="col-md-4 private-office">
+    <div class="panel panel-default" style=" border-radius: 0px;">
+        <div class="panel-heading" style="background:#ddedf4; color:#606060; border-radius: 0px;">
+            <h4 class="private-office"><i class="fa fa-sitemap"></i>  Connected Offices </h4>
+        </div>
+        <div class="row">
             {% set officesCount = app.user.assignedOffices | length %}
 
             {% if officesCount == 0 %}
-                <div class="list-group-item">
-                    <h4 class="text-info text-center">Offices will be displayed here</h4>
+                <div class="col-xs-12" style="min-height: 50px;">
+                    <div style=" min-height: 50px;">
+                        <h4 class="text-center" style="padding-top:15px;color:#606060;">Offices will be displayed here</h4>
+                    </div>
                 </div>
             {% endif %}
 
             {% for office in app.user.assignedOffices | reverse | slice(0, 3) %}
-                <a class="list-group-item" href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
-                    <i class="fa fa-sitemap"></i>
-                    {{ office.name }}
+                <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                    <div class="col-xs-3" style="margin-top:5px;">
+                        <img src="{{ asset('bundles/zectranet/img/officeimg.png') }}" height="80">
+                    </div>
+                    <div class="col-xs-9" style="min-height: 85px;">
+                        <h4> <i class="fa fa-sitemap"></i> {{ office.name }}</h4>
+                        <p style="padding-left:8px;"> {{ office.description }}</p>
+                    </div>
                 </a>
             {% endfor %}
+
             <div id="connected_office_collapse" class="panel-collapse collapse" aria-expanded="false">
                 {% for office in app.user.assignedOffices | reverse | slice(3, officesCount) %}
-                    <a class="list-group-item" href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
-                        <i class="fa fa-sitemap"></i>
-                        {{ office.name }}
+                    <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
+                        <div class="col-xs-3" style="margin-top:5px;">
+                            <img src="{{ asset('bundles/zectranet/img/officeimg.png') }}" height="80">
+                        </div>
+                        <div class="col-xs-9" style="min-height: 85px;">
+                            <h4> <i class="fa fa-sitemap"></i> {{ office.name }}</h4>
+                            <p style="padding-left:8px;"> {{ office.description }}</p>
+                        </div>
                     </a>
                 {% endfor %}
             </div>
             {% if officesCount > 3 %}
-                <a data-toggle="collapse" href="#connected_office_collapse" aria-expanded="false"
-                   class="collapsed btn btn-default form-control">
-                    <i class="fa fa-list-alt"></i>
-                    Show all
+                <a data-toggle="collapse" href="#connected_office_collapse" aria-expanded="false" class="text-center">
+                    <div class="col-xs-12 text-center" style="min-height: 32px; margin-top: 15px;">
+                        <i class="fa fa-list-alt"></i> Show all
+                    </div>
                 </a>
             {% endif %}
+            </div>
+        </div>
         </div>
         <!-- End of Shared Offices -->
 
         <!-- Begin of Shared Projects -->
-        <div class="list-group col-md-4">
-            <div class="list-group-item active">
-                <i class="fa fa-briefcase"></i>
-                Connected Projects
-            </div>
+    <div class="col-md-4 private-office">
+    <div class="panel panel-default" style=" border-radius: 0px;">
+        <div class="panel-heading" style="background:#ddedf4; color:#606060; border-radius: 0px;">
+            <h4 class="private-office"><i class="fa fa-briefcase"></i> Connected Projects </h4>
+        </div>
+        <div class="row">
             {% set projectsCount = app.user.projects | length %}
 
             {% if projectsCount == 0 %}
-                <div class="list-group-item">
-                    <h4 class="text-info text-center">Projects will be displayed here</h4>
+                <div class="col-xs-12" style="min-height: 50px;">
+                    <div style=" min-height: 50px;">
+                        <h4 class="text-center" style="padding-top:15px;color:#606060;">Projects will be displayed here</h4>
+                    </div>
                 </div>
             {% endif %}
 
             {% for project in app.user.projects | reverse | slice(0, 3) %}
                 {% if project.parent == null %}
-                    <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                        <i class="fa fa-briefcase"></i>
-                        {{ project.name }}
+                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                        <div class="col-xs-3" style="margin-top:5px;">
+                            <img src="{{ asset('bundles/zectranet/img/projectimg.png') }}" height="80">
+                        </div>
+                        <div class="col-xs-9" style="min-height: 85px;">
+                            <h4> <i class="fa fa-sitemap"></i> {{ project.name }}</h4>
+                            <p style="padding-left:8px;"> {{ project.description }}</p>
+                        </div>
                     </a>
                 {% endif %}
             {% endfor %}
+
+
+
             <div id="connected_project_collapse" class="panel-collapse collapse" aria-expanded="false">
                 {% for project in app.user.projects | reverse | slice(3, projectsCount) %}
                     {% if project.parent == null %}
-                        <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                            <i class="fa fa-briefcase"></i>
-                            {{ project.name }}
+                        <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                            <div class="col-xs-3" style="margin-top:5px;">
+                                <img src="{{ asset('bundles/zectranet/img/projectimg.png') }}" height="80">
+                            </div>
+                            <div class="col-xs-9" style="min-height: 85px;">
+                                <h4> <i class="fa fa-sitemap"></i> {{ project.name }}</h4>
+                                <p style="padding-left:8px;"> {{ project.description }}</p>
+                            </div>
                         </a>
                     {% endif %}
                 {% endfor %}
             </div>
             {% if projectsCount > 3 %}
-                <a data-toggle="collapse" href="#connected_project_collapse" aria-expanded="false"
-                   class="collapsed btn btn-default form-control">
-                    <i class="fa fa-list-alt"></i>
-                    Show all
+                <a data-toggle="collapse" href="#connected_project_collapse" class="text-center">
+                    <div class="col-xs-12 text-center" style="min-height: 32px; margin-top: 15px;">
+                        <i class="fa fa-list-alt"></i> Show all
+                    </div>
                 </a>
             {% endif %}
+            </div>
+        </div>
         </div>
         <!-- End of Shared Projects -->
 
         <!-- Begin of Shared Sprints -->
-        <div class="list-group col-md-4">
-            <div class="list-group-item active">
-                <i class="fa fa-repeat"></i>
-                Connected Sprints
-            </div>
+    <div class="col-md-4 private-office">
+    <div class="panel panel-default" style=" border-radius: 0px;">
+        <div class="panel-heading" style="background:#ddedf4; color:#606060; border-radius: 0px;">
+            <h4 class="private-office"><i class="fa fa-repeat"></i>  Connected Offices </h4>
+        </div>
+        <div class="row">
 
             {% set sharedSprints = [] %}
             {% for office in app.user.assignedOffices %}
@@ -258,33 +355,47 @@
             {% set sprintsCount = sharedSprints | length %}
 
             {% if sprintsCount == 0 %}
-                <div class="list-group-item">
-                    <h4 class="text-info text-center">Sprints will be displayed here</h4>
+                <div class="col-xs-12" style="min-height: 50px;">
+                    <div style=" min-height: 50px;">
+                        <h4 class="text-center" style="padding-top:15px;color:#606060;">Sprints will be displayed here</h4>
+                    </div>
                 </div>
             {% endif %}
 
             {% for sprint in sharedSprints | reverse | slice(0, 3) %}
-                <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
-                    <i class="fa fa-repeat"></i>
-                    {{ sprint.name }}
+                <a href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
+                    <div class="col-xs-3" style="margin-top:5px;">
+                        <img src="{{ asset('bundles/zectranet/img/sprintimg.png') }}" height="80">
+                    </div>
+                    <div class="col-xs-9" style="min-height: 85px;">
+                        <h4> <i class="fa fa-repeat"></i> {{ sprint.name }}</h4>
+                        <p style="padding-left:8px;"> {{ sprint.description }}</p>
+                    </div>
                 </a>
             {% endfor %}
             <div id="connected_sprint_collapse" class="panel-collapse collapse" aria-expanded="false">
                 {% for sprint in sharedSprints | reverse | slice(3, sprintsCount) %}
-                    <a class="list-group-item" href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
-                        <i class="fa fa-repeat"></i>
-                        {{ sprint.name }}
+                    <a href="{{ path('zectranet_show_project', {'project_id': sprint.id }) }}">
+                        <div class="col-xs-3" style="margin-top:5px;">
+                            <img src="{{ asset('bundles/zectranet/img/sprintimg.png') }}" height="80">
+                        </div>
+                        <div class="col-xs-9" style="min-height: 85px;">
+                            <h4> <i class="fa fa-repeat"></i> {{ sprint.name }}</h4>
+                            <p style="padding-left:8px;"> {{ sprint.description }}</p>
+                        </div>
                     </a>
                 {% endfor %}
             </div>
             {% if projectsCount > 3 %}
-                <a data-toggle="collapse" href="#connected_sprint_collapse" aria-expanded="false"
-                   class="collapsed btn btn-default form-control">
-                    <i class="fa fa-list-alt"></i>
-                    Show all
+                <a data-toggle="collapse" href="#connected_sprint_collapse" class="text-center">
+                    <div class="col-xs-12 text-center" style="min-height: 32px; margin-top: 15px;">
+                        <i class="fa fa-list-alt"></i> Show all
+                    </div>
                 </a>
             {% endif %}
         </div>
+    </div>
+    </div>
         <!-- End of Shared Sprints -->
 
     </div>

@@ -64,7 +64,7 @@
 .private-office h4{
   font-family: 'PT Sans Narrow', sans-serif;
   font-weight: bold;
-  margin:7px;
+  margin: 7px;
 }
 
 .private-office h3{
@@ -84,4 +84,40 @@
 }
 .private-office-btn-a:hover{
   text-decoration: none !important;
+}
+
+.private-office h4{
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-weight: bold;
+    margin:7px;
+}
+
+.private-office h3{
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-weight: bold;
+    margin:7px;
+}
+
+.private-office-btn{
+    background: #428bca;
+    color: white;
+    text-decoration: none;
+}
+.private-office-btn:hover{
+    background: #337ab7;
+    text-decoration: none !important;
+}
+.private-office-btn-a:hover{
+    text-decoration: none !important;
+}
+.addnew-btn{
+    background-color:#ddedf4;
+    min-height: 50px;
+}
+.addnew-btn:hover{
+    background-color:#bce2f3 ;
+    min-height: 50px;
+}
+.addnew-btn-hover:hover{
+    text-decoration: none !important;
 }
