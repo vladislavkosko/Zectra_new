@@ -8,21 +8,27 @@
             <div class="page-header text-center">Story</div>
 
             <div class="list-group">
-                <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter">
+                <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter" ng-if="task.status.label == 'story'">
                     <div class="col-md-12" ng-init="parentTask = task">
-                        <span ng-if="task.status.label == 'story'">
                             <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                                ng-class="{
                                     'local-red': task.priority.id == 3,
                                     'local-yellow': task.priority.id == 2,
                                     'local-green': task.priority.id == 1
                                     }">
-                               <h4 class="list-group-item-heading">
+                               <h4 class="list-group-item-heading" ng-if="task.parentid == null">
                                     <span style="color: black;">
                                         [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
                                         &nbsp;
                                     </span>
                                     [[ task.name ]]
+                               </h4>
+                               <h4 class="list-group-item-heading" ng-if="task.parentid != null">
+                                   <span style="color: black;">
+                                       [[ parentTask.id ]].[[ $index + 1 ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                       &nbsp;
+                                   </span>
+                                   [[ task.name ]]
                                </h4>
                                <p class="list-group-item-text">
                                    [[ task.description ]]
@@ -32,8 +38,8 @@
                                    <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                                </p>
                             </a>
-                        </span>
-                        <span ng-repeat="task in task.subtasks | orderBy: tasksOrderBy | filter: execTaskFilter">
+                        <!--
+                        <div ng-repeat="task in task.subtasks | orderBy: tasksOrderBy | filter: execTaskFilter">
                             <a ng-if="task.status.label == 'story'" class="list-group-item" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                                ng-class="{
                                     'local-red': task.priority.id == 3,
@@ -56,7 +62,8 @@
                                     <span ng-if="(task.assigned != null) && (task.assigned.avatar)"><img ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.assigned.avatar)" class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;"></span>
                                </p>
                             </a>
-                        </span>
+                        </div>
+                        -->
                     </div>
                 </div>
             </div>

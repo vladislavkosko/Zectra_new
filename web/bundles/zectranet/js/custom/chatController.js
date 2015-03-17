@@ -21,7 +21,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             $scope.getPosts(0, 100);
         };
 
-        $scope.getPosts = function (offset, count) {
+        $scope.getPosts = function GetPosts(offset, count) {
             $scope.promise = $http.post($scope.urlGetPosts, {'offset': offset , 'count': count})
                 .success(function (response) {
                    $scope.posts = preparePosts(response.Posts);
@@ -30,6 +30,8 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
 
                 });
         };
+
+        $rootScope.updateChat = $scope.getPosts;
 
         $scope.userHref = function (user_id) {
 
