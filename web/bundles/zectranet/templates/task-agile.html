@@ -14,7 +14,7 @@
                                     'local-yellow': task.priority.id == 2,
                                     'local-green': task.priority.id == 1
                                     }">
-                            <h4 class="list-group-item-heading" ng-if="task.parentid == null">
+                            <h4 class="list-group-item-heading">
                                     <span style="color: black;">
                                         [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
                                         &nbsp;
@@ -25,13 +25,13 @@
                                 [[ task.description ]]
                             </p>
                             <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <span class="label label-info" style="float:left;">0</span>
+                                <span class="label label-info" style="float:left;">[[task.postCount]]</span>
                                 <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
                             </p>
                         </a>
                     </div>
                 </div>
-                <div class="row" ng-repeat="task in agileStorySubtasks">
+                <div class="row" ng-repeat="task in agileStorySubtasks track by $index">
                     <div class="col-md-12">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-href="[[task.href]]"
                            ng-class="{
@@ -89,7 +89,7 @@
                             </a>
                         </div>
                     </div>
-                <div class="row" ng-repeat="task in agileTodoSubtasks">
+                <div class="row" ng-repeat="task in agileTodoSubtasks track by $index">
                     <div class="col-md-12">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-href="[[task.href]]"
                            ng-class="{
@@ -147,7 +147,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="row" ng-repeat="task in agileInProgressSubtasks">
+                <div class="row" ng-repeat="task in agileInProgressSubtasks track by $index">
                     <div class="col-md-12">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-href="[[task.href]]"
                            ng-class="{
@@ -205,7 +205,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="row" ng-repeat="task in agileDoneSubtasks">
+                <div class="row" ng-repeat="task in agileDoneSubtasks track by $index">
                     <div class="col-md-12">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-href="[[task.href]]"
                            ng-class="{

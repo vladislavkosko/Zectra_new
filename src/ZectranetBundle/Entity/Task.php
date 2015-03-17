@@ -1077,6 +1077,7 @@ class Task
             'priority' => $this->getPriority()->getInArray(),
             'subtasks' => $subtasks,
             'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
+            'postCount' => count($this->getPosts()),
         );
     }
 }

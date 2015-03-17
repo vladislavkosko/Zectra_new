@@ -96,6 +96,10 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         //// ------- BEGIN OF PREPARE TASKS FUNCTIONS ------- \\\\
         {
             function calculateTasksInfo (tasks) {
+                $scope.agileStorySubtasks = [];
+                $scope.agileTodoSubtasks = [];
+                $scope.agileInProgressSubtasks = [];
+                $scope.agileDoneSubtasks = [];
                 tasks = giveTasksHref(tasks);
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].subtasks && tasks[i].subtasks.length > 0) {

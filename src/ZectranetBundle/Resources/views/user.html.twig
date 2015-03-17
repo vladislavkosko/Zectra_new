@@ -282,7 +282,22 @@
             <h4 class="private-office"><i class="fa fa-briefcase"></i> Connected Projects </h4>
         </div>
         <div class="row">
-            {% set projectsCount = app.user.projects | length %}
+            {% set connectedProjects = [] %}
+            {% for project in app.user.projects %}
+                {% set connectedProjects = connectedProjects | merge([project]) %}
+            {% endfor %}
+            {% for office in app.user.ownedOffices %}
+                {% for project in office.projects if project not in connectedProjects and project not in app.user.projects and project.parentid == null %}
+                    {% set connectedProjects = connectedProjects | merge([project]) %}
+                {% endfor %}
+            {% endfor %}
+            {% for office in app.user.assignedOffices %}
+                {% for project in office.projects if project not in connectedProjects and project not in app.user.projects and project.parentid == null %}
+                    {% set connectedProjects = connectedProjects | merge([project]) %}
+                {% endfor %}
+            {% endfor %}
+
+            {% set projectsCount = connectedProjects | length %}
 
             {% if projectsCount == 0 %}
                 <div class="col-xs-12" style="min-height: 50px;">
@@ -292,7 +307,7 @@
                 </div>
             {% endif %}
 
-            {% for project in app.user.projects | reverse | slice(0, 3) %}
+            {% for project in connectedProjects | slice(0, 3) %}
                 {% if project.parent == null %}
                     <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
                         <div class="col-xs-3" style="margin-top:5px;">
@@ -306,10 +321,8 @@
                 {% endif %}
             {% endfor %}
 
-
-
             <div id="connected_project_collapse" class="panel-collapse collapse" aria-expanded="false">
-                {% for project in app.user.projects | reverse | slice(3, projectsCount) %}
+                {% for project in connectedProjects | slice(3, projectsCount) %}
                     {% if project.parent == null %}
                         <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
                             <div class="col-xs-3" style="margin-top:5px;">
