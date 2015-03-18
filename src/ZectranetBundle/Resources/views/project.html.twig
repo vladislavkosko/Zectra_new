@@ -65,7 +65,7 @@
                 <div class="list-group">
                     <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-users"></i>
-                        Project Users
+                        <strong>Project Users</strong>
                     </div>
                     <div class="list-group-item">
                         <div class="row">
@@ -119,9 +119,16 @@
             <div class="col-xs-12 col-md-12">
                 <div class="list-group">
                     <div class="list-group-item" style="background:#ddedf4; color:#606060;">
-                        Navigation
+                        <strong>Navigation</strong>
 
-                        <i class="fa fa-plus-circle"></i>
+                        {% if app.user.id == project.owner.id %}
+                        <div style="float: right;">
+                            <a style="color:#606060 !important;" class="addnew-btn-hover" data-toggle="modal" data-target="#add_epic_story" href="#">
+                                <i class="fa fa-plus-circle"></i> New Epic Story
+                            </a>
+                        </div>
+                        {% endif %}
+
                     </div>
                     <div cg-busy="promiseProject">
                         <div style="max-height: 168px; overflow-y: auto;">
@@ -144,18 +151,9 @@
                                 <h4 class="text-center text-info">Epic Stories will be displayed here</h4>
                             </div>
                         </div>
-                        {% if app.user.id == project.owner.id %}
-                            <div class="form-group">
-                                <a class="addnew-btn-hover" data-toggle="modal" data-target="#add_epic_story" href="#">
-                                    <div class="addnew-btn">
-                                        <h5 class="text-center" style="padding-top:15px;color:#606060;">
-                                            <i class="fa fa-plus-circle"></i>
-                                            Add New Epic Story
-                                        </h5>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endif %}
+
+
+
                     </div>
                 </div>
             </div>
@@ -166,7 +164,7 @@
                 <div class="chat-panel" ng-controller="ChatController" style="margin-bottom: 20px;">
                     <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-comments fa-fw"></i>
-                        Project Chat
+                        <strong> Project Chat</strong>
                     </div>
                     <div id="posts-panel" class="list-group-item panel-body" cg-busy="promise" style="max-height: 350px;">
                         <div ng-if="(posts == null) || (posts.length == 0)" class="center-block vertical-center">
@@ -223,7 +221,7 @@
 
                     <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-tasks"></i>
-                        <span>Tasks</span>
+                        <strong>Tasks</strong>
                     </div>
 
                     <div cg-busy="promise" class="panel-body">
