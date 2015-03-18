@@ -5,7 +5,7 @@
 {% block body %}
 
     <div class="row">
-        <ol class="breadcrumb" style="margin: 0 -15px;">
+        <ol class="breadcrumb" style="margin: 0 -30px; border-radius:0px !important; padding: 12px 50px; background-color: #fbfbfb; ">
             <li>
                 <a href="{{ path('zectranet_user_home') }}">Summary</a>
             </li>
@@ -18,8 +18,7 @@
     <div class="page-header">
         <div class="row">
             <div class="col-md-6">
-                <i class="fa fa-home fa-2x"></i>
-                <span style="font-size: 25px;">{{ office.name }}</span>
+                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ office.name }}</span>
             </div>
             <div class="col-md-6">
                 <!-- Begin of Office controll buttons -->
@@ -45,10 +44,12 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="list-group">
-                <div class="list-group-item active">Office Description</div>
-                <div class="list-group-item">{{ office.description }}</div>
-            </div>
+            <blockquote>
+                <p>{{ office.description }}</p>
+                <footer>
+                    <cite title="Source Title">Office Description</cite>
+                </footer>
+            </blockquote>
         </div>
     </div>
 
@@ -56,7 +57,7 @@
         <!-- BEGIN OF USER ROLES LIST -->
         <div class="col-md-4">
             <div class="list-group">
-                <div class="list-group-item active">
+                <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                     <i class="fa fa-user fa-fw"></i>
                     Connected Users
                 </div>
@@ -102,7 +103,7 @@
         <!-- BEGIN OF CONNECTED PROJECTS LIST -->
         <div class="col-md-4">
             <div class="list-group">
-                <div class="list-group-item active">
+                <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                     <i class="fa fa-briefcase"></i>
                     <span>Connected Projects</span>
                 </div>
@@ -125,7 +126,7 @@
         <!-- BEGIN OF SPRINT LIST -->
         <div class="col-md-4">
             <div class="list-group">
-                <div class="list-group-item active">
+                <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                     <i class="fa fa-repeat"></i>
                     Office Sprints
                 </div>
@@ -140,10 +141,16 @@
                         <h4 class="text-info text-center">Sprints will be displayed here</h4>
                     </div>
                 {% endif %}
-                <a class="btn btn-default btn-success form-control" data-toggle="modal" data-target="#add_sprint">
-                    <i class="fa fa-plus-circle"></i>
-                    Add New Sprint
+                <div class="list-group-item" style="padding: 0px;">
+                <a class="addnew-btn-hover" data-toggle="modal" data-target="#add_sprint" href="#">
+                    <div class="addnew-btn">
+                        <h5 class="text-center" style="padding-top:15px;color:#606060;">
+                            <i class="fa fa-plus-circle"></i>
+                            Add New Epic Story
+                        </h5>
+                    </div>
                 </a>
+                </div>
             </div>
         </div>
         <!-- END OF SPRINT LIST -->
@@ -154,7 +161,7 @@
     </div>
 
     <div class="chat-panel list-group" ng-controller="ChatController" ng-init="getPosts(0, 100)">
-        <div class="list-group-item active">
+        <div class="list-group-item" style="background:#ddedf4; color:#606060;">
             <i class="fa fa-comments fa-fw"></i>
             Office Chat
         </div>

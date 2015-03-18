@@ -5,7 +5,7 @@
 {% block body %}
     <div ng-controller="ProjectController" ng-init="getEpicStories({{ project.id }})">
         <div class="row">
-            <ol class="breadcrumb" style="margin: 0 -15px;">
+            <ol class="breadcrumb" style="margin: 0 -30px; border-radius:0px !important; padding: 12px 50px; background-color: #fbfbfb; ">
                 <li>
                     <a href="{{ path('zectranet_user_home') }}">Summary</a>
                 </li>
@@ -18,8 +18,7 @@
         <div class="page-header">
             <div class="row">
                 <div class="col-md-6">
-                    <i class="fa fa-briefcase fa-2x"></i>
-                    <span style="font-size: 25px;">{{ project.name }}</span>
+                    <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ project.name }}</span>
                 </div>
                 <div class="col-md-6">
                     <!-- Begin of Project controll buttons -->
@@ -42,141 +41,29 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12 col-md-6">
-                <div class="list-group">
-                    <div class="list-group-item active">
-                        Project
-                    </div>
-                    <a class="list-group-item" style="cursor: pointer;"
-                       ng-click="changeCurrentPage({{ project.id }}); removeHighlightFromEpicStories();">
-                        <i class="fa fa-briefcase"></i>
-                        {{ project.name }}
-                    </a>
-                    <div class="list-group-item active">Project Description</div>
-                    <div class="list-group-item">{{ project.description }}</div>
-                </div>
-            </div>
-            <div class="col-xs-12 col-md-6">
-                <div class="list-group">
-                    <div class="list-group-item active">
-                        Epic Stories
-                    </div>
-                    <div cg-busy="promiseProject">
-                        <div style="max-height: 168px; overflow-y: auto;">
-                            <a class="list-group-item" ng-repeat="story in epicStories" style="cursor: pointer;"
-                               ng-init="story.selected = false;" ng-class="{'list-group-item-success': story.selected }"
-                               ng-click="changeCurrentPage(story.id); highlightCurrentEpicStory(story.id);">
-                                <i class="fa fa-briefcase"></i>
-                                [[ story.name ]]
-                            </a>
-                            <div class="list-group-item" ng-if="epicStories.length == 0">
-                                <h4 class="text-center text-info">Epic Stories will be displayed here</h4>
-                            </div>
-                        </div>
-                        {% if app.user.id == project.owner.id %}
-                            <div class="form-group">
-                                <button type="button" data-toggle="modal" data-target="#add_epic_story" class="form-control btn btn-default btn-success">
-                                    <i class="fa fa-plus-circle"></i>
-                                    Add New Epic Story
-                                </button>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
 
-            <!-- BEGIN OF EPIC STORY ADD MODAL -->
-            {% include '@Zectranet/projectAddEpicStory.html.twig' %}
-            <!-- END OF EPIC STORY ADD MODAL -->
-
-        </div>
-
-        <!-- Begin of Tasks -->
-        <div class="row" ng-controller="TaskController">
-
-            <div class="col-md-12">
-                <div class="panel panel-default list-group">
-
-                    {% include '@Zectranet/filter.html.twig' %}
-
-                    <div class="list-group-item active">
-                        <i class="fa fa-tasks"></i>
-                        <span>Tasks</span>
-                    </div>
-
-                    <div cg-busy="promise" class="panel-body">
-                        <!-- Begin of Task Nav Tabs -->
-                        <ul id="task-view-tabs" class="nav nav-tabs" role="tablist">
-                            <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
-                                <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
-                                    <i class="fa fa-table fa-2x"></i>
-                                </a>
-                            </li>
-                            {#
-                            <li data-toggle="tooltip" data-placement="top" title="List view" role="presentation">
-                                <a data-toggle="tab" id="task-view-list" class="btn" href="#list-view" aria-controls="list-view" role="tab" aria-expanded="false">
-                                    <i class="fa fa-list fa-2x"></i>
-                                </a>
-                            </li>
-                            #}
-                            <li data-toggle="tooltip" data-placement="top" title="Agile view" role="presentation">
-                                <a data-toggle="tab" id="task-view-agile"  class="btn" href="#agile-view" aria-controls="agile-view" role="tab" aria-expanded="false">
-                                    <i class="fa fa-th fa-2x"></i>
-                                </a>
-                            </li>
-                            <li data-toggle="tooltip" data-placement="top" title="Add new task" role="presentation">
-                                <a id="add_new_task_btn" style="cursor: pointer" data-toggle="modal" data-target="#add_new_task">
-                                    <i class="fa fa-plus fa-2x"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- End of Task Nav Tabs -->
-
-                        <div id="tasks-tab-content" class="tab-content">
-
-                            <!-- Begin of Task Table View -->
-                            <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
-                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-table.html') ~ '\'' }}"></ng-include>
-                            </div>
-                            <!-- End of Task Table View -->
-
-                            {#
-                            <!-- Begin of Task List View -->
-                            <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
-                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
-                            </div>
-                            <!-- End of Task List View -->
-                            #}
-
-                            <!-- Begin of Task Agile View -->
-                            <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
-                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-agile.html') ~ '\'' }}"></ng-include>
-                            </div>
-                            <!-- End of Task Agile View -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Begin of Task operations modals -->
-            {% include '@Zectranet/taskAdd.html.twig' %}
-
-            {% include '@Zectranet/taskAddSub.html.twig' %}
-
-            {% include '@Zectranet/taskDelete.html.twig' %}
-
-            {% include '@Zectranet/projectAddTaskToSprint.html.twig' %}
-            <!-- End of Task operations modals -->
-
-        </div>
-        <!-- End of Tasks -->
 
         <div class="row">
+        <div class="col-md-6">
+
+            <div class="col-xs-12 col-md-12">
+                <blockquote>
+                    <p>{{ project.description }}</p>
+                    <footer>
+                        <cite title="Source Title">Project Description</cite>
+                    </footer>
+                </blockquote>
+            </div>
+
+
+
+
+
+
             <!-- BEGIN OF OFFICE USERS PANEL -->
             <div class="col-md-12 col-xs-12">
                 <div class="list-group">
-                    <div class="list-group-item active">
+                    <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-users"></i>
                         Project Users
                     </div>
@@ -228,17 +115,60 @@
                 </div>
             </div>
             <!-- END OF OFFICE USERS PANEL -->
-        </div>
 
-        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="list-group">
+                    <div class="list-group-item" style="background:#ddedf4; color:#606060;">
+                        Navigation
+
+                        <i class="fa fa-plus-circle"></i>
+                    </div>
+                    <div cg-busy="promiseProject">
+                        <div style="max-height: 168px; overflow-y: auto;">
+
+                            <a class="list-group-item" style="cursor: pointer;"
+                               ng-click="changeCurrentPage({{ project.id }}); removeHighlightFromEpicStories();">
+                                <i class="fa fa-briefcase"></i>
+                                {{ project.name }}
+                            </a>
+
+
+
+                            <a class="list-group-item" ng-repeat="story in epicStories" style="cursor: pointer;"
+                               ng-init="story.selected = false;" ng-class="{'list-group-item-success': story.selected }"
+                               ng-click="changeCurrentPage(story.id); highlightCurrentEpicStory(story.id);">
+                                <i class="fa fa-briefcase"></i>
+                                [[ story.name ]]
+                            </a>
+                            <div class="list-group-item" ng-if="epicStories.length == 0">
+                                <h4 class="text-center text-info">Epic Stories will be displayed here</h4>
+                            </div>
+                        </div>
+                        {% if app.user.id == project.owner.id %}
+                            <div class="form-group">
+                                <a class="addnew-btn-hover" data-toggle="modal" data-target="#add_epic_story" href="#">
+                                    <div class="addnew-btn">
+                                        <h5 class="text-center" style="padding-top:15px;color:#606060;">
+                                            <i class="fa fa-plus-circle"></i>
+                                            Add New Epic Story
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
             <div class="col-xs-12 col-md-12">
                 <!-- BEGIN OF CHAT PANEL -->
-                <div class="chat-panel list-group" ng-controller="ChatController">
-                    <div class="list-group-item active">
+                <div class="chat-panel" ng-controller="ChatController" style="margin-bottom: 20px;">
+                    <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-comments fa-fw"></i>
                         Project Chat
                     </div>
-                    <div id="posts-panel" class="list-group-item panel-body" cg-busy="promise" style="max-height: 300px;">
+                    <div id="posts-panel" class="list-group-item panel-body" cg-busy="promise" style="max-height: 350px;">
                         <div ng-if="(posts == null) || (posts.length == 0)" class="center-block vertical-center">
                             <h3 class="text-info text-center">Post will be displayed here</h3>
                         </div>
@@ -270,7 +200,103 @@
                 <!-- END OF CHAT PANEL -->
                 {% include '@Zectranet/dialogAdd.html.twig' %}
             </div>
+                </div>
+            </div>
+
+
+
+            <!-- BEGIN OF EPIC STORY ADD MODAL -->
+            {% include '@Zectranet/projectAddEpicStory.html.twig' %}
+            <!-- END OF EPIC STORY ADD MODAL -->
+
+
+
+
+
+        <!-- Begin of Tasks -->
+        <div class="row" ng-controller="TaskController">
+            <div class="col-md-12">
+            <div class="col-md-12">
+                <div class="panel panel-default list-group">
+
+
+
+                    <div class="list-group-item" style="background:#ddedf4; color:#606060;">
+                        <i class="fa fa-tasks"></i>
+                        <span>Tasks</span>
+                    </div>
+
+                    <div cg-busy="promise" class="panel-body">
+                        <!-- Begin of Task Nav Tabs -->
+                        <ul id="task-view-tabs" class="nav nav-tabs" role="tablist">
+                            <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
+                                <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
+                                    <i class="fa fa-table fa-2x"></i>
+                                </a>
+                            </li>
+                            {#
+                            <li data-toggle="tooltip" data-placement="top" title="List view" role="presentation">
+                                <a data-toggle="tab" id="task-view-list" class="btn" href="#list-view" aria-controls="list-view" role="tab" aria-expanded="false">
+                                    <i class="fa fa-list fa-2x"></i>
+                                </a>
+                            </li>
+                            #}
+                            <li data-toggle="tooltip" data-placement="top" title="Agile view" role="presentation">
+                                <a data-toggle="tab" id="task-view-agile"  class="btn" href="#agile-view" aria-controls="agile-view" role="tab" aria-expanded="false">
+                                    <i class="fa fa-th fa-2x"></i>
+                                </a>
+                            </li>
+                            <li data-toggle="tooltip" data-placement="top" title="Add new task" role="presentation">
+                                <a id="add_new_task_btn" style="cursor: pointer" data-toggle="modal" data-target="#add_new_task">
+                                    <i class="fa fa-plus fa-2x"></i>
+                                </a>
+                            </li>
+                            <li>{% include '@Zectranet/filter.html.twig' %}</li>
+                        </ul>
+                        <!-- End of Task Nav Tabs -->
+
+                        <div id="tasks-tab-content" class="tab-content">
+
+                            <!-- Begin of Task Table View -->
+                            <div id="table-view" class="tab-pane fade in active" aria-labelledby="task-view-table" role="tabpanel">
+                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-table.html') ~ '\'' }}"></ng-include>
+                            </div>
+                            <!-- End of Task Table View -->
+
+                            {#
+                            <!-- Begin of Task List View -->
+                            <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
+                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
+                            </div>
+                            <!-- End of Task List View -->
+                            #}
+
+                            <!-- Begin of Task Agile View -->
+                            <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
+                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-agile.html') ~ '\'' }}"></ng-include>
+                            </div>
+                            <!-- End of Task Agile View -->
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Begin of Task operations modals -->
+            {% include '@Zectranet/taskAdd.html.twig' %}
+
+            {% include '@Zectranet/taskAddSub.html.twig' %}
+
+            {% include '@Zectranet/taskDelete.html.twig' %}
+
+            {% include '@Zectranet/projectAddTaskToSprint.html.twig' %}
+            <!-- End of Task operations modals -->
+
         </div>
+        <!-- End of Tasks -->
+
+
+
 
         <div ng-init="changeCurrentPage('{{ project.id }}')"></div>
     </div>
