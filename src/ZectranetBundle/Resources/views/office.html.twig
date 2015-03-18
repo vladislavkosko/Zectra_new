@@ -155,7 +155,7 @@
         {% include '@Zectranet/officeAddSprint.html.twig' %}
         <!-- End of Add Sprint Modal -->
     </div>
-
+    <div ng-controller="DocumentsController">
     <div class="chat-panel list-group" ng-controller="ChatController" ng-init="getPosts(0, 100)">
         <div class="list-group-item" style="background:#ddedf4; color:#606060;">
             <i class="fa fa-comments fa-fw"></i>
@@ -208,12 +208,13 @@
             </form>
             <div id="slide-down-menu-screenshots" cg-busy="documentPromise" style="display: none;">
                 <div id="div-screenshot" style="display: none; width: auto;height: auto;">
-
+                    <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/attachments.html') ~ '\'' }}"></ng-include>
                 </div>
             </div>
         </div>
     </div>
     {% include '@Zectranet/dialogAdd.html.twig' %}
+    </div>
 {% endblock %}
 
 {% block modals %}

@@ -156,6 +156,7 @@
             <div class="col-xs-12 col-md-6">
             <div class="col-xs-12 col-md-12">
                 <!-- BEGIN OF CHAT PANEL -->
+                <div ng-controller="DocumentsController">
                 <div class="chat-panel" ng-controller="ChatController" style="margin-bottom: 20px;">
                     <div class="list-group-item" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-comments fa-fw"></i>
@@ -185,13 +186,14 @@
                         </form>
                         <div id="slide-down-menu-screenshots" style="display: none;" cg-busy="documentPromise">
                             <div id="div-screenshot" style="display: none; width: auto;height: auto;">
-
+                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/attachments.html') ~ '\'' }}"></ng-include>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- END OF CHAT PANEL -->
                 {% include '@Zectranet/dialogAdd.html.twig' %}
+                </div>
             </div>
                 </div>
             </div>
