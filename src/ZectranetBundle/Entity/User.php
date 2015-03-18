@@ -1121,11 +1121,34 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * Add requests
+     *
+     * @param \ZectranetBundle\Entity\Request $requests
+     * @return User
+     */
+    public function addRequest(\ZectranetBundle\Entity\Request $requests)
+    {
+        $this->requests[] = $requests;
+
+        return $this;
+    }
+
+    /**
+     * Remove requests
+     *
+     * @param \ZectranetBundle\Entity\Request $requests
+     */
+    public function removeRequest(\ZectranetBundle\Entity\Request $requests)
+    {
+        $this->requests->removeElement($requests);
+    }
+
+    /**
      * Get requests
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getrequests()
+    public function getRequests()
     {
         return $this->requests;
     }

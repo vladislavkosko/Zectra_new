@@ -2,6 +2,7 @@
 
 namespace ZectranetBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -58,6 +59,12 @@ class Document
      * @ORM\Column(name="uploaded", type="datetime")
      */
     private $uploaded;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Version", mappedBy="attachments")
+     * @var ArrayCollection
+     */
+    private $versions;
 
     public function getAbsolutePath()
     {
@@ -238,5 +245,45 @@ class Document
             'uploaded' => $this->getUploaded(),
             'url' => $this->getWebPath()
         );
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->versions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add versions
+     *
+     * @param \ZectranetBundle\Entity\Version $versions
+     * @return Document
+     */
+    public function addVersion(\ZectranetBundle\Entity\Version $versions)
+    {
+        $this->versions[] = $versions;
+
+        return $this;
+    }
+
+    /**
+     * Remove versions
+     *
+     * @param \ZectranetBundle\Entity\Version $versions
+     */
+    public function removeVersion(\ZectranetBundle\Entity\Version $versions)
+    {
+        $this->versions->removeElement($versions);
+    }
+
+    /**
+     * Get versions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVersions()
+    {
+        return $this->versions;
     }
 }

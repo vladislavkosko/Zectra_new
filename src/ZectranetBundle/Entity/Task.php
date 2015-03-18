@@ -117,6 +117,19 @@ class Task
 
     /**
      * @var integer
+     * @ORM\Column(name="version_id", type="integer", nullable=true, options={"default" = null})
+     */
+    private $versionid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Version", inversedBy="tasks")
+     * @ORM\JoinColumn(name="version_id")
+     * @var Version
+     */
+    private $version;
+
+    /**
+     * @var integer
      * @ORM\Column(name="assigned_id", type="integer", nullable=true, options={"default"=null})
      */
     private $assignedid;
@@ -204,6 +217,7 @@ class Task
         $this->estimatedHours = 0;
         $this->estimatedMinutes = 0;
         $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->versionid = null;
     }
 
     /**
@@ -1079,5 +1093,51 @@ class Task
             'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
             'postCount' => count($this->getPosts()),
         );
+    }
+
+    /**
+     * Set versionid
+     *
+     * @param integer $versionid
+     * @return Task
+     */
+    public function setVersionid($versionid)
+    {
+        $this->versionid = $versionid;
+
+        return $this;
+    }
+
+    /**
+     * Get versionid
+     *
+     * @return integer 
+     */
+    public function getVersionid()
+    {
+        return $this->versionid;
+    }
+
+    /**
+     * Set version
+     *
+     * @param \ZectranetBundle\Entity\Version $version
+     * @return Task
+     */
+    public function setVersion(\ZectranetBundle\Entity\Version $version = null)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return \ZectranetBundle\Entity\Version 
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 }
