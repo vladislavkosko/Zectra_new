@@ -443,94 +443,96 @@
         </div>
 
         <!-- Begin of Task Nav Tabs -->
-        <div ng-controller="ChatController">
-        <ul id="myTab" class="nav nav-tabs" role="tablist">
-            <li data-toggle="tooltip" data-placement="top" title="Logs" role="presentation" class="active">
-                <a data-toggle="tab" id="task-logs-tab" class="btn" href="#task-logs" aria-controls="task-logs" role="tab" aria-expanded="true">
-                    Logs
-                </a>
-            </li>
-            <li class="" role="presentation" >
-                <a id="coments-tab" aria-controls="coments" data-toggle="tab" role="tab" href="#coments" aria-expanded="false">Comments</a>
-            </li>
+        <div ng-controller="DocumentsController">
+            <div ng-controller="ChatController">
+            <ul id="myTab" class="nav nav-tabs" role="tablist">
+                <li data-toggle="tooltip" data-placement="top" title="Logs" role="presentation" class="active">
+                    <a data-toggle="tab" id="task-logs-tab" class="btn" href="#task-logs" aria-controls="task-logs" role="tab" aria-expanded="true">
+                        Logs
+                    </a>
+                </li>
+                <li class="" role="presentation" >
+                    <a id="coments-tab" aria-controls="coments" data-toggle="tab" role="tab" href="#coments" aria-expanded="false">Comments</a>
+                </li>
 
-        </ul>
-        <!-- End of Task Nav Tabs -->
+            </ul>
+            <!-- End of Task Nav Tabs -->
 
-            <div id="tasks-tab-content" class="tab-content">
-                <div id="task-logs" class="tab-pane fade in active" style="max-height: 500px; overflow-y: auto;" aria-labelledby="task-logs-tab" role="tabpanel">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th class="col-md-1">#</th>
-                            <th class="col-md-2">User</th>
-                            <th class="col-md-1">Type</th>
-                            <th class="col-md-3">Value Before</th>
-                            <th class="col-md-3">Value After</th>
-                            <th class="col-md-2">Date</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for i, log in task.logs %}
+                <div id="tasks-tab-content" class="tab-content">
+                    <div id="task-logs" class="tab-pane fade in active" style="max-height: 500px; overflow-y: auto;" aria-labelledby="task-logs-tab" role="tabpanel">
+                        <table class="table">
+                            <thead>
                             <tr>
-                                <td>{{ i + 1 }}</td>
-                                <td>{{ log.user.name ~ ' ' ~ log.user.surname ~ ' (' ~ log.user.username ~ ')' }}</td>
-                                <td>{{ log.type }}</td>
-                                <td>{{ log.valueBefore }}</td>
-                                <td>{{ log.valueAfter }}</td>
-                                <td>
-                                    {{ log.date | date('Y-m-d') }}<br>
-                                    {{ log.date | date('H:i') }}
-                                </td>
+                                <th class="col-md-1">#</th>
+                                <th class="col-md-2">User</th>
+                                <th class="col-md-1">Type</th>
+                                <th class="col-md-3">Value Before</th>
+                                <th class="col-md-3">Value After</th>
+                                <th class="col-md-2">Date</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div id="coments"  class="tab-pane fade" aria-labelledby="coments-tab" role="tabpanel"  ng-init="getPosts(0, 100)">
-                    <div style="overflow-y: auto;height: 500px; " id="posts-panel">
-                        <div class="coments" ng-repeat="post in posts">
-                            <p style="margin-top: 25px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + post.user.avatar)">
-                                <a ng-init="Href = userHref(post.user.id)" ng-href="[[Href]]" style="display: inline-block; text-decoration: none;">
-                                    <img style="width: 50px;height: 50px; object-fit: cover;" ng-src="[[avatar]]" alt="User Avatar" class="img-circle"/>
-                                </a>
-                                <span style="vertical-align: top;font-weight: 300;  color: #A9A9A9;">
-                                    <strong style="vertical-align: top; color: #337ab7;">
-                                        [[post.user.name]]
-                                    </strong>
-                                    added a comment - [[ post.posted ]]
-                                </span>
-                            </p>
-                            <p style="margin: -10px 0 0 83px;" ng-bind-html="post.message"></p>
-                            <hr>
-                        </div>
+                            </thead>
+                            <tbody>
+                            {% for i, log in task.logs %}
+                                <tr>
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ log.user.name ~ ' ' ~ log.user.surname ~ ' (' ~ log.user.username ~ ')' }}</td>
+                                    <td>{{ log.type }}</td>
+                                    <td>{{ log.valueBefore }}</td>
+                                    <td>{{ log.valueAfter }}</td>
+                                    <td>
+                                        {{ log.date | date('Y-m-d') }}<br>
+                                        {{ log.date | date('H:i') }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div class="list-group-item">
-                        <form class="input-group input-group-lg">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" style="height: 65px;" data-placement="top" id="add_dialog_btn"  data-toggle="modal" data-target="#add_dialog">
-                                    <i class="fa fa-file"></i>
-                                </button>
-                            </span>
-                            <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
-                                    <span class="input-group-btn">
-                                    <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
-                                        <span>Post</span>
-                                    </button>
-                            </span>
-                        </form>
-                        <div id="slide-down-menu-screenshots" cg-busy="documentPromise" style="display: none;">
-                            <div id="div-screenshot" style="display: none; width: auto;height: auto;">
+                    <div id="coments"  class="tab-pane fade" aria-labelledby="coments-tab" role="tabpanel"  ng-init="getPosts(0, 100)">
+                        <div style="overflow-y: auto;height: 500px; " id="posts-panel">
+                            <div class="coments" ng-repeat="post in posts">
+                                <p style="margin-top: 25px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + post.user.avatar)">
+                                    <a ng-init="Href = userHref(post.user.id)" ng-href="[[Href]]" style="display: inline-block; text-decoration: none;">
+                                        <img style="width: 50px;height: 50px; object-fit: cover;" ng-src="[[avatar]]" alt="User Avatar" class="img-circle"/>
+                                    </a>
+                                    <span style="vertical-align: top;font-weight: 300;  color: #A9A9A9;">
+                                        <strong style="vertical-align: top; color: #337ab7;">
+                                            [[post.user.name]]
+                                        </strong>
+                                        added a comment - [[ post.posted ]]
+                                    </span>
+                                </p>
+                                <p style="margin: -10px 0 0 83px;" ng-bind-html="post.message"></p>
+                                <hr>
+                            </div>
+                        </div>
 
+                        <div class="list-group-item">
+                            <form class="input-group input-group-lg">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" style="height: 65px;" data-placement="top" id="add_dialog_btn"  data-toggle="modal" data-target="#add_dialog">
+                                        <i class="fa fa-file"></i>
+                                    </button>
+                                </span>
+                                <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
+                                        <span class="input-group-btn">
+                                        <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
+                                            <span>Post</span>
+                                        </button>
+                                </span>
+                            </form>
+                            <div id="slide-down-menu-screenshots" cg-busy="documentPromise" style="display: none;">
+                                <div id="div-screenshot" style="display: none; width: auto;height: auto;">
+                                    <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/attachments.html') ~ '\'' }}"></ng-include>
+                                </div>
                             </div>
                         </div>
                     </div>
+                        {% include '@Zectranet/dialogAdd.html.twig' %}
+                    </div>
                 </div>
-                {% include '@Zectranet/dialogAdd.html.twig' %}
-
             </div>
-        </div>
 
     </div>
 {% endblock %}
