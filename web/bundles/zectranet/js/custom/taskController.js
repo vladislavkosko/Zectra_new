@@ -335,6 +335,20 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 initUniquesCount();
             }
 
+            $scope.selectAll = function (array, filterFunc) {
+                for (var i = 0; i < array.length; i++) {
+                    array[i].checked = true;
+                    filterFunc(array[i]);
+                }
+            };
+
+            $scope.clearAll = function (array, filterFunc) {
+                for (var i = 0; i < array.length; i++) {
+                    array[i].checked = false;
+                    filterFunc(array[i]);
+                }
+            };
+
             function initUniqueFilterOptions(task) {
                 if ($.inArray(task.id, $scope.uniqueFilterOptions.uniques.id) < 0) {
                     $scope.uniqueFilterOptions.uniques.id.push(task.id);

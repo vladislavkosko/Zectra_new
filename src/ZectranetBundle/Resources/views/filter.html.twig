@@ -1,147 +1,174 @@
-
-<div class="panel-body">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="btn-group" align="center">
-                <!-- BEGIN OF FILTER BY PRIORITY -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[1] }">Priority</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu noclose" role="menu" ng-init="orderByPriority = 0">
-                        <li>
-                            <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = 'priority.label'; orderByPriority = 1;"
-                               ng-class="{'btn-warning': orderByPriority == 1}">Sort A-Z</a></li>
-                        <li>
-                            <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = '-priority.label'; orderByPriority = 2;"
-                               ng-class="{'btn-warning': orderByPriority == 2}">Sort Z-A</a></li>
-                        <li>
-                            <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = null; orderByPriority = 0;">
-                                Disable sort by this field
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li ng-repeat="priority in uniqueFilterOptions.priority | filter: filterForPriority">
-                            <a style="cursor: pointer;" ng-click="priority.checked = !priority.checked; filterByPriority(priority);">
-                                <input type="checkbox" ng-model="priority.checked" class="checkbox checkbox-inline">
-                                [[ priority.priority.label ]]
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- END OF FILTER BY PRIORITY -->
-
-                <!-- BEGIN OF FILTER BY STATUS -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[2] }">Status</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu noclose" role="menu" ng-init="orderByStatus = 0">
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = 'status.label'; orderByStatus = 1;"
-                               ng-class="{'btn-warning': orderByStatus == 1}">Sort A-Z</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = '-status.label'; orderByStatus = 2;"
-                               ng-class="{'btn-warning': orderByStatus == 2}">Sort Z-A</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = null; orderByStatus = 0;">
-                                Disable sort by this field</a></li>
-                        <li class="divider"></li>
-                        <li ng-repeat="status in uniqueFilterOptions.status | filter: filterForStatus">
-                            <a style="cursor: pointer;" ng-click="status.checked = !status.checked; filterByStatus(status);">
-                                <input type="checkbox" ng-model="status.checked" class="checkbox checkbox-inline">
-                                [[ status.status.label ]]
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- END OF FILTER BY STATUS -->
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[3] }">Progress</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu noclose" role="menu" ng-init="orderByProgress = 0">
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = 'progress'; orderByProgress = 1;"
-                               ng-class="{'btn-warning': orderByProgress == 1}">Sort A-Z</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = '-progress'; orderByProgress = 2;"
-                               ng-class="{'btn-warning': orderByProgress == 2}">Sort Z-A</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = null; orderByProgress = 0;">Disable sort by this field</a></li>
-                        <li class="divider"></li>
-                        <li ng-repeat="progress in uniqueFilterOptions.progress | filter: filterForProgress">
-                            <a style="cursor: pointer;" ng-click="progress.checked = !progress.checked; filterByProgress(progress);">
-                                <input type="checkbox" ng-model="progress.checked" class="checkbox checkbox-inline">
-                                [[ progress.progress ]]%
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[4] }">Owner</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu noclose" role="menu" ng-init="orderByOwner = 0">
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = 'owner.username'; orderByOwner = 1;"
-                               ng-class="{'btn-warning': orderByOwner == 1}">Sort A-Z</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = '-owner.username'; orderByOwner = 2;"
-                               ng-class="{'btn-warning': orderByOwner == 2}">Sort Z-A</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = null; orderByOwner = 0;">Disable sort by this field</a></li>
-                        <li class="divider"></li>
-                        <li ng-repeat="owner in uniqueFilterOptions.owner | filter: filterForOwner">
-                            <a style="cursor: pointer;" ng-click="owner.checked = !owner.checked; filterByOwner(owner);">
-                                <input type="checkbox" ng-model="owner.checked" class="checkbox checkbox-inline">
-                                [[ owner.owner.username ]]
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[5] }">Assigned</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu noclose" role="menu" ng-init="orderByAssigned = 0">
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = 'assigned.username'; orderByAssigned = 1;"
-                               ng-class="{'btn-warning': orderByAssigned == 1}">Sort A-Z</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = '-assigned.username'; orderByAssigned = 2;"
-                               ng-class="{'btn-warning': orderByAssigned == 2}">Sort Z-A</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = null; orderByAssigned = 0;">Disable sort by this field</a></li>
-                        <li class="divider"></li>
-                        <li ng-repeat="assigned in uniqueFilterOptions.assigned | filter: filterForAssigned">
-                            <a style="cursor: pointer;" ng-click="assigned.checked = !assigned.checked; filterByAssigned(assigned);">
-                                <input type="checkbox" ng-model="assigned.checked" class="checkbox checkbox-inline">
-                                [[ assigned.assigned.username ]]
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                        <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[6] }">Sprint</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu noclose" role="menu" ng-init="orderBySprint = 0">
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = 'sprint.name'; orderBySprint = 1;"
-                               ng-class="{'btn-warning': orderBySprint == 1}">Sort A-Z</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = '-sprint.name'; orderBySprint = 2;"
-                               ng-class="{'btn-warning': orderBySprint == 2}">Sort Z-A</a></li>
-                        <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = null; orderBySprint = 0;">Disable sort by this field</a></li>
-                        <li class="divider"></li>
-                        <li ng-repeat="sprint in uniqueFilterOptions.sprint | filter: filterForSprint">
-                            <a style="cursor: pointer;" ng-click="sprint.checked = !sprint.checked; filterBySprint(sprint);">
-                                <input type="checkbox" ng-model="sprint.checked" class="checkbox checkbox-inline">
-                                [[ sprint.sprint.name ]]
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
+<div class="row" style="padding: 8px;">
+    <div class="col-xs-12">
+        <div class="btn-group" align="center">
+            <!-- BEGIN OF FILTER BY PRIORITY -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[1] }">Priority</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByPriority = 0">
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = 'priority.label'; orderByPriority = 1;"
+                           ng-class="{'btn-warning': orderByPriority == 1}">Sort A-Z</a></li>
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = '-priority.label'; orderByPriority = 2;"
+                           ng-class="{'btn-warning': orderByPriority == 2}">Sort Z-A</a></li>
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = null; orderByPriority = 0;">
+                            Disable sort by this field
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.priority, filterByPriority);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.priority, filterByPriority);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="priority in uniqueFilterOptions.priority | filter: filterForPriority">
+                        <a style="cursor: pointer;" ng-click="priority.checked = !priority.checked; filterByPriority(priority);">
+                            <input type="checkbox" ng-model="priority.checked" class="checkbox checkbox-inline">
+                            [[ priority.priority.label ]]
+                        </a>
+                    </li>
+                </ul>
             </div>
+            <!-- END OF FILTER BY PRIORITY -->
+
+            <!-- BEGIN OF FILTER BY STATUS -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[2] }">Status</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByStatus = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = 'status.label'; orderByStatus = 1;"
+                           ng-class="{'btn-warning': orderByStatus == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = '-status.label'; orderByStatus = 2;"
+                           ng-class="{'btn-warning': orderByStatus == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = null; orderByStatus = 0;">
+                            Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.status, filterByStatus);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.status, filterByStatus);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="status in uniqueFilterOptions.status | filter: filterForStatus">
+                        <a style="cursor: pointer;" ng-click="status.checked = !status.checked; filterByStatus(status);">
+                            <input type="checkbox" ng-model="status.checked" class="checkbox checkbox-inline">
+                            [[ status.status.label ]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- END OF FILTER BY STATUS -->
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[3] }">Progress</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByProgress = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = 'progress'; orderByProgress = 1;"
+                           ng-class="{'btn-warning': orderByProgress == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = '-progress'; orderByProgress = 2;"
+                           ng-class="{'btn-warning': orderByProgress == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = null; orderByProgress = 0;">Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.progress, filterByProgress);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.progress, filterByProgress);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="progress in uniqueFilterOptions.progress | filter: filterForProgress">
+                        <a style="cursor: pointer;" ng-click="progress.checked = !progress.checked; filterByProgress(progress);">
+                            <input type="checkbox" ng-model="progress.checked" class="checkbox checkbox-inline">
+                            [[ progress.progress ]]%
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[4] }">Owner</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByOwner = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = 'owner.username'; orderByOwner = 1;"
+                           ng-class="{'btn-warning': orderByOwner == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = '-owner.username'; orderByOwner = 2;"
+                           ng-class="{'btn-warning': orderByOwner == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = null; orderByOwner = 0;">Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.owner, filterByOwner);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.owner, filterByOwner);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="owner in uniqueFilterOptions.owner | filter: filterForOwner">
+                        <a style="cursor: pointer;" ng-click="owner.checked = !owner.checked; filterByOwner(owner);">
+                            <input type="checkbox" ng-model="owner.checked" class="checkbox checkbox-inline">
+                            [[ owner.owner.username ]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[5] }">Assigned</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByAssigned = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = 'assigned.username'; orderByAssigned = 1;"
+                           ng-class="{'btn-warning': orderByAssigned == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = '-assigned.username'; orderByAssigned = 2;"
+                           ng-class="{'btn-warning': orderByAssigned == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = null; orderByAssigned = 0;">Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.assigned, filterByAssigned);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.assigned, filterByAssigned);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="assigned in uniqueFilterOptions.assigned | filter: filterForAssigned">
+                        <a style="cursor: pointer;" ng-click="assigned.checked = !assigned.checked; filterByAssigned(assigned);">
+                            <input type="checkbox" ng-model="assigned.checked" class="checkbox checkbox-inline">
+                            [[ assigned.assigned.username ]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[6] }">Sprint</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderBySprint = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = 'sprint.name'; orderBySprint = 1;"
+                           ng-class="{'btn-warning': orderBySprint == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = '-sprint.name'; orderBySprint = 2;"
+                           ng-class="{'btn-warning': orderBySprint == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = null; orderBySprint = 0;">Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.sprint, filterBySprint);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.sprint, filterBySprint);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="sprint in uniqueFilterOptions.sprint | filter: filterForSprint">
+                        <a style="cursor: pointer;" ng-click="sprint.checked = !sprint.checked; filterBySprint(sprint);">
+                            <input type="checkbox" ng-model="sprint.checked" class="checkbox checkbox-inline">
+                            [[ sprint.sprint.name ]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
-
 </div>
+
