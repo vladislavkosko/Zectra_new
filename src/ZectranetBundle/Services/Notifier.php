@@ -170,7 +170,7 @@ class Notifier
 		try {
 			$message = \Swift_Message::newInstance()
 				->setSubject('Zectranet notification!')
-				->setFrom('notifications@zectratrading.com')
+				->setFrom('Notifications@zectratrading.com')
 				->setTo($user->getEmail())
 				->setBody($message, 'text/html');
 			$this->mailer->send($message);
