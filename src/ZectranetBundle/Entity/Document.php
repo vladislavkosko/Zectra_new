@@ -60,11 +60,6 @@ class Document
      */
     private $uploaded;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Version", mappedBy="attachments")
-     * @var ArrayCollection
-     */
-    private $versions;
 
     public function getAbsolutePath()
     {

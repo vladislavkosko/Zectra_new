@@ -73,12 +73,6 @@ class Version
     protected $owner;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Document", mappedBy="versions")
-     * @var ArrayCollection
-     */
-    private $attachments;
-
-    /**
      * Constructor
      */
     public function __construct()
