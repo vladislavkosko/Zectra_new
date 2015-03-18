@@ -74,22 +74,22 @@
                                 {{ user.wde[i].date | date("Y-m-d")  }}
                             </td>
                             <td>
-                                {{ user.wde[i].startTime | date("H:i") }}
+                                {{ user.wde[i].startTime is empty ? "-": user.wde[i].startTime | date("H:i") }}
                             </td>
                             <td>
-                                {{ user.wde[i].beginLunch | date("H:i") }}
+                                {{ user.wde[i].beginLunch is empty ? "-": user.wde[i].beginLunch | date("H:i") }}
                             </td>
                             <td>
-                                {{ user.wde[i].endLunch | date("H:i") }}
+                                {{ user.wde[i].endLunch is empty ? "-": user.wde[i].endLunch | date("H:i") }}
                             </td>
                             <td>
-                                {{ user.wde[i].endTime | date("H:i") }}
+                                {{ user.wde[i].endTime is empty ? "-": user.wde[i].endTime | date("H:i") }}
                             </td>
                             <td>
-                                {{ user.wde[i].hours }}
+                                {{ user.wde[i].hours is empty ? "-": user.wde[i].hours }}
                             </td>
                             <td>
-                                {{ user.wde[i].mainTask }}
+                                {{ user.wde[i].mainTask is empty ? "-": user.wde[i].mainTask }}
                             </td>
                         </tr>
                     {% endfor %}
