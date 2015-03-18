@@ -44,9 +44,9 @@ class Notifier
         "task_deleted",                   // +
         "epic_story_deleted",             // +
 
-        "request_office",                 // -
+        "request_office",                 // +
         "request_user_project",           // +
-        "request_project",                // -
+        "request_project",                // +
         "request_assign_task",            // -
 
         "private_message_office",         // +
@@ -448,21 +448,21 @@ class Notifier
             {
                 case "request_office":
                 {
-                    $message = 'You assign the new task "'.$resource->getName().'"';
+                    $message = 'You have a new request from "'.$resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
                     $users = $usersRequest;
                     break;
                 }
 
                 case "request_user_project":
                 {
-                    $message = 'You have a new assign request from "'.$resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
+                    $message = 'You have a new request from "'.$resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
                     $users = $usersRequest;
                     break;
                 }
 
                 case "request_project":
                 {
-                    $message = 'Your office ' . $user_to_send_name->getName() . ' has a new assign request from "'.$resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
+                    $message = 'Your office ' . $user_to_send_name->getName() . ' has a new request from "'.$resource->getName() . ' ' . $resource->getSurname() . ' in "' . $destination->getName() . '"';
                     $users = array($usersRequest);
                     break;
                 }

@@ -433,11 +433,21 @@
                     <div ng-if="requests.length > 0" class="hidden-element" ng-class="{'visible-element': requests.length > 0}">
                         <div class="panel panel-info request">
                             <div class="panel-body">
-                                <div ng-repeat="request in requests | limitTo: 3">
+                                <div ng-repeat="request in requests | limitTo: 1">
+
+                                    <div ng-if="(request.type.label == 'request_office')" style="margin-bottom: 20px;">
+                                        <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
+                                            You have a new request in office "[[request.office.name]]"
+                                        </div>
+                                        <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
+                                            <div ng-click="acceptRequestUserOffice(request.office.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
+                                            <div ng-click="declineRequestUserOffice(request.office.id)" class="btn btn-default">Decline</div>
+                                        </div>
+                                    </div>
 
                                     <div ng-if="(request.type.label == 'request_user_project')" style="margin-bottom: 20px;">
                                         <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
-                                            You have a new request in "[[request.project.name]]"
+                                            You have a new request in project "[[request.project.name]]"
                                         </div>
                                         <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
                                             <div ng-click="acceptRequestUserProject(request.project.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
@@ -447,7 +457,7 @@
 
                                     <div ng-if="(request.type.label == 'request_project')" style="margin-bottom: 20px;">
                                         <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
-                                            Your office "[[request.office.name]]" has a new request in "[[request.project.name]]"
+                                            Your office "[[request.office.name]]" has a new request in project "[[request.project.name]]"
                                         </div>
                                         <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
                                             <div ng-click="acceptRequestOfficeProject(request.project.id, request.office.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
@@ -517,6 +527,8 @@
 			notificationsGet: "{{ url('zectranet_notifications_get') }}",
             officeShow: "{{ url('zectranet_show_office', {office_id: 0}) }}",
 			projectShow: "{{ url('zectranet_show_project', {project_id: 0}) }}",
+            acceptRequestUserOffice : "{{ url('zectranet_accept_request_user_office', { 'office_id': 0 }) }}",
+            declineRequestUserOffice : "{{ url('zectranet_decline_request_user_office', { 'office_id': 0 }) }}",
             acceptRequestUserProject : "{{ url('zectranet_accept_request_user_project', { 'project_id': 0 }) }}",
             declineRequestUserProject : "{{ url('zectranet_decline_request_user_project', { 'project_id': 0 }) }}",
             acceptRequestOfficeProject : "{{ url('zectranet_accept_request_project', { 'project_id': 0, 'office_id': 1 }) }}",

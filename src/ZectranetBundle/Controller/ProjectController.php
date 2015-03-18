@@ -134,7 +134,8 @@ class ProjectController extends Controller
     public function saveMembersAction(Request $request, $project_id) {
         $data = json_decode($request->getContent(), true);
         $ids = array();
-        foreach ($data['users'] as $user) {
+        foreach ($data['users'] as $user)
+        {
             if ((!isset($user['request'])) or ((isset($user['request'])) and ($user['request'] == 2)))
             {
                 $user = (object) $user;

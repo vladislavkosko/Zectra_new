@@ -9,9 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\OfficePost;
 use ZectranetBundle\Entity\Project;
+use ZectranetBundle\Entity\RequestType;
 use ZectranetBundle\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -148,23 +150,115 @@ class OfficeController extends Controller
     public function saveMembersAction(Request $request, $office_id) {
         $data = json_decode($request->getContent(), true);
         $ids = array();
-        foreach ($data['users'] as $user) {
-            $user = (object) $user;
-            $ids[] = $user->id;
+        foreach ($data['users'] as $user)
+        {
+            if ((!isset($user['request'])) or ((isset($user['request'])) and ($user['request'] == 2)))
+            {
+                $user = (object) $user;
+                $ids[] = $user->id;
+            }
         }
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
         $users = $em->getRepository('ZectranetBundle:User')->findBy(array('id' => $ids));
-        $office->setUsers($users);
 
-        $em->persist($office);
-        $em->flush();
+        if ($data['status'] == 1)
+        {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            /** @var RequestType $type */
+            $type = $this->getDoctrine()->getRepository('ZectranetBundle:RequestType')->find(1);
+
+            $usersNames = array();
+            foreach ($office->getUsers() as $user)
+                $usersNames[] = $user->getUsername();
+
+            $usersRequest = array();
+            foreach ($users as $user)
+            {
+                if (!in_array($user->getUsername(), $usersNames))
+                    $usersRequest[] = $user;
+            }
+
+            foreach ($usersRequest as $user)
+                \ZectranetBundle\Entity\Request::addNewRequest($em, $user, $type, null, $office);
+
+            /** @var User $user */
+            $user = $this->getUser();
+            $this->get('zectranet.notifier')->createNotification("request_office", $user, $usersRequest, $office);
+        }
+
+        if ($data['status'] == 0)
+        {
+            $office->setUsers($users);
+            $em->persist($office);
+            $em->flush();
+        }
 
         $response = new Response(json_encode(array('success' => true)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    /**
+     * @Route("/office/{office_id}/acceptRequestUserOffice")
+     * @Security("has_role('ROLE_USER')")
+     * @param $office_id
+     * @return RedirectResponse
+     */
+    public function acceptRequestUserOfficeAction($office_id)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var Project $project */
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+        /** @var Request $request */
+        $request = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'officeid' => $office_id, 'typeid' => 1));
+        /** @var Notification $notification */
+        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $office_id, 'type' => 'request_office'));
+
+        $usersOffice = $office->getUsers();
+        $usersOffice[] = $user;
+
+        $office->setUsers($usersOffice);
+        $em->persist($office);
+        $em->remove($request);
+        $em->remove($notification);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office_id));
+    }
+
+    /**
+     * @Route("/office/{office_id}/declineRequestUserOffice")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $office_id
+     * @return RedirectResponse
+     */
+    public function declineRequestUserOfficeAction(Request $request, $office_id)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+
+        /** @var Request $request */
+        $requestUser = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'officeid' => $office_id, 'typeid' => 1));
+        /** @var Notification $notification */
+        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $office_id, 'type' => 'request_office'));
+
+        $em->remove($requestUser);
+        if ($notification != null)
+            $em->remove($notification);
+        $em->flush();
+
+        $referer = $request->headers->get('referer');
+        return new RedirectResponse($referer);
     }
 
     /**

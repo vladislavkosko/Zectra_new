@@ -447,6 +447,17 @@ class Office
         foreach ($office->getUsers() as $user) {
             $jsonOfficeUsers[] = $user->getInArray();
         }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('officeid' => $office_id, 'typeid' => 1));
+        if (count($requests) > 0)
+        {
+            foreach ($requests as $request){
+                $usr = $request->getUser()->getInArray();
+                $usr['request'] = 1;
+                $jsonOfficeUsers[] = $usr;
+            }
+        }
+
         return $jsonOfficeUsers;
     }
 
@@ -465,6 +476,11 @@ class Office
         foreach ($office->getUsers() as $user) {
             $user_ids[] = $user->getId();
         }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('officeid' => $office_id, 'typeid' => 1));
+        if (count($requests) > 0)
+            foreach ($requests as $request)
+                $user_ids[] = $request->getUserid();
 
         $notOfficeUsers = array();
         if (count($user_ids) > 0) {

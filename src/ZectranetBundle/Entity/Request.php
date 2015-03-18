@@ -346,7 +346,7 @@ class Request
             'office' => (($this->getType()->getLabel() == 'request_office')
                 or ($this->getType()->getLabel() == 'request_project'))
                 ? $this->getOffice()->getInArray() : null,
-            'task' => ($this->getType()->getLabel() == 'request_office')
+            'task' => ($this->getType()->getLabel() == 'request_assign_task')
                 ? $this->getTask()->getInArray() : null
         );
     }
@@ -355,17 +355,18 @@ class Request
      * @param EntityManager $em
      * @param User $user
      * @param $type
-     * @param $project
+     * @param null $project
      * @param null $office
      */
-    public static function addNewRequest($em, $user, $type, $project, $office = null)
+    public static function addNewRequest($em, $user, $type, $project = null, $office = null)
     {
         /** @var Request $new_request */
         $new_request = new Request();
 
         $new_request->setType($type);
         $new_request->setUser($user);
-        $new_request->setProject($project);
+        if ($project != null)
+            $new_request->setProject($project);
         if ($office != null)
             $new_request->setOffice($office);
 

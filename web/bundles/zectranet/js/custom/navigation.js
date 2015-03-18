@@ -6,6 +6,8 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 	var officeShowUrlBase = JSON_URLS.officeShow;
 	var projectShowUrlBase = JSON_URLS.projectShow;
 	var taskShowUrlBase = JSON_URLS.taskShow;
+    var acceptRequestUserOffice = JSON_URLS.acceptRequestUserOffice;
+    var declineRequestUserOffice = JSON_URLS.declineRequestUserOffice;
     var acceptRequestUserProject = JSON_URLS.acceptRequestUserProject;
     var declineRequestUserProject = JSON_URLS.declineRequestUserProject;
     var acceptRequestOfficeProject = JSON_URLS.acceptRequestOfficeProject;
@@ -91,6 +93,10 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 		return notifications;
 	}
 
+    $scope.acceptRequestUserOffice = function(office_id){
+        window.location.href = acceptRequestUserOffice.replace('0', office_id);
+    };
+
     $scope.acceptRequestUserProject = function(project_id){
         window.location.href = acceptRequestUserProject.replace('0', project_id);
     };
@@ -101,6 +107,10 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
             .replace('1', 'office_id')
             .replace('project_id', project_id)
             .replace('office_id', office_id);
+    };
+
+    $scope.declineRequestUserOffice = function(office_id){
+        window.location.href = declineRequestUserOffice.replace('0', office_id);
     };
 
     $scope.declineRequestUserProject = function(project_id){
