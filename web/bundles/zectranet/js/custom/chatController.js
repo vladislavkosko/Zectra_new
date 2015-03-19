@@ -35,8 +35,6 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                                 'scrollTop': $(this).height() + chatList.height() + 500
                             }, 1000
                         );
-                        console.log(chatList.height());
-                        console.log(postsPanel.height());
                         return false;
                     }, 200);
 

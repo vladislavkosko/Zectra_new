@@ -12,6 +12,8 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
             $scope.projectOffices = null;
             $scope.offices = null;
 
+            $scope.projectVersions = null;
+
             $scope.projectVisible = null;
 
             $scope.urlGetEpicStories = JSON_URLS.getEpicStories;
@@ -23,6 +25,9 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
             $scope.urlAddOffices = JSON_URLS.addOffices;
             $scope.urlRemoveOffices = JSON_URLS.removeOffices;
             $scope.urlChangeVisibleState = JSON_URLS.changeVisibleState;
+            $scope.urlGetProjectVersions = JSON_URLS.getProjectVersions;
+            $scope.urlAddNewProjectVersion = JSON_URLS.addNewProjectVersion;
+            $scope.urlShowTask = JSON_URLS.showTask;
         }
         // -------------------- End of Scope Variables ----------------------\\
 
@@ -36,8 +41,60 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                     .get($scope.urlGetEpicStories)
                     .success(function (response) {
                         $scope.epicStories = response.EpicStories;
-                    });
+                    }
+                );
             };
+
+            function prepareProjectVersions(versions) {
+                for (var i = 0; i < versions.length; i++) {
+                    versions[i].tasks = giveTasksHref(versions[i].tasks);
+                }
+                return versions;
+            }
+
+            $scope.getProjectVersions = function () {
+                $scope.versionPromise = $http
+                    .get($scope.urlGetProjectVersions)
+                    .success(function(response) {
+                        $scope.projectVersions = prepareProjectVersions(response.versions);
+                    }
+                );
+            };
+
+            $scope.addNewVersion = function (version) {
+                if (version.name && version.description) {
+                    $http.post($scope.urlAddNewProjectVersion, { 'version': version })
+                        .success(function (response) {
+                           if (response.success) {
+                               $('#project_version_add').modal('hide');
+                               $scope.getProjectVersions();
+                           }
+                        }
+                    );
+                }
+            };
+
+            function assignTaskHref(task_id) {
+                return $scope.urlShowTask.replace('0', task_id);
+            }
+
+            function giveTasksHref (tasks) {
+                for (var i = 0; i < tasks.length; i++) {
+                    tasks[i].href = assignTaskHref(tasks[i].id);
+                    if (tasks[i].subtasks.length > 0) {
+                        tasks[i].subtasks = giveTasksHref(tasks[i].subtasks);
+                        tasks[i].subtasks = giveSubtaskIndex(tasks[i].subtasks);
+                    }
+                }
+                return tasks;
+            }
+
+            function giveSubtaskIndex(subtasks) {
+                for (var i = 0; i < subtasks.length; i++) {
+                    subtasks[i].subindex = i + 1;
+                }
+                return subtasks;
+            }
 
             $scope.changeCurrentPage = function (project_id) {
                 $scope.urlCurrentProject = project_id;
@@ -120,7 +177,8 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
                     .success(function (response) {
                         $scope.projectMembers = response.projectMembers;
                         $scope.users = response.users;
-                    });
+                    }
+                );
             };
 
             $scope.addUsersToProject = function () {

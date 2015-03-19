@@ -42,7 +42,7 @@ class Version
 
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="version")
-     * @var array
+     * @var ArrayCollection
      */
     private $tasks;
 
@@ -77,8 +77,8 @@ class Version
      */
     public function __construct()
     {
-        $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tasks = new ArrayCollection();
+        $this->attachments = new ArrayCollection();
     }
 
     /**
@@ -310,11 +310,22 @@ class Version
 
     /**
      * Get attachments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAttachments()
     {
         return $this->attachments;
+    }
+
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'projectid' => $this->getProjectid(),
+            'onwerid' => $this->getOnwerid(),
+            'date' => $this->getDate()->format('Y-m-d'),
+            'tasks' => EntityOperations::arrayToJsonArray($this->getTasks()),
+        );
     }
 }

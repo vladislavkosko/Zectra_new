@@ -1,11 +1,10 @@
-<!-- BEGIN OF EPIC STORY ADD MODAL -->
-<div class="modal fade" id="add_epic_story" tabindex="-1" role="dialog">
+<div class="modal fade" id="project_version_add" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header label-primary">
+            <div class="modal-header label-success">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" style="color: #f5f5f5;">
-                    Add New Epic Story
+                    Add new version
                 </h4>
             </div>
             <div class="modal-body">
@@ -13,23 +12,21 @@
                     <div class="col-md-offset-1 col-md-10 col-xs-offset-1 col-xs-10">
                         <form class="form-horizontal">
                             <div class="form-group">
-                                <label for="add_epic_story_name">Epic Story Name:</label>
-                                <input type="text" id="add_epic_story_name" ng-model="story.name" pattern="[0-9A-Za-z -_()]{1,30}" class="form-control" required>
+                                <label for="add_version_name" class="control-label">Version Name:</label>
+                                <input type="text" id="add_version_name" class="form-control" name="name" ng-model="version.name" required>
                             </div>
                             <div class="form-group">
-                                <label for="add_epic_story_description">Epic Story Description:</label>
-                                <input type="text" id="add_epic_story_description" ng-model="story.description" class="form-control" pattern="[0-9A-Za-z -_()]{1,50}" required>
+                                <label for="add_version_description" class="control-label">Version Description:</label>
+                                <input type="text" id="add_version_description" class="form-control" name="description" ng-model="version.description" required>
                             </div>
                             <div class="form-group">
-                                <a class="btn btn-primary" ng-click="addNewEpicStory(story)">Add</a>
+                                <button type="button" class="btn btn-success" ng-click="addNewVersion(version);">Add</button>
                                 <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
                             </div>
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-<!-- END OF EPIC STORY ADD MODAL -->

@@ -257,7 +257,8 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 $scope.promise = $http.post($scope.urlAddSubTask, {'task': task})
                     .success(function (response) {
                         $scope.getTasks();
-                    });
+                    }
+                );
             }
         };
 

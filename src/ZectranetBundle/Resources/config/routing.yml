@@ -163,6 +163,18 @@ zectranet_get_project_members:
     requirements:
         project_id: \d+
 
+zectranet_get_project_versions:
+    pattern: /project/{project_id}/getVersions
+    defaults: { _controller: ZectranetBundle:Project:getProjectVersions }
+    requirements:
+        project_id: \d+
+
+zectranet_add_project_version:
+    pattern: /project/{project_id}/addNewVersion
+    defaults: { _controller: ZectranetBundle:Project:addNewProjectVersion }
+    requirements:
+        project_id: \d+
+
 zectranet_save_project_members:
     pattern: /project/{project_id}/saveMembersState
     defaults: { _controller: ZectranetBundle:Project:saveMembers }

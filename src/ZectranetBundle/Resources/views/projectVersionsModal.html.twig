@@ -1,0 +1,60 @@
+<div class="modal fade" id="project_versions" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header label-primary">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="color: #f5f5f5;">
+                    Project Versions
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-10 col-xs-offset-1 col-xs-10" cg-busy="versionPromise">
+                        <ul class="list-group" style="max-height: 600px;">
+                            <li class="list-group-item" ng-repeat="version in projectVersions">
+                                <button class="btn btn-default form-control" type="button" data-toggle="collapse" data-target="#version[[ version.id ]]">
+                                    [[ version.name ]]
+                                </button>
+                                <div class="collapse" id="version[[ version.id ]]">
+                                    <div class="well">
+                                        <table class="table">
+                                            <tbody ng-repeat="task in version.tasks">
+                                                <tr>
+                                                    <td>
+                                                        [[ task.id ]]
+                                                    </td>
+                                                    <td>
+                                                        <a ng-href="[[task.href]]">[[ task.name ]]</a>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-repeat="task in version.tasks.subtasks">
+                                                    <td>
+                                                        [[ task.parentid ]].[[ task.subindex ]]
+                                                    </td>
+                                                    <td>
+                                                        <a ng-href="[[task.href]]">[[ task.name ]]</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p></p>
+                                <p style="margin-top: 10px;">[[ version.description ]]</p>
+                            </li>
+                        </ul>
+
+                        <div class="form-group">
+                            <a class="btn btn-default btn-primary" data-toggle="modal" data-target="#project_version_add">
+                                <i class="fa fa-plus-circle"></i>
+                                Add new version
+                            </a>
+                            <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include '@Zectranet/projectVersionAdd.html.twig' %}

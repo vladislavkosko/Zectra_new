@@ -2,6 +2,7 @@
 
 namespace ZectranetBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Project;
@@ -621,6 +623,42 @@ class ProjectController extends Controller
         $this->get('zectranet.notifier')->createNotification("epic_story_added", $project, $user, $project, null, null, $data->name);
 
         $response = new Response(json_encode(array('EpicStory' => $epicStory->getInArray())));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Route("/project/{project_id}/getVersions")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $project_id
+     * @return Response
+     */
+    public function getProjectVersionsAction($project_id) {
+        /** @var Project $project */
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+        /** @var ArrayCollection $versions */
+        $versions = EntityOperations::arrayToJsonArray($project->getVersions());
+        $response = new Response(json_encode(array('versions' => $versions)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Route("/project/{project_id}/addNewVersion")
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $project_id
+     * @return Response
+     */
+    public function addNewProjectVersionAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $version = (object) $data['version'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        Project::addNewProjectVersion($em, $project_id, $user->getId(), $version);
+        $response = new Response(json_encode(array('success' => true)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }

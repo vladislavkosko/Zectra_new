@@ -973,6 +973,14 @@ class Task
         }
 
         if ($status_id != $task->getStatusid()) {
+            if ($task->getStatusid() == 4) {
+                $task->setVersionid(null);
+            } else if ($status_id == 4) {
+                $version = $em->getRepository('ZectranetBundle:Version')->findOneBy(array(), array('date' => 'DESC'));
+                if ($version) {
+                    $task->setVersion($version);
+                }
+            }
             $status = $em->getRepository('ZectranetBundle:TaskStatus')->find($status_id);
             $logger->valueChanged(4, $task_id, $task->getStatus()->getLabel(), $status->getLabel());
             $task->setStatus($status);
@@ -1092,6 +1100,7 @@ class Task
             'subtasks' => $subtasks,
             'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
             'postCount' => count($this->getPosts()),
+            'versionid' => $this->getVersionid(),
         );
     }
 

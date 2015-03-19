@@ -73,6 +73,13 @@ class Project
     private $epicStories;
 
     /**
+     * @ORM\OneToMany(targetEntity="Version", mappedBy="project", cascade={"remove"})
+     * @ORM\OrderBy({"date" = "DESC"})
+     * @var ArrayCollection
+     */
+    private $versions;
+
+    /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="projects", fetch="EXTRA_LAZY")
      * @var ArrayCollection
      */
@@ -681,5 +688,63 @@ class Project
 
         $em->persist($project);
         $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @param int $user_id
+     * @param object $version
+     * @return Version
+     */
+    public static function addNewProjectVersion(EntityManager $em, $project_id, $user_id, $version) {
+        /** @var Project $project */
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        /** @var User $user */
+        $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
+        $newVersion = new Version();
+        $newVersion->setName($version->name);
+        $newVersion->setDescription($version->description);
+        $newVersion->setDate(new \DateTime());
+        $newVersion->setOwner($user);
+        $newVersion->setProject($project);
+
+        $em->persist($newVersion);
+        $em->flush();
+
+        return $newVersion;
+    }
+
+    /**
+     * Add versions
+     *
+     * @param \ZectranetBundle\Entity\Version $versions
+     * @return Project
+     */
+    public function addVersion(\ZectranetBundle\Entity\Version $versions)
+    {
+        $this->versions[] = $versions;
+
+        return $this;
+    }
+
+    /**
+     * Remove versions
+     *
+     * @param \ZectranetBundle\Entity\Version $versions
+     */
+    public function removeVersion(\ZectranetBundle\Entity\Version $versions)
+    {
+        $this->versions->removeElement($versions);
+    }
+
+    /**
+     * Get versions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVersions()
+    {
+        return $this->versions;
     }
 }
