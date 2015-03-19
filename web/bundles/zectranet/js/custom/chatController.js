@@ -5,7 +5,6 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         {
             $scope.posts = null;
             $rootScope.message = '';
-
             $scope.urlAddPost = JSON_URLS.addPost;
             $scope.urlGetPosts = JSON_URLS.getPosts;
 
@@ -62,6 +61,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
 
         $scope.SendPost = function (message) {
             $rootScope.message = '';
+
             var usersForPrivateMessage = $scope.getUsersForPrivateMessage(message);
             $scope.addDocumentsToPost();
             var documents = '';
