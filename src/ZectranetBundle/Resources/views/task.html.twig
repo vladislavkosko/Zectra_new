@@ -39,8 +39,8 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
-                                    <input type="text" name="name" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.name" class="form-control" value="{{ task.name }}">
+                                <div class="input-group" style="width: 100%;">
+                                    <input type="text" name="name" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.name" class="form-control btn-group-justified" value="{{ task.name }}">
                                 </div>
 
                             </div>
@@ -74,7 +74,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="type" ng-model="taskInfoEdit.type.id" style="border: none;font-weight: bold;">
                                         {% for type in task_types %}
                                             <option style="color: {{ type.color }}" value="{{ type.id }}"
@@ -99,7 +99,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="priority" ng-model="taskInfoEdit.priority.id" style="border: none;font-weight: bold;">
                                         {% for priority in task_priority %}
                                             <option style="color: {{ priority.color }}" value="{{ priority.id }}"
@@ -124,7 +124,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;font-weight: bold;">
                                         {% for status in task_statuses %}
                                             <option style="color: {{ status.color }}" value="{{ status.id }}"
@@ -150,7 +150,7 @@
 
                             {% set project = (task.project.parent) ? task.project.parent : task.project %}
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="project" ng-model="taskInfoEdit.projectid" style="border: none;font-weight: bold;">
                                         <optgroup style="margin: 0; padding: 0;" label="Project">
                                             <option {% if project.id == task.project.id %}selected="selected"{% endif %} value="{{ project.id }}">{{ project.name }}</option>
@@ -209,7 +209,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="assigned" ng-model="taskInfoEdit.assigned" style="border: none;font-weight: bold;">
                                         {% set usersForAssign = [] %}
                                         {% for user in task.project.users if user not in usersForAssign %}
@@ -256,7 +256,7 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="progress" ng-model="taskInfoEdit.progress" style="border: none;font-weight: bold;">
                                         <option value="0">0%</option>
                                         <option value="10">10%</option>
@@ -284,7 +284,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="estimated_hours" ng-model="taskInfoEdit.estimatedHours" style="border: none;font-weight: bold;">
                                         {% for i in 0..48 %}
                                             <option value="{{ i }}" {% if task.estimatedHours == i %}selected="selected"{% endif %}>{{ i }} h</option>
@@ -304,7 +304,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="estimated_minutes" ng-model="taskInfoEdit.estimatedMinutes" style="border: none;font-weight: bold;">
                                         <option value="0" {% if task.estimatedMinutes == 0 %}selected="selected"{% endif %}>0 m</option>
                                         <option value="10" {% if task.estimatedMinutes == 10 %}selected="selected"{% endif %}>10 m</option>
@@ -327,7 +327,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <input class="form-control" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.startDate" type="date">
                                 </div>
                             </div>
@@ -343,7 +343,7 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group">
+                                <div class="input-group" style="width: 100%;">
                                     <input class="form-control" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.endDate" type="date">
                                 </div>
                             </div>
