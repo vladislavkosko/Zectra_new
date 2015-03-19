@@ -1,6 +1,28 @@
 <div class="row" style="padding: 8px;">
     <div class="col-xs-12">
         <div class="btn-group" align="center">
+            <!-- BEGIN OF FILTER BY ID -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[1] }">ID</span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByID = 0">
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = 'id'; orderByID = 1;"
+                           ng-class="{'btn-warning': orderByID == 1}">Sort A-Z</a></li>
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = '-id'; orderByID = 2;"
+                           ng-class="{'btn-warning': orderByID == 2}">Sort Z-A</a></li>
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = null; orderByID = 0;">
+                            Disable sort by this field
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- END OF FILTER BY ID -->
+
             <!-- BEGIN OF FILTER BY PRIORITY -->
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

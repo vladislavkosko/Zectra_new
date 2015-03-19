@@ -889,17 +889,18 @@ class Task
      * @return Task
      */
     public static function addNewSubTask(EntityManager $em, User $user, $project_id, $parameters) {
+        $parent = $em->getRepository('ZectranetBundle:Task')->find($parameters['parent']);
         $task = new Task();
         $task->setName($parameters['name']);
         $task->setDescription($parameters['description']);
-        $task->setProject($em->getRepository('ZectranetBundle:Project')->find($project_id));
+        $task->setProject($parent->getProject());
         $task->setStatus($em->getRepository('ZectranetBundle:TaskStatus')->find(1));
         $task->setOwner($user);
         $task->setPriority($em->getRepository('ZectranetBundle:TaskPriority')->find($parameters['priority']));
         $task->setType($em->getRepository('ZectranetBundle:TaskType')->find($parameters['type']));
         $task->setStartdate(\DateTime::createFromFormat('Y-m-d', $parameters['startdate']));
         $task->setEnddate(\DateTime::createFromFormat('Y-m-d', $parameters['enddate']));
-        $task->setParent($em->getRepository('ZectranetBundle:Task')->find($parameters['parent']));
+        $task->setParent($parent);
 
         $em->persist($task);
         $em->flush();

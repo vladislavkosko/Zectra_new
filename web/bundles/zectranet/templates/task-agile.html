@@ -24,10 +24,21 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <span class="label label-info" style="float:left;">[[task.postCount]]</span>
-                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                            </p>
+                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                                <div class="col-md-12">
+                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
+                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding-top:5px;" class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
+                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -50,10 +61,21 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                            </p>
+                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                                <div class="col-md-12">
+                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
+                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding-top:5px;" class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
+                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -82,10 +104,21 @@
                                 <p class="list-group-item-text">
                                     [[ task.description ]]
                                 </p>
-                                <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                    <span class="label label-info" style="float:left;">0</span>
-                                    <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                                </p>
+                                <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                                    <div class="col-md-12">
+                                        <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
+                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                    </div>
+                                </div>
+                                <div style="padding-top:5px;" class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
+                                                <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </a>
                         </div>
                     </div>
@@ -108,10 +141,21 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                            </p>
+                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                                <div class="col-md-12">
+                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
+                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding-top:5px;" class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
+                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -140,10 +184,21 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                            </p>
+                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                                <div class="col-md-12">
+                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
+                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding-top:5px;" class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
+                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -166,10 +221,21 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                            </p>
+                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                                <div class="col-md-12">
+                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
+                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding-top:5px;" class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
+                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -198,10 +264,21 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                            </p>
+                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                                <div class="col-md-12">
+                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
+                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding-top:5px;" class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
+                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>
@@ -224,10 +301,21 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <p style="padding-top:5px;" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <span class="label label-info" style="float:left;">0</span>
-                                <img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px; float:left; margin-left:5px;">
-                            </p>
+                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                                <div class="col-md-12">
+                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
+                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding-top:5px;" class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
+                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </div>
                 </div>
