@@ -87,12 +87,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             });
         };
 
-        $scope.$watch('tasks', function (){
-            if ($scope.tasks) {
-                $scope.tasks = calculateTasksInfo($scope.tasks);
-            }
-        });
-
         //// ------- BEGIN OF PREPARE TASKS FUNCTIONS ------- \\\\
         {
             function calculateTasksInfo (tasks) {
@@ -105,9 +99,11 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     if (tasks[i].subtasks && tasks[i].subtasks.length > 0) {
                         tasks[i].subtasks = giveSubtaskIndex(tasks[i].subtasks);
                         tasks[i].progress = calculateMeanProgress(tasks[i].subtasks, tasks[i].progress);
-                        var estimatedTime = calculateMeanEstimation(tasks[i].subtasks);
-                        tasks[i].estimatedHours += estimatedTime.hours;
-                        tasks[i].estimatedMinutes += estimatedTime.minutes;
+                        var estimatedTime = calculateMeanEstimation(
+                            tasks[i].subtasks, tasks[i].estimatedHours, tasks[i].estimatedMinutes
+                        );
+                        tasks[i].estimatedHours = estimatedTime.hours;
+                        tasks[i].estimatedMinutes = estimatedTime.minutes;
                         tasks[i].status = calculateMeanStatus(tasks[i].subtasks);
                     }
                 }
@@ -122,9 +118,9 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 return Math.round((meanNumber + progress) / (subtasks.length + 1));
             }
 
-            function calculateMeanEstimation (subtasks) {
+            function calculateMeanEstimation (subtasks, hours, minutes) {
                 var estimatedTime = {
-                    'hours': 0, 'minutes': 0
+                    'hours': hours, 'minutes': minutes
                 };
                 for (var i = 0; i < subtasks.length; i++) {
                     estimatedTime.hours += subtasks[i].estimatedHours;
