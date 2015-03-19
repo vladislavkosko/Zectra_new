@@ -1,9 +1,13 @@
 <div class="row" style="padding: 8px;">
     <div class="col-xs-12">
-        <i class="fa fa-filter"></i>
+
         <div class="btn-group" align="center">
             <!-- BEGIN OF FILTER BY ID -->
             <div class="btn-group">
+
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" disabled>
+                    <i class="fa fa-filter"></i>
+                </button>
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[1] }">ID</span>
                     <span class="caret"></span>
