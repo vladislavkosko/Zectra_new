@@ -68,18 +68,24 @@
             <div ng-if="task.sprint.name == 'none'">none</div>
         </td>
         <td class="col-xs-1">
-            <a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add_new_subtask"
-               ng-click="addParentIdToSubTask(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
-                <i class="fa fa-code-fork"></i>
-            </a>
-            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task"
-               ng-click="addDeleteTaskId(task.id)" style="width: 22px; height: 22px; cursor: pointer;">
-                <i class="fa fa-trash"></i>
-            </a>
-            <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#add_task_to_sprint"
-               ng-click="taskModel.id = task.id" style="width: 22px; height: 22px; cursor: pointer;">
-                <i class="fa fa-stack-overflow"></i>
-            </a>
+
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">
+                    <i class="fa fa-ellipsis-v"></i>
+                </button>
+                <ul class="dropdown-menu" role="menu" style="left:-60px !important;">
+                    <li>
+                        <a data-toggle="modal" data-target="#add_new_subtask" ng-click="addParentIdToSubTask(task.id)" style="cursor: pointer"><i class="fa fa-code-fork"></i> Add new subtask</a>
+                    </li>
+                    <li>
+                        <a  data-toggle="modal" data-target="#add_task_to_sprint" ng-click="taskModel.id = task.id" style="cursor: pointer"><i class="fa fa-stack-overflow"></i> Add task to sprint</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a data-toggle="modal" data-target="#delete_task" ng-click="addDeleteTaskId(task.id)" style="cursor: pointer"><span class="text-danger"><i class="fa fa-trash"></i> Delete task</span></a>
+                    </li>
+                </ul>
+            </div>
         </td>
     </tr>
 
@@ -114,6 +120,7 @@
         <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.username ]]</td>
         <td class="col-xs-1 hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
         <td></td>
+
         <td class="col-xs-1">
             <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
                ng-click="addDeleteTaskId(task.id)" style="width: 22px; height: 22px;">
