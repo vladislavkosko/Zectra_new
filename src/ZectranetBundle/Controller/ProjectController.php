@@ -662,4 +662,16 @@ class ProjectController extends Controller
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+
+    /**
+     * @Route("/project/{project_id}/showVersions")
+     * @Security("has_role('ROLE_USER')")
+     * @param int $project_id
+     * @return Response
+     */
+    public function showProjectVersionAction($project_id) {
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+        return $this->render('@Zectranet/projectVersions.html.twig', array('project' => $project));
+
+    }
 }

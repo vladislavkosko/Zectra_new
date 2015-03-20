@@ -1,0 +1,74 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}Project Versions{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-header">
+
+                    <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ project.name }}</span>
+
+            </div>
+            <div id="accordion" class="panel-group" aria-multiselectable="true" role="tablist">
+
+                <div class="panel panel-default">
+
+                    <div id="headingTwo" class="panel-heading" role="tab">
+                        <h4 id="-collapsible-group-item-#2-" class="panel-title">
+                            <a class="collapsed" aria-controls="collapseTwo" aria-expanded="false" href="#collapseTwo" data-parent="#accordion" data-toggle="collapse">
+                                V 20.10298
+                            </a>
+                            <a class="anchorjs-link" href="#-collapsible-group-item-#2-">
+                <span class="anchorjs-icon">
+
+                </span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse" aria-labelledby="headingTwo" role="tabpanel">
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th class="col-md-1" style="padding-left:20px;">ID</th>
+                                <th class="col-md-8">Task Name</th>
+                                <th class="col-md-3">Date</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td style="padding-left:20px;">Hellow</td>
+                                <td>Hellow</td>
+                                <td>Hellow</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-left:20px;">Hellow</td>
+                                <td>Hellow</td>
+                                <td>Hellow</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="panel-footer"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="form-group">
+                <a class="btn btn-default btn-primary" data-toggle="modal" data-target="#project_version_add">
+                    <i class="fa fa-plus-circle"></i>
+                    Add new version
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% include '@Zectranet/projectVersionAdd.html.twig' %}
+
+{% endblock %}
