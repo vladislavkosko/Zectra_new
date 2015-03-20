@@ -118,8 +118,6 @@ class TaskController extends Controller {
         /** @var TaskLogger $logger */
         $logger = $this->get('zectranet.tasklogger');
 
-        $name = $data->name;
-
         $parameters = array(
             'name' => $data->name,
             'type' => $data->type['id'],
@@ -132,6 +130,7 @@ class TaskController extends Controller {
             'estimated_minutes' => $data->estimatedMinutes,
             'start_date' => date('Y-m-d', strtotime($data->startDate)),
             'end_date' => date('Y-m-d', strtotime($data->endDate)),
+            'version' => $data->versionid,
         );
 
         $task = Task::editInfo($em, $logger, $task_id, $parameters);

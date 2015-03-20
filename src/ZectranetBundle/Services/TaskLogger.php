@@ -45,6 +45,7 @@ class TaskLogger
             9 => 'Estimated Minutes Changed',
             10 => 'Start Date Changed',
             11 => 'End Date Changed',
+            12 => 'Version Changed',
         );
     }
 

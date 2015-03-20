@@ -961,6 +961,7 @@ class Task
         $estimatedMinutes = $parameters['estimated_minutes'];
         $startDate = $parameters['start_date'];
         $endDate = $parameters['end_date'];
+        $version = $parameters['version'];
 
         if ($name !== $task->getName()) {
             $logger->valueChanged(0, $task_id, $task->getName(), $name);
@@ -980,14 +981,6 @@ class Task
         }
 
         if ($status_id != $task->getStatusid()) {
-            if ($task->getStatusid() == 4) {
-                $task->setVersionid(null);
-            } else if ($status_id == 4) {
-                $version = $em->getRepository('ZectranetBundle:Version')->findOneBy(array(), array('date' => 'DESC'));
-                if ($version) {
-                    $task->setVersion($version);
-                }
-            }
             $status = $em->getRepository('ZectranetBundle:TaskStatus')->find($status_id);
             $logger->valueChanged(4, $task_id, $task->getStatus()->getLabel(), $status->getLabel());
             $task->setStatus($status);
@@ -1035,6 +1028,17 @@ class Task
         if ($endDate !== $task->getEnddate()->format('Y-m-d')) {
             $logger->valueChanged(11, $task_id, $task->getEnddate()->format('Y-m-d'), $endDate);
             $task->setEnddate(\DateTime::createFromFormat('Y-m-d', $endDate));
+        }
+
+        if ($version != $task->getVersionid()) {
+            $version = $em->getRepository('ZectranetBundle:Version')->find($version);
+            $logger->valueChanged(12, $task_id, (
+                $task->getVersionid())
+                    ? $task->getVersion()->getName()
+                    : '-',
+                $version->getName()
+            );
+            $task->setVersion($version);
         }
 
         $em->persist($task);

@@ -340,6 +340,28 @@
                         </div>
                         <!-- End Of Task ESTIMATED MINUTES Select -->
 
+                        {% if task.project.versions | length > 0 %}
+                        <!-- Begin Of Task Version Select -->
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">Project Version:</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group" style="width: 100%;">
+                                    <select class="form-control" name="version" ng-model="taskInfoEdit.versionid" style="border: none;font-weight: bold;">
+                                        {% for version in task.project.versions %}
+                                            <option value="{{ version.id }}">{{ version.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Of Task Version Select -->
+                        {% endif %}
+
                     </div>
                 </form>
                 <!--End of Task Details-->
