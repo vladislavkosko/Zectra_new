@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="page-header">
-                <h3><i class="fa fa-user fa-2x"></i> My Profile</h3>
+                <h3 style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;"> {{ user.name }} {{ user.surname }}</h3>
             </div>
 
             <div class="col-md-2">
@@ -25,8 +25,6 @@
             </div>
 
             <div class="col-md-10">
-                <p><strong>Name: </strong> {{ user.name }}</p>
-                <p><strong>Surname: </strong> {{ user.surname }}</p>
                 <p><strong>Username: </strong> {{ user.username }}</p>
                 <hr>
                 <p><strong>Country: </strong> Under Construction</p>
