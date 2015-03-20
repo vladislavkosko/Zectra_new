@@ -948,13 +948,19 @@ class Task
      * @param array $parameters
      * @return Task
      */
-    public static function editMainInfo(EntityManager $em, TaskLogger $logger, $task_id, $parameters) {
+    public static function editInfo(EntityManager $em, TaskLogger $logger, $task_id, $parameters) {
         $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
         $name = $parameters['name'];
         $type_id = $parameters['type'];
         $priority_id = $parameters['priority'];
         $status_id = $parameters['status'];
         $project_id = $parameters['project'];
+        $assigned_id = $parameters['assigned'];
+        $progress = $parameters['progress'];
+        $estimatedHours = $parameters['estimated_hours'];
+        $estimatedMinutes = $parameters['estimated_minutes'];
+        $startDate = $parameters['start_date'];
+        $endDate = $parameters['end_date'];
 
         if ($name !== $task->getName()) {
             $logger->valueChanged(0, $task_id, $task->getName(), $name);
@@ -992,29 +998,6 @@ class Task
             $logger->valueChanged(5, $task_id, $task->getProject()->getName(), $project->getName());
             $task->setProject($project);
         }
-
-        $em->persist($task);
-        $em->flush();
-        return $task;
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param TaskLogger $logger
-     * @param int $task_id
-     * @param array $parameters
-     * @return Task
-     */
-    public static function editDetailsInfo(EntityManager $em, TaskLogger $logger, $task_id, $parameters) {
-        $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
-        if (!$task) { return null; }
-
-        $assigned_id = $parameters['assigned'];
-        $progress = $parameters['progress'];
-        $estimatedHours = $parameters['estimated_hours'];
-        $estimatedMinutes = $parameters['estimated_minutes'];
-        $startDate = $parameters['start_date'];
-        $endDate = $parameters['end_date'];
 
         if ($assigned_id != $task->getAssignedid()) {
             $assigned = $em->getRepository('ZectranetBundle:User')->find($assigned_id);
@@ -1056,7 +1039,6 @@ class Task
 
         $em->persist($task);
         $em->flush();
-
         return $task;
     }
 
@@ -1073,15 +1055,6 @@ class Task
      * @return array
      */
     public function getInArray() {
-        $subtasks = array();
-        if ($this->subtasks) {
-            $sub = $this->getSubtasks();
-            /** @var Task $task */
-            foreach ($sub as $task) {
-                $subtasks[] = $task->getInArray();
-            }
-        }
-
         return array(
             'id' => $this->getId(),
             'name' => $this->getName(),
@@ -1098,7 +1071,7 @@ class Task
             'status' => $this->getStatus()->getInArray(),
             'type' => $this->getType()->getInArray(),
             'priority' => $this->getPriority()->getInArray(),
-            'subtasks' => $subtasks,
+            'subtasks' => EntityOperations::arrayToJsonArray($this->subtasks),
             'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
             'postCount' => count($this->getPosts()),
             'versionid' => $this->getVersionid(),

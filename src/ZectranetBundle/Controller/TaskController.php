@@ -110,7 +110,7 @@ class TaskController extends Controller {
      * @param int $task_id
      * @return RedirectResponse
      */
-    public function editMainInfoAction (Request $request, $task_id) {
+    public function editInfoAction (Request $request, $task_id) {
         $data = json_decode($request->getContent(), true);
         $data = (object) $data['task'];
         /** @var EntityManager $em */
@@ -118,34 +118,14 @@ class TaskController extends Controller {
         /** @var TaskLogger $logger */
         $logger = $this->get('zectranet.tasklogger');
 
+        $name = $data->name;
+
         $parameters = array(
-            'name' => $data->name, 'type' => $data->type['id'],
+            'name' => $data->name,
+            'type' => $data->type['id'],
             'priority' => $data->priority['id'],
             'status' => $data->status['id'],
             'project' => $data->projectid,
-        );
-
-        $task = Task::editMainInfo($em, $logger, $task_id, $parameters);
-
-        $response = new Response(json_encode(array('task' => $task)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-
-    /**
-     * @param Request $request
-     * @param int $task_id
-     * @return RedirectResponse
-     */
-    public function editDetailInfoAction (Request $request, $task_id) {
-        $data = json_decode($request->getContent(), true);
-        $data = (object) $data['task'];
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        /** @var TaskLogger $logger */
-        $logger = $this->get('zectranet.tasklogger');
-
-        $parameters = array(
             'assigned' => $data->assigned,
             'progress' => $data->progress,
             'estimated_hours' => $data->estimatedHours,
@@ -154,7 +134,7 @@ class TaskController extends Controller {
             'end_date' => date('Y-m-d', strtotime($data->endDate)),
         );
 
-        $task = Task::editDetailsInfo($em, $logger, $task_id, $parameters);
+        $task = Task::editInfo($em, $logger, $task_id, $parameters);
 
         $response = new Response(json_encode(array('task' => $task)));
         $response->headers->set('Content-Type', 'application/json');

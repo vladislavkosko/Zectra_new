@@ -306,15 +306,9 @@ zectranent_task_get_single:
     requirements:
         task_id: \d+
 
-zectranet_task_edit_main_info:
-    pattern: /task/{task_id}/edit_main_info
-    defaults: { _controller: ZectranetBundle:Task:editMainInfo }
-    requirements:
-        task_id: \d+
-
-zectranet_task_edit_detail_info:
-    pattern: /task/{task_id}/edit_detail_info
-    defaults: { _controller: ZectranetBundle:Task:editDetailInfo }
+zectranet_task_edit_info:
+    pattern: /task/{task_id}/edit_info
+    defaults: { _controller: ZectranetBundle:Task:editInfo }
     requirements:
         task_id: \d+
 

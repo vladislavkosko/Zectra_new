@@ -40,8 +40,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.urlShowSprint = JSON_URLS.showSprint;
         $scope.urlAsset = JSON_URLS.asset;
         $scope.urlgetSingleTask = JSON_URLS.getSingleTask;
-        $scope.urlSaveTaskMainInfo = JSON_URLS.saveMainTaskInfo;
-        $scope.urlSaveTaskDetailsInfo = JSON_URLS.saveDetailsTaskInfo;
+        $scope.urlSaveTaskInfo = JSON_URLS.saveTaskInfo;
 
         $rootScope.initTaskController = function (page_id) {
             $scope.urlGetTasks = JSON_URLS.getTasks.replace('0', page_id);
@@ -215,15 +214,9 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             );
         };
 
-        $scope.saveSingleTaskMainInfo = function (task) {
-            $scope.mainInfoPromise = $http
-                .post($scope.urlSaveTaskMainInfo, { 'task': task });
-        };
-
-        $scope.saveSingleTaskDetailsInfo = function (task) {
-            if (task.assigned == 'Not Assigned') task.assigned = null;
-            $scope.detailsInfoPromise = $http
-                .post($scope.urlSaveTaskDetailsInfo, { 'task': task });
+        $scope.saveSingleTaskInfo = function (task) {
+            $scope.taskPromise = $http
+                .post($scope.urlSaveTaskInfo, { 'task': task });
         };
 
         $scope.generateAsset = function (asset, url) {

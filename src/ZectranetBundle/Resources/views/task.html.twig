@@ -4,7 +4,9 @@
 
 {% block body %}
     <div ng-cloak>
+        <!-- Begin of Task Info -->
         <div ng-controller="TaskController" ng-init="getSingleTask();">
+            <!-- Begin of Breadcrumbs -->
             <div class="row">
                 <ol class="breadcrumb" style="margin: 0 -15px;">
                     <li>
@@ -21,10 +23,12 @@
                     </li>
                 </ol>
             </div>
+            <!-- End of Breadcrumbs -->
 
+            <!-- Begin of Task Info Section -->
             <div class="row" style="margin-top: 20px;">
                 <!--Begin of Main Task Info-->
-                <form cg-busy="taskPromise" class="col-md-6" style="border-bottom: 1px solid #eee;">
+                <form cg-busy="taskPromise" class="col-md-6">
                     <div cg-busy="mainInfoPromise">
                         <div class="page-header" style="margin-top: 0; border-bottom: 0;">
                             <span style="font-size: 20px;  color: #337ab7;">Task Info</span>
@@ -46,24 +50,6 @@
                             </div>
                         </div>
                         <!-- End of Task NAME Edit -->
-
-                        <!-- Begin Of Task OWNER Details -->
-                        <div class="row" style="margin-bottom: 10px;">
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">Owner:</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-9">
-                                <div class="input-group">
-                                    <a style="font-weight: bold;" href="{{ path('zectranet_user_page', {'user_id': task.ownerid }) }}" class="btn form-control-static text-info">
-                                        {{ task.owner.name ~ ' ' ~ task.owner.surname ~ ' (' ~ task.owner.username ~ ')'}}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Of Task OWNER Details -->
 
                         <!-- Begin of Task TYPE Select -->
                         <div class="row" style="margin-bottom: 10px;">
@@ -115,31 +101,6 @@
                         </div>
                         <!-- End of Task PRIORITY Select -->
 
-                        <!-- Begin of Task STATUS Select -->
-                        <div class="row" style="margin-bottom: 10px;">
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">Status:</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-9">
-                                <div class="input-group" style="width: 100%;">
-                                    <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;font-weight: bold;">
-                                        {% for status in task_statuses %}
-                                            <option style="color: {{ status.color }}" value="{{ status.id }}"
-                                                    {% if status.id == task.status.id %}
-                                                selected="selected"
-                                                    {% endif %}>
-                                                {{ status.label }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End of Task STATUS Select -->
-
                         <!-- Begin of Task PROJECT/STORY Select -->
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
@@ -175,30 +136,66 @@
                         </div>
                         <!-- End of Task PROJECT/STORY Select -->
 
-                        <!-- SAVE BUTTON -->
-                        <div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <button type="button" ng-click="saveSingleTaskMainInfo(taskInfoEdit);" class="btn btn-default btn-primary">
-                                            Save
-                                        </button>
-                                    </div>
+                        <!-- Begin Of Task START DATE Select -->
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">Start Date:</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group" style="width: 100%;">
+                                    <input class="form-control" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.startDate" type="date">
                                 </div>
                             </div>
                         </div>
-                        <!-- SAVE BUTTON -->
-                    </div>
+                        <!-- End Of Task START DATE Select -->
 
+                        <!-- Begin Of Task END DATE Select -->
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">End Date:</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group" style="width: 100%;">
+                                    <input class="form-control" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.endDate" type="date">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Of Task END DATE Select -->
+
+                    </div>
                 </form>
                 <!--End of Main Task Info-->
 
                 <!--Begin of Task Details-->
-                <form cg-busy="taskPromise" class="col-md-6" style="border-bottom: 1px solid #eee;">
+                <form cg-busy="taskPromise" class="col-md-6">
                     <div cg-busy="detailsInfoPromise">
                         <div class="page-header" style="margin-top: 0; border: none;">
                             <span style="font-size: 20px; color: #337ab7;">Task Details</span>
                         </div>
+
+                        <!-- Begin Of Task OWNER Details -->
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">Owner:</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <a style="font-weight: bold;" href="{{ path('zectranet_user_page', {'user_id': task.ownerid }) }}" class="btn form-control-static text-info">
+                                        {{ task.owner.name ~ ' ' ~ task.owner.surname ~ ' (' ~ task.owner.username ~ ')'}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Of Task OWNER Details -->
 
                         <!-- Begin Of Task ASSIGNED Select -->
                         <div class="row" style="margin-bottom: 10px;">
@@ -240,7 +237,7 @@
                         <!-- End Of Task ASSIGNED Select -->
 
                         <!-- Begin Of Task PROGRESS Selection -->
-                        <div class="row">
+                        <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <label class="text-muted  form-control-static" style="  color: #777;font-weight: 300;">Progress:</label>
@@ -274,6 +271,31 @@
                             </div>
                         </div>
                         <!-- End Of Task PROGRESS Selection -->
+
+                        <!-- Begin of Task STATUS Select -->
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">Status:</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group" style="width: 100%;">
+                                    <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;font-weight: bold;">
+                                        {% for status in task_statuses %}
+                                            <option style="color: {{ status.color }}" value="{{ status.id }}"
+                                                    {% if status.id == task.status.id %}
+                                                selected="selected"
+                                                    {% endif %}>
+                                                {{ status.label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End of Task STATUS Select -->
 
                         <!-- Begin Of Task ESTIMATED HOURS Select -->
                         <div class="row" style="margin-bottom: 10px;">
@@ -318,59 +340,25 @@
                         </div>
                         <!-- End Of Task ESTIMATED MINUTES Select -->
 
-                        <!-- Begin Of Task START DATE Select -->
-                        <div class="row" style="margin-bottom: 10px;">
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">Start Date:</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-9">
-                                <div class="input-group" style="width: 100%;">
-                                    <input class="form-control" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.startDate" type="date">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Of Task START DATE Select -->
-
-                        <!-- Begin Of Task END DATE Select -->
-                        <div class="row" style="margin-bottom: 10px;">
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <label class="text-muted form-control-static" style="  color: #777;font-weight: 300;">End Date:</label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-9">
-                                <div class="input-group" style="width: 100%;">
-                                    <input class="form-control" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.endDate" type="date">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Of Task END DATE Select -->
-
-                        <!-- SAVE BUTTON -->
-                        <div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="page-header" style="margin-top: 0;border: 0;"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12" style="margin-bottom: 15px;">
-                                    <form class="form-group">
-                                        <button type="button" ng-click="saveSingleTaskDetailsInfo(taskInfoEdit)" class="btn btn-default btn-primary">Save</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- SAVE BUTTON -->
                     </div>
                 </form>
                 <!--End of Task Details-->
             </div>
+            <!-- End of Task Info Section ---->
+
+            <hr/>
+
+            <!-- SAVE BUTTON -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <button type="button" ng-click="saveSingleTaskInfo(taskInfoEdit);" class="btn btn-default btn-primary">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- SAVE BUTTON -->
 
             <!-- Begin of Desciption Section -->
             <div class="row">
@@ -395,68 +383,69 @@
 
             <!-- Begin of Sub-Task Section -->
             {% if task.subtasks|length > 0 %}
-            <div class="row" style="  margin-bottom: 50px;">
-                <div class="col-md-12">
-                    <div class="page-header" style="border: 0;">
-                        <h4 style="color: #337ab7; margin-bottom: 0;"> Sub-Tasks </h4>
+                <div class="row" style="  margin-bottom: 50px;">
+                    <div class="col-md-12">
+                        <div class="page-header" style="border: 0;">
+                            <h4 style="color: #337ab7; margin-bottom: 0;"> Sub-Tasks </h4>
+                        </div>
+                        <table>
+                            <tbody>
+                            {% for i,subtask in task.subtasks %}
+                                <tr>
+                                    <td style="margin-bottom: 10px;">
+                                        {{ i + 1 }}.
+                                    </td>
+
+                                    <td class="col-xs-6">
+                                        <a style="word-wrap: break-word;" href="{{ path('zectranet_task_show', {'task_id': subtask.id }) }}"  >{{ subtask.name }}</a>
+                                    </td>
+
+                                    <td class="col-xs-2">
+                                        {% if subtask.status.label == 'story'  %}
+                                            <span style="color: {{  subtask.status.color }} ">{{ subtask.status.label }}</span>
+                                        {% elseif subtask.status.label == 'todo' %}
+                                            <span style="color:{{  subtask.status.color }} ">{{ subtask.status.label }}</span>
+                                        {% elseif subtask.status.label == 'in-progress' %}
+                                            <span style="color: {{  subtask.status.color }} ">{{ subtask.status.label }}</span>
+                                        {% elseif subtask.status.label == 'done' %}
+                                            <span style="color: {{  subtask.status.color }} ">{{ subtask.status.label }}</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td class="col-xs-4" style="  font-weight: bold;">
+                                        {% if subtask.assigned == null  %}
+                                            Not Assigned
+                                        {% else %}
+                                            {{ subtask.assigned.name ~ ' ' ~ subtask.assigned.surname ~ ' (' ~ subtask.assigned.username ~ ')' }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    <table>
-                        <tbody>
-                        {% for i,subtask in task.subtasks %}
-                            <tr>
-                                <td style="margin-bottom: 10px;">
-                                    {{ i + 1 }}.
-                                </td>
-
-                                <td class="col-xs-6">
-                                    <a style="word-wrap: break-word;" href="{{ path('zectranet_task_show', {'task_id': subtask.id }) }}"  >{{ subtask.name }}</a>
-                                </td>
-
-                                <td class="col-xs-2">
-                                    {% if subtask.status.label == 'story'  %}
-                                        <span style="color: {{  subtask.status.color }} ">{{ subtask.status.label }}</span>
-                                    {% elseif subtask.status.label == 'todo' %}
-                                        <span style="color:{{  subtask.status.color }} ">{{ subtask.status.label }}</span>
-                                    {% elseif subtask.status.label == 'in-progress' %}
-                                        <span style="color: {{  subtask.status.color }} ">{{ subtask.status.label }}</span>
-                                    {% elseif subtask.status.label == 'done' %}
-                                        <span style="color: {{  subtask.status.color }} ">{{ subtask.status.label }}</span>
-                                    {% endif %}
-                                </td>
-
-                                <td class="col-xs-4" style="  font-weight: bold;">
-                                    {% if subtask.assigned == null  %}
-                                        Not Assigned
-                                    {% else %}
-                                        {{ subtask.assigned.name ~ ' ' ~ subtask.assigned.surname ~ ' (' ~ subtask.assigned.username ~ ')' }}
-                                    {% endif %}
-                                </td>
-                            </tr>
-
-                        {% endfor %}
-                        </tbody>
-                    </table>
                 </div>
-            </div>
             {% endif %}
             <!-- End of Sub-Task Section -->
         </div>
+        <!-- End of Task Info ---->
 
         <!-- Begin of Task Nav Tabs -->
         <div ng-controller="DocumentsController">
             <div ng-controller="ChatController">
-            <ul id="myTab" class="nav nav-tabs" role="tablist">
-                <li data-toggle="tooltip" data-placement="top" title="Logs" role="presentation" class="active">
-                    <a data-toggle="tab" id="task-logs-tab" class="btn" href="#task-logs" aria-controls="task-logs" role="tab" aria-expanded="true">
-                        Logs
-                    </a>
-                </li>
-                <li class="" role="presentation" >
-                    <a id="coments-tab" aria-controls="coments" data-toggle="tab" role="tab" href="#coments" aria-expanded="false">Comments</a>
-                </li>
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    <li data-toggle="tooltip" data-placement="top" title="Logs" role="presentation" class="active">
+                        <a data-toggle="tab" id="task-logs-tab" class="btn" href="#task-logs" aria-controls="task-logs" role="tab" aria-expanded="true">
+                            Logs
+                        </a>
+                    </li>
+                    <li class="" role="presentation" >
+                        <a id="coments-tab" aria-controls="coments" data-toggle="tab" role="tab" href="#coments" aria-expanded="false">Comments</a>
+                    </li>
 
-            </ul>
-            <!-- End of Task Nav Tabs -->
+                </ul>
+                <!-- End of Task Nav Tabs -->
 
                 <div id="tasks-tab-content" class="tab-content">
                     <div id="task-logs" class="tab-pane fade in active" style="max-height: 500px; overflow-y: auto;" aria-labelledby="task-logs-tab" role="tabpanel">
@@ -529,11 +518,11 @@
                             </div>
                         </div>
                     </div>
-                        {% include '@Zectranet/dialogAdd.html.twig' %}
-                    </div>
+                    {% include '@Zectranet/dialogAdd.html.twig' %}
                 </div>
             </div>
-
+        </div>
+        <!-- End of Task Nav Tabs ---->
     </div>
 {% endblock %}
 
@@ -546,8 +535,7 @@
         JSON_URLS.getPosts = "{{ path('zectranet_task_get_post', { 'task_id': task.id }) }}";
         JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";
         JSON_URLS.userPage = "{{ path('zectranet_user_page', {'user_id': 0}) }}";
-        JSON_URLS.saveMainTaskInfo = "{{ path('zectranet_task_edit_main_info', { 'task_id': task.id }) }}";
-        JSON_URLS.saveDetailsTaskInfo = "{{ path('zectranet_task_edit_detail_info', { 'task_id': task.id }) }}";
+        JSON_URLS.saveTaskInfo = "{{ path('zectranet_task_edit_info', { 'task_id': task.id }) }}";
         JSON_URLS.getSingleTask = "{{ path('zectranent_task_get_single', { 'task_id': task.id }) }}";
         TEMPPARAMS.TASK_ID = {{ task.id }};
     </script>
