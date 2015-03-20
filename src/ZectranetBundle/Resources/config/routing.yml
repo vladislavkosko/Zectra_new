@@ -403,3 +403,8 @@ zectranet_task_add_post:
     requirements:
         office_id: \d+
 
+zectranet_show_project_versions:
+    pattern: /project/{project_id}/showVersions
+    defaults: { _controller: ZectranetBundle:Project:showProjectVersion }
+    requirements:
+        project_id: \d+
