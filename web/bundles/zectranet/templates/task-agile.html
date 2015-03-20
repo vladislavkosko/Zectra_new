@@ -24,10 +24,12 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                            <div style="padding-top:5px;" class="row">
                                 <div class="col-md-12">
                                     <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
+                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 15px; height: 15px;"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div style="padding-top:5px;" class="row">
@@ -61,10 +63,12 @@
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
-                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
+                            <div style="padding-top:5px;" class="row">
                                 <div class="col-md-12">
                                     <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
+                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 15px; height: 15px;"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div style="padding-top:5px;" class="row">
@@ -107,7 +111,9 @@
                                 <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                     <div class="col-md-12">
                                         <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                        <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
+                                            <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 15px; height: 15px;"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div style="padding-top:5px;" class="row">
@@ -144,7 +150,9 @@
                             <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                 <div class="col-md-12">
                                     <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
+                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 15px; height: 15px;"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div style="padding-top:5px;" class="row">
@@ -187,7 +195,9 @@
                             <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                 <div class="col-md-12">
                                     <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
+                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 15px; height: 15px;"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div style="padding-top:5px;" class="row">
@@ -224,7 +234,9 @@
                             <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                 <div class="col-md-12">
                                     <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
+                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 15px; height: 15px;"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div style="padding-top:5px;" class="row">
@@ -267,7 +279,9 @@
                             <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                 <div class="col-md-12">
                                     <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
+                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 15px; height: 15px;"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div style="padding-top:5px;" class="row">
@@ -304,7 +318,9 @@
                             <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
                                 <div class="col-md-12">
                                     <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[avatar]]" style="width: 15px; height: 15px;"></div>
+                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
+                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 15px; height: 15px;"></div>
+                                    </div>
                                 </div>
                             </div>
                             <div style="padding-top:5px;" class="row">

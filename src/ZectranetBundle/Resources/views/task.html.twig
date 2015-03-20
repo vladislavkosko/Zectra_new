@@ -352,7 +352,8 @@
                             <div class="col-md-9">
                                 <div class="input-group" style="width: 100%;">
                                     <select class="form-control" name="version" ng-model="taskInfoEdit.versionid" style="border: none;font-weight: bold;">
-                                        {% for version in task.project.versions %}
+                                        {% set versions = (task.project.parent) ? task.project.parent.versions : task.project.versions %}
+                                        {% for version in versions %}
                                             <option value="{{ version.id }}">{{ version.name }}</option>
                                         {% endfor %}
                                     </select>

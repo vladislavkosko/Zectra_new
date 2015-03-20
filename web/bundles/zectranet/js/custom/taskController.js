@@ -189,6 +189,9 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             function giveTasksHref (tasks) {
                 for (var i = 0; i < tasks.length; i++) {
                     tasks[i].href = $scope.assignTaskHref(tasks[i].id);
+                    if (tasks[i].assigned) {
+                        tasks[i].assigned.avatar = $scope.generateAsset($scope.urlAsset, 'documents/' + tasks[i].assigned.avatar);
+                    }
                     if (tasks[i].subtasks.length > 0) {
                         tasks[i].subtasks = giveTasksHref(tasks[i].subtasks);
                     }
