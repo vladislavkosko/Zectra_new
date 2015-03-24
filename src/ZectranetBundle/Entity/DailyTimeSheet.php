@@ -302,6 +302,22 @@ class DailyTimeSheet
         return $this->user;
     }
 
+    public function getInArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'userid' => $this->getUserid(),
+            'user' => $this->getUser()->getInArray(),
+            'date' => $this->getDate()->format('Y-m-d'),
+            'startOffice' => ($this->getStartTime() != null) ? $this->getStartTime()->format('H:i'): '-',
+            'startLunch' => ($this->getBeginLunch() != null) ? $this->getBeginLunch()->format('H:i'): '-',
+            'endLunch' => ($this->getEndLunch() != null) ? $this->getEndLunch()->format('H:i'): '-',
+            'endOffice' => ($this->getEndTime() != null) ? $this->getEndTime()->format('H:i'): '-',
+            'hours' => ($this->getHours() != null) ? $this->getHours(): '-',
+            'mainTask' => ($this->getMainTask() != null) ? $this->getMainTask(): '-'
+        );
+    }
+
     /**
      * @param EntityManager $em
      * @param User $user

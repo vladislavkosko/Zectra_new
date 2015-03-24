@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use ZectranetBundle\Entity\DailyTimeSheet;
 use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\OfficePost;
@@ -118,6 +119,46 @@ class OfficeController extends Controller
         $response = new Response(json_encode(array('success' => true)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    /**
+     * @Route("/office/{office_id}/getWDE")
+     * @Security("has_role('ROLE_USER')")
+     * @param $office_id
+     * @return bool
+     */
+    public function getWDEAction($office_id)
+    {
+        $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+        $office_users_ids = array();
+        $office_users_ids[] = $office->getOwner()->getId();
+        foreach ($office->getUsers() as $user)
+            $office_users_ids[] = $user->getId();
+
+        $office_WDE = $this->getDoctrine()->getRepository('ZectranetBundle:DailyTimeSheet')->findBy(array('userid' => $office_users_ids));
+
+        $WDE = array();
+        /** @var DailyTimeSheet $wde */
+        foreach ($office_WDE as $wde)
+            $WDE[] = $wde->getInArray();
+
+        $response = new Response(json_encode(array(
+            'WDE' => $WDE
+        )));
+
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Route("/office/{office_id}/showWDE")
+     * @Security("has_role('ROLE_USER')")
+     * @param $office_id
+     * @return Response
+     */
+    public function showWDEAction($office_id)
+    {
+        return $this->render('@Zectranet/WDE.html.twig', array('office_id' => $office_id));
     }
 
     /**

@@ -1,0 +1,130 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %} WDE {% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+
+    <link href="{{ asset('bundles/zectranet/css/calendar.less') }}" rel="stylesheet" type="text/less">
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div ng-controller="OfficeController">
+            <div ng-init="getWDE()">
+                <div style="margin-top: 40px;">
+
+                    <calendar selected="day" id="calendar"></calendar>
+
+                    <div ng-if="WDE.length > 0" class="table-responsive" style="clear: both; margin-top: 40px;">
+                        <table class="table" cg-busy="membersPromise">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>User name</th>
+                                <th>Start In Office</th>
+                                <th>Start Lunch</th>
+                                <th>End Lunch</th>
+                                <th>End In Office</th>
+                                <th>Total hours</th>
+                                <th>Main Task</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="wde in WDE" ng-if="wde.date == day.format('YYYY-MM-DD')">
+                                <td>[[wde.date]]</td>
+                                <td>[[wde.user.username]]</td>
+                                <td>[[wde.startOffice]]</td>
+                                <td>[[wde.startLunch]]</td>
+                                <td>[[wde.endLunch]]</td>
+                                <td>[[wde.endOffice]]</td>
+                                <td>[[wde.hours]]</td>
+                                <td>[[wde.mainTask]]</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('bundles/zectranet/js/custom/officeController.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/less.min.js') }}" type="text/javascript"></script>
+
+    <script>
+
+        // ---- Ban on text selection -----
+        function preventSelection(element){
+            var preventSelection = false;
+
+            function addHandler(element, event, handler){
+                if (element.attachEvent)
+                    element.attachEvent('on' + event, handler);
+                else
+                if (element.addEventListener)
+                    element.addEventListener(event, handler, false);
+            }
+            function removeSelection(){
+                if (window.getSelection) { window.getSelection().removeAllRanges(); }
+                else if (document.selection && document.selection.clear)
+                    document.selection.clear();
+            }
+            function killCtrlA(event){
+                var event = event || window.event;
+                var sender = event.target || event.srcElement;
+
+                if (sender.tagName.match(/INPUT|TEXTAREA/i))
+                    return;
+
+                var key = event.keyCode || event.which;
+                if (event.ctrlKey && key == 'A'.charCodeAt(0))  // 'A'.charCodeAt(0) можно заменить на 65
+                {
+                    removeSelection();
+
+                    if (event.preventDefault)
+                        event.preventDefault();
+                    else
+                        event.returnValue = false;
+                }
+            }
+
+            //--------- Ban on text selection from mouse ------
+            addHandler(element, 'mousemove', function(){
+                if(preventSelection)
+                    removeSelection();
+            });
+            addHandler(element, 'mousedown', function(event){
+                var event = event || window.event;
+                var sender = event.target || event.srcElement;
+                preventSelection = !sender.tagName.match(/INPUT|TEXTAREA/i);
+            });
+
+            //-------- Ban on text selection from mouse dbclick -----
+            addHandler(element, 'mouseup', function(){
+                if (preventSelection)
+                    removeSelection();
+                preventSelection = false;
+            });
+
+            //--------- Ban on text selection from Ctrl + A ------
+            addHandler(element, 'keydown', killCtrlA);
+            addHandler(element, 'keyup', killCtrlA);
+        }
+
+        preventSelection(calendar);
+
+        JSON_URLS.getWDE = "{{ path('zectranet_office_get_WDE', { 'office_id': office_id }) }}";
+
+    </script>
+
+{% endblock %}

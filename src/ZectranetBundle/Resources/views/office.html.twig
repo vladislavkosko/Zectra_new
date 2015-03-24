@@ -35,6 +35,11 @@
                                 <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
                             </a>
                         </div>
+                        <div class="pull-right">
+                            <a href="{{ path('zectranet_office_show_WDE', { 'office_id': office.id }) }}">
+                                WDE
+                            </a>
+                        </div>
                     </div>
                 {% endif %}
                 <!-- End of Office controll buttons -->
@@ -155,6 +160,7 @@
         {% include '@Zectranet/officeAddSprint.html.twig' %}
         <!-- End of Add Sprint Modal -->
     </div>
+
     <div ng-controller="DocumentsController">
     <div class="chat-panel list-group" ng-controller="ChatController" ng-init="getPosts(0, 100)">
         <div class="list-group-item" style="background:#ddedf4; color:#606060;">
@@ -261,6 +267,7 @@
     </script>
     <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/documentsController.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/custom/officeController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/upload/jquery.knob.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/upload/jquery.ui.widget.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/upload/jquery.iframe-transport.js') }}" type="text/javascript"></script>

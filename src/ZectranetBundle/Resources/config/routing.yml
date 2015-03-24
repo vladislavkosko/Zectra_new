@@ -109,6 +109,18 @@ zectranet_settings_office:
     requirements:
         office_id: \d+
 
+zectranet_office_get_WDE:
+    pattern: /office/{office_id}/getWDE
+    defaults: { _controller: ZectranetBundle:Office:getWDE }
+    requirements:
+        office_id: \d+
+
+zectranet_office_show_WDE:
+    pattern: /office/{office_id}/showWDE
+    defaults: { _controller: ZectranetBundle:Office:showWDE }
+    requirements:
+        office_id: \d+
+
 zectranet_get_office_members:
     pattern: /office/{office_id}/getMembers
     defaults: { _controller: ZectranetBundle:Office:getMembers }

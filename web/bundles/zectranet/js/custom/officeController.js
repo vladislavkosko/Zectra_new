@@ -4,8 +4,10 @@ Zectranet.controller('OfficeController', ['$scope', '$http', '$rootScope',
         $scope.urlChangeVisibleState = JSON_URLS.changeVisibleState;
         $scope.urlSaveOfficeMembers = JSON_URLS.saveMembers;
         $scope.urlGetOfficeMembers = JSON_URLS.getMembers;
+        $scope.urlGetWDE = JSON_URLS.getWDE;
 
         $scope.officeVisible = null;
+        $scope.WDE = null;
 
         $scope.changeVisibleState = function (visible) {
             $scope.visiblePromise = $http
@@ -85,5 +87,15 @@ Zectranet.controller('OfficeController', ['$scope', '$http', '$rootScope',
         }
         // -------------------- End of Office Members Manage ----------------------\\
 
+        // -------- WDE in office -------
+        $scope.day = moment();
+
+        $scope.getWDE = function () {
+            $scope.membersPromise = $http
+                .post($scope.urlGetWDE, {'dateFilter': $scope.day.format('YYYY-MM-DD')})
+                .success(function (response) {
+                    $scope.WDE = response.WDE;
+                });
+        };
     }
 ]);
