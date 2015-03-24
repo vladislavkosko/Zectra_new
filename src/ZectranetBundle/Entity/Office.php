@@ -40,7 +40,7 @@ class Office
     /**
      * @var integer
      *
-     * @ORM\Column(name="owner_id", type="integer")
+     * @ORM\Column(name="owner_id", type="integer", nullable=true)
      */
     private $ownerid;
 

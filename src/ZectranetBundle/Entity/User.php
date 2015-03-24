@@ -106,6 +106,19 @@ class User implements UserInterface, \Serializable
     private $avatar;
 
     /**
+     * @var int
+     * @ORM\Column(name="home_office_id", type="integer")
+     */
+    private $homeOfficeID;
+
+    /**
+     * @var Office
+     * @ORM\OneToOne(targetEntity="Office", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="home_office_id", referencedColumnName="id")
+     */
+    private $homeOffice;
+
+    /**
      * @ORM\OneToMany(targetEntity="Office", mappedBy="owner", cascade={"remove"})
      * @var ArrayCollection
      */
@@ -981,6 +994,13 @@ class User implements UserInterface, \Serializable
         $user->setRegistered(new \DateTime());
         $user->setLastActive(new \DateTime());
         $user->addRole(Role::getUserRole($em));
+        $office = new Office();
+        $office->setOwner($user);
+        $office->setDescription("This is your home office");
+        $office->setName("Home Office");
+        $em->persist($office);
+        $user->setHomeOffice($office);
+        $user->setHomeOfficeID($office->getId());
         $em->persist($user);
 
         $settings = new UserSettings();
@@ -1151,5 +1171,51 @@ class User implements UserInterface, \Serializable
     public function getRequests()
     {
         return $this->requests;
+    }
+
+    /**
+     * Set homeOfficeID
+     *
+     * @param integer $homeOfficeID
+     * @return User
+     */
+    public function setHomeOfficeID($homeOfficeID)
+    {
+        $this->homeOfficeID = $homeOfficeID;
+
+        return $this;
+    }
+
+    /**
+     * Get homeOfficeID
+     *
+     * @return integer 
+     */
+    public function getHomeOfficeID()
+    {
+        return $this->homeOfficeID;
+    }
+
+    /**
+     * Set homeOffice
+     *
+     * @param \ZectranetBundle\Entity\Office $homeOffice
+     * @return User
+     */
+    public function setHomeOffice(\ZectranetBundle\Entity\Office $homeOffice = null)
+    {
+        $this->homeOffice = $homeOffice;
+
+        return $this;
+    }
+
+    /**
+     * Get homeOffice
+     *
+     * @return \ZectranetBundle\Entity\Office 
+     */
+    public function getHomeOffice()
+    {
+        return $this->homeOffice;
     }
 }
