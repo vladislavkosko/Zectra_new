@@ -310,6 +310,8 @@
     {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
         <!-- Begin of Delete Private Project Modal -->
         {% include '@Zectranet/projectDelete.html.twig' %}
+
+
         <!-- End of Delete Private Project Modal -->
     {% endif %}
 
