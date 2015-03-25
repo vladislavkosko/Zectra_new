@@ -66,6 +66,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 						}
                         $scope.notifications = prepareNotifications(response.result.notifications);
                         $scope.notificationsLength = response.result.notifications.length;
+						$rootScope.NOTIFICATIONS = $scope.notifications;
                     }
                 }
 

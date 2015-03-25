@@ -86,6 +86,76 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             });
         };
 
+        function commentsCalculate(task) {
+            if (task.newCommentsCount) {
+                task.newCommentsCount++;
+            } else {
+                task.newCommentsCount = 1;
+            }
+            return task;
+        }
+
+        function subCommentsCalculate(task) {
+            if (task.newSubCommentsCount) {
+                task.newSubCommentsCount++;
+            } else {
+                task.newSubCommentsCount = 1;
+            }
+            return task;
+        }
+
+        function giveNewCommentsCount(tasks, notification) {
+            for (var j = 0; j < tasks.length; j++) {
+                if (tasks[j].id == notification.destinationid && !tasks[j].parentid) {
+                    tasks[j] = commentsCalculate(tasks[j]);
+                } else if (tasks[j].subtasks) {
+                    var res = findInSubTasks(notification.destinationid, tasks[j].subtasks);
+                    if (res.changed) {
+                        tasks[j].subtasks = res.subtasks;
+                        tasks[j] = subCommentsCalculate(tasks[j]);
+                    }
+                }
+            }
+            return tasks;
+        }
+
+        function findInSubTasks(task_id, subtasks) {
+            var changed = false;
+            for (var i = 0; i < subtasks.length; i++){
+                if (subtasks[i].id == task_id) {
+                    subtasks[i] = commentsCalculate(subtasks[i]);
+                    changed = true;
+                    break;
+                }
+            }
+            return { 'subtasks': subtasks, 'changed': changed };
+        }
+
+        function CalculateTaskNewCommentsCount(notifications, tasks) {
+            for (var i = 0; i < notifications.length; i++) {
+                switch (notifications[i].type) {
+                    case "private_message_task":
+                        if (notifications[i].user.id == $scope.USER_ID) {
+                            tasks = giveNewCommentsCount(tasks, notifications[i]);
+                        }
+                        break;
+                    case "message_task":
+                        tasks = giveNewCommentsCount(tasks, notifications[i]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return tasks;
+        }
+
+        $rootScope.$watch('NOTIFICATIONS', function() {
+            if ($rootScope.NOTIFICATIONS && $scope.tasks) {
+                $scope.tasks = CalculateTaskNewCommentsCount($rootScope.NOTIFICATIONS, $scope.tasks);
+            }
+        });
+
+
         //// ------- BEGIN OF PREPARE TASKS FUNCTIONS ------- \\\\
         {
             function calculateTasksInfo (tasks) {
@@ -105,6 +175,9 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                         tasks[i].estimatedMinutes = estimatedTime.minutes;
                         tasks[i].status = calculateMeanStatus(tasks[i].subtasks);
                     }
+                }
+                if ($rootScope.NOTIFICATIONS && $scope.tasks) {
+                    tasks = CalculateTaskNewCommentsCount($rootScope.NOTIFICATIONS, tasks);
                 }
                 return tasks;
             }
