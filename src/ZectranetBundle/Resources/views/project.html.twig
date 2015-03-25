@@ -231,7 +231,7 @@
                     <div cg-busy="promise" class="panel-body">
                         <!-- Begin of Task Nav Tabs -->
                         <div class="row">
-                            <div class="col-md-3 col-sm-12" style="width: 22%;">
+
                                 <ul id="task-view-tabs" class="nav nav-tabs" role="tablist">
                                     <li data-toggle="tooltip" data-placement="top" title="Table view" role="presentation" class="active">
                                         <a data-toggle="tab" id="task-view-table" class="btn" href="#table-view" aria-controls="table-view" role="tab" aria-expanded="true">
@@ -255,9 +255,10 @@
                                             <i class="fa fa-plus fa-2x"></i>
                                         </a>
                                     </li>
+                                    <li class="pull-right">{% include '@Zectranet/filter.html.twig' %}</li>
                                 </ul>
-                            </div>
-                            <div class="col-md-9 col-sm-12" style="width: 77%;"><div class="pull-right">{% include '@Zectranet/filter.html.twig' %}</div> </div>
+
+
                         </div>
 
 
@@ -309,6 +310,8 @@
     {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
         <!-- Begin of Delete Private Project Modal -->
         {% include '@Zectranet/projectDelete.html.twig' %}
+
+
         <!-- End of Delete Private Project Modal -->
     {% endif %}
 

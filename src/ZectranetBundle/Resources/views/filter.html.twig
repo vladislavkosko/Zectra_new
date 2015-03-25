@@ -174,7 +174,7 @@
                     <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[6] }">Sprint</span>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu noclose" role="menu" ng-init="orderBySprint = 0">
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderBySprint = 0" style="left:-85px !important;">
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = 'sprint.name'; orderBySprint = 1;"
                            ng-class="{'btn-warning': orderBySprint == 1}">Sort A-Z</a></li>
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = '-sprint.name'; orderBySprint = 2;"

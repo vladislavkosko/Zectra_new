@@ -1,6 +1,7 @@
 <div ng-if="(tasks == null) || (tasks.length == 0)" class="center-block vertical-center">
     <h3 class="text-info text-center">Tasks will be displayed here</h3>
 </div>
+
 <table ng-if="(tasks) && (tasks.length > 0)" class="table">
     <thead>
         <tr>
@@ -16,7 +17,7 @@
             <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
             <th class="col-xs-1 hidden-sm hidden-xs">Assigned</th>
             <th class="col-xs-1 hidden-xs">Sprint</th>
-            <th class="col-xs-1">Operations</th>
+            <th class="col-xs-1">Fun</th>
         </tr>
     </thead>
 
@@ -77,7 +78,7 @@
                 <button class="btn btn-default dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">
                     <i class="fa fa-ellipsis-v"></i>
                 </button>
-                <ul class="dropdown-menu" role="menu" style="left:-60px !important;">
+                <ul class="dropdown-menu" role="menu" style="left:-100px !important;">
                     <li>
                         <a data-toggle="modal" data-target="#add_new_subtask" ng-click="addParentIdToSubTask(task.id)" style="cursor: pointer"><i class="fa fa-code-fork"></i> Add new subtask</a>
                     </li>
