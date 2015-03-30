@@ -3,10 +3,13 @@
 </div>
 <div ng-if="(tasks) && (tasks.length > 0)" class="col-md-12">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3"  ui-on-Drop="onDrop($event,'story')">
             <div class="page-header text-center">Story</div>
             <div class="list-group">
-                <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter" ng-if="(task.status.label == 'story') && (task.parentid == null)">
+                <div class="row"
+                     ui-draggable="true" drag="task"
+                     on-drop-success="dropSuccessHandler($event,$index,task)"
+                     ng-repeat="task in storyTasks | filter: execTaskFilter" >
                     <div class="col-md-12" ng-init="parentTask = task">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
@@ -49,58 +52,17 @@
                         </a>
                     </div>
                 </div>
-                <div class="row" ng-repeat="task in agileStorySubtasks track by $index">
-                    <div class="col-md-12">
-                        <a class="list-group-item" style="margin-bottom: 5px;" ng-href="[[task.href]]"
-                           ng-class="{
-                                    'local-red': task.priority.id == 3,
-                                    'local-yellow': task.priority.id == 2,
-                                    'local-green': task.priority.id == 1
-                                    }">
-                            <h4 class="list-group-item-heading">
-                                <span style="color: black;">
-                                    [[ task.parentid ]].[[ task.subindex ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                    &nbsp;
-                                </span>
-                                [[ task.name ]]
-                            </h4>
-                            [[ task.name ]]
-                            <p class="list-group-item-text">
-                                [[ task.description ]]
-                            </p>
-                            <div style="padding-top:5px;" class="row">
-                                <div class="col-md-12">
-                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
-                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 16px; height: 16px;"></div>
-                                    </div>
-                                    <div class="pull-left" style="margin-left: 5px;">
-                                        <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
-                                        <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
-                                        <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="padding-top:5px;" class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
-                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3"  ui-on-Drop="onDrop($event,'todo')">
             <div class="page-header text-center">Todo</div>
 
             <div class="list-group">
-                <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter" ng-if="(task.status.label == 'todo') && (task.parentid == null)">
+                <div class="row"
+                     ui-draggable="true" drag="task"
+                     on-drop-success="dropSuccessHandler($event,$index,task)"
+                     ng-repeat="task in todoTasks | filter: execTaskFilter" >
                         <div class="col-md-12" ng-init="parentTask = task">
                             <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                                ng-class="{
@@ -143,58 +105,16 @@
                             </a>
                         </div>
                     </div>
-                <div class="row" ng-repeat="task in agileTodoSubtasks track by $index">
-                    <div class="col-md-12">
-                        <a class="list-group-item" style="margin-bottom: 5px;" ng-href="[[task.href]]"
-                           ng-class="{
-                                    'local-red': task.priority.id == 3,
-                                    'local-yellow': task.priority.id == 2,
-                                    'local-green': task.priority.id == 1
-                                    }">
-                            <h4 class="list-group-item-heading">
-                                <span style="color: black;">
-                                    [[ task.parentid ]].[[ task.subindex ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                    &nbsp;
-                                </span>
-                                [[ task.name ]]
-                            </h4>
-                            [[ task.name ]]
-                            <p class="list-group-item-text">
-                                [[ task.description ]]
-                            </p>
-                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <div class="col-md-12">
-                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
-                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 16px; height: 16px;"></div>
-                                    </div>
-                                    <div class="pull-left" style="margin-left: 5px;">
-                                        <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
-                                        <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
-                                        <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="padding-top:5px;" class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
-                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3"  ui-on-Drop="onDrop($event,'in-progress')">
             <div class="page-header text-center">In-progess</div>
-
             <div class="list-group">
-                <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter" ng-if="(task.status.label == 'in-progress') && (task.parentid == null)">
+                <div class="row"
+                     ui-draggable="true" drag="task"
+                     on-drop-success="dropSuccessHandler($event,$index,task)"
+                     ng-repeat="task in inProgresTasks |  filter: execTaskFilter"  >
                     <div class="col-md-12" ng-init="parentTask = task">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
@@ -237,116 +157,30 @@
                         </a>
                     </div>
                 </div>
-                <div class="row" ng-repeat="task in agileInProgressSubtasks track by $index">
-                    <div class="col-md-12">
-                        <a class="list-group-item" style="margin-bottom: 5px;" ng-href="[[task.href]]"
-                           ng-class="{
-                                    'local-red': task.priority.id == 3,
-                                    'local-yellow': task.priority.id == 2,
-                                    'local-green': task.priority.id == 1
-                                    }">
-                            <h4 class="list-group-item-heading">
-                                <span style="color: black;">
-                                    [[ task.parentid ]].[[ task.subindex ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                    &nbsp;
-                                </span>
-                                [[ task.name ]]
-                            </h4>
-                            [[ task.name ]]
-                            <p class="list-group-item-text">
-                                [[ task.description ]]
-                            </p>
-                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <div class="col-md-12">
-                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
-                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 16px; height: 16px;"></div>
-                                    </div>
-                                    <div class="pull-left" style="margin-left: 5px;">
-                                        <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
-                                        <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
-                                        <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="padding-top:5px;" class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
-                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
 
-        <div class="col-md-3">
+         <div class="col-md-3" ui-on-Drop="onDrop($event,'done')">
             <div class="page-header text-center">Done</div>
-
             <div class="list-group">
-                <div class="row" ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter" ng-if="(task.status.label == 'done') && (task.parentid == null)">
+                <div class="row"
+                     ui-draggable="true" drag="task"
+                     on-drop-success="dropSuccessHandler($event,$index,task)"
+                     ng-repeat="task in doneTasks | filter: execTaskFilter "  >
                     <div class="col-md-12" ng-init="parentTask = task">
                         <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
-                                        'local-red': task.priority.id == 3,
-                                        'local-yellow': task.priority.id == 2,
-                                        'local-green': task.priority.id == 1
-                                        }">
+                                            'local-red': task.priority.id == 3,
+                                            'local-yellow': task.priority.id == 2,
+                                            'local-green': task.priority.id == 1
+                                            }">
                             <h4 class="list-group-item-heading" ng-if="task.parentid == null">
-                                        <span style="color: black;">
-                                            [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                            &nbsp;
-                                        </span>
+                                            <span style="color: black;">
+                                                [[ task.id ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
+                                                &nbsp;
+                                            </span>
                                 [[ task.name ]]
                             </h4>
-                            <p class="list-group-item-text">
-                                [[ task.description ]]
-                            </p>
-                            <div style="padding-top:5px;" class="row" ng-init="avatar = generateAsset(urlAsset, 'documents/' + task.owner.avatar)">
-                                <div class="col-md-12">
-                                    <div class="pull-left"><span class="label label-info">[[task.postCount]]</span></div>
-                                    <div ng-if="(task.assigned) && (task.assigned.name != 'none')">
-                                        <div class="pull-left" style="margin-left: 5px;"><img class="img-circle" ng-src="[[task.assigned.avatar]]" style="width: 16px; height: 16px;"></div>
-                                    </div>
-                                    <div class="pull-left" style="margin-left: 5px;">
-                                        <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
-                                        <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
-                                        <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="padding-top:5px;" class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group progress progress-striped active" style="position: relative; margin-bottom: 0;">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="[[task.progress]]" aria-valuemin="0" aria-valuemax="100" style="width: [[task.progress]]%;">
-                                            <div class="text-muted text-center" align="center" style="color: black; font-weight: bold; position: absolute; left: 35%; opacity: 0.6">[[task.progress]]% Complete</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="row" ng-repeat="task in agileDoneSubtasks track by $index">
-                    <div class="col-md-12">
-                        <a class="list-group-item" style="margin-bottom: 5px;" ng-href="[[task.href]]"
-                           ng-class="{
-                                    'local-red': task.priority.id == 3,
-                                    'local-yellow': task.priority.id == 2,
-                                    'local-green': task.priority.id == 1
-                                    }">
-                            <h4 class="list-group-item-heading">
-                                <span style="color: black;">
-                                    [[ task.parentid ]].[[ task.subindex ]]<span ng-if="task.type.label == 'bug'">[['.B']]</span><span ng-if="task.type.label == 'improvement'">[['.I']]</span>
-                                    &nbsp;
-                                </span>
-                                [[ task.name ]]
-                            </h4>
-                            [[ task.name ]]
                             <p class="list-group-item-text">
                                 [[ task.description ]]
                             </p>
@@ -376,6 +210,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+         </div>
+
+
+
+
     </div>
 </div>

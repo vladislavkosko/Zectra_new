@@ -376,6 +376,7 @@
         JSON_URLS.renameFile  = "{{ path('zectranet_document_rename', { fileid : 0 }) }}";
         JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";
         TEMPPARAMS.NOW = '{{ "now" | date('Y-m-d') }}';
+        JSON_URLS.saveTaskInfo = "{{ path('zectranet_task_edit_info', { 'task_id': 0}) }}";
 
         $('.noclose').bind('click', function (e) {
             e.stopPropagation();

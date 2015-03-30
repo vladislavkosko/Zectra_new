@@ -30,6 +30,10 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.agileTodoSubtasks = [];
         $scope.agileInProgressSubtasks = [];
         $scope.agileDoneSubtasks = [];
+        $scope.storyTasks = [] ;
+        $scope.todoTasks = [] ;
+        $scope.inProgresTasks = [] ;
+        $scope.doneTasks = [] ;
 
         $scope.urlGetTasks = null;
         $scope.urlAddTask = null;
@@ -53,6 +57,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             $scope.promise = $http.get($scope.urlGetTasks)
                 .success(function (response) {
                     $scope.tasks = response.Tasks;
+                    separationTasksByStatus(response.Tasks);
                 }
             );
 
@@ -155,6 +160,38 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             }
         });
 
+
+        function separationTasksByStatus(tasks)
+        {
+            $scope.storyTasks = [] ;
+            $scope.todoTasks = [] ;
+            $scope.inProgresTasks = [] ;
+            $scope.doneTasks = [] ;
+
+            for( var i = 0;i < tasks.length; i++ )
+            {
+
+                    switch (tasks[i].status.label) {
+                        case 'story':
+                            $scope.storyTasks.push(tasks[i]);
+                            break;
+                        case 'todo':
+                            $scope.todoTasks.push(tasks[i]);
+                            break;
+                        case 'in-progress':
+                            $scope.inProgresTasks.push(tasks[i]);
+                            break;
+                        case 'done':
+                            $scope.doneTasks.push(tasks[i]);
+                            break;
+
+                }
+            }
+            console.log($scope.storyTasks);
+            console.log( $scope.todoTasks);
+            console.log($scope.inProgresTasks);
+            console.log($scope.doneTasks);
+        }
 
         //// ------- BEGIN OF PREPARE TASKS FUNCTIONS ------- \\\\
         {
@@ -619,6 +656,83 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
         }
         // ------------ End of filter functions -------------- \\
+
+
+        $scope.onDrop = function($event,type){
+            $scope.taskstatusForDragAndDrop = '';
+            $scope.taskStatusForDragAndDrop = type;
+
+        };
+
+        $scope.dropSuccessHandler = function($event,$index,task){
+            console.log('$index = '+$index);
+
+            var draggebletask = null;
+
+            switch (task.status.label)
+            {
+
+                case 'story':
+                    draggebletask = $scope.storyTasks[$index];
+
+                    $scope.storyTasks.splice($index,1);
+
+                    break;
+                case 'todo':
+                    draggebletask = $scope.todoTasks[$index];
+
+                    $scope.todoTasks.splice($index,1);
+
+                    break;
+                case 'in-progress':
+                    draggebletask = $scope.inProgresTasks[$index];
+
+                    $scope.inProgresTasks.splice($index,1);
+
+
+                    break;
+                case 'done':
+                    draggebletask = $scope.doneTasks[$index];
+
+                    $scope.doneTasks.splice($index,1);
+
+                    break;
+            }
+            switch ($scope.taskStatusForDragAndDrop)
+            {
+                case 'story':
+                    draggebletask.status.label = $scope.taskStatusForDragAndDrop;
+                    draggebletask.status.id = 1;
+                    $scope.storyTasks.push(draggebletask);
+
+                    break;
+                case 'todo':
+                    draggebletask.status.label = $scope.taskStatusForDragAndDrop;
+                    draggebletask.status.id = 2;
+                    $scope.todoTasks.push(draggebletask);
+
+                    break;
+                case 'in-progress':
+                    draggebletask.status.label = $scope.taskStatusForDragAndDrop;
+                    draggebletask.status.id = 3;
+                    $scope.inProgresTasks.push(draggebletask);
+                    break;
+                case 'done':
+                    draggebletask.status.label = $scope.taskStatusForDragAndDrop;
+                    draggebletask.status.id = 4;
+                    $scope.doneTasks.push(draggebletask);
+                    break;
+            }
+
+
+           /* $scope.urlSaveTaskInfo = $scope.urlSaveTaskInfo.replace('0', draggebletask.id);
+            $scope.promise =  $http.post($scope.urlSaveTaskInfo, { 'task': draggebletask })
+                .success(function () {
+                  $scope.getTasks();
+                });*/
+
+        };
+
 
         console.log('Task Controller was loaded');
     }

@@ -11,6 +11,9 @@
                         ng-class="{'pull-right': USER_ID == post.user.id, 'pull-left': USER_ID != post.user.id }">
                     [[  post.user.username  ]]
                 </strong>
+                <div  ng-if="( trueorfalse($index) == true)" class=" editpost">
+                    <i class="fa fa-pencil-square-o"></i>
+                </div>
 
                 <small class="text-muted" ng-class="{'pull-left': USER_ID == post.user.id, 'pull-right': USER_ID != post.user.id }">
                     <i class="fa fa-clock-o fa-fw"></i>

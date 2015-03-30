@@ -102,8 +102,28 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             return matches;
         };
 
+        $scope.trueorfalse = function($index) {
 
+            var now = new Date();
+            var now_times = [];
+            now_times.month = now.getMonth();
+            now_times.day = now.getDate() ;
+            now_times.hour = now.getHours() ;
+            now_times.minutes = now.getMinutes();
 
+            var timepost = new Date($scope.posts[$index].posted);
+            var post_times = [];
+
+            post_times.month = timepost.getMonth();
+            post_times.day = timepost.getDate();
+            post_times.hour = timepost.getHours();
+            post_times.minutes = timepost.getMinutes();
+          if( now_times.month - post_times.month == 0 &&  now_times.day - post_times.day == 0 && now_times.hour - post_times.hour == 0 &&  now_times.minutes - post_times.minutes <= 10 )
+          {
+              return true;
+          }
+
+        };
 
 
         console.log('Chat Controller was loaded');
