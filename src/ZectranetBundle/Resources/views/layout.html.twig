@@ -264,7 +264,9 @@
                     <li class="dropdown">
 
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-							<i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+							<i class="fa fa-bell fa-fw"></i>
+                            <label ng-if="notifications.length > 0" class="label label-default" style="position: absolute; left: 25px; top: 3px; opacity: 0.5;">[[notifications.length]]</label>
+                            <i class="fa fa-caret-down"></i>
 						</a>
 
                         <!-- Sound when new notification -->
