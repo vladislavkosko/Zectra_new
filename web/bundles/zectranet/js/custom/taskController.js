@@ -131,7 +131,21 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             return { 'subtasks': subtasks, 'changed': changed };
         }
 
+        function clearOldTasksCount(tasks) {
+            for (var i = 0; i < tasks.length; i++) {
+                tasks[i].newCommentsCount = 0;
+                if (!tasks[i].parentid) {
+                    tasks[i].newSubCommentsCount = 0;
+                }
+                if (tasks[i].subtasks) {
+                    tasks[i].subtasks = clearOldTasksCount(tasks[i].subtasks);
+                }
+            }
+            return tasks;
+        }
+
         function CalculateTaskNewCommentsCount(notifications, tasks) {
+            tasks = clearOldTasksCount(tasks);
             for (var i = 0; i < notifications.length; i++) {
                 switch (notifications[i].type) {
                     case "private_message_task":
