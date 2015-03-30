@@ -1067,6 +1067,7 @@ class Task
             'projectid' => $this->getProjectid(),
             'progress' => $this->getProgress(),
             'assigned' => ($this->assigned) ? $this->getAssigned()->getInArray() : null,
+            'assignedid' => $this->getAssignedid(),
             'startDate' => $this->getStartdate()->format('Y-m-d'),
             'endDate' => $this->getEnddate()->format('Y-m-d'),
             'estimatedHours' => $this->getEstimatedHours(),

@@ -739,11 +739,12 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             }
 
 
-           /* $scope.urlSaveTaskInfo = $scope.urlSaveTaskInfo.replace('0', draggebletask.id);
+            $scope.urlSaveTaskInfo = $scope.urlSaveTaskInfo.replace('0', draggebletask.id);
             $scope.promise =  $http.post($scope.urlSaveTaskInfo, { 'task': draggebletask })
                 .success(function () {
                   $scope.getTasks();
-                });*/
+                }
+            );
 
         };
 
