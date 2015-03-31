@@ -87,6 +87,14 @@ zectranet_notifications_get:
     pattern:  /notifications/get
     defaults: { _controller: ZectranetBundle:Notification:getNotifications }
 
+zectranet_all_notifications:
+    path: user/notifications/all
+    defaults: { _controller: ZectranetBundle:Notification:all }
+
+zectranet_delete_all_notifications:
+    path: user/notifications/delete_all
+    defaults: { _controller: ZectranetBundle:Notification:deleteAll }
+
 zectranet_show_office:
     pattern: /office/{office_id}
     defaults: { _controller: ZectranetBundle:Office:index }

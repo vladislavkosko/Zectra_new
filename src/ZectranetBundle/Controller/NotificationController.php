@@ -54,4 +54,25 @@ class NotificationController extends Controller
     	$this->getUser()->clearNotifications($this->getDoctrine()->getManager());
     	return $this->redirect($this->generateUrl('zectranet_notifications_show'));
     }
+
+    /**
+     * @Route("user/notifications/all")
+     * @Security("has_role('ROLE_USER')")
+     * @return Response
+     */
+    public function allAction()
+    {
+        return $this->render('@Zectranet/notifications.html.twig');
+    }
+
+    /**
+     * @Route("user/notifications/delete_all")
+     * @Security("has_role('ROLE_USER')")
+     * @return Response
+     */
+    public function deleteAllAction()
+    {
+        $this->get('zectranet.notifier')->clearAllNotifications();
+        return $this->redirectToRoute('zectranet_all_notifications');
+    }
 }

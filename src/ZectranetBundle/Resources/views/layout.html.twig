@@ -265,7 +265,7 @@
 
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 							<i class="fa fa-bell fa-fw"></i>
-                            <label ng-if="notifications.length > 0" class="label label-default" style="position: absolute; left: 25px; top: 3px; opacity: 0.5;">[[notifications.length]]</label>
+                            <span ng-if="notifications.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">[[notifications.length]]</span>
                             <i class="fa fa-caret-down"></i>
 						</a>
 
@@ -309,14 +309,14 @@
                             </li>
 
                             <li>
-                                <a class="text-center" href="#">
-                                    <strong>See All Alerts</strong>
+                                <a class="text-center" href="{{ path('zectranet_all_notifications') }}">
+                                    <strong>See All Notifications</strong>
                                     <i class="fa fa-angle-right"></i>
                                 </a>
                             </li>
                         </ul>
 
-                        <div ng-if="notifications.length == 0" class="notifier dropdown-menu dropdown-alerts" style="text-align: center;">
+                        <div ng-if="(notifications != null) && (notifications.length == 0)" class="notifier dropdown-menu dropdown-alerts" style="text-align: center;">
                             You don't have notifications!
                         </div>
 

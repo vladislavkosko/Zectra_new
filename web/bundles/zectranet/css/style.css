@@ -418,3 +418,12 @@
     cursor: pointer;
     opacity: 0.5;
 }
+
+.allNotifications{
+    border-bottom: 1px solid #eee;
+    padding: 5px 10px 0 7px;
+}
+
+.allNotifications:hover{
+    background-color: #f8f8f8;
+}

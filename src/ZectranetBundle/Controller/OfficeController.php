@@ -158,7 +158,8 @@ class OfficeController extends Controller
      */
     public function showWDEAction($office_id)
     {
-        return $this->render('@Zectranet/WDE.html.twig', array('office_id' => $office_id));
+        $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+        return $this->render('@Zectranet/WDE.html.twig', array('office' => $office));
     }
 
     /**

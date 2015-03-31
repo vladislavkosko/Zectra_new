@@ -11,44 +11,70 @@
 
 {% block body %}
 
+    <!-- Breadcrumps -->
     <div class="row">
-        <div ng-controller="OfficeController">
-            <div ng-init="getWDE()">
-                <div style="margin-top: 40px;">
+        <ol class="breadcrumb" style="margin: 0 -15px;">
+            <li>
+                <a href="{{ path('zectranet_user_home') }}">Summary</a>
+            </li>
+            <li>
+                <a href="{{ path('zectranet_show_office', {office_id: office.id}) }}">
+                    {{ office.name }}
+                </a>
+            </li>
+            <li class="active">WDE</li>
+        </ol>
+    </div>
+    <!-- End Breadcrumps -->
 
-                    <calendar selected="day" id="calendar"></calendar>
+    <div class="page-header">
+        <div class="row">
+            <div class="col-md-12">
+                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">WDE</span>
+            </div>
+        </div>
+    </div>
 
-                    <div ng-if="WDE.length > 0" class="table-responsive" style="clear: both; margin-top: 40px;">
-                        <table class="table" cg-busy="membersPromise">
-                            <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>User name</th>
-                                <th>Start In Office</th>
-                                <th>Start Lunch</th>
-                                <th>End Lunch</th>
-                                <th>End In Office</th>
-                                <th>Total hours</th>
-                                <th>Main Task</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="wde in WDE" ng-if="wde.date == day.format('YYYY-MM-DD')">
-                                <td>[[wde.date]]</td>
-                                <td>[[wde.user.username]]</td>
-                                <td>[[wde.startOffice]]</td>
-                                <td>[[wde.startLunch]]</td>
-                                <td>[[wde.endLunch]]</td>
-                                <td>[[wde.endOffice]]</td>
-                                <td>[[wde.hours]]</td>
-                                <td>[[wde.mainTask]]</td>
-                            </tr>
-                            </tbody>
-                        </table>
+    <div class="row">
+        <div class="col-md-12">
+            <div ng-controller="OfficeController">
+                <div ng-init="getWDE()">
+                    <div>
+
+                        <calendar selected="day" id="calendar"></calendar>
+
+                        <div ng-if="WDE.length > 0" class="table-responsive" style="clear: both; margin-top: 40px;">
+                            <table class="table" cg-busy="membersPromise">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>User name</th>
+                                    <th>Start In Office</th>
+                                    <th>Start Lunch</th>
+                                    <th>End Lunch</th>
+                                    <th>End In Office</th>
+                                    <th>Total hours</th>
+                                    <th>Main Task</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="wde in WDE" ng-if="wde.date == day.format('YYYY-MM-DD')">
+                                    <td>[[wde.date]]</td>
+                                    <td>[[wde.user.username]]</td>
+                                    <td>[[wde.startOffice]]</td>
+                                    <td>[[wde.startLunch]]</td>
+                                    <td>[[wde.endLunch]]</td>
+                                    <td>[[wde.endOffice]]</td>
+                                    <td>[[wde.hours]]</td>
+                                    <td>[[wde.mainTask]]</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
 
                 </div>
-
             </div>
         </div>
     </div>
@@ -123,7 +149,7 @@
 
         preventSelection(calendar);
 
-        JSON_URLS.getWDE = "{{ path('zectranet_office_get_WDE', { 'office_id': office_id }) }}";
+        JSON_URLS.getWDE = "{{ path('zectranet_office_get_WDE', { 'office_id': office.id }) }}";
 
     </script>
 

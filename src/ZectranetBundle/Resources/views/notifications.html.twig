@@ -1,0 +1,97 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %} Notifications {% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+
+    <link href="{{ asset('bundles/zectranet/css/calendar.less') }}" rel="stylesheet" type="text/less">
+
+{% endblock %}
+
+{% block body %}
+
+    <!-- Breadcrumps -->
+    <div class="row">
+        <ol class="breadcrumb" style="margin: 0 -15px;">
+            <li>
+                <a href="{{ path('zectranet_user_page', {'user_id': app.user.id}) }}">{{ app.user.username }}</a>
+            </li>
+            <li class="active">Notifications</li>
+        </ol>
+    </div>
+    <!-- End Breadcrumps -->
+
+    <div class="page-header" ng-if="notifications.length > 0">
+        <div class="row">
+            <div class="col-md-6">
+                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">Notifications</span>
+            </div>
+            <div class="col-md-6">
+                <div class="pull-right">
+                    <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete All Notifications">
+                        <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_all_notifications">
+                            <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div ng-if="notifications.length > 0" style="margin-bottom: 20px;">
+        <div ng-repeat="notification in notifications" class="allNotifications">
+            <a ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
+                                    || (notification.type == 'private_message_office') || (notification.type == 'private_message_project') || (notification.type == 'private_message_task') || (notification.type == 'private_message_epic_story')
+                                    || (notification.type == 'task_added') || (notification.type == 'task_deleted') || (notification.type == 'epic_story_added') || (notification.type == 'epic_story_deleted')"
+               href="[[notification.href]]"
+               style="text-decoration: none; color: #000;">
+                <i ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
+                                    || (notification.type == 'private_message_office') || (notification.type == 'private_message_project') || (notification.type == 'private_message_task') || (notification.type == 'private_message_epic_story')"
+                   class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
+                <i ng-if="(notification.type == 'task_added')" class="fa fa-tasks fa-fw"></i>
+                <i ng-if="(notification.type == 'epic_story_added')" class="fa fa-briefcase fa-fw"></i>
+                <i ng-if="(notification.type == 'task_deleted') || (notification.type == 'epic_story_deleted')" class="fa fa-trash-o fa-fw"></i>
+                <div style="word-wrap: break-word; display: inline-block" ng-bind-html="notification.message"></div>
+                <div class="text-muted small" style="text-align: right">
+                    <i class="fa fa-clock-o"></i>
+                    [[ notification.activated.date.substring(0, 16) ]]
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div ng-class="{'visible-element': (notifications != null) && (notifications.length == 0) }" class="alert-warning hidden-element" style="text-align: center; font-size: 20px; padding: 25px 0; margin-top: 50px;">
+        You don't have notifications!
+    </div>
+    <!-- End Notifications -->
+
+    <!-- Modal window of delete all notifications -->
+    <div class="modal fade" id="delete_all_notifications" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header label-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
+                        Delete All Notifications
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="header">
+                            <h3 class="text-center">Are you really want to delete all notifications?</h3><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-danger" href="{{ path('zectranet_delete_all_notifications') }}">Delete</a>
+                        <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Modal window of delete all notifications -->
+
+
+{% endblock %}

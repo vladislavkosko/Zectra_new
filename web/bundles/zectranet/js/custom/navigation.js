@@ -14,7 +14,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
     var declineRequestOfficeProject = JSON_URLS.declineRequestOfficeProject;
 
     $scope.requests = [];
-    $scope.notifications = [];
+    $scope.notifications = null;
 	$scope.notifyHandler = null;
     $scope.notificationsLength = null;
 
@@ -46,6 +46,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
                         StartNotify();
                         document.getElementById('notif_sound').play();
 						var chatUpdate = false;
+                        $scope.notifications = prepareNotifications(response.result.notifications);
 						for (var i = 0; i < $scope.notifications.length; i++) {
 							if ($scope.notifications[i].type == 'message_office'
 								|| $scope.notifications[i].type == 'message_project'
@@ -64,7 +65,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 							}
 
 						}
-                        $scope.notifications = prepareNotifications(response.result.notifications);
+
                         $scope.notificationsLength = response.result.notifications.length;
 						$rootScope.NOTIFICATIONS = $scope.notifications;
                     }

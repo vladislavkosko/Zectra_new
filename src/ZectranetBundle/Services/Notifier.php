@@ -288,6 +288,19 @@ class Notifier
     }
 
     /**
+     * @return mixed
+     */
+    public function clearAllNotifications()
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->delete('ZectranetBundle:Notification', 'n')
+            ->where("n.userid = :userid")
+            ->setParameter("userid", $this->user->getId());
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
      * @param $type
      * @param User|Project|Task $resource
      * @param $usersRequest
