@@ -124,7 +124,7 @@ class TaskController extends Controller {
             'priority' => $data->priority['id'],
             'status' => $data->status['id'],
             'project' => $data->projectid,
-            'assigned' => $data->assignedid,
+            'assigned' => $data->assigned,
             'progress' => $data->progress,
             'estimated_hours' => $data->estimatedHours,
             'estimated_minutes' => $data->estimatedMinutes,

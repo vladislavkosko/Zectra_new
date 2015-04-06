@@ -201,10 +201,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
                 }
             }
-            console.log($scope.storyTasks);
-            console.log( $scope.todoTasks);
-            console.log($scope.inProgresTasks);
-            console.log($scope.doneTasks);
         }
 
         //// ------- BEGIN OF PREPARE TASKS FUNCTIONS ------- \\\\
@@ -675,41 +671,28 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.onDrop = function($event,type){
             $scope.taskstatusForDragAndDrop = '';
             $scope.taskStatusForDragAndDrop = type;
-
         };
 
         $scope.dropSuccessHandler = function($event,$index,task){
-            console.log('$index = '+$index);
-
             var draggebletask = null;
 
             switch (task.status.label)
             {
-
                 case 'story':
                     draggebletask = $scope.storyTasks[$index];
-
                     $scope.storyTasks.splice($index,1);
-
                     break;
                 case 'todo':
                     draggebletask = $scope.todoTasks[$index];
-
                     $scope.todoTasks.splice($index,1);
-
                     break;
                 case 'in-progress':
                     draggebletask = $scope.inProgresTasks[$index];
-
                     $scope.inProgresTasks.splice($index,1);
-
-
                     break;
                 case 'done':
                     draggebletask = $scope.doneTasks[$index];
-
                     $scope.doneTasks.splice($index,1);
-
                     break;
             }
             switch ($scope.taskStatusForDragAndDrop)
@@ -718,13 +701,11 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     draggebletask.status.label = $scope.taskStatusForDragAndDrop;
                     draggebletask.status.id = 1;
                     $scope.storyTasks.push(draggebletask);
-
                     break;
                 case 'todo':
                     draggebletask.status.label = $scope.taskStatusForDragAndDrop;
                     draggebletask.status.id = 2;
                     $scope.todoTasks.push(draggebletask);
-
                     break;
                 case 'in-progress':
                     draggebletask.status.label = $scope.taskStatusForDragAndDrop;
