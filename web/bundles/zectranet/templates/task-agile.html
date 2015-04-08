@@ -11,7 +11,7 @@
                      on-drop-success="dropSuccessHandler($event,$index,task)"
                      ng-repeat="task in storyTasks | filter: execTaskFilter" >
                     <div class="col-md-12" ng-init="parentTask = task">
-                        <a class="list-group-item" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
+                        <a class="list-group-item local-red" style="margin-bottom: 5px;" ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
                            ng-class="{
                                     'local-red': task.priority.id == 3,
                                     'local-yellow': task.priority.id == 2,

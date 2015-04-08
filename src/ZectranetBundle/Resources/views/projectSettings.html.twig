@@ -119,7 +119,7 @@
                                                ng-class="{ 'active': user.selected }" ng-click="selectUser(user)">
                                                 <i class="fa fa-user"></i>
                                                 [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
-                                                <label ng-if="user.request" class="pull-right label label-default">Request sended</label>
+                                                <label ng-if="user.request" class="pull-right label label-default">Request sent</label>
                                             </a>
                                         </div>
                                         <div class="form-group">
@@ -175,7 +175,7 @@
                                                ng-class="{ 'active': office.selected }" ng-click="selectOffice(office)">
                                                 <i class="fa fa-home"></i>
                                                 [[ office.name ]]
-                                                <label ng-if="office.request" class="pull-right label label-default">Request sended</label>
+                                                <label ng-if="office.request" class="pull-right label label-default">Request sent</label>
                                             </a>
                                             <div class="list-group-item" ng-if="projectOffices.length == 0">
                                                 <h4 class="text-center text-info">Project Offices will be displayed here</h4>
