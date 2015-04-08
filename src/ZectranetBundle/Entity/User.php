@@ -210,6 +210,12 @@ class User implements UserInterface, \Serializable
      */
     private $wde;
 
+    /**
+     * @var UserInfo
+     * @ORM\OneToOne(targetEntity="UserInfo", mappedBy="user")
+     */
+    private $userInfo;
+
     public function __construct()
     {
         $this->active = true;
@@ -309,8 +315,36 @@ class User implements UserInterface, \Serializable
             'registered' => $this->getRegistered(),
             'lastactive' => $this->getLastactive(),
             'active' => $this->getActive(),
-            'avatar' => $this->getAvatar()
+            'avatar' => $this->getAvatar(),
         );
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param array $params
+     * @param string $email
+     * @return array
+     */
+    public static function editProfileInfo(EntityManager $em, $user_id, $params, $email) {
+        $response = array(
+            'email' => false,
+        );
+        /** @var User $user */
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $user->setName($params['name']);
+        $user->setSurname($params['surname']);
+        $findEmail = $em->getRepository('ZectranetBundle:User')
+            ->findOneBy(array('email' => $params['email']));
+
+        if (!$findEmail) {
+            $user->setEmail($params['email']);
+        } else if ($email != $params['email']) {
+            $response['email'] = true;
+        }
+        $em->persist($user);
+        $em->flush();
+        return $response;
     }
 
     /**
@@ -1007,6 +1041,10 @@ class User implements UserInterface, \Serializable
         $settings->setUser($user);
         $em->persist($settings);
 
+        $userInfo = new UserInfo();
+        $userInfo->setUser($user);
+        $em->persist($userInfo);
+
         $em->flush();
         return $user;
     }
@@ -1217,5 +1255,28 @@ class User implements UserInterface, \Serializable
     public function getHomeOffice()
     {
         return $this->homeOffice;
+    }
+
+    /**
+     * Set userInfo
+     *
+     * @param \ZectranetBundle\Entity\UserInfo $userInfo
+     * @return User
+     */
+    public function setUserInfo(\ZectranetBundle\Entity\UserInfo $userInfo = null)
+    {
+        $this->userInfo = $userInfo;
+
+        return $this;
+    }
+
+    /**
+     * Get userInfo
+     *
+     * @return \ZectranetBundle\Entity\UserInfo 
+     */
+    public function getUserInfo()
+    {
+        return $this->userInfo;
     }
 }

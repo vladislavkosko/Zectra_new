@@ -12,14 +12,25 @@
             <div class="col-md-2">
                 <div class="row">
                     <div class="col-xs-12">
-                        <img class="img-responsive" src="{{ asset('') }}documents/{{ user.avatar }}" style="width: auto; max-width: 100%; max-height: 100%;">
+                        <img class="img-responsive" src="{{ asset('') }}documents/{{ user.avatar }}">
                     </div>
                 </div>
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-xs-12">
-                        <button class="center-block btn btn-default btn-success" type="button">
-                            Send Message
-                        </button>
+                        <div class="btn-group btn-group-vertical" style="width: 100%;">
+                            {% if app.user.id == user.id %}
+                                <a href="{{ path('zectranet_generate_avatar') }}" class="btn btn-default btn-warning">
+                                    Generate avatar
+                                </a>
+                                <a href="{{ path('zectranet_edit_user_page') }}" class="btn btn-primary btn-default">
+                                    Edit profile
+                                </a>
+                            {% else %}
+                                <a class="btn btn-default btn-success">
+                                    Add to contact list
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -27,75 +38,128 @@
             <div class="col-md-10">
                 <p><strong>Username: </strong> {{ user.username }}</p>
                 <hr>
-                <p><strong>Country: </strong> Under Construction</p>
-                <p><strong>City: </strong> Under Construction</p>
+                {% if userInfo.residenceCountryVisible %}
+                <p><strong>Country: </strong> {{ (userInfo.residenceCountry) ? userInfo.residenceCountry : '-' }}</p>
                 <hr>
-                <p><strong>About Me: </strong>Under Construction</p>
+                {% endif %}
+                <p><strong>Email: </strong> {{ user.email }}</p>
                 <hr>
-                <p><strong>Work Experience: </strong>
-                    <span class="label label-info">
-                        Under Construction
-                    </span>
+                {% if userInfo.workExpirienceVisible %}
+                <p><strong>Work Experience: </strong> {{ (userInfo.workExpirience) ? userInfo.workExpirience : '-' }}</p>
+                <hr>
+                {% endif %}
+                {% if userInfo.skillsVisible %}
+                <p><strong>Skills: </strong> {{ (userInfo.skills) ? userInfo.skills : '-' }}</p>
+                <hr>
+                {% endif %}
+                {% if userInfo.interestsVisible %}
+                <p><strong>Intersts: </strong> {{ (userInfo.interests) ? userInfo.interests : '-' }}</p>
+                <hr>
+                {% endif %}
+                {% if userInfo.volunteerWorkVisible %}
+                <p><strong>Volunteer Work: </strong> {{ (userInfo.volunteerWork) ? userInfo.volunteerWork : '-' }}</p>
+                <hr>
+                {% endif %}
+                {% if userInfo.facebookVisible %}
+                <p><strong>Facebook: </strong>
+                    {% if userInfo.facebook %}
+                        <a href="{{ userInfo.facebook }}">link</a>
+                    {% else %}
+                        -
+                    {% endif %}
                 </p>
                 <hr>
-                <p><strong>Study: </strong>Under Construction</p>
+                {% endif %}
+                {% if userInfo.twitterVisible %}
+                <p><strong>Twitter: </strong>
+                    {% if userInfo.twitter %}
+                        <a href="{{ userInfo.twitter }}">link</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </p>
+                <hr>
+                {% endif %}
+                {% if userInfo.linkedInVisible %}
+                <p><strong>LinkedIn: </strong>
+                    {% if userInfo.linkedIn %}
+                        <a href="{{ userInfo.linkedIn }}">link</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </p>
+                <hr>
+                {% endif %}
+                {% if userInfo.googlePlusVisible %}
+                <p><strong>Google+: </strong>
+                    {% if userInfo.googlePlus %}
+                        <a href="{{ userInfo.googlePlus }}">link</a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </p>
+                <hr>
+                {% endif %}
+
         </div>
     </div>
 
-    <div class="row" style="margin-bottom: 20px;">
-        <div class="col-xs-12">
-            <hr>
-            <p align="center"><strong>Daily TimeSheet:</strong></p>
-            {% if user.wde | length == 0 %}
-                <h4 class="text-center text-info">WDE will be displayed here</h4>
-            {% else %}
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Date</th>
-                        <th>Start In Office</th>
-                        <th>Start Lunch</th>
-                        <th>End Lunch</th>
-                        <th>End In Office</th>
-                        <th>Total hours</th>
-                        <th>Main Task</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for i in 0..user.wde | length - 1 %}
+        {% if user.id == app.user.id %}
+        <div class="row" style="margin-bottom: 20px;">
+            <div class="col-xs-12">
+                <hr>
+                <p align="center"><strong>Daily TimeSheet:</strong></p>
+                {% if user.wde | length == 0 %}
+                    <h4 class="text-center text-info">WDE will be displayed here</h4>
+                {% else %}
+                    <table class="table">
+                        <thead>
                         <tr>
-                            <td>
-                                {{ i + 1 }}
-                            </td>
-                            <td>
-                                {{ user.wde[i].date | date("Y-m-d")  }}
-                            </td>
-                            <td>
-                                {{ user.wde[i].startTime is empty ? "-": user.wde[i].startTime | date("H:i") }}
-                            </td>
-                            <td>
-                                {{ user.wde[i].beginLunch is empty ? "-": user.wde[i].beginLunch | date("H:i") }}
-                            </td>
-                            <td>
-                                {{ user.wde[i].endLunch is empty ? "-": user.wde[i].endLunch | date("H:i") }}
-                            </td>
-                            <td>
-                                {{ user.wde[i].endTime is empty ? "-": user.wde[i].endTime | date("H:i") }}
-                            </td>
-                            <td>
-                                {{ user.wde[i].hours is empty ? "-": user.wde[i].hours }}
-                            </td>
-                            <td>
-                                {{ user.wde[i].mainTask is empty ? "-": user.wde[i].mainTask }}
-                            </td>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Start In Office</th>
+                            <th>Start Lunch</th>
+                            <th>End Lunch</th>
+                            <th>End In Office</th>
+                            <th>Total hours</th>
+                            <th>Main Task</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% endif %}
+                        </thead>
+                        <tbody>
+                        {% for i in 0..user.wde | length - 1 %}
+                            <tr>
+                                <td>
+                                    {{ i + 1 }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].date | date("Y-m-d")  }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].startTime is empty ? "-": user.wde[i].startTime | date("H:i") }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].beginLunch is empty ? "-": user.wde[i].beginLunch | date("H:i") }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].endLunch is empty ? "-": user.wde[i].endLunch | date("H:i") }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].endTime is empty ? "-": user.wde[i].endTime | date("H:i") }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].hours is empty ? "-": user.wde[i].hours }}
+                                </td>
+                                <td>
+                                    {{ user.wde[i].mainTask is empty ? "-": user.wde[i].mainTask }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
         </div>
-    </div>
+        {% endif %}
 {% endblock %}
 
 {% block modals %}

@@ -1,0 +1,149 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="page-header">
+            <h3 style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">Edit Profile</h3>
+        </div>
+        <div class="col-md-12">
+            <form action="{{ path('zectranet_edit_user_page_action', { 'user_id': app.user.id }) }}" method="post" class="form-horizontal">
+                <p>
+                    <label>
+                        Name:
+                        <input type="text" name="name" value="{{ user.name }}" />
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        Surname:
+                        <input type="text" name="surname" value="{{ user.surname }}" />
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        Email:
+                        <input type="email" name="email" value="{{ user.email }}"/>
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        Country:
+                        <input type="text" name="residenceCountry" value="{{ userInfo.residenceCountry }}" />
+                    </label>
+
+                    <label>
+                        Visible
+                        <input type="checkbox" name="residenceCountryVisible" {% if userInfo.residenceCountryVisible %}checked{% endif %}/>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Work Experience:
+                        <input type="text" name="workExpirience" value="{{ userInfo.workExpirience }}"/>
+                    </label>
+                    <label>
+                        Visible
+                        <input type="checkbox" name="workExpirienceVisible" {% if userInfo.workExpirienceVisible %}checked{% endif %} />
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Skills:
+                        <input type="text" name="skills" value="{{ userInfo.skills }}"/>
+                    </label>
+                    <label>
+                        Visible
+                        <input type="checkbox" name="skillsVisible" {% if userInfo.skillsVisible %}checked{% endif %}/>
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        Intersts:
+                        <input type="text" name="interests" value="{{ userInfo.interests }}"/>
+                    </label>
+                    <label>
+                        Visible
+                        <input type="checkbox" name="interestsVisible" {% if userInfo.interestsVisible %}checked{% endif %}/>
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        Volunteer Work:
+                        <input type="text" name="volunteerWork" value="{{ userInfo.volunteerWork }}" />
+                    </label>
+                    <label>
+                        Visible
+                        <input type="checkbox" name="volunteerWorkVisible" {% if userInfo.volunteerWorkVisible %}checked{% endif %}/>
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        Facebook:
+                        <input type="text" name="facebook" value="{{ userInfo.facebook }}" />
+                    </label>
+                    <label>
+                        Visible
+                        <input type="checkbox" name="facebookVisible" {% if userInfo.facebookVisible %}checked{% endif %} />
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        Twitter:
+                        <input type="text" name="twitter" value="{{ userInfo.twitter }}" />
+                    </label>
+                    <label>
+                        Visible
+                        <input type="checkbox" name="twitterVisible" {% if userInfo.twitterVisible %}checked{% endif %}/>
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        LinkedIn:
+                        <input type="text" name="linkedIn" value="{{ userInfo.linkedIn }}" />
+                    </label>
+                    <label>
+                        Visible
+                        <input type="checkbox" name="linkedInVisible" {% if userInfo.linkedInVisible %}checked{% endif %}/>
+                    </label>
+                </p>
+
+                <p>
+                    <label>
+                        Google+:
+                        <input type="text" name="googlePlus" value="{{ userInfo.googlePlus }}"/>
+                    </label>
+                    <label>
+                        Visible
+                        <input type="checkbox" name="googlePlusVisible" {% if userInfo.googlePlusVisible %}checked{% endif %}/>
+                    </label>
+                </p>
+                <hr/>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-default btn-success">
+                        Save
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% endblock %}
+
+    {% block modals %}
+        {{ parent() }}
+    {% endblock %}
+
+    {% block javascripts %}
+    {{ parent() }}
+{% endblock %}

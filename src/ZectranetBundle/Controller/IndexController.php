@@ -20,7 +20,11 @@ class IndexController extends Controller
     public function indexAction()
     {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
-            return $this->redirectToRoute('zectranet_user_page');
+            /** @var User $user */
+            $user = $this->getUser();
+            $homeOfficeID = $user->getHomeOfficeID();
+            return $this->redirectToRoute('zectranet_show_office',
+                array('office_id' => $homeOfficeID));
         }
 
         $response = new Response();

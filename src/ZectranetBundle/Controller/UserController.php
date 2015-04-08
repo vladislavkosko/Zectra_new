@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ZectranetBundle\Entity\DailyTimeSheet;
 use ZectranetBundle\Entity\User;
+use ZectranetBundle\Entity\UserInfo;
 use ZectranetBundle\Entity\UserSettings;
 
 class UserController extends Controller
@@ -24,12 +25,85 @@ class UserController extends Controller
      */
     public function indexAction($user_id = null)
     {
+        $user = null;
         if ($user_id != null) {
             $user = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($user_id);
         } else {
             $user = $this->getUser();
         }
-        return $this->render('@Zectranet/userProfile.html.twig', array('user' => $user));
+
+        $additionalInfo = $user->getUserInfo();
+        return $this->render('@Zectranet/userProfile.html.twig',
+            array('user' => $user, 'userInfo' => $additionalInfo));
+    }
+
+    /**
+     * @return Response
+     */
+    public function editProfilePageAction() {
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var UserInfo $additionalInfo */
+        $additionalInfo = $this->getDoctrine()->getRepository('ZectranetBundle:UserInfo')
+            ->findOneBy(array('userID' => $user->getId()));
+
+        $emailError = $this->get('session')->get('email');
+        if ($emailError) {
+            $this->get('session')->remove('email');
+        }
+        $errors = array(
+            'email' => $emailError
+        );
+
+        return $this->render('@Zectranet/userProfileEdit.html.twig',
+            array('user' => $user, 'userInfo' => $additionalInfo, 'errors' => $errors));
+    }
+
+    /**
+     * @param Request $request
+     * @param $user_id
+     * @return RedirectResponse
+     */
+    public function editProfileAction (Request $request, $user_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        if ($user->getId() == $user_id && $request->getMethod() == "POST") {
+            $params = array(
+                'name' => $request->request->get('name'),
+                'surname' => $request->request->get('surname'),
+                'email' => $request->request->get('email'),
+                'residenceCountry' => $request->request->get('residenceCountry'),
+                'residenceCountryVisible' => ($request->request->get('residenceCountryVisible') == 'on'),
+                'workExpirience' => $request->request->get('workExpirience'),
+                'workExpirienceVisible' => ($request->request->get('workExpirienceVisible') == 'on'),
+                'skills' => $request->request->get('skills'),
+                'skillsVisible' => ($request->request->get('skillsVisible') == 'on'),
+                'interests' => $request->request->get('interests'),
+                'interestsVisible' => ($request->request->get('interestsVisible') == 'on'),
+                'volunteerWork' => $request->request->get('volunteerWork'),
+                'volunteerWorkVisible' => ($request->request->get('volunteerWorkVisible') == 'on'),
+                'facebook' => $request->request->get('facebook'),
+                'facebookVisible' => ($request->request->get('facebookVisible') == 'on'),
+                'twitter' => $request->request->get('twitter'),
+                'twitterVisible' => ($request->request->get('twitterVisible') == 'on'),
+                'linkedIn' => $request->request->get('linkedIn'),
+                'linkedInVisible' => ($request->request->get('linkedInVisible') == 'on'),
+                'googlePlus' => $request->request->get('googlePlus'),
+                'googlePlusVisible' => ($request->request->get('googlePlusVisible') == 'on'),
+            );
+
+            $errors = User::editProfileInfo($em, $user_id, $params, $user->getEmail());
+            UserInfo::editInfo($em, $user_id, $params);
+
+            if ($errors['email']) {
+                $this->get('session')->set('error', 'email');
+                return $this->redirectToRoute('zectranet_edit_user_page');
+            } else {
+                return $this->redirectToRoute('zectranet_user_page');
+            }
+        }
     }
 
     /**

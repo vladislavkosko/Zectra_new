@@ -45,8 +45,18 @@ zectranet_public_market:
     path: /public_market
     defaults: { _controller: ZectranetBundle:PublicMarket:index }
 
+zectranet_edit_user_page:
+    path: /userProfile/edit
+    defaults: { _controller: ZectranetBundle:User:editProfilePage }
+
+zectranet_edit_user_page_action:
+    path: /userProfile/edit/{user_id}
+    defaults: { _controller: ZectranetBundle:User:editProfile }
+    requirements:
+          user_id: \d+
+
 zectranet_user_page:
-    path: /userProfile/{user_id}
+    pattern: /userProfile/{user_id}
     defaults: { _controller: ZectranetBundle:User:index, user_id: null }
     requirements:
             user_id: \d+
