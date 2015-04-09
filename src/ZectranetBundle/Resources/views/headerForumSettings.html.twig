@@ -1,0 +1,129 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}Forum Settings{% endblock %}
+
+{% block body %}
+    <div ng-controller="HeaderForumController" ng-init="getHeaders();">
+        <div class="row">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ path('zectranet_show_header_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
+                </li>
+                <li class="active">Settings</li>
+            </ol>
+        </div>
+
+        <div class="page-header">
+            <h4>Forum Settings</h4>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <p>
+                        <label>
+                            Select header background color:
+                            <input type="color" ng-model="header.bgColor" />
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            Select header text color:
+                            <input type="color" ng-model="header.textColor"/>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            Header title:
+                            <input type="text" ng-model="header.title" />
+                        </label>
+                    </p>
+                    <p>
+                        <button type="button" class="btn btn-default btn-success" ng-click="addNewHeader(header);">
+                            <i class="fa fa-plus-circle"></i>
+                            Add new header
+                        </button>
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+                    <p>
+                        <label>
+                            Select header:
+                            <select ng-model="subheader.header_id">
+                                <option ng-repeat="header in headers" value="[[ header.id ]]">
+                                    [[ header.title ]]
+                                </option>
+                            </select>
+                            <button type="button" class="btn btn-default btn-danger" ng-click="deleteHeader(subheader.header_id);">
+                                <i class="fa fa-trash"></i>
+                                Delete header
+                            </button>
+                        </label>
+                    </p>
+
+                    <p>
+                        <label>
+                            Subheader title:
+                            <input type="text" ng-model="subheader.title" />
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            Subheader Description: <br/>
+                            <textarea ng-model="subheader.description" cols="30" rows="5"></textarea>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            Admin subheader:
+                            <input type="checkbox" ng-model="subheader.admin" />
+                        </label>
+                    </p>
+                    <p>
+                        <button type="button" class="btn btn-default btn-success" ng-click="addNewSubHeader(subheader);">
+                            <i class="fa fa-plus-circle"></i>
+                            Add subheader
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="header_forum_messages_modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" ng-class="modal.class">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 align="center" style="color: #f5f5f5;">
+                            [[ modal.title ]]
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-offset-1 col-md-10 col-xs-offset-1 col-xs-10">
+                                <h4>[[ modal.message ]]</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/zectranet/js/custom/headerForumController.js') }}"></script>
+    <script>
+        JSON_URLS.getHeaderForumHeaders = "{{ path('zectranet_get_header_forum_headers', { 'project_id': forum.id } ) }}";
+        JSON_URLS.addHeaderForumHeaders = "{{ path('zectranet_add_header_action', { 'project_id': forum.id }) }}";
+        JSON_URLS.addSubHeaderForumHeaders = "{{ path('zectranet_add_subheader_action', { 'header_id': 0 }) }}";
+        JSON_URLS.deleteHeaderForumHeaders = "{{ path('zectranet_delete_header_action', { 'header_id': 0 }) }}";
+    </script>
+{% endblock %}

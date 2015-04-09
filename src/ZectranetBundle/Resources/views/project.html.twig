@@ -76,11 +76,16 @@
                             <div class="row">
 
                                 {% for user in project.users %}
-
                                     <div class="col-md-3 col-xs-4 col-sm-3">
                                         <div class="user-chat center-block">
                                             <a href="{{ path('zectranet_user_page', {'user_id': user.id}) }}" style="display: block; text-decoration: none;">
-                                                <p class="text-muted label label-default label-primary text-center center-block" style="margin:0 2px 0px 2px; border-radius: 0px;">Manager</p>
+                                                <p class="text-muted label label-default label-primary text-center center-block" style="margin:0 2px 0px 2px; border-radius: 0px;">
+                                                    {% if project.ownerid == user.id %}
+                                                        {{ 'Owner' }}
+                                                    {% else %}
+                                                        {{ 'Member' }}
+                                                    {% endif %}
+                                                </p>
                                                 <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-responsive center-block" style="width: 60px; height: 60px;">
                                             </a>
                                             <a style="cursor: pointer;">
@@ -90,35 +95,6 @@
                                     </div>
 
                                 {% endfor %}
-
-                                {% for office in project.offices %}
-                                    {% for user in office.users %}
-                                        <div class="col-md-3 col-xs-4 col-sm-3">
-                                            <div class="user-chat center-block">
-                                                <a href="{{ path('zectranet_user_page', {'user_id': user.id}) }}" style="display: block; text-decoration: none;">
-                                                    <p class="text-muted label label-default label-primary text-center center-block" style="margin:0 2px 0px 2px; border-radius: 0px;">Manager</p>
-                                                    <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-responsive center-block" style="width: 60px; height: 60px;">
-                                                </a>
-                                                <a style="cursor: pointer;">
-                                                    <p class="text-center" style="font-weight: bold;">{{ user.name ~ ' ' ~ user.surname }}</p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                {% endfor %}
-
-                                <div class="col-md-3 col-xs-4 col-sm-3">
-                                    <div class="user-chat center-block">
-                                        <a href="{{ path('zectranet_user_page', {'user_id': project.owner.id}) }}" style="display: block; text-decoration: none;">
-                                            <p class="text-muted label label-default label-primary text-center center-block" style="margin:0 2px 0px 2px; border-radius: 0px;">Owner</p>
-                                            <img src="{{ asset('') ~ 'documents/' ~ project.owner.avatar }}" class="img-responsive center-block" style="width: 60px; height: 60px;">
-                                        </a>
-                                        <a style="cursor: pointer;">
-                                            <p class="text-center" style="font-weight: bold; ">{{ project.owner.name ~ ' ' ~ project.owner.surname}}</p>
-                                        </a>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>

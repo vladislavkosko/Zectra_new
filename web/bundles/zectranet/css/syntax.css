@@ -1,0 +1,54 @@
+.class {
+    color: darkblue;
+    text-shadow: 1px 1px darkgray; font-weight: 600;
+}
+
+.exception {
+    color: darkred;
+    text-shadow: 1px 1px darkgray; font-weight: 600;
+}
+
+.file {
+    color: darkgreen;
+    text-shadow: 1px 1px darkgray; font-weight: 600;
+}
+
+.function {
+    color: orangered;
+    text-shadow: 1px 1px darkgray; font-weight: 600;
+}
+
+.SQL {
+    color: blue;
+    text-shadow: 1px 1px darkgray; font-weight: 600;
+}
+
+.orange {
+    color: orange;
+    text-shadow: 1px 1px darkgray; font-weight: 600;
+}
+
+.line {
+    color: crimson;
+    text-shadow: 1px 1px darkgray; font-weight: 600;
+}
+
+.question {
+    color: purple;
+    text-shadow: 1px 1px darkgray; font-weight: 600;
+}
+
+.message-block {
+    display: block;
+    padding: 10px;
+    margin: 0 0 10px;
+    font-size: 15px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    white-space: pre-line;
+}

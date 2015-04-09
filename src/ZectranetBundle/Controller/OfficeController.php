@@ -36,7 +36,12 @@ class OfficeController extends Controller
 
         $this->get('zectranet.notifier')->clearNotificationsByOfficeId($office_id);
 
-        return $this->render('@Zectranet/office.html.twig', array('office' => $office));
+        if ($office->getId() == $user->getHomeOfficeID())
+        {
+            return $this->render('@Zectranet/homeOffice.html.twig', array('office' => $office));
+        } else {
+            return $this->render('@Zectranet/office.html.twig', array('office' => $office));
+        }
     }
 
     /**

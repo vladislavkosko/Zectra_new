@@ -34,9 +34,22 @@ class Project
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true, options={"default" = null})
      */
     private $description;
+
+    /**
+     * @var int
+     * @ORM\Column(name="type_id", type="integer")
+     */
+    private $typeID;
+
+    /**
+     * @var ProjectType
+     * @ORM\ManyToOne(targetEntity="ProjectType")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     */
+    private $type;
 
     /**
      * @var integer
@@ -86,10 +99,17 @@ class Project
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Office", inversedBy="projects", fetch="EXTRA_LAZY")
+     * @var Office
+     * @ORM\Column(name="office_id", type="integer")
+     */
+    private $officeID;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Office", inversedBy="projects", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
      * @var array
      */
-    private $offices;
+    private $office;
 
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="project", cascade={"remove"})
@@ -116,7 +136,6 @@ class Project
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->offices = new ArrayCollection();
         $this->tasks = new ArrayCollection();
         $this->postsProject = new ArrayCollection();
         $this->visible = false;
@@ -141,20 +160,218 @@ class Project
      * @param $project_id
      * @param User $user
      * @param $data
+     * @param int $office_id
      * @return Project
      */
-    public static function addEpicStory(EntityManager $em, $project_id, User $user, $data) {
+    public static function addEpicStory(EntityManager $em, $project_id, User $user, $data, $office_id) {
         $epicStory = new Project();
         $epicStory->setOwner($user);
-        $epicStory->setParent($em->getRepository('ZectranetBundle:Project')
-            ->find($project_id));
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $epicStory->setParent($project);
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+        $epicStory->setOffice($office);
+        $epicStory->setType($project->getType());
         $epicStory->setName($data->name);
-        $epicStory->setDescription($data->description);
-
         $em->persist($epicStory);
         $em->flush();
 
         return $epicStory;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @param string $name
+     * @param int $type_id
+     * @param int $office_id
+     * @return Project
+     */
+    public static function addNewProject(EntityManager $em, User $user, $name, $type_id, $office_id) {
+        $project = new Project();
+        $project->setOwner($user);
+        $project->setName($name);
+        $type = $em->getRepository('ZectranetBundle:ProjectType')->find($type_id);
+        $project->setType($type);
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+        $project->setOffice($office);
+        $project->addUser($user);
+        $em->persist($project);
+        $em->flush();
+
+        return $project;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     */
+    public static function deleteProject(EntityManager $em, $project_id) {
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $em->remove($project);
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @return array
+     */
+    public static function getJsonProjectMembers(EntityManager $em, $project_id) {
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $jsonProjectUsers = array();
+        /** @var User $user */
+        foreach ($project->getUsers() as $user) {
+            $jsonProjectUsers[] = $user->getInArray();
+        }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 2));
+        if (count($requests) > 0)
+        {
+            foreach ($requests as $request){
+                $usr = $request->getUser()->getInArray();
+                $usr['request'] = 1;
+                $jsonProjectUsers[] = $usr;
+            }
+        }
+
+        return $jsonProjectUsers;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @return array
+     */
+    public static function getJsonNotProjectMembers(EntityManager $em, $project_id) {
+        /** @var \Doctrine\ORM\QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $user_ids = array();
+        /** @var User $user */
+        foreach ($project->getUsers() as $user) {
+            $user_ids[] = $user->getId();
+        }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 2));
+        if (count($requests) > 0)
+            foreach ($requests as $request)
+                $user_ids[] = $request->getUserid();
+
+        $notProjectUsers = array();
+        if (count($user_ids) > 0) {
+            $query = $qb->select('u')
+                ->from('ZectranetBundle:User', 'u')
+                ->where($qb->expr()->notIn('u.id', $user_ids))
+                ->getQuery();
+            $notProjectUsers = $query->getResult();
+        } else {
+            $notProjectUsers = $em->getRepository('ZectranetBundle:User')->findAll();
+        }
+
+        $jsonNotProjectUsers = array();
+        /** @var User $user */
+        foreach ($notProjectUsers as $user) {
+            if (count($user->getAssignedOffices()) == 0 && count($user->getOwnedOffices()) == 0) {
+                $jsonNotProjectUsers[] = $user->getInArray();
+            }
+        }
+
+        return $jsonNotProjectUsers;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @return array
+     */
+    public static function getJsonProjectOffices(EntityManager $em, $project_id)
+    {
+        $jsonProjectOffices = array();
+        /*$project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        foreach ($project->getOffices() as $office) {
+            $jsonProjectOffices[] = $office->getInArray();
+        }
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 3));
+        if (count($requests) > 0)
+        {
+            foreach ($requests as $request){
+                $office = $request->getOffice()->getInArray();
+                $office['request'] = 1;
+                $jsonProjectOffices[] = $office;
+            }
+        }*/
+
+        return $jsonProjectOffices;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @return array
+     */
+    public static function getJsonNotProjectOffices(EntityManager $em, $project_id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $qb */
+        $qb = $em->createQueryBuilder();
+
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $office_ids = array();
+        /** @var Office $office */
+        /*foreach ($project->getOffices() as $office) {
+            $office_ids[] = $office->getId();
+        }*/
+
+        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 3));
+        if (count($requests) > 0)
+            foreach ($requests as $request)
+                $office_ids[] = $request->getOfficeid();
+
+        /*$notProjectOffices = array();
+        if (count($office_ids) > 0) {
+            $query = $qb->select('o')
+                ->from('ZectranetBundle:Office', 'o')
+                ->where($qb->expr()->notIn('o.id', $office_ids))
+                ->andWhere('o.visible = 1')
+                ->getQuery();
+            $notProjectOffices = $query->getResult();
+        } else {
+            $notProjectOffices = $em->getRepository('ZectranetBundle:Office')->findBy(array('visible' => true));
+        }*/
+
+        $jsonNotProjectOffices = array();
+        /** @var Office $office */
+        /*foreach ($notProjectOffices as $office) {
+            $jsonNotProjectOffices[] = $office->getInArray();
+        }*/
+
+        return $jsonNotProjectOffices;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @param int $user_id
+     * @param object $version
+     * @return Version
+     */
+    public static function addNewProjectVersion(EntityManager $em, $project_id, $user_id, $version) {
+        /** @var Project $project */
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        /** @var User $user */
+        $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
+        $newVersion = new Version();
+        $newVersion->setName($version->name);
+        $newVersion->setDescription($version->description);
+        $newVersion->setDate(new \DateTime());
+        $newVersion->setOwner($user);
+        $newVersion->setProject($project);
+
+        $em->persist($newVersion);
+        $em->flush();
+
+        return $newVersion;
     }
 
     /**
@@ -260,6 +477,52 @@ class Project
     }
 
     /**
+     * Set officeID
+     *
+     * @param integer $officeID
+     * @return Project
+     */
+    public function setOfficeID($officeID)
+    {
+        $this->officeID = $officeID;
+
+        return $this;
+    }
+
+    /**
+     * Get officeID
+     *
+     * @return integer 
+     */
+    public function getOfficeID()
+    {
+        return $this->officeID;
+    }
+
+    /**
+     * Set visible
+     *
+     * @param boolean $visible
+     * @return Project
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+
+        return $this;
+    }
+
+    /**
+     * Get visible
+     *
+     * @return boolean 
+     */
+    public function getVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
      * Set owner
      *
      * @param \ZectranetBundle\Entity\User $owner
@@ -306,6 +569,59 @@ class Project
     }
 
     /**
+     * Remove epicStories
+     *
+     * @param \ZectranetBundle\Entity\Project $epicStories
+     */
+    public function removeEpicStory(\ZectranetBundle\Entity\Project $epicStories)
+    {
+        $this->epicStories->removeElement($epicStories);
+    }
+
+    /**
+     * Get epicStories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEpicStories()
+    {
+        return $this->epicStories;
+    }
+
+    /**
+     * Add versions
+     *
+     * @param \ZectranetBundle\Entity\Version $versions
+     * @return Project
+     */
+    public function addVersion(\ZectranetBundle\Entity\Version $versions)
+    {
+        $this->versions[] = $versions;
+
+        return $this;
+    }
+
+    /**
+     * Remove versions
+     *
+     * @param \ZectranetBundle\Entity\Version $versions
+     */
+    public function removeVersion(\ZectranetBundle\Entity\Version $versions)
+    {
+        $this->versions->removeElement($versions);
+    }
+
+    /**
+     * Get versions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVersions()
+    {
+        return $this->versions;
+    }
+
+    /**
      * Add users
      *
      * @param \ZectranetBundle\Entity\User $users
@@ -329,13 +645,6 @@ class Project
     }
 
     /**
-     * @param $users
-     */
-    public function setUsers($users) {
-        $this->users = $users;
-    }
-
-    /**
      * Get users
      *
      * @return \Doctrine\Common\Collections\Collection 
@@ -346,36 +655,26 @@ class Project
     }
 
     /**
-     * Add offices
+     * Set office
      *
-     * @param \ZectranetBundle\Entity\Office $offices
+     * @param \ZectranetBundle\Entity\Office $office
      * @return Project
      */
-    public function addOffice(\ZectranetBundle\Entity\Office $offices)
+    public function setOffice(\ZectranetBundle\Entity\Office $office = null)
     {
-        $this->offices[] = $offices;
+        $this->office = $office;
 
         return $this;
     }
 
     /**
-     * Remove offices
+     * Get office
      *
-     * @param \ZectranetBundle\Entity\Office $offices
+     * @return \ZectranetBundle\Entity\Office 
      */
-    public function removeOffice(\ZectranetBundle\Entity\Office $offices)
+    public function getOffice()
     {
-        $this->offices->removeElement($offices);
-    }
-
-    /**
-     * Get offices
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOffices()
-    {
-        return $this->offices;
+        return $this->office;
     }
 
     /**
@@ -417,7 +716,7 @@ class Project
      * @param \ZectranetBundle\Entity\ProjectPost $postsProject
      * @return Project
      */
-    public function addPostsProject(ProjectPost $postsProject)
+    public function addPostsProject(\ZectranetBundle\Entity\ProjectPost $postsProject)
     {
         $this->postsProject[] = $postsProject;
 
@@ -429,7 +728,7 @@ class Project
      *
      * @param \ZectranetBundle\Entity\ProjectPost $postsProject
      */
-    public function removePostsProject(ProjectPost $postsProject)
+    public function removePostsProject(\ZectranetBundle\Entity\ProjectPost $postsProject)
     {
         $this->postsProject->removeElement($postsProject);
     }
@@ -445,306 +744,48 @@ class Project
     }
 
     /**
-     * @param EntityManager $em
-     * @param User $user
-     * @param string $name
-     * @param string $description
+     * Set typeID
+     *
+     * @param integer $typeID
      * @return Project
      */
-    public static function addNewProject(EntityManager $em, User $user, $name, $description) {
-        $project = new Project();
-        $project->setOwner($user);
-        $project->setName($name);
-        $project->setDescription($description);
-        $em->persist($project);
-        $em->flush();
-
-        return $project;
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param int $project_id
-     */
-    public static function deleteProject(EntityManager $em, $project_id) {
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $em->remove($project);
-        $em->flush();
-    }
-
-    /**
-     * Remove epicStories
-     *
-     * @param \ZectranetBundle\Entity\Project $epicStories
-     */
-    public function removeEpicStory(\ZectranetBundle\Entity\Project $epicStories)
+    public function setTypeID($typeID)
     {
-        $this->epicStories->removeElement($epicStories);
-    }
-
-    /**
-     * Get epicStories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getEpicStories()
-    {
-        return $this->epicStories;
-    }
-
-    /**
-     * Set visible
-     *
-     * @param boolean $visible
-     * @return Project
-     */
-    public function setVisible($visible)
-    {
-        $this->visible = $visible;
+        $this->typeID = $typeID;
 
         return $this;
     }
 
     /**
-     * Get visible
+     * Get typeID
      *
-     * @return boolean 
+     * @return integer 
      */
-    public function getVisible()
+    public function getTypeID()
     {
-        return $this->visible;
+        return $this->typeID;
     }
 
     /**
-     * @param EntityManager $em
-     * @param $project_id
-     * @return array
-     */
-    public static function getJsonProjectMembers(EntityManager $em, $project_id) {
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $jsonProjectUsers = array();
-        /** @var User $user */
-        foreach ($project->getUsers() as $user) {
-            $jsonProjectUsers[] = $user->getInArray();
-        }
-
-        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 2));
-        if (count($requests) > 0)
-        {
-            foreach ($requests as $request){
-                $usr = $request->getUser()->getInArray();
-                $usr['request'] = 1;
-                $jsonProjectUsers[] = $usr;
-            }
-        }
-
-        return $jsonProjectUsers;
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param $project_id
-     * @return array
-     */
-    public static function getJsonNotProjectMembers(EntityManager $em, $project_id) {
-        /** @var \Doctrine\ORM\QueryBuilder $qb */
-        $qb = $em->createQueryBuilder();
-
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $user_ids = array();
-        /** @var User $user */
-        foreach ($project->getUsers() as $user) {
-            $user_ids[] = $user->getId();
-        }
-
-        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 2));
-        if (count($requests) > 0)
-            foreach ($requests as $request)
-                $user_ids[] = $request->getUserid();
-
-        $notProjectUsers = array();
-        if (count($user_ids) > 0) {
-            $query = $qb->select('u')
-                ->from('ZectranetBundle:User', 'u')
-                ->where($qb->expr()->notIn('u.id', $user_ids))
-                ->getQuery();
-            $notProjectUsers = $query->getResult();
-        } else {
-            $notProjectUsers = $em->getRepository('ZectranetBundle:User')->findAll();
-        }
-
-        $jsonNotProjectUsers = array();
-        /** @var User $user */
-        foreach ($notProjectUsers as $user) {
-            if (count($user->getAssignedOffices()) == 0 && count($user->getOwnedOffices()) == 0) {
-                $jsonNotProjectUsers[] = $user->getInArray();
-            }
-        }
-
-        return $jsonNotProjectUsers;
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param $project_id
-     * @return array
-     */
-    public static function getJsonProjectOffices(EntityManager $em, $project_id)
-    {
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $jsonProjectOffices = array();
-        /** @var Office $office */
-        foreach ($project->getOffices() as $office) {
-            $jsonProjectOffices[] = $office->getInArray();
-        }
-
-        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 3));
-        if (count($requests) > 0)
-        {
-            foreach ($requests as $request){
-                $office = $request->getOffice()->getInArray();
-                $office['request'] = 1;
-                $jsonProjectOffices[] = $office;
-            }
-        }
-
-        return $jsonProjectOffices;
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param $project_id
-     * @return array
-     */
-    public static function getJsonNotProjectOffices(EntityManager $em, $project_id)
-    {
-        /** @var \Doctrine\ORM\QueryBuilder $qb */
-        $qb = $em->createQueryBuilder();
-
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $office_ids = array();
-        /** @var Office $office */
-        foreach ($project->getOffices() as $office) {
-            $office_ids[] = $office->getId();
-        }
-
-        $requests = $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id, 'typeid' => 3));
-        if (count($requests) > 0)
-            foreach ($requests as $request)
-                $office_ids[] = $request->getOfficeid();
-
-        $notProjectOffices = array();
-        if (count($office_ids) > 0) {
-            $query = $qb->select('o')
-                ->from('ZectranetBundle:Office', 'o')
-                ->where($qb->expr()->notIn('o.id', $office_ids))
-                ->andWhere('o.visible = 1')
-                ->getQuery();
-            $notProjectOffices = $query->getResult();
-        } else {
-            $notProjectOffices = $em->getRepository('ZectranetBundle:Office')->findBy(array('visible' => true));
-        }
-
-        $jsonNotProjectOffices = array();
-        /** @var Office $office */
-        foreach ($notProjectOffices as $office) {
-            $jsonNotProjectOffices[] = $office->getInArray();
-        }
-
-        return $jsonNotProjectOffices;
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param $office_id
-     * @param $project_id
-     */
-    public static function addOfficeToProject($em, $office_id, $project_id) {
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
-
-        $project->addOffice($office);
-
-        $em->persist($project);
-        $em->flush();
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param array $office_ids
-     * @param int $project_id
-     */
-    public static function removeOfficesFromProject(EntityManager $em, $office_ids, $project_id) {
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $offices = $em->getRepository('ZectranetBundle:Office')->findBy(array('id' => $office_ids));
-        /** @var ArrayCollection $projectOffices */
-        $projectOffices = $project->getOffices();
-        /** @var Office $office */
-        foreach ($offices as $office) {
-            if ($projectOffices->contains($office)) {
-                $project->removeOffice($office);
-            }
-        }
-
-        $em->persist($project);
-        $em->flush();
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param int $project_id
-     * @param int $user_id
-     * @param object $version
-     * @return Version
-     */
-    public static function addNewProjectVersion(EntityManager $em, $project_id, $user_id, $version) {
-        /** @var Project $project */
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        /** @var User $user */
-        $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
-        $newVersion = new Version();
-        $newVersion->setName($version->name);
-        $newVersion->setDescription($version->description);
-        $newVersion->setDate(new \DateTime());
-        $newVersion->setOwner($user);
-        $newVersion->setProject($project);
-
-        $em->persist($newVersion);
-        $em->flush();
-
-        return $newVersion;
-    }
-
-    /**
-     * Add versions
+     * Set type
      *
-     * @param \ZectranetBundle\Entity\Version $versions
+     * @param \ZectranetBundle\Entity\ProjectType $type
      * @return Project
      */
-    public function addVersion(\ZectranetBundle\Entity\Version $versions)
+    public function setType(\ZectranetBundle\Entity\ProjectType $type = null)
     {
-        $this->versions[] = $versions;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Remove versions
+     * Get type
      *
-     * @param \ZectranetBundle\Entity\Version $versions
+     * @return \ZectranetBundle\Entity\ProjectType 
      */
-    public function removeVersion(\ZectranetBundle\Entity\Version $versions)
+    public function getType()
     {
-        $this->versions->removeElement($versions);
-    }
-
-    /**
-     * Get versions
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getVersions()
-    {
-        return $this->versions;
+        return $this->type;
     }
 }

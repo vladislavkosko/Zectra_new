@@ -1028,13 +1028,16 @@ class User implements UserInterface, \Serializable
         $user->setRegistered(new \DateTime());
         $user->setLastActive(new \DateTime());
         $user->addRole(Role::getUserRole($em));
+
         $office = new Office();
         $office->setOwner($user);
         $office->setDescription("This is your home office");
         $office->setName("Home Office");
         $em->persist($office);
+        
         $user->setHomeOffice($office);
         $user->setHomeOfficeID($office->getId());
+
         $em->persist($user);
 
         $settings = new UserSettings();

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use ZectranetBundle\Entity\EntityOperations;
+use ZectranetBundle\Entity\HeaderForum;
 use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Project;
@@ -24,7 +26,7 @@ use ZectranetBundle\Entity\User;
 class ProjectController extends Controller
 {
     /**
-     * @Route("/project/{project_id}")
+     * @Route("project/{project_id}")
      * @Security("has_role('ROLE_USER')")
      * @param int $project_id
      * @return Response
@@ -35,38 +37,25 @@ class ProjectController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
-        $isUserInProject = false;
         if (!$user->getProjects()->contains($project)
             && !$user->getOwnedProjects()->contains($project)) {
-            /** @var Office $office */
-            foreach ($user->getAssignedOffices() as $office) {
-                if ($office->getProjects()->contains($project)) {
-                    $isUserInProject = true; break;
-                }
-            }
 
-            /** @var Office $office */
-            foreach ($user->getOwnedOffices() as $office) {
-                if ($office->getProjects()->contains($project)) {
-                    $isUserInProject = true; break;
-                }
-            }
-
-            if (!$isUserInProject) {
-                return $this->redirectToRoute('zectranet_user_home');
-            }
+            //return $this->redirectToRoute('');
         }
 
         $this->get('zectranet.notifier')->clearNotificationsByProjectId($project_id);
 
-        $task_priority = $this->getDoctrine()->getRepository('ZectranetBundle:TaskPriority')->findAll();
-        $task_types = $this->getDoctrine()->getRepository('ZectranetBundle:TaskType')->findAll();
+        $task_priority = $this->getDoctrine()
+            ->getRepository('ZectranetBundle:TaskPriority')->findAll();
+        $task_types = $this->getDoctrine()
+            ->getRepository('ZectranetBundle:TaskType')->findAll();
+
         return $this->render('@Zectranet/project.html.twig', array(
             'project' => $project,
             'task_priority' => $task_priority,
-            'task_types' => $task_types
-            )
-        );
+            'task_types' => $task_types,
+            'office' => $project->getOffice()
+        ));
     }
 
     /**
@@ -101,8 +90,7 @@ class ProjectController extends Controller
         $em->persist($project);
         $em->flush();
 
-        $response = new Response(json_encode(array('success' => true)));
-        $response->headers->set('Content-Type', 'application/json');
+        $response = new JsonResponse(array('success' => true));
         return $response;
     }
 
@@ -118,11 +106,10 @@ class ProjectController extends Controller
         $jsonProjectUsers = Project::getJsonProjectMembers($em, $project_id);
         $jsonNotProjectUsers = Project::getJsonNotProjectMembers($em, $project_id);
 
-        $response = new Response(json_encode(array(
+        $response = new JsonResponse(array(
             'projectMembers' => $jsonProjectUsers,
             'users' => $jsonNotProjectUsers
-        )));
-        $response->headers->set('Content-Type', 'application/json');
+        ));
         return $response;
     }
 
@@ -309,109 +296,40 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/{project_id}/getOffices")
-     * @Security("has_role('ROLE_USER')")
-     * @param int $project_id
-     * @return Response
-     */
-    public function getOfficesAction($project_id) {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        $jsonProjectOffices = Project::getJsonProjectOffices($em, $project_id);
-        $jsonNotProjectOffices = Project::getJsonNotProjectOffices($em, $project_id);
-
-        $response = new Response(json_encode(array(
-            'projectOffices' => $jsonProjectOffices,
-            'offices' => $jsonNotProjectOffices
-        )));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-
-    /**
-     * @Route("/project/{project_id}/addOffices")
-     * @Security("has_role('ROLE_USER')")
-     * @param Request $request
-     * @param int $project_id
-     * @return Response
-     */
-    public function addOfficesAction(Request $request, $project_id) {
-        $data = json_decode($request->getContent(), true);
-        $ids = array();
-        foreach ($data['offices'] as $office)
-        {
-            if ((!isset($office['request'])) or ((isset($office['request'])) and ($office['request'] == 2)))
-            {
-                $office = (object) $office;
-                $ids[] = $office->id;
-            }
-        }
-
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        /** @var RequestType $type */
-        $type = $this->getDoctrine()->getRepository('ZectranetBundle:RequestType')->find(3);
-        /** @var Project $project */
-        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
-        /** @var User $user */
-        $user = $this->getUser();
-
-        $offices = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->findBy(array('id' => $ids));
-
-        foreach ($offices as $office)
-        {
-            if ($user->getId() != $office->getOwner()->getId())
-            {
-                \ZectranetBundle\Entity\Request::addNewRequest($em, $office->getOwner(), $type, $project, $office);
-                $this->get('zectranet.notifier')->createNotification("request_project", $user, $office->getOwner(), $project, $office);
-            }
-            else
-                Project::addOfficeToProject($em, $office->getId(), $project_id);
-        }
-
-        $response = new Response(json_encode(array('success' => true)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-
-    /**
-     * @Route("/project/{project_id}/removeOffices")
-     * @Security("has_role('ROLE_USER')")
-     * @param Request $request
-     * @param int $project_id
-     * @return Response
-     */
-    public function removeOfficesAction(Request $request, $project_id) {
-        $data = json_decode($request->getContent(), true);
-        $ids = array();
-        foreach ($data['offices'] as $office) {
-            $office = (object) $office;
-            $ids[] = $office->id;
-        }
-
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        Project::removeOfficesFromProject($em, $ids, $project_id);
-        $response = new Response(json_encode(array('success' => true)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-
-    /**
      * @Route("/project/add")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
+     * @param int $office_id
      * @return Response
      */
-    public function addProjectAction(Request $request) {
+    public function addProjectAction(Request $request, $office_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $name = $request->request->get('project_name');
-        $description = $request->request->get('project_description');
+        $name = $request->request->get('name');
+        $type = $request->request->get('type');
 
-        /** @var Project $project */
-        $project = Project::addNewProject($em, $this->getUser(), $name, $description);
-        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project->getId()));
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $params = array(
+            'name' => $name,
+            'type' => $type,
+        );
+
+        switch ($type) {
+            case 1:
+                /** @var Project $project */
+                $project = Project::addNewProject($em, $user, $name, $type, $office_id);
+                return $this->redirectToRoute('zectranet_show_project',
+                    array('project_id' => $project->getId()));
+            case 2:
+                /** @var HeaderForum $project */
+                $project = HeaderForum::addNewHeaderForum($em, $user->getId(), $params);
+                return $this->redirectToRoute('zectranet_show_header_forum',
+                    array('project_id' => $project->getId()));
+
+        }
+
     }
 
     /**

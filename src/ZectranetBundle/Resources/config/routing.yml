@@ -17,6 +17,14 @@ zectranet_user_home:
     path: /user/home
     defaults: { _controller: ZectranetBundle:User:home }
 
+zectranet_get_error_logs:
+    path: /dev/error_logs
+    defaults: { _controller: ZectranetBundle:ErrorLog:index }
+
+zectranet_get_error_logs_errors:
+    path: /dev/error_logs/getErrors
+    defaults: { _controller: ZectranetBundle:ErrorLog:getErrors }
+
 zectranet_signup:
     path: /signup
     defaults: { _controller: ZectranetBundle:Index:signup }
@@ -211,6 +219,63 @@ zectranet_save_project_members:
     requirements:
         project_id: \d+
 
+zectranet_show_header_forum:
+    pattern: /headerForum/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:index }
+    requirements:
+         project_id: \d+
+
+zectranet_show_header_forum_subheader:
+    pattern: /headerForum/{project_id}/{subheader_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:forum }
+    requirements:
+         project_id: \d+
+         subheader_id: \d+
+
+zectranet_show_header_forum_settings:
+    pattern: /headerForum/{project_id}/settings
+    defaults: { _controller: ZectranetBundle:HeaderForum:settings }
+    requirements:
+        project_id: \d+
+
+zectranet_add_header_action:
+    pattern: /headerForum/{project_id}/addHeader
+    defaults: { _controller: ZectranetBundle:HeaderForum:addNewHeader }
+    requirements:
+        project_id: \d+
+
+zectranet_add_subheader_action:
+    pattern: /headerForum/addSubHeader/{header_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:addNewSubHeader }
+    requirements:
+        header_id: \d+
+
+zectranet_delete_header_action:
+    pattern: /headerForum/deleteHeader/{header_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:deleteHeader }
+    requirements:
+        header_id: \d+
+
+zectranet_get_header_forum_headers:
+    pattern: /headerForum/{project_id}/getHeaders
+    defaults: { _controller: ZectranetBundle:HeaderForum:getHeaders }
+    requirements:
+        project_id: \d+
+
+zectranet_show_header_forum_thread:
+    pattern: /headerForum/{project_id}/{subheader_id}/{thread_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:showThread }
+    requirements:
+        project_id: \d+
+        subheader_id: \d+
+        thread_id: \d+
+
+zectranet_start_header_forum_thread:
+    pattern: /headerForum/{subheader_id}/start_new_thread
+    defaults: { _controller: ZectranetBundle:HeaderForum:startNewThread }
+    requirements:
+        subheader_id: \d+
+
 zectranet_accept_request_user_office:
     pattern: /office/{office_id}/acceptRequestUserOffice
     defaults: { _controller: ZectranetBundle:Office:acceptRequestUserOffice }
@@ -267,7 +332,7 @@ zectranet_project_remove_offices:
         project_id: \d+
 
 zectranet_add_project:
-    path: /project/add
+    path: /office/{office_id}/project/add
     defaults: { _controller: ZectranetBundle:Project:addProject }
 
 zectranet_delete_project:

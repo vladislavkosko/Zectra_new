@@ -32,7 +32,7 @@
 				<!-- BEGIN OF SITE TREE -->
 				<ul class="nav" id="side-menu">
 
-					<li class="active">
+					<li>
 						<a href="{{ path('zectranet_public_market') }}">
 							<i class='fa fa-credit-card'></i>
 							Public Market
@@ -40,132 +40,119 @@
 					</li>
 
 					<li>
-						<a href="#">
+						<a href="{{ path('zectranet_show_office', {'office_id': app.user.homeOffice.id }) }}"
+                           class="
+                                {% if app.user.homeOffice.projects | length > 0 %}
+                                    {{ 'non-collapsible-href' }}
+                                {% else %}
+                                    {{ 'non-collapsible-href-full' }}
+                                {% endif %}">
 							<i class='fa fa-home'></i>
-							<span>Private Offices</span>
+							<span>Home Office</span>
 						</a>
+                        {% if app.user.homeOffice.projects | length > 0 %}
+                            <a href="{{ path('zectranet_show_office', {'office_id': app.user.homeOffice.id }) }}" class="collapsible-href">
+                                <i class="fa fa-arrow-left fa-fw"></i>
+                            </a>
+                        {% endif %}
+                        <div class="clearfix"></div>
 						<ul class="nav nav-second-level">
-							{% for office in app.user.ownedOffices %}
-								<li>
-									<a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
-										<i class='fa fa-home'></i>
-										<span>{{ office.name }}</span>
-									</a>
-								</li>
-							{% endfor %}
-						</ul>
+                            {% for project in app.user.homeOffice.projects if project.users | length == 1 %}
+                                <li>
+                                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                                        <i class="fa fa-briefcase fa-fw"></i>
+                                        {{ project.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            <li>
+                                <a href="#">
+                                    <i class='fa fa-briefcase'></i>
+                                    <span>Connected Projects</span>
+                                </a>
+                                <ul class="nav nav-third-level">
+                                    {% for project in app.user.projects if project.users | length > 1 %}
+                                        <li>
+                                            <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                                                <i class="fa fa-briefcase fa-fw"></i>
+                                                {{ project.name }}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        </ul>
 					</li>
 
-					<li>
-						<a href="#">
-							<i class='fa fa-sitemap'></i>
-							<span>Connected Offices</span>
-						</a>
-						<ul class="nav nav-second-level">
-							{% for office in app.user.assignedOffices %}
-								<li>
-									<a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}">
-										<i class='fa fa-sitemap'></i>
-										<span>{{ office.name }}</span>
-									</a>
-								</li>
-							{% endfor %}
-						</ul>
-					</li>
+                    {% for office in app.user.ownedOffices if office.id != app.user.homeOffice.id %}
+                        <li>
+                            <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}"
+                               class="
+                                    {% if office.projects | length > 0 %}
+                                        {{ 'non-collapsible-href' }}
+                                    {% else %}
+                                        {{ 'non-collapsible-href-full' }}
+                                    {% endif %}">
+                                <i class='fa fa-home'></i>
+                                <span>{{ office.name }}</span>
+                            </a>
+                            {% if office.projects | length > 0 %}
+                                <a href="#" class="collapsible-href">
+                                    <i class="fa fa-arrow-left fa-fw"></i>
+                                </a>
+                            {% endif %}
+                            <div class="clearfix"></div>
+                            <ul class="nav nav-second-level">
+                                {% for project in office.projects %}
+                                <li>
+                                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                                        {{ project.name }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
 
-					{#
-					<li class="active">
-						<div style="position: relative; display: block; padding: 10px 15px; background-color: #eee;">
-							<i class='fa fa-sitemap'></i>
-							<span>Offices</span>
-						</div>
-						<ul class="nav nav-second-level">
+                    {% for office in app.user.assignedOffices if office.id != app.user.homeOffice.id %}
+                        <li>
+                            <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}"
+                               class="
+                                    {% if office.projects | length > 0 %}
+                                        {{ 'non-collapsible-href' }}
+                                    {% else %}
+                                        {{ 'non-collapsible-href-full' }}
+                                    {% endif %}">
+                                <i class='fa fa-home'></i>
+                                <span>{{ office.name }}</span>
+                            </a>
+                            {% if office.projects | length > 0 %}
+                                <a href="#" class="collapsible-href">
+                                    <i class="fa fa-arrow-left fa-fw"></i>
+                                </a>
+                            {% endif %}
+                            <div class="clearfix"></div>
+                            <ul class="nav nav-second-level">
+                                {% for project in office.projects %}
+                                    <li>
+                                        <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                                            {{ project.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
 
-							<li style="display: none;">
-								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_office">
-									<i class='fa fa-plus-circle'></i>
-									<span>Add New Office</span>
-								</a>
-							</li>
-						</ul>
-					</li>
-					#}
+                    {% if is_granted('ROLE_WEB_DEVELOPER') %}
+                    <li>
+                        <a href="{{ path('zectranet_get_error_logs') }}">
+                            <i class='fa fa-close'></i>
+                            Error Logs
+                        </a>
+                    </li>
+                    {% endif %}
 
-					<li>
-						<a href="#">
-							<i class='fa fa-briefcase'></i>
-							<span>Private Projects</span>
-						</a>
-						<ul class="nav nav-second-level">
-							{% for project in app.user.ownedProjects %}
-								{% if project.parent == null %}
-									<li>
-										<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-											<i class='fa fa-briefcase'></i>
-											<span>{{ project.name }}</span>
-										</a>
-									</li>
-								{% endif %}
-							{% endfor %}
-						</ul>
-					</li>
-
-					<li>
-						<a href="#">
-							<i class='fa fa-briefcase'></i>
-							<span>Connected Projects</span>
-						</a>
-						<ul class="nav nav-second-level">
-							{% for project in app.user.projects %}
-								{% if project.parent == null %}
-									<li>
-										<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-											<i class='fa fa-briefcase'></i>
-											<span>{{ project.name }}</span>
-										</a>
-									</li>
-								{% endif %}
-							{% endfor %}
-							{% for office in app.user.assignedOffices %}
-								{% for project in office.projects if project.parent == null and project not in app.user.ownedProjects %}
-									<li>
-										<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-											<i class='fa fa-briefcase'></i>
-											<span>{{ project.name }}</span>
-										</a>
-									</li>
-								{% endfor %}
-							{% endfor %}
-							{% for office in app.user.ownedOffices %}
-								{% for project in office.projects if project.parent == null and project not in app.user.ownedProjects %}
-									<li>
-										<a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-											<i class='fa fa-briefcase'></i>
-											<span>{{ project.name }}</span>
-										</a>
-									</li>
-								{% endfor %}
-							{% endfor %}
-						</ul>
-					</li>
-
-					{#
-					<li class="active">
-						<div style="position: relative; display: block; padding: 10px 15px; background-color: #eee;">
-							<i class='fa fa-briefcase'></i>
-							<span>Projects</span>
-						</div>
-						<ul class="nav nav-second-level">
-
-							<li style="display: none;">
-								<a href="#" data-toggle="modal" class="btn-primary bg-primary label-primary" data-target="#add_private_project">
-									<i class='fa fa-plus-circle'></i>
-									<span>Add New Project</span>
-								</a>
-							</li>
-						</ul>
-					</li>
-					#}
 				</ul>
 				<!-- END OF SITE TREE -->
 
@@ -174,70 +161,6 @@
 	</div>
 
 	{% block modals %}
-
-		<!-- Begin of Add New Private Office Modal -->
-		<div class="modal fade" id="add_private_office" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header label-primary">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel" style="color: #f5f5f5;">
-							Add New Private Office
-						</h4>
-					</div>
-					<div class="modal-body">
-						<form method="post" action="{{ path('zectranet_add_office') }}">
-
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Office Name" name="office_name" required>
-							</div>
-
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Office Description" name="office_description" required>
-							</div>
-
-							<div class="form-group">
-								<input type="submit" class="btn btn-primary" value="Add">
-								<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End of Add New Private Office Modal -->
-
-		<!-- Begin of Add New Private Office Modal -->
-		<div class="modal fade" id="add_private_project" tabindex="-1" role="dialog" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header" style="background:#ddedf4; color:#606060; border-radius: 0px;">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel" style=" color:#606060; ">
-							Add New Private Project
-						</h4>
-					</div>
-					<div class="modal-body">
-						<form method="post" action="{{ path('zectranet_add_project') }}">
-
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Project Name" name="project_name" required>
-							</div>
-
-							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Project Description" name="project_description" required>
-							</div>
-
-							<div class="form-group">
-								<input type="submit" class="btn btn-primary" value="Add">
-								<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End of Add New Private Office Modal -->
 
 	{% endblock %}
 {% endblock %}

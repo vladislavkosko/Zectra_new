@@ -1,0 +1,24 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}{{ thread.title }}{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-2">
+            <img class="img-responsive img-thumbnail" src="{{ asset('') ~ 'documents/' ~ thread.user.avatar }}" alt="{{ thread.user.username }}"/>
+            <p>
+                <a href="{{ path('zectranet_user_page', {'user_id': thread.userID }) }}">
+                    {{ thread.user.username }}
+                </a>
+            </p>
+        </div>
+        <div class="col-xs-10">
+            <div class="page-header">
+                <h4 class="text-info">{{ thread.title }}</h4>
+            </div>
+            <p>
+                {{ thread.message }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

@@ -4,6 +4,7 @@ namespace ZectranetBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManager;
 
 class EntityOperations {
     /**
@@ -16,5 +17,18 @@ class EntityOperations {
             $jsonArray[] = $item->getInArray();
         }
         return $jsonArray;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return EntityManager
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public static function getEntityManager(EntityManager $em) {
+        if (!$em->isOpen()) {
+            $em = $em->create(
+                $em->getConnection(), $em->getConfiguration());
+        }
+        return $em;
     }
 }

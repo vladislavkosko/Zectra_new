@@ -58,7 +58,7 @@ class Office
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Project", mappedBy="offices", fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="Project", mappedBy="office", fetch="EXTRA_LAZY")
      * @var ArrayCollection
      */
     private $projects;

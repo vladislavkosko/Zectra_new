@@ -220,6 +220,19 @@ class UserInfo
         $em->flush();
     }
 
+    public function __construct() {
+        $this->setFacebookVisible(true);
+        $this->setInterestsVisible(true);
+        $this->setSkillsVisible(true);
+        $this->setSocietiesVisible(true);
+        $this->setTwitterVisible(true);
+        $this->setWorkExpirienceVisible(true);
+        $this->setGooglePlusVisible(true);
+        $this->setLinkedInVisible(true);
+        $this->setResidenceCountryVisible(true);
+        $this->setVolunteerWorkVisible(true);
+    }
+
     /**
      * Get id
      *

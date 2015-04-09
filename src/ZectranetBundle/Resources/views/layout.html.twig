@@ -23,7 +23,8 @@
         <link href="{{ asset('bundles/zectranet/css/search.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('bundles/zectranet/css/angular-busy.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('bundles/zectranet/css/lightbox.css') }}" rel="stylesheet" type="text/css">
-        <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
+        <link href="{{ asset('bundles/zectranet/css/leftSidebar.css') }}" rel="stylesheet" type="text/css">
+        {#<link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>#}
     {% endblock %}
 
 	{% block head %}
@@ -516,7 +517,7 @@
     <script src="{{ asset('bundles/zectranet/js/draganddrop.js') }}"></script>
 
 	<script src="{{ asset('bundles/zectranet/js/Bootstrap/ui-bootstrap-tpls-0.10.0.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('bundles/zectranet/js/metisMenu.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/zectranet/js/metisMenu.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/sb-admin-2.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/highlight.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/Bootstrap/bootstrap_ench_dropdowns.js') }}"></script>
@@ -544,32 +545,6 @@
             declineRequestOfficeProject : "{{ url('zectranet_decline_request_project', { 'project_id': 0 }) }}",
             taskShow: "{{ url('zectranet_task_show', {task_id: 0}) }}",
 			documentTemplate: "{{ asset('bundles/zectranet/templates/document.html') }}",
-            {#checkUserByUsername: "{{ url('intranet_user_check_username') }}",
-            registrationAction : "{{ url('intranet_register_action') }}",
-            checkUsername: "{{ url('intranet_user_check_username') }}",
-            checkEmail: "{{ url('intranet_user_check_email') }}",
-
-            // Sprint controll
-            addSprint: "{{ url('intranet_create_sprint') }}",
-            showSprint: "{{ url('intranet_show_sprint', {sprintid: 0}) }}",
-            addTaskToSprint: "{{ url('intranet_add_task_to_sprint', {taskid: 0}) }}",
-            changeStatus: "{{ url('intranet_change_sprint_status', {sprintid: 0}) }}",
-
-            // Search and quick search
-            quickSearch: "{{ url('intranet_quick_search') }}",
-            ExtendedSearchUrl: "{{ url('intranet_search') }}",
-
-            // Upload and document control
-            uploaderUpload: "{{ path('intranet_document_upload') }}",
-            deleteFile: "{{ path('intranet_document_delete', { fileid : 0 }) }}",
-            renameFile: "{{ path('intranet_document_rename', { fileid : 0 }) }}",
-            documentsGet: "{{ path('intranet_document_get') }}",
-
-            delSprint: "{{ url('intranet_del_sprint', {sprintid: 0}) }}",
-            // path to Intranet/web/
-            asset: "{{ asset('') }}",
-            topicsShow: "{{ path('intranet_show_topic', {topic_id: 0}) }}",
-            urlOfficeForTasks: "{{ path('intranet_show_office', {office_id: 0}) }}",#}
 		};
 
         var TEMPPARAMS = {};

@@ -9,3 +9,7 @@ services:
     zectranet.notifier:
         class: ZectranetBundle\Services\Notifier
         arguments: [@security.token_storage, @doctrine.orm.entity_manager, @router, @mailer]
+
+    zectranet.errorLogger:
+            class: ZectranetBundle\Services\ErrorLogger
+            arguments: [@security.token_storage, @doctrine.orm.entity_manager]
