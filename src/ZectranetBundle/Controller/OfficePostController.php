@@ -3,6 +3,7 @@ namespace ZectranetBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use ZectranetBundle\Entity\OfficePost;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,13 +27,26 @@ class OfficePostController extends Controller
         $user = $this->getUser();
         $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
 
-        $new_post = OfficePost::addNewPost($em, $user->getId(), $office_id, $post->message);
+        $new_post = null;
+        try {
+            $new_post = OfficePost::addNewPost($em, $user->getId(), $office_id, $post->message);
+        } catch (\Exception $ex) {
+            $from = "Class: OfficePost, function: addNewPost";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $usersName = array();
         $privateForAll = false;
         if ($post->usersForPrivateMessage == 'all')
         {
-            $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, null, 'office');
+            try {
+                $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, null, 'office');
+            } catch (\Exception $ex) {
+                $from = "Class: zectranet_notifier, function: createNotification";
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                return new JsonResponse(false);
+            }
             $privateForAll = true;
         }
 
@@ -51,14 +65,26 @@ class OfficePostController extends Controller
             {
                 $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $usersName));
                 $user = $this->getUser();
-                $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, $usersEmail, 'office');
+                try {
+                    $this->get('zectranet.notifier')->createNotification("private_message_office", $user, $user, $office, null, $post, $usersEmail, 'office');
+                } catch (\Exception $ex) {
+                    $from = "Class: zectranet_notifier, function: createNotification";
+                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                    return new JsonResponse(false);
+                }
             }
 
         }
 
         $user = $this->getUser();
-        if ($privateForAll == false)
-            $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $office, null, $post, $usersName, 'office');
+        try {
+            if ($privateForAll == false)
+                $this->get('zectranet.notifier')->createNotification("message_office", $user, $user, $office, null, $post, $usersName, 'office');
+        } catch (\Exception $ex) {
+            $from = "Class: zectranet_notifier, function: createNotification";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
@@ -71,7 +97,14 @@ class OfficePostController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent(), true);
         $data = (object) $data;
-        $phpPosts = OfficePost::getPostsOffset($em,$office_id, $data->offset, $data->count);
+        $phpPosts = null;
+        try{
+            $phpPosts = OfficePost::getPostsOffset($em,$office_id, $data->offset, $data->count);
+        } catch (\Exception $ex) {
+            $from = "Class: OfficePost, function: getPostsOffset";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
         $jsonPosts = array();
         /** @var OfficePost $post */
         foreach ($phpPosts as $post) {

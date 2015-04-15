@@ -101,8 +101,22 @@ class ProjectController extends Controller
     public function getMembersAction($project_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $jsonProjectUsers = Project::getJsonProjectMembers($em, $project_id);
-        $jsonNotProjectUsers = Project::getJsonNotProjectMembers($em, $project_id);
+        $jsonProjectUsers = null;
+        $jsonNotProjectUsers = null;
+        try {
+            $jsonProjectUsers = Project::getJsonProjectMembers($em, $project_id);
+        } catch (\Exception $ex) {
+            $from = "Class: Project, function: getJsonProjectMembers";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
+        try {
+            $jsonNotProjectUsers = Project::getJsonNotProjectMembers($em, $project_id);
+        } catch (\Exception $ex) {
+            $from = "Class: Project, function: getJsonNotProjectMembers";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $response = new JsonResponse(array(
             'projectMembers' => $jsonProjectUsers,
@@ -155,11 +169,23 @@ class ProjectController extends Controller
             }
 
             foreach ($usersRequest as $user)
-                \ZectranetBundle\Entity\Request::addNewRequest($em, $user, $type, $project);
+                try{
+                    \ZectranetBundle\Entity\Request::addNewRequest($em, $user, $type, $project);
+                } catch (\Exception $ex) {
+                    $from = "Class: Request, function: addNewRequest";
+                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                    return new JsonResponse(false);
+                }
 
             /** @var User $user */
             $user = $this->getUser();
-            $this->get('zectranet.notifier')->createNotification("request_user_project", $user, $usersRequest, $project);
+            try {
+                $this->get('zectranet.notifier')->createNotification("request_user_project", $user, $usersRequest, $project);
+            } catch (\Exception $ex) {
+                $from = "Class: zectranet_notifier, function: createNotification";
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                return new JsonResponse(false);
+            }
         }
 
         if ($data['status'] == 0)
@@ -217,7 +243,13 @@ class ProjectController extends Controller
        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        Project::addOfficeToProject($em, $office_id, $project_id);
+        try {
+            Project::addOfficeToProject($em, $office_id, $project_id);
+        } catch (\Exception $ex) {
+            $from = "Class: Project, function: addOfficeToProject";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+        }
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
@@ -365,9 +397,15 @@ class ProjectController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
-        if ($project && ($project->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN'))) {
-            Project::deleteProject($em, $project_id);
-            $this->get('zectranet.notifier')->clearAllNotificationsByProjectId($project_id);
+        try {
+            if ($project && ($project->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN'))) {
+                Project::deleteProject($em, $project_id);
+                $this->get('zectranet.notifier')->clearAllNotificationsByProjectId($project_id);
+            }
+        } catch (\Exception $ex) {
+            $from = "Class: Project, function: deleteProject";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_user_page');
         }
 
         return $this->redirectToRoute('zectranet_user_page');
@@ -397,14 +435,21 @@ class ProjectController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
-        if (count($epicStories) > 0) {
-            foreach ($epicStories as $story) {
-                if ($story->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN')) {
-                    Project::deleteProject($em, $story->getId());
-                    $this->get('zectranet.notifier')->createNotification("epic_story_deleted", $story->getParent(), $user, $story->getParent(), null, null, $story->getName());
+        try {
+            if (count($epicStories) > 0) {
+                foreach ($epicStories as $story) {
+                    if ($story->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN')) {
+                        Project::deleteProject($em, $story->getId());
+                        $this->get('zectranet.notifier')->createNotification("epic_story_deleted", $story->getParent(), $user, $story->getParent(), null, null, $story->getName());
+                    }
                 }
             }
+        } catch (\Exception $ex) {
+            $from = "Class: Project, function: deleteProject";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
         }
+
 
         $response = new Response(json_encode(array('success' => 'success')));
         $response->headers->set('Content-Type', 'application/json');
@@ -424,7 +469,13 @@ class ProjectController extends Controller
             /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
             $user_id = $this->getUser()->getId();
-            ProjectPost::addNewPost($em, $user_id, $project_id, $message);
+            try {
+                ProjectPost::addNewPost($em, $user_id, $project_id, $message);
+            } catch (\Exception $ex) {
+                $from = "Class: ProjectPost, function: addNewPost";
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+            }
         }
         return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
     }
@@ -455,7 +506,14 @@ class ProjectController extends Controller
         $user = $this->getUser();
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
 
-        $task = Task::addNewTask($em, $user, $project_id, $parameters);
+        $task = null;
+        try {
+            $task = Task::addNewTask($em, $user, $project_id, $parameters);
+        } catch (\Exception $ex) {
+            $from = "Class: Task, function: addNewTask";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $nameEpicStory = null;
         if ($project->getParent())
@@ -463,7 +521,13 @@ class ProjectController extends Controller
             $nameEpicStory = $project->getName();
             $project = $project->getParent();
         }
-        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory, null, $parameters['name']);
+        try {
+            $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory, null, $parameters['name']);
+        } catch (\Exception $ex) {
+            $from = "Class: zectranet_notifier, function: createNotification";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
@@ -496,7 +560,14 @@ class ProjectController extends Controller
         $user = $this->getUser();
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
 
-        $task = Task::addNewSubTask($em, $user, $project_id, $parameters);
+        $task = null;
+        try {
+            $task = Task::addNewSubTask($em, $user, $project_id, $parameters);
+        } catch (\Exception $ex) {
+            $from = "Class: Task, function: addNewSubTask";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $nameEpicStory = null;
         if ($project->getParent())
@@ -504,7 +575,13 @@ class ProjectController extends Controller
             $nameEpicStory = $project->getName();
             $project = $project->getParent();
         }
-        $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory, null, $parameters['name']);
+        try {
+            $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory, null, $parameters['name']);
+        } catch (\Exception $ex) {
+            $from = "Class: zectranet_notifier, function: createNotification";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
 
         $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
@@ -549,9 +626,22 @@ class ProjectController extends Controller
         $data = json_decode($request->getContent(), true);
         $data = (object) $data['story'];
 
-        $epicStory = Project::addEpicStory($em, $project_id, $user, $data);
+        $epicStory = null;
+        try {
+            $epicStory = Project::addEpicStory($em, $project_id, $user, $data, $project->getOfficeID());
+        } catch (\Exception $ex) {
+            $from = "Class: HFHeader, function: deleteHeader";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
-        $this->get('zectranet.notifier')->createNotification("epic_story_added", $project, $user, $project, null, null, $data->name);
+        try {
+            $this->get('zectranet.notifier')->createNotification("epic_story_added", $project, $user, $project, null, null, $data->name);
+        } catch (\Exception $ex) {
+            $from = "Class: zectranet_notifier, function: createNotification";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $response = new Response(json_encode(array('EpicStory' => $epicStory->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
@@ -588,7 +678,13 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
-        Project::addNewProjectVersion($em, $project_id, $user->getId(), $version);
+        try {
+            Project::addNewProjectVersion($em, $project_id, $user->getId(), $version);
+        } catch (\Exception $ex) {
+            $from = "Class: Project, function: addNewProjectVersion";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
         $response = new Response(json_encode(array('success' => true)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;

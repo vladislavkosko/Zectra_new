@@ -5,6 +5,7 @@ namespace ZectranetBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +54,17 @@ class SprintController extends Controller {
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $sprint = Sprint::addNewSprint($em, $office_id, $params);
+        $sprint = null;
+        try {
+            $sprint = Sprint::addNewSprint($em, $office_id, $params);
+        } catch (\Exception $ex) {
+            $from = "Class: HFHeader, function: deleteHeader";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_show_sprint', array(
+                'office_id' => $office_id,
+                'sprint_id' => $sprint->getId()
+            ));
+        }
 
         return $this->redirectToRoute('zectranet_show_sprint', array(
             'office_id' => $office_id,
@@ -100,7 +111,13 @@ class SprintController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        Sprint::addTasksToSprint($em, $sprint_id, $ids);
+        try {
+            Sprint::addTasksToSprint($em, $sprint_id, $ids);
+        } catch (\Exception $ex) {
+            $from = "Class: Sprint, function: addTasksToSprint";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $response = new Response(json_encode(array('success' => true)));
         $response->headers->set('Content-Type', 'application/json');

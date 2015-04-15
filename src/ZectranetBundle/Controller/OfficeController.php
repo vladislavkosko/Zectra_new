@@ -4,6 +4,7 @@ namespace ZectranetBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -56,8 +57,15 @@ class OfficeController extends Controller
         $name = $request->request->get('office_name');
         $description = $request->request->get('office_description');
 
-        /** @var Office $office */
-        $office = Office::addNewOffice($em, $this->getUser(), $name, $description);
+        $office = null;
+        try {
+            /** @var Office $office */
+            $office = Office::addNewOffice($em, $this->getUser(), $name, $description);
+        } catch (\Exception $ex) {
+            $from = "Class: Office, function: addNewOffice";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office->getId()));
+        }
         return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office->getId()));
     }
 
@@ -81,9 +89,15 @@ class OfficeController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
-        if ($office && ($office->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN'))) {
-            Office::deleteOffice($em, $office_id);
-            $this->get('zectranet.notifier')->clearAllNotificationsByOfficeId($office_id);
+        try {
+            if ($office && ($office->getOwnerid() == $user->getId() || $auth_checker->isGranted('ROLE_ADMIN'))) {
+                Office::deleteOffice($em, $office_id);
+                $this->get('zectranet.notifier')->clearAllNotificationsByOfficeId($office_id);
+            }
+        } catch (\Exception $ex) {
+            $from = "Class: Office, function: deleteOffice";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_user_page');
         }
 
         return $this->redirectToRoute('zectranet_user_page');
@@ -176,8 +190,24 @@ class OfficeController extends Controller
     public function getMembersAction($office_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $jsonOfficeUsers = Office::getJsonOfficeMembers($em, $office_id);
-        $jsonNotOfficeUsers = Office::getJsonNotOfficeMembers($em, $office_id);
+        $jsonOfficeUsers = null;
+        $jsonNotOfficeUsers = null;
+
+        try {
+            $jsonOfficeUsers = Office::getJsonOfficeMembers($em, $office_id);
+        } catch (\Exception $ex) {
+            $from = "Class: Office, function: getJsonOfficeMembers";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
+
+        try {
+            $jsonNotOfficeUsers = Office::getJsonNotOfficeMembers($em, $office_id);
+        } catch (\Exception $ex) {
+            $from = "Class: Office, function: getJsonNotOfficeMembers";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $response = new Response(json_encode(array(
             'officeMembers' => $jsonOfficeUsers,
@@ -229,12 +259,24 @@ class OfficeController extends Controller
                     $usersRequest[] = $user;
             }
 
-            foreach ($usersRequest as $user)
-                \ZectranetBundle\Entity\Request::addNewRequest($em, $user, $type, null, $office);
+            try {
+                foreach ($usersRequest as $user)
+                    \ZectranetBundle\Entity\Request::addNewRequest($em, $user, $type, null, $office);
+            } catch (\Exception $ex) {
+                $from = "Class: Request, function: addNewRequest";
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                return new JsonResponse(false);
+            }
 
             /** @var User $user */
             $user = $this->getUser();
-            $this->get('zectranet.notifier')->createNotification("request_office", $user, $usersRequest, $office);
+            try {
+                $this->get('zectranet.notifier')->createNotification("request_office", $user, $usersRequest, $office);
+            } catch (\Exception $ex) {
+                $from = "Class: zectranet_notifier, function: createNotification";
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                return new JsonResponse(false);
+            }
         }
 
         if ($data['status'] == 0)
@@ -321,7 +363,13 @@ class OfficeController extends Controller
             /** @var EntityManager $em */
             $em = $this->getDoctrine()->getManager();
             $user_id = $this->getUser()->getId();
-            OfficePost::addNewPost($em, $user_id, $office_id, $message);
+            try {
+                OfficePost::addNewPost($em, $user_id, $office_id, $message);
+            } catch (\Exception $ex) {
+                $from = "Class: OfficePost, function: addNewPost";
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                return new JsonResponse(false);
+            }
         }
         return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office_id));
     }

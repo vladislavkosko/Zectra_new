@@ -3,6 +3,7 @@ namespace ZectranetBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use ZectranetBundle\Entity\ProjectPost;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,13 +32,26 @@ class ProjectPostController extends Controller
             $project = $project->getParent();
         }
 
-        $new_post = ProjectPost::addNewPost($em, $user->getId(), $project_id, $post->message);
+        $new_post = null;
+        try {
+            $new_post = ProjectPost::addNewPost($em, $user->getId(), $project_id, $post->message);
+        } catch (\Exception $ex) {
+            $from = "Class: ProjectPost, function: addNewPost";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $usersName = array();
         $privateForAll = false;
         if ($post->usersForPrivateMessage == 'all')
         {
-            $this->get('zectranet.notifier')->createNotification("private_message_project", $user, $user, $project, $nameEpicStory, $post);
+            try {
+                $this->get('zectranet.notifier')->createNotification("private_message_project", $user, $user, $project, $nameEpicStory, $post);
+            } catch (\Exception $ex) {
+                $from = "Class: zectranet_notifier, function: createNotification";
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                return new JsonResponse(false);
+            }
             $privateForAll = true;
         }
 
@@ -63,13 +77,25 @@ class ProjectPostController extends Controller
             {
                 $usersEmail = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findBy(array('username' => $usersName));
                 $user = $this->getUser();
-                $this->get('zectranet.notifier')->createNotification("private_message_project", $user, $user, $project, $nameEpicStory, $post, $usersEmail);
+                try {
+                    $this->get('zectranet.notifier')->createNotification("private_message_project", $user, $user, $project, $nameEpicStory, $post, $usersEmail);
+                } catch (\Exception $ex) {
+                    $from = "Class: HFHeader, function: deleteHeader";
+                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                    return new JsonResponse(false);
+                }
             }
         }
 
         $user = $this->getUser();
-        if ($privateForAll == false)
-            $this->get('zectranet.notifier')->createNotification("message_project", $user, $user, $project, $nameEpicStory, $post, $usersName);
+        try {
+            if ($privateForAll == false)
+                $this->get('zectranet.notifier')->createNotification("message_project", $user, $user, $project, $nameEpicStory, $post, $usersName);
+        } catch (\Exception $ex) {
+            $from = "Class: zectranet_notifier, function: createNotification";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
@@ -81,7 +107,14 @@ class ProjectPostController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = json_decode($request->getContent(), true);
         $data = (object) $data;
-        $phpPosts = ProjectPost::getPostsOffset($em,$project_id, $data->offset, $data->count);
+        $phpPosts = null;
+        try {
+            $phpPosts = ProjectPost::getPostsOffset($em,$project_id, $data->offset, $data->count);
+        } catch (\Exception $ex) {
+            $from = "Class: ProjectPost, function: getPostsOffset";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
         $jsonPosts = array();
         /** @var ProjectPost $post */
         foreach ($phpPosts as $post) {
