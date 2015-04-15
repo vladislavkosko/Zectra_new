@@ -5,6 +5,7 @@ namespace ZectranetBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,15 +66,21 @@ class UploadController extends Controller
 
                     $file->move(__DIR__ . '/../../../web/documents/' . $user->getUsername(), $file_name);
 
-                    $document = new Document();
-                    $document->setName($file_name);
-                    $document->setPath($user->getUsername() . '/' . $file_name);
-                    $document->setUserid($user->getId());
-                    $document->setUser($user);
-                    $document->setUploaded(new \DateTime());
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($document);
-                    $em->flush();
+                    try {
+                        $document = new Document();
+                        $document->setName($file_name);
+                        $document->setPath($user->getUsername() . '/' . $file_name);
+                        $document->setUserid($user->getId());
+                        $document->setUser($user);
+                        $document->setUploaded(new \DateTime());
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($document);
+                        $em->flush();
+                    } catch (\Exception $ex) {
+                        $from = "Class: Document, function: uploadAction";
+                        $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                        return new JsonResponse(false);
+                    }
 
                     $response = new Response(json_encode(array("message" => "success")));
                     $response->headers->set('Content-Type', 'application/json');
@@ -91,15 +98,21 @@ class UploadController extends Controller
 
                     $file->move(__DIR__ . '/../../../web/documents/' . $user->getUsername(), $file_name);
 
-                    $document = new Document();
-                    $document->setName($file_name);
-                    $document->setPath($user->getUsername() . '/' . $file_name);
-                    $document->setUserid($user->getId());
-                    $document->setUser($user);
-                    $document->setUploaded(new \DateTime());
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($document);
-                    $em->flush();
+                    try {
+                        $document = new Document();
+                        $document->setName($file_name);
+                        $document->setPath($user->getUsername() . '/' . $file_name);
+                        $document->setUserid($user->getId());
+                        $document->setUser($user);
+                        $document->setUploaded(new \DateTime());
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($document);
+                        $em->flush();
+                    } catch (\Exception $ex) {
+                        $from = "Class: Document, function: uploadAction";
+                        $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                        return new JsonResponse(false);
+                    }
 
                     $response = new Response(json_encode(array("message" => 'success')));
                     $response->headers->set('Content-Type', 'application/json');
@@ -134,15 +147,21 @@ class UploadController extends Controller
 
                 if (count($document_clone) == 0)
                 {
-                    $document = new Document($user);
-                    $document->setName($name_img . '.png');
-                    $document->setPath($user_name . '/' . 'attachments/' . $name_img . ".png");
-                    $document->setUserid($user->getId());
-                    $document->setUser($user);
-                    $document->setUploaded(new \DateTime());
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($document);
-                    $em->flush();
+                    try {
+                        $document = new Document($user);
+                        $document->setName($name_img . '.png');
+                        $document->setPath($user_name . '/' . 'attachments/' . $name_img . ".png");
+                        $document->setUserid($user->getId());
+                        $document->setUser($user);
+                        $document->setUploaded(new \DateTime());
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($document);
+                        $em->flush();
+                    } catch (\Exception $ex) {
+                        $from = "Class: Document, function: Insert_Screenshots_InPHPAction";
+                        $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                        return new JsonResponse(false);
+                    }
 
                     $img_in_base64 = str_replace('data:image/png;base64,', '', $img_in_base64);
                     $img_in_base64 = str_replace(' ', '+', $img_in_base64);
@@ -179,7 +198,14 @@ class UploadController extends Controller
 
         $userid = $this->getUser()->getId();
 
-        $documents = Document::getAllDocuments($em, $userid);
+        $documents = null;
+        try {
+            $documents = Document::getAllDocuments($em, $userid);
+        } catch (\Exception $ex) {
+            $from = "Class: Document, function: getAllDocuments";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
         $response = new Response(json_encode(array("result" => $documents)));
         $response->headers->set('Content-Type', 'application/json');
 

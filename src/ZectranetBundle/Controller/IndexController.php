@@ -47,10 +47,6 @@ class IndexController extends Controller
             return $this->redirectToRoute('zectranet_user_page');
         }
 
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
-            return $this->redirectToRoute('zectranet_user_page');
-        }
-
         $authenticationUtils = $this->get('security.authentication_utils');
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -117,9 +113,22 @@ class IndexController extends Controller
             'password' => $request->request->get('password'),
         );
 
-        $user = User::addUser($em, $this->get('security.encoder_factory'), $parameters);
-        User::GenerateDefaultAvatar($em, $user);
+        $user = null;
+        try{
+            $user = User::addUser($em, $this->get('security.encoder_factory'), $parameters);
+        } catch (\Exception $ex) {
+            $from = "Class: User, function: addUser";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_login');
+        }
 
+        try{
+            User::GenerateDefaultAvatar($em, $user);
+        } catch (\Exception $ex) {
+            $from = "Class: User, function: GenerateDefaultAvatar";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_login');
+        }
         return $this->redirectToRoute('zectranet_login');
     }
 
@@ -138,7 +147,14 @@ class IndexController extends Controller
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $keyForAccess = ForgotPassword::addForgotRecord($em, $user);
+        $keyForAccess = null;
+        try{
+            $keyForAccess = ForgotPassword::addForgotRecord($em, $user);
+        } catch (\Exception $ex) {
+            $from = "Class: ForgotPassword, function: addForgotRecord";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->forward('ZectranetBundle:Index:login', array('param' => "ErrorLogger"));
+        }
 
         $link = $this->get('router')->generate('zectranet_reset_password', array('keyForAccess' => $keyForAccess) ,true);
 
@@ -199,7 +215,14 @@ class IndexController extends Controller
         /** @var User $user */
         $user = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($userid);
 
-        $status = User::resetPassword($em, $this->get('security.encoder_factory'), $user, $parameters);
+        $status = null;
+        try {
+            $status = User::resetPassword($em, $this->get('security.encoder_factory'), $user, $parameters);
+        } catch (\Exception $ex) {
+            $from = "Class: User, function: resetPassword";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->render("ZectranetBundle::resetPassword.html.twig", array('userid' => $userid, 'messageError' => "ErrorLogger"));
+        }
 
         if ($status == 0)
             return $this->render("ZectranetBundle::resetPassword.html.twig", array('userid' => $userid, 'messageError' => "Please enter the same password in both the fields"));

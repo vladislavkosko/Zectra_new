@@ -5,6 +5,7 @@ namespace ZectranetBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use ZectranetBundle\Entity\Notification;
@@ -34,7 +35,14 @@ class NotificationController extends Controller
 
         $user_requests = $user->getrequests();
 
-        $user_notifications = Notification::prepareNotifications($user);
+        $user_notifications = null;
+        try {
+            $user_notifications = Notification::prepareNotifications($user);
+        } catch (\Exception $ex) {
+            $from = "Class: Notification, function: prepareNotifications";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(false);
+        }
 
         $response = new Response(json_encode(array("result" => array(
             'notifications' => array_map(function($e){return $e->getInArray();}, $user_notifications),

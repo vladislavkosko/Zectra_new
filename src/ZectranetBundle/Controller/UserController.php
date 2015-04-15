@@ -94,7 +94,19 @@ class UserController extends Controller
                 'googlePlusVisible' => ($request->request->get('googlePlusVisible') == 'on'),
             );
 
-            $errors = User::editProfileInfo($em, $user_id, $params, $user->getEmail());
+            $errors = null;
+            try {
+                $errors = User::editProfileInfo($em, $user_id, $params, $user->getEmail());
+            } catch (\Exception $ex) {
+                $from = "Class: User, function: editProfileInfo";
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                if ($errors['email']) {
+                    $this->get('session')->set('error', 'email');
+                    return $this->redirectToRoute('zectranet_edit_user_page');
+                } else {
+                    return $this->redirectToRoute('zectranet_user_page');
+                }
+            }
             UserInfo::editInfo($em, $user_id, $params);
 
             if ($errors['email']) {
@@ -134,7 +146,13 @@ class UserController extends Controller
     public function generateAvatarAction() {
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-        User::GenerateDefaultAvatar($em, $user);
+        try {
+            User::GenerateDefaultAvatar($em, $user);
+        } catch (\Exception $ex) {
+            $from = "Class: User, function: GenerateDefaultAvatar";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_user_page');
+        }
         return $this->redirectToRoute('zectranet_user_page');
     }
 
@@ -185,7 +203,13 @@ class UserController extends Controller
             'msgEmailEpicStoryDeleted' => $request->request->get('msgEmailEpicStoryDeleted')
         );
 
-        UserSettings::setEmailSettings($em, $settings, $parameters);
+        try {
+            UserSettings::setEmailSettings($em, $settings, $parameters);
+        } catch (\Exception $ex) {
+            $from = "Class: UserSettings, function: setEmailSettings";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_user_settings');
+        }
 
         return $this->redirectToRoute('zectranet_user_settings');
     }
@@ -215,7 +239,13 @@ class UserController extends Controller
             'msgSiteEpicStoryDeleted' => $request->request->get('msgSiteEpicStoryDeleted')
         );
 
-        UserSettings::setSiteSettings($em, $settings, $parameters);
+        try {
+            UserSettings::setSiteSettings($em, $settings, $parameters);
+        } catch (\Exception $ex) {
+            $from = "Class: UserSettings, function: setSiteSettings";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->redirectToRoute('zectranet_user_settings');
+        }
 
         return $this->redirectToRoute('zectranet_user_settings');
     }
@@ -239,7 +269,14 @@ class UserController extends Controller
             'repeatNewPassword' => $request->request->get('repeatNewPassword')
         );
 
-        $status = User::changePassword($em, $this->get('security.encoder_factory'), $user, $parameters);
+        $status = null;
+        try {
+            $status = User::changePassword($em, $this->get('security.encoder_factory'), $user, $parameters);
+        } catch (\Exception $ex) {
+            $from = "Class: User, function: changePassword";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return $this->render('@Zectranet/settings.html.twig', array('mes' => "ErrorLogger"));
+        }
 
         if ($status == 0)
             return $this->render('@Zectranet/settings.html.twig', array('mes' => 0));
@@ -273,10 +310,16 @@ class UserController extends Controller
         );
 
         $currentWDE = $em->getRepository('ZectranetBundle:DailyTimeSheet')->findOneBy(array('date' => $currentDate, 'userid' => $user->getId()));
-        if ($currentWDE == null)
-            DailyTimeSheet::createWDE($em, $user, $parameters);
-        else
-            DailyTimeSheet::updateWDE($em, $user, $parameters, $currentDate);
+        try {
+            if ($currentWDE == null)
+                DailyTimeSheet::createWDE($em, $user, $parameters);
+            else
+                DailyTimeSheet::updateWDE($em, $user, $parameters, $currentDate);
+        } catch (\Exception $ex) {
+            $from = "Class: DailyTimeSheet, function: createWDE_or_updateWDE";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new RedirectResponse($referer);
+        }
 
         return new RedirectResponse($referer);
     }
