@@ -3,6 +3,7 @@
 namespace ZectranetBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -75,6 +76,34 @@ class ThreadPost
             'edited' => $this->getEdited()->format('Y-m-d'),
             'threadID' => $this->getThreadID(),
         );
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $thread_id
+     * @param int $user_id
+     * @param string $message
+     * @return ThreadPost
+     */
+    public static function addNewPost(EntityManager $em, $thread_id, $user_id, $message) {
+        $thread = $em->getRepository('ZectranetBundle:Thread')->find($thread_id);
+        $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
+        $post = new ThreadPost();
+        $post->setMessage($message);
+        $post->setThread($thread);
+        $post->setUser($user);
+        $em->persist($post);
+        $em->flush();
+
+        return $post;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->posted = new \DateTime();
+        $this->edited = new \DateTime();
     }
 
     /**

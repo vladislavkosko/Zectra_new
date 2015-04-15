@@ -5,6 +5,7 @@ namespace ZectranetBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -16,6 +17,7 @@ use ZectranetBundle\Entity\Header;
 use ZectranetBundle\Entity\HeaderForum;
 use ZectranetBundle\Entity\SubHeader;
 use ZectranetBundle\Entity\Thread;
+use ZectranetBundle\Entity\ThreadPost;
 use ZectranetBundle\Entity\User;
 
 class HeaderForumController extends Controller {
@@ -174,6 +176,7 @@ class HeaderForumController extends Controller {
         $params = array(
             'title' => $request->request->get('title'),
             'message' => $request->request->get('message'),
+            'keywords' => $request->request->get('keywords'),
         );
 
         $thread = null;
@@ -191,6 +194,31 @@ class HeaderForumController extends Controller {
         return $this->redirectToRoute('zectranet_show_header_forum_thread', array(
             'project_id' => $subHeader->getHeader()->getForumID(),
             'subheader_id' => $subHeader->getId(),
+            'thread_id' => $thread->getId(),
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @param int $thread_id
+     * @return RedirectResponse
+     */
+    public function addNewPostAction(Request $request, $thread_id) {
+        $message = $request->request->get('message');
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        $thread = $em->getRepository('ZectranetBundle:Thread')->find($thread_id);
+        try {
+            $th = ThreadPost::addNewPost($em, $thread_id, $user->getId(), $message);
+        } catch (\Exception $ex) {
+            $from = "Class: ThreadPost, function: addNewPost";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+        }
+        return $this->redirectToRoute('zectranet_show_header_forum_thread', array(
+            'project_id' => $thread->getSubHeader()->getHeader()->getForumID(),
+            'subheader_id' => $thread->getSubHeaderID(),
             'thread_id' => $thread->getId(),
         ));
     }

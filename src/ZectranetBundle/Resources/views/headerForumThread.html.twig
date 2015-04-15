@@ -4,21 +4,77 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-xs-2">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{{ path('zectranet_show_header_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
+            </li>
+            <li>
+                <a href="{{ path('zectranet_show_header_forum_subheader', { 'project_id': forum.id, 'subheader_id': sub.id }) }}">{{ sub.title }}</a>
+            </li>
+            <li class="active">{{ thread.title }}</li>
+        </ol>
+    </div>
+
+    <div class="row panel panel-default">
+        <div class="col-xs-2" style="padding: 10px;">
             <img class="img-responsive img-thumbnail" src="{{ asset('') ~ 'documents/' ~ thread.user.avatar }}" alt="{{ thread.user.username }}"/>
             <p>
-                <a href="{{ path('zectranet_user_page', {'user_id': thread.userID }) }}">
-                    {{ thread.user.username }}
+                <a class="btn" href="{{ path('zectranet_user_page', {'user_id': thread.userID }) }}" style="word-wrap: break-word; white-space: normal">
+                    {{ thread.user.name ~ ' ' ~ thread.user.surname ~ ' (' ~ thread.user.username ~ ')' }}
                 </a>
             </p>
         </div>
-        <div class="col-xs-10">
+        <div class="col-xs-10" style="min-height: 250px; border-left: 1px solid #eee;">
             <div class="page-header">
                 <h4 class="text-info">{{ thread.title }}</h4>
             </div>
-            <p>
+            <p class="pull-right text-muted"><i>{{ thread.date | date('Y-m-d H:i:s') }}</i></p>
+            <p style="white-space: pre-line;">
                 {{ thread.message }}
             </p>
         </div>
+        {% if thread.keywords %}
+            <div class="col-xs-10 col-xs-offset-2" style="border-top: 1px solid #eee; border-left: 1px solid #eee; padding: 10px 15px;">
+                <p>
+                    <b>Keywords: </b> <i class="text-muted">{{ thread.keywords }}</i>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row panel panel-default">
+        <div class="panel-heading">
+            <h5 align="center">Thread posts</h5>
+        </div>
+        <div class="panel-body" style="padding: 10px 25px;">
+            {% for post in thread.posts %}
+                <div class="row panel panel-default" style="border-right: 1px solid #eee;">
+                    <div class="col-xs-2" style="padding: 10px;">
+                        <img class="img-responsive img-thumbnail" src="{{ asset('') ~ 'documents/' ~ post.user.avatar }}" alt="{{ post.user.username }}"/>
+                        <p>
+                            <a class="btn" href="{{ path('zectranet_user_page', {'user_id': post.userID }) }}" style="word-wrap: break-word; white-space: normal;">
+                                {{ post.user.name ~ ' ' ~ post.user.surname ~ ' (' ~ post.user.username ~ ')' }}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-xs-10" style="min-height: 200px; border-left: 1px solid #eee;">
+                        <p class="pull-right text-muted"><i>{{ post.posted | date('Y-m-d H:i:s') }}</i></p>
+                        <p style="white-space: pre-line;">
+                            {{ post.message }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <form class="panel-footer" action="{{ path('zectranet_add_post_header_forum_thread', { 'thread_id': thread.id }) }}" method="post">
+            <div class="input-group">
+                <textarea name="message" class="form-control" rows="6"></textarea>
+                <div class="input-group-addon" style="padding: 0;">
+                    <button type="submit" class="btn btn-default btn-primary" style="width: 132px; height: 132px;">
+                        Post
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 {% endblock %}

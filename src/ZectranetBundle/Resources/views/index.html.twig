@@ -65,6 +65,16 @@
                                     </a>
                                 </li>
                             {% endfor %}
+
+                            {% for project in app.user.homeOffice.headerForums if project.users | length == 1 %}
+                                <li>
+                                    <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}">
+                                        <i class="fa fa-briefcase fa-fw"></i>
+                                        {{ project.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+
                             <li>
                                 <a href="#">
                                     <i class='fa fa-briefcase'></i>

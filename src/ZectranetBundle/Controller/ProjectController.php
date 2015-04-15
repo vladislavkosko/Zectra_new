@@ -39,8 +39,6 @@ class ProjectController extends Controller
 
         if (!$user->getProjects()->contains($project)
             && !$user->getOwnedProjects()->contains($project)) {
-
-            //return $this->redirectToRoute('');
         }
 
         $this->get('zectranet.notifier')->clearNotificationsByProjectId($project_id);
@@ -318,16 +316,29 @@ class ProjectController extends Controller
 
         switch ($type) {
             case 1:
-                /** @var Project $project */
-                $project = Project::addNewProject($em, $user, $name, $type, $office_id);
+                $project = null;
+                try {
+                    /** @var Project $project */
+                    $project = Project::addNewProject($em, $user, $name, $type, $office_id);
+                } catch (\Exception $ex) {
+                    $from = "class: Project, function: addNewProject";
+                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                }
+
                 return $this->redirectToRoute('zectranet_show_project',
                     array('project_id' => $project->getId()));
             case 2:
-                /** @var HeaderForum $project */
-                $project = HeaderForum::addNewHeaderForum($em, $user->getId(), $params);
+                $project = null;
+                try {
+                    /** @var HeaderForum $project */
+                    $project = HeaderForum::addNewHeaderForum($em, $user->getId(), $office_id, $params);
+                } catch (\Exception $ex) {
+                    $from = "class: HeaderForum, function: addNewHeaderForum";
+                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                }
+
                 return $this->redirectToRoute('zectranet_show_header_forum',
                     array('project_id' => $project->getId()));
-
         }
 
     }

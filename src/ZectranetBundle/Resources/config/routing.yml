@@ -276,6 +276,12 @@ zectranet_start_header_forum_thread:
     requirements:
         subheader_id: \d+
 
+zectranet_add_post_header_forum_thread:
+    pattern: /headerForum/thread/{thread_id}/addPost
+    defaults: { _controller: ZectranetBundle:HeaderForum:addNewPost }
+    requirements:
+        thread_id: \d+
+
 zectranet_accept_request_user_office:
     pattern: /office/{office_id}/acceptRequestUserOffice
     defaults: { _controller: ZectranetBundle:Office:acceptRequestUserOffice }

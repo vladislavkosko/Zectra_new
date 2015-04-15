@@ -11,13 +11,13 @@
     <div ng-controller="ErrorLogsController" ng-init="getErrors();">
         <div class="row" ng-repeat="error in errors" style="margin-top: 20px;">
             <div class="col-md-12">
-                <div class="img-thumbnail" style="padding: 15px 20px; box-shadow: 0 0 10px 1px darkred;">
+                <div class="img-thumbnail" style="padding: 15px 20px; box-shadow: 0 0 6px 0 darkseagreen;">
                     <p class="pull-right text-muted"><i>[[ error.date ]]</i></p>
-                    <h4 class="text-info">Error Message:</h4>
+                    <h4 class="text-info" style="text-shadow: 1px 0 darkorchid;">Error Message:</h4>
                     <div class="message-block" ng-bind-html="error.message"></div>
-                    <h4 class="text-info">Where:</h4>
+                    <h4 class="text-info" style="text-shadow: 1px 0 darkorchid;">Where:</h4>
                     <div class="message-block" ng-bind-html="error.where"></div>
-                    <h4 class="text-info">From:</h4>
+                    <h4 class="text-info" style="text-shadow: 1px 0 darkorchid;">From:</h4>
                     <div class="message-block" ng-bind-html="error.from"></div>
                 </div>
             </div>

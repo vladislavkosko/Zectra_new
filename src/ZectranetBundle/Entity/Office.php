@@ -64,6 +64,12 @@ class Office
     private $projects;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="HeaderForum", mappedBy="office")
+     */
+    private $headerForums;
+
+    /**
      * @ORM\OneToMany(targetEntity="Sprint", mappedBy="office", cascade={"remove"})
      * @var ArrayCollection
      */
@@ -504,5 +510,38 @@ class Office
         }
 
         return $jsonNotOfficeUsers;
+    }
+
+    /**
+     * Add headerForums
+     *
+     * @param \ZectranetBundle\Entity\HeaderForum $headerForums
+     * @return Office
+     */
+    public function addHeaderForum(\ZectranetBundle\Entity\HeaderForum $headerForums)
+    {
+        $this->headerForums[] = $headerForums;
+
+        return $this;
+    }
+
+    /**
+     * Remove headerForums
+     *
+     * @param \ZectranetBundle\Entity\HeaderForum $headerForums
+     */
+    public function removeHeaderForum(\ZectranetBundle\Entity\HeaderForum $headerForums)
+    {
+        $this->headerForums->removeElement($headerForums);
+    }
+
+    /**
+     * Get headerForums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHeaderForums()
+    {
+        return $this->headerForums;
     }
 }

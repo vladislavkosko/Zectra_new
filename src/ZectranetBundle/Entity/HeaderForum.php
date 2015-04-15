@@ -37,6 +37,24 @@ class HeaderForum
     private $owner;
 
     /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="headerForums", fetch="EXTRA_LAZY")
+     * @var ArrayCollection
+     */
+    private $users;
+
+    /**
+     * @var int
+     * @ORM\Column(name="office_id", type="integer")
+     */
+    private $officeID;
+
+    /**
+     * @var Office
+     * @ORM\ManyToOne(targetEntity="Office", inversedBy="headerForums")
+     */
+    private $office;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Header", mappedBy="forum", cascade={"remove"})
      */
@@ -66,6 +84,7 @@ class HeaderForum
     public function __construct() {
         $this->created = new \DateTime();
         $this->shared = false;
+        $this->users = new ArrayCollection();
     }
 
     public function getInArray() {
@@ -80,14 +99,18 @@ class HeaderForum
     /**
      * @param EntityManager $em
      * @param int $user_id
+     * @param int $office_id
      * @param array $params
      * @return HeaderForum
      */
-    public static function addNewHeaderForum(EntityManager $em, $user_id, $params) {
+    public static function addNewHeaderForum(EntityManager $em, $user_id, $office_id, $params) {
         $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
         $project = new HeaderForum();
+        $project->setOffice($office);
         $project->setOwner($user);
         $project->setName($params['name']);
+        $project->addUser($user);
         $em->persist($project);
         $em->flush();
 
@@ -250,5 +273,84 @@ class HeaderForum
     public function getHeaders()
     {
         return $this->headers;
+    }
+
+    /**
+     * Set officeID
+     *
+     * @param integer $officeID
+     * @return HeaderForum
+     */
+    public function setOfficeID($officeID)
+    {
+        $this->officeID = $officeID;
+
+        return $this;
+    }
+
+    /**
+     * Get officeID
+     *
+     * @return integer 
+     */
+    public function getOfficeID()
+    {
+        return $this->officeID;
+    }
+
+    /**
+     * Set office
+     *
+     * @param \ZectranetBundle\Entity\Office $office
+     * @return HeaderForum
+     */
+    public function setOffice(\ZectranetBundle\Entity\Office $office = null)
+    {
+        $this->office = $office;
+
+        return $this;
+    }
+
+    /**
+     * Get office
+     *
+     * @return \ZectranetBundle\Entity\Office 
+     */
+    public function getOffice()
+    {
+        return $this->office;
+    }
+
+    /**
+     * Add users
+     *
+     * @param \ZectranetBundle\Entity\User $users
+     * @return HeaderForum
+     */
+    public function addUser(\ZectranetBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \ZectranetBundle\Entity\User $users
+     */
+    public function removeUser(\ZectranetBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

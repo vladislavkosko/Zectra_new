@@ -79,6 +79,12 @@ class Thread
      */
     private $message;
 
+    /**
+     * @var string
+     * @ORM\Column(name="keywords", type="string", length=255, nullable=true, options={"default" = null})
+     */
+    private $keywords;
+
     public function __construct() {
         $this->posts = new ArrayCollection();
         $this->date = new \DateTime();
@@ -95,6 +101,7 @@ class Thread
             'title' => $this->getTitle(),
             'message' => $this->getMessage(),
             'subHeaderID' => $this->getSubHeaderID(),
+            'keywords' => $this->getKeywords(),
             'posts' => EntityOperations::arrayToJsonArray($this->getPosts()),
         );
     }
@@ -112,6 +119,7 @@ class Thread
         $thread = new Thread();
         $thread->setMessage($params['message']);
         $thread->setTitle($params['title']);
+        $thread->setKeywords($params['keywords']);
         $thread->setSubHeader($subheader);
         $thread->setUser($user);
         $em->persist($thread);
@@ -345,5 +353,28 @@ class Thread
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set keywords
+     *
+     * @param string $keywords
+     * @return Thread
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = $keywords;
+
+        return $this;
+    }
+
+    /**
+     * Get keywords
+     *
+     * @return string 
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
     }
 }

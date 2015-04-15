@@ -51,4 +51,5 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     white-space: pre-line;
+    box-shadow: 3px 3px 8px lightslategray;
 }

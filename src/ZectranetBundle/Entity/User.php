@@ -216,11 +216,18 @@ class User implements UserInterface, \Serializable
      */
     private $userInfo;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="HeaderForum", inversedBy="users", fetch="EXTRA_LAZY")
+     * @var ArrayCollection
+     */
+    private $headerForums;
+
     public function __construct()
     {
         $this->active = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
+        $this->headerForums = new ArrayCollection();
     }
 
     /**
@@ -1281,5 +1288,38 @@ class User implements UserInterface, \Serializable
     public function getUserInfo()
     {
         return $this->userInfo;
+    }
+
+    /**
+     * Add headerForums
+     *
+     * @param \ZectranetBundle\Entity\HeaderForum $headerForums
+     * @return User
+     */
+    public function addHeaderForum(\ZectranetBundle\Entity\HeaderForum $headerForums)
+    {
+        $this->headerForums[] = $headerForums;
+
+        return $this;
+    }
+
+    /**
+     * Remove headerForums
+     *
+     * @param \ZectranetBundle\Entity\HeaderForum $headerForums
+     */
+    public function removeHeaderForum(\ZectranetBundle\Entity\HeaderForum $headerForums)
+    {
+        $this->headerForums->removeElement($headerForums);
+    }
+
+    /**
+     * Get headerForums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHeaderForums()
+    {
+        return $this->headerForums;
     }
 }
