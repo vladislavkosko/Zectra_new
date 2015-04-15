@@ -8,12 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Thread
+ * HFThread
  *
  * @ORM\Table(name="header_forum_threads")
  * @ORM\Entity
  */
-class Thread
+class HFThread
 {
     /**
      * @var integer
@@ -38,7 +38,7 @@ class Thread
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="ThreadPost", mappedBy="thread", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="HFThreadPost", mappedBy="thread", cascade={"remove"})
      */
     private $posts;
 
@@ -61,8 +61,8 @@ class Thread
     private $subHeaderID;
 
     /**
-     * @var SubHeader
-     * @ORM\ManyToOne(targetEntity="SubHeader", inversedBy="threads")
+     * @var HFSubHeader
+     * @ORM\ManyToOne(targetEntity="HFSubHeader", inversedBy="threads")
      * @ORM\JoinColumn(name="subheader_id", referencedColumnName="id")
      */
     private $subHeader;
@@ -111,12 +111,12 @@ class Thread
      * @param int $subheader_id
      * @param int $user_id
      * @param array $params
-     * @return Thread
+     * @return HFThread
      */
     public static function startNewThread(EntityManager $em, $subheader_id, $user_id, $params) {
-        $subheader = $em->getRepository('ZectranetBundle:SubHeader')->find($subheader_id);
+        $subheader = $em->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
         $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
-        $thread = new Thread();
+        $thread = new HFThread();
         $thread->setMessage($params['message']);
         $thread->setTitle($params['title']);
         $thread->setKeywords($params['keywords']);
@@ -142,7 +142,7 @@ class Thread
      * Set userID
      *
      * @param integer $userID
-     * @return Thread
+     * @return HFThread
      */
     public function setUserID($userID)
     {
@@ -165,7 +165,7 @@ class Thread
      * Set subHeaderID
      *
      * @param integer $subHeaderID
-     * @return Thread
+     * @return HFThread
      */
     public function setSubHeaderID($subHeaderID)
     {
@@ -188,7 +188,7 @@ class Thread
      * Set title
      *
      * @param string $title
-     * @return Thread
+     * @return HFThread
      */
     public function setTitle($title)
     {
@@ -211,7 +211,7 @@ class Thread
      * Set message
      *
      * @param string $message
-     * @return Thread
+     * @return HFThread
      */
     public function setMessage($message)
     {
@@ -234,7 +234,7 @@ class Thread
      * Set user
      *
      * @param \ZectranetBundle\Entity\User $user
-     * @return Thread
+     * @return HFThread
      */
     public function setUser(\ZectranetBundle\Entity\User $user = null)
     {
@@ -256,10 +256,10 @@ class Thread
     /**
      * Set subHeader
      *
-     * @param \ZectranetBundle\Entity\SubHeader $subHeader
-     * @return Thread
+     * @param \ZectranetBundle\Entity\HFSubHeader $subHeader
+     * @return HFThread
      */
-    public function setSubHeader(\ZectranetBundle\Entity\SubHeader $subHeader = null)
+    public function setSubHeader(\ZectranetBundle\Entity\HFSubHeader $subHeader = null)
     {
         $this->subHeader = $subHeader;
 
@@ -269,7 +269,7 @@ class Thread
     /**
      * Get subHeader
      *
-     * @return \ZectranetBundle\Entity\SubHeader 
+     * @return \ZectranetBundle\Entity\HFSubHeader
      */
     public function getSubHeader()
     {
@@ -279,10 +279,10 @@ class Thread
     /**
      * Add posts
      *
-     * @param \ZectranetBundle\Entity\ThreadPost $posts
-     * @return Thread
+     * @param \ZectranetBundle\Entity\HFThreadPost $posts
+     * @return HFThread
      */
-    public function addPost(\ZectranetBundle\Entity\ThreadPost $posts)
+    public function addPost(\ZectranetBundle\Entity\HFThreadPost $posts)
     {
         $this->posts[] = $posts;
 
@@ -292,9 +292,9 @@ class Thread
     /**
      * Remove posts
      *
-     * @param \ZectranetBundle\Entity\ThreadPost $posts
+     * @param \ZectranetBundle\Entity\HFThreadPost $posts
      */
-    public function removePost(\ZectranetBundle\Entity\ThreadPost $posts)
+    public function removePost(\ZectranetBundle\Entity\HFThreadPost $posts)
     {
         $this->posts->removeElement($posts);
     }
@@ -313,7 +313,7 @@ class Thread
      * Set sticky
      *
      * @param boolean $sticky
-     * @return Thread
+     * @return HFThread
      */
     public function setSticky($sticky)
     {
@@ -336,7 +336,7 @@ class Thread
      * Set date
      *
      * @param \DateTime $date
-     * @return Thread
+     * @return HFThread
      */
     public function setDate($date)
     {
@@ -359,7 +359,7 @@ class Thread
      * Set keywords
      *
      * @param string $keywords
-     * @return Thread
+     * @return HFThread
      */
     public function setKeywords($keywords)
     {

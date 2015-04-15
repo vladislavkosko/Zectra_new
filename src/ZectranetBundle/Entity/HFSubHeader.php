@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SubHeader
+ * HFSubHeader
  *
  * @ORM\Table(name="header_forum_subheaders")
  * @ORM\Entity
  */
-class SubHeader
+class HFSubHeader
 {
     /**
      * @var integer
@@ -29,15 +29,15 @@ class SubHeader
     private $headerID;
 
     /**
-     * @var Header
-     * @ORM\ManyToOne(targetEntity="Header", inversedBy="subHeaders")
+     * @var HFHeader
+     * @ORM\ManyToOne(targetEntity="HFHeader", inversedBy="subHeaders")
      * @ORM\JoinColumn(name="header_id", referencedColumnName="id")
      */
     private $header;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Thread", mappedBy="subHeader", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="HFThread", mappedBy="subHeader", cascade={"remove"})
      * @ORM\OrderBy({"sticky" = "DESC", "date" = "DESC"})
      */
     private $threads;
@@ -85,7 +85,7 @@ class SubHeader
      * Set headerID
      *
      * @param integer $headerID
-     * @return SubHeader
+     * @return HFSubHeader
      */
     public function setHeaderID($headerID)
     {
@@ -108,7 +108,7 @@ class SubHeader
      * Set title
      *
      * @param string $title
-     * @return SubHeader
+     * @return HFSubHeader
      */
     public function setTitle($title)
     {
@@ -131,7 +131,7 @@ class SubHeader
      * Set adminHeader
      *
      * @param boolean $adminHeader
-     * @return SubHeader
+     * @return HFSubHeader
      */
     public function setAdminHeader($adminHeader)
     {
@@ -154,7 +154,7 @@ class SubHeader
      * Set description
      *
      * @param string $description
-     * @return SubHeader
+     * @return HFSubHeader
      */
     public function setDescription($description)
     {
@@ -176,10 +176,10 @@ class SubHeader
     /**
      * Set header
      *
-     * @param \ZectranetBundle\Entity\Header $header
-     * @return SubHeader
+     * @param \ZectranetBundle\Entity\HFHeader $header
+     * @return HFSubHeader
      */
-    public function setHeader(\ZectranetBundle\Entity\Header $header = null)
+    public function setHeader(\ZectranetBundle\Entity\HFHeader $header = null)
     {
         $this->header = $header;
 
@@ -189,7 +189,7 @@ class SubHeader
     /**
      * Get header
      *
-     * @return \ZectranetBundle\Entity\Header 
+     * @return \ZectranetBundle\Entity\HFHeader
      */
     public function getHeader()
     {
@@ -206,10 +206,10 @@ class SubHeader
     /**
      * Add threads
      *
-     * @param \ZectranetBundle\Entity\Thread $threads
-     * @return SubHeader
+     * @param \ZectranetBundle\Entity\HFThread $threads
+     * @return HFSubHeader
      */
-    public function addThread(\ZectranetBundle\Entity\Thread $threads)
+    public function addThread(\ZectranetBundle\Entity\HFThread $threads)
     {
         $this->threads[] = $threads;
 
@@ -219,9 +219,9 @@ class SubHeader
     /**
      * Remove threads
      *
-     * @param \ZectranetBundle\Entity\Thread $threads
+     * @param \ZectranetBundle\Entity\HFThread $threads
      */
-    public function removeThread(\ZectranetBundle\Entity\Thread $threads)
+    public function removeThread(\ZectranetBundle\Entity\HFThread $threads)
     {
         $this->threads->removeElement($threads);
     }

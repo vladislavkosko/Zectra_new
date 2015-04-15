@@ -42,7 +42,7 @@ class QnAPost
     private $threadID;
 
     /**
-     * @var Thread
+     * @var HFThread
      * @ORM\ManyToOne(targetEntity="QnAThread", inversedBy="posts")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="id")
      */

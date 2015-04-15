@@ -65,7 +65,7 @@ class Office
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="HeaderForum", mappedBy="office")
+     * @ORM\OneToMany(targetEntity="HFForum", mappedBy="office")
      */
     private $headerForums;
 
@@ -515,10 +515,10 @@ class Office
     /**
      * Add headerForums
      *
-     * @param \ZectranetBundle\Entity\HeaderForum $headerForums
+     * @param \ZectranetBundle\Entity\HFForum $headerForums
      * @return Office
      */
-    public function addHeaderForum(\ZectranetBundle\Entity\HeaderForum $headerForums)
+    public function addHeaderForum(\ZectranetBundle\Entity\HFForum $headerForums)
     {
         $this->headerForums[] = $headerForums;
 
@@ -528,9 +528,9 @@ class Office
     /**
      * Remove headerForums
      *
-     * @param \ZectranetBundle\Entity\HeaderForum $headerForums
+     * @param \ZectranetBundle\Entity\HFForum $headerForums
      */
-    public function removeHeaderForum(\ZectranetBundle\Entity\HeaderForum $headerForums)
+    public function removeHeaderForum(\ZectranetBundle\Entity\HFForum $headerForums)
     {
         $this->headerForums->removeElement($headerForums);
     }

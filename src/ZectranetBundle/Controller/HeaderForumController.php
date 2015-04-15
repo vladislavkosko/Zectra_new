@@ -13,11 +13,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\ForgotPassword;
-use ZectranetBundle\Entity\Header;
-use ZectranetBundle\Entity\HeaderForum;
-use ZectranetBundle\Entity\SubHeader;
-use ZectranetBundle\Entity\Thread;
-use ZectranetBundle\Entity\ThreadPost;
+use ZectranetBundle\Entity\HFHeader;
+use ZectranetBundle\Entity\HFForum;
+use ZectranetBundle\Entity\HFSubHeader;
+use ZectranetBundle\Entity\HFThread;
+use ZectranetBundle\Entity\HFThreadPost;
 use ZectranetBundle\Entity\User;
 
 class HeaderForumController extends Controller {
@@ -27,7 +27,7 @@ class HeaderForumController extends Controller {
      * @return Response
      */
     public function indexAction($project_id) {
-        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HeaderForum')->find($project_id);
+        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         return $this->render('@Zectranet/headerForum.html.twig', array('forum' => $forum));
     }
 
@@ -38,10 +38,10 @@ class HeaderForumController extends Controller {
      * @return Response
      */
     public function forumAction($project_id, $subheader_id) {
-        /** @var HeaderForum $forum */
-        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HeaderForum')->find($project_id);
-        /** @var SubHeader $subheader */
-        $subheader = $this->getDoctrine()->getRepository('ZectranetBundle:SubHeader')->find($subheader_id);
+        /** @var HFForum $forum */
+        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
+        /** @var HFSubHeader $subheader */
+        $subheader = $this->getDoctrine()->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
         return $this->render('@Zectranet/headerForumSubHeader.html.twig', array(
             'forum' => $forum,
             'sub' => $subheader,
@@ -54,7 +54,7 @@ class HeaderForumController extends Controller {
      * @return Response
      */
     public function settingsAction($project_id) {
-        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HeaderForum')->find($project_id);
+        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         return $this->render('@Zectranet/headerForumSettings.html.twig', array('forum' => $forum));
     }
 
@@ -64,7 +64,7 @@ class HeaderForumController extends Controller {
      * @return JsonResponse
      */
     public function getHeadersAction($project_id) {
-        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HeaderForum')->find($project_id);
+        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         return new JsonResponse(EntityOperations::arrayToJsonArray($forum->getHeaders()));
     }
 
@@ -84,14 +84,14 @@ class HeaderForumController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
-            Header::addNewHeader($em, $project_id, $params);
+            HFHeader::addNewHeader($em, $project_id, $params);
         } catch (\Exception $ex) {
-            $from = "Class: Header, function: addNewHeader";
+            $from = "Class: HFHeader, function: addNewHeader";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return new JsonResponse(false);
         }
 
-        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HeaderForum')->find($project_id);
+        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         return new JsonResponse(EntityOperations::arrayToJsonArray($forum->getHeaders()));
     }
 
@@ -111,11 +111,11 @@ class HeaderForumController extends Controller {
         );
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $header = $em->getRepository('ZectranetBundle:Header')->find($header_id);
+        $header = $em->getRepository('ZectranetBundle:HFHeader')->find($header_id);
         try {
-            Header::addNewSubHeader($em, $params);
+            HFHeader::addNewSubHeader($em, $params);
         } catch (\Exception $ex) {
-            $from = "Class: Header, function: addNewSubHeader";
+            $from = "Class: HFHeader, function: addNewSubHeader";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return new JsonResponse(false);
         }
@@ -130,12 +130,12 @@ class HeaderForumController extends Controller {
     public function deleteHeaderAction($header_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $header = $em->getRepository('ZectranetBundle:Header')->find($header_id);
+        $header = $em->getRepository('ZectranetBundle:HFHeader')->find($header_id);
         $forum = $header->getForum();
         try {
-            Header::deleteHeader($em, $header_id);
+            HFHeader::deleteHeader($em, $header_id);
         } catch (\Exception $ex) {
-            $from = "Class: Header, function: deleteHeader";
+            $from = "Class: HFHeader, function: deleteHeader";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return new JsonResponse(false);
         }
@@ -151,9 +151,9 @@ class HeaderForumController extends Controller {
      * @return Response
      */
     public function showThreadAction($project_id, $subheader_id, $thread_id) {
-        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HeaderForum')->find($project_id);
-        $subHeader = $this->getDoctrine()->getRepository('ZectranetBundle:SubHeader')->find($subheader_id);
-        $thread = $this->getDoctrine()->getRepository('ZectranetBundle:Thread')->find($thread_id);
+        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
+        $subHeader = $this->getDoctrine()->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
+        $thread = $this->getDoctrine()->getRepository('ZectranetBundle:HFThread')->find($thread_id);
 
         return $this->render('@Zectranet/headerForumThread.html.twig', array(
             'forum' => $forum,
@@ -170,7 +170,7 @@ class HeaderForumController extends Controller {
     public function startNewThreadAction(Request $request, $subheader_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $subHeader = $em->getRepository('ZectranetBundle:SubHeader')->find($subheader_id);
+        $subHeader = $em->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
         /** @var User $user */
         $user = $this->getUser();
         $params = array(
@@ -181,9 +181,9 @@ class HeaderForumController extends Controller {
 
         $thread = null;
         try {
-            $thread = Thread::startNewThread($em, $subheader_id, $user->getId(), $params);
+            $thread = HFThread::startNewThread($em, $subheader_id, $user->getId(), $params);
         } catch (\Exception $ex) {
-            $from = "Class: Thread, function: startNewThread";
+            $from = "Class: HFThread, function: startNewThread";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return $this->redirectToRoute('zectranet_show_header_forum_subheader', array(
                 'project_id' => $subHeader->getHeader()->getForumID(),
@@ -209,11 +209,11 @@ class HeaderForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
-        $thread = $em->getRepository('ZectranetBundle:Thread')->find($thread_id);
+        $thread = $em->getRepository('ZectranetBundle:HFThread')->find($thread_id);
         try {
-            $th = ThreadPost::addNewPost($em, $thread_id, $user->getId(), $message);
+            $th = HFThreadPost::addNewPost($em, $thread_id, $user->getId(), $message);
         } catch (\Exception $ex) {
-            $from = "Class: ThreadPost, function: addNewPost";
+            $from = "Class: HFThreadPost, function: addNewPost";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
         }
         return $this->redirectToRoute('zectranet_show_header_forum_thread', array(

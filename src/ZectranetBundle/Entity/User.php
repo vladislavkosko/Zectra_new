@@ -217,7 +217,7 @@ class User implements UserInterface, \Serializable
     private $userInfo;
 
     /**
-     * @ORM\ManyToMany(targetEntity="HeaderForum", inversedBy="users", fetch="EXTRA_LAZY")
+     * @ORM\ManyToMany(targetEntity="HFForum", inversedBy="users", fetch="EXTRA_LAZY")
      * @var ArrayCollection
      */
     private $headerForums;
@@ -1293,10 +1293,10 @@ class User implements UserInterface, \Serializable
     /**
      * Add headerForums
      *
-     * @param \ZectranetBundle\Entity\HeaderForum $headerForums
+     * @param \ZectranetBundle\Entity\HFForum $headerForums
      * @return User
      */
-    public function addHeaderForum(\ZectranetBundle\Entity\HeaderForum $headerForums)
+    public function addHeaderForum(\ZectranetBundle\Entity\HFForum $headerForums)
     {
         $this->headerForums[] = $headerForums;
 
@@ -1306,9 +1306,9 @@ class User implements UserInterface, \Serializable
     /**
      * Remove headerForums
      *
-     * @param \ZectranetBundle\Entity\HeaderForum $headerForums
+     * @param \ZectranetBundle\Entity\HFForum $headerForums
      */
-    public function removeHeaderForum(\ZectranetBundle\Entity\HeaderForum $headerForums)
+    public function removeHeaderForum(\ZectranetBundle\Entity\HFForum $headerForums)
     {
         $this->headerForums->removeElement($headerForums);
     }

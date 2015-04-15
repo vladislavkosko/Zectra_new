@@ -8,12 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Thread
+ * HFThread
  *
  * @ORM\Table(name="header_forum_thread_posts")
  * @ORM\Entity
  */
-class ThreadPost
+class HFThreadPost
 {
     /**
      * @var integer
@@ -43,8 +43,8 @@ class ThreadPost
     private $threadID;
 
     /**
-     * @var Thread
-     * @ORM\ManyToOne(targetEntity="Thread", inversedBy="posts")
+     * @var HFThread
+     * @ORM\ManyToOne(targetEntity="HFThread", inversedBy="posts")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="id")
      */
     private $thread;
@@ -83,12 +83,12 @@ class ThreadPost
      * @param int $thread_id
      * @param int $user_id
      * @param string $message
-     * @return ThreadPost
+     * @return HFThreadPost
      */
     public static function addNewPost(EntityManager $em, $thread_id, $user_id, $message) {
-        $thread = $em->getRepository('ZectranetBundle:Thread')->find($thread_id);
+        $thread = $em->getRepository('ZectranetBundle:HFThread')->find($thread_id);
         $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
-        $post = new ThreadPost();
+        $post = new HFThreadPost();
         $post->setMessage($message);
         $post->setThread($thread);
         $post->setUser($user);
@@ -120,7 +120,7 @@ class ThreadPost
      * Set userID
      *
      * @param integer $userID
-     * @return ThreadPost
+     * @return HFThreadPost
      */
     public function setUserID($userID)
     {
@@ -143,7 +143,7 @@ class ThreadPost
      * Set threadID
      *
      * @param integer $threadID
-     * @return ThreadPost
+     * @return HFThreadPost
      */
     public function setThreadID($threadID)
     {
@@ -166,7 +166,7 @@ class ThreadPost
      * Set message
      *
      * @param string $message
-     * @return ThreadPost
+     * @return HFThreadPost
      */
     public function setMessage($message)
     {
@@ -189,7 +189,7 @@ class ThreadPost
      * Set posted
      *
      * @param \DateTime $posted
-     * @return ThreadPost
+     * @return HFThreadPost
      */
     public function setPosted($posted)
     {
@@ -212,7 +212,7 @@ class ThreadPost
      * Set edited
      *
      * @param \DateTime $edited
-     * @return ThreadPost
+     * @return HFThreadPost
      */
     public function setEdited($edited)
     {
@@ -235,7 +235,7 @@ class ThreadPost
      * Set user
      *
      * @param \ZectranetBundle\Entity\User $user
-     * @return ThreadPost
+     * @return HFThreadPost
      */
     public function setUser(\ZectranetBundle\Entity\User $user = null)
     {
@@ -257,10 +257,10 @@ class ThreadPost
     /**
      * Set thread
      *
-     * @param \ZectranetBundle\Entity\Thread $thread
-     * @return ThreadPost
+     * @param \ZectranetBundle\Entity\HFThread $thread
+     * @return HFThreadPost
      */
-    public function setThread(\ZectranetBundle\Entity\Thread $thread = null)
+    public function setThread(\ZectranetBundle\Entity\HFThread $thread = null)
     {
         $this->thread = $thread;
 
@@ -270,7 +270,7 @@ class ThreadPost
     /**
      * Get thread
      *
-     * @return \ZectranetBundle\Entity\Thread 
+     * @return \ZectranetBundle\Entity\HFThread
      */
     public function getThread()
     {

@@ -8,12 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * SubHeader
+ * HFSubHeader
  *
  * @ORM\Table(name="header_forum_headers")
  * @ORM\Entity
  */
-class Header
+class HFHeader
 {
     /**
      * @var integer
@@ -30,15 +30,15 @@ class Header
     private $forumID;
 
     /**
-     * @var HeaderForum
-     * @ORM\ManyToOne(targetEntity="HeaderForum", inversedBy="headers")
+     * @var HFForum
+     * @ORM\ManyToOne(targetEntity="HFForum", inversedBy="headers")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="id")
      */
     private $forum;
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="SubHeader", mappedBy="header", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="HFSubHeader", mappedBy="header", cascade={"remove"})
      */
     private $subHeaders;
 
@@ -78,11 +78,11 @@ class Header
      * @param EntityManager $em
      * @param int $project_id
      * @param array $params
-     * @return Header
+     * @return HFHeader
      */
     public static function addNewHeader(EntityManager $em, $project_id, $params) {
-        $project = $em->getRepository('ZectranetBundle:HeaderForum')->find($project_id);
-        $header = new Header();
+        $project = $em->getRepository('ZectranetBundle:HFForum')->find($project_id);
+        $header = new HFHeader();
         $header->setTitle($params['title']);
         $header->setHeaderBgColor($params['bgColor']);
         $header->setHeaderTextColor($params['textColor']);
@@ -96,12 +96,12 @@ class Header
     /**
      * @param EntityManager $em
      * @param array $params
-     * @return Header
+     * @return HFHeader
      */
     public static function addNewSubHeader(EntityManager $em, $params) {
-        /** @var Header $header */
-        $header = $em->getRepository('ZectranetBundle:Header')->find($params['header_id']);
-        $subHeader = new SubHeader();
+        /** @var HFHeader $header */
+        $header = $em->getRepository('ZectranetBundle:HFHeader')->find($params['header_id']);
+        $subHeader = new HFSubHeader();
         $subHeader->setTitle($params['title']);
         $subHeader->setAdminHeader($params['admin']);
         $subHeader->setDescription($params['description']);
@@ -117,7 +117,7 @@ class Header
      * @param int $header_id
      */
     public static function deleteHeader(EntityManager $em, $header_id) {
-        $forum = $em->getRepository('ZectranetBundle:HeaderForum')->find($header_id);
+        $forum = $em->getRepository('ZectranetBundle:HFForum')->find($header_id);
         $em->remove($forum);
         $em->flush();
     }
@@ -136,7 +136,7 @@ class Header
      * Set forumID
      *
      * @param integer $forumID
-     * @return Header
+     * @return HFHeader
      */
     public function setForumID($forumID)
     {
@@ -159,7 +159,7 @@ class Header
      * Set title
      *
      * @param string $title
-     * @return Header
+     * @return HFHeader
      */
     public function setTitle($title)
     {
@@ -182,7 +182,7 @@ class Header
      * Set headerBgColor
      *
      * @param string $headerBgColor
-     * @return Header
+     * @return HFHeader
      */
     public function setHeaderBgColor($headerBgColor)
     {
@@ -205,7 +205,7 @@ class Header
      * Set headerTextColor
      *
      * @param string $headerTextColor
-     * @return Header
+     * @return HFHeader
      */
     public function setHeaderTextColor($headerTextColor)
     {
@@ -227,10 +227,10 @@ class Header
     /**
      * Set forum
      *
-     * @param \ZectranetBundle\Entity\HeaderForum $forum
-     * @return Header
+     * @param \ZectranetBundle\Entity\HFForum $forum
+     * @return HFHeader
      */
-    public function setForum(\ZectranetBundle\Entity\HeaderForum $forum = null)
+    public function setForum(\ZectranetBundle\Entity\HFForum $forum = null)
     {
         $this->forum = $forum;
 
@@ -240,7 +240,7 @@ class Header
     /**
      * Get forum
      *
-     * @return \ZectranetBundle\Entity\HeaderForum 
+     * @return \ZectranetBundle\Entity\HFForum
      */
     public function getForum()
     {
@@ -257,10 +257,10 @@ class Header
     /**
      * Add subHeaders
      *
-     * @param \ZectranetBundle\Entity\SubHeader $subHeaders
-     * @return Header
+     * @param \ZectranetBundle\Entity\HFSubHeader $subHeaders
+     * @return HFHeader
      */
-    public function addSubHeader(\ZectranetBundle\Entity\SubHeader $subHeaders)
+    public function addSubHeader(\ZectranetBundle\Entity\HFSubHeader $subHeaders)
     {
         $this->subHeaders[] = $subHeaders;
 
@@ -270,9 +270,9 @@ class Header
     /**
      * Remove subHeaders
      *
-     * @param \ZectranetBundle\Entity\SubHeader $subHeaders
+     * @param \ZectranetBundle\Entity\HFSubHeader $subHeaders
      */
-    public function removeSubHeader(\ZectranetBundle\Entity\SubHeader $subHeaders)
+    public function removeSubHeader(\ZectranetBundle\Entity\HFSubHeader $subHeaders)
     {
         $this->subHeaders->removeElement($subHeaders);
     }

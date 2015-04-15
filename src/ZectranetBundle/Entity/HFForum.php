@@ -8,12 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * HeaderForum
+ * HFForum
  *
  * @ORM\Table(name="header_forums")
  * @ORM\Entity
  */
-class HeaderForum
+class HFForum
 {
     /**
      * @var integer
@@ -57,7 +57,7 @@ class HeaderForum
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Header", mappedBy="forum", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="HFHeader", mappedBy="forum", cascade={"remove"})
      */
     private $headers;
 
@@ -102,12 +102,12 @@ class HeaderForum
      * @param int $user_id
      * @param int $office_id
      * @param array $params
-     * @return HeaderForum
+     * @return HFForum
      */
     public static function addNewHeaderForum(EntityManager $em, $user_id, $office_id, $params) {
         $user = $em->getRepository('ZectranetBundle:User')->find($user_id);
         $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
-        $project = new HeaderForum();
+        $project = new HFForum();
         $project->setOffice($office);
         $project->setOwner($user);
         $project->setName($params['name']);
@@ -132,7 +132,7 @@ class HeaderForum
      * Set ownerID
      *
      * @param integer $ownerID
-     * @return HeaderForum
+     * @return HFForum
      */
     public function setOwnerID($ownerID)
     {
@@ -155,7 +155,7 @@ class HeaderForum
      * Set shared
      *
      * @param boolean $shared
-     * @return HeaderForum
+     * @return HFForum
      */
     public function setShared($shared)
     {
@@ -178,7 +178,7 @@ class HeaderForum
      * Set owner
      *
      * @param \ZectranetBundle\Entity\User $owner
-     * @return HeaderForum
+     * @return HFForum
      */
     public function setOwner(\ZectranetBundle\Entity\User $owner = null)
     {
@@ -201,7 +201,7 @@ class HeaderForum
      * Set name
      *
      * @param string $name
-     * @return HeaderForum
+     * @return HFForum
      */
     public function setName($name)
     {
@@ -224,7 +224,7 @@ class HeaderForum
      * Set created
      *
      * @param \DateTime $created
-     * @return HeaderForum
+     * @return HFForum
      */
     public function setCreated($created)
     {
@@ -246,10 +246,10 @@ class HeaderForum
     /**
      * Add headers
      *
-     * @param \ZectranetBundle\Entity\Header $headers
-     * @return HeaderForum
+     * @param \ZectranetBundle\Entity\HFHeader $headers
+     * @return HFForum
      */
-    public function addHeader(\ZectranetBundle\Entity\Header $headers)
+    public function addHeader(\ZectranetBundle\Entity\HFHeader $headers)
     {
         $this->headers[] = $headers;
 
@@ -259,9 +259,9 @@ class HeaderForum
     /**
      * Remove headers
      *
-     * @param \ZectranetBundle\Entity\Header $headers
+     * @param \ZectranetBundle\Entity\HFHeader $headers
      */
-    public function removeHeader(\ZectranetBundle\Entity\Header $headers)
+    public function removeHeader(\ZectranetBundle\Entity\HFHeader $headers)
     {
         $this->headers->removeElement($headers);
     }
@@ -280,7 +280,7 @@ class HeaderForum
      * Set officeID
      *
      * @param integer $officeID
-     * @return HeaderForum
+     * @return HFForum
      */
     public function setOfficeID($officeID)
     {
@@ -303,7 +303,7 @@ class HeaderForum
      * Set office
      *
      * @param \ZectranetBundle\Entity\Office $office
-     * @return HeaderForum
+     * @return HFForum
      */
     public function setOffice(\ZectranetBundle\Entity\Office $office = null)
     {
@@ -326,7 +326,7 @@ class HeaderForum
      * Add users
      *
      * @param \ZectranetBundle\Entity\User $users
-     * @return HeaderForum
+     * @return HFForum
      */
     public function addUser(\ZectranetBundle\Entity\User $users)
     {

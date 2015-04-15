@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\ForgotPassword;
-use ZectranetBundle\Entity\Header;
+use ZectranetBundle\Entity\HFHeader;
 use ZectranetBundle\Entity\User;
 
 class ErrorLogController extends Controller

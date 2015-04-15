@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use ZectranetBundle\Entity\EntityOperations;
-use ZectranetBundle\Entity\HeaderForum;
+use ZectranetBundle\Entity\HFForum;
 use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Project;
@@ -320,12 +320,12 @@ class ProjectController extends Controller
             case 2:
                 $project = null;
                 try {
-                    /** @var HeaderForum $project */
-                    $project = HeaderForum::addNewHeaderForum($em, $user->getId(), $office_id, $params);
+                    /** @var HFForum $project */
+                    $project = HFForum::addNewHeaderForum($em, $user->getId(), $office_id, $params);
                     return $this->redirectToRoute('zectranet_show_header_forum',
                         array('project_id' => $project->getId()));
                 } catch (\Exception $ex) {
-                    $from = "class: HeaderForum, function: addNewHeaderForum";
+                    $from = "class: HFForum, function: addNewHeaderForum";
                     $this->get('zectranet.errorlogger')->registerException($ex, $from);
                 }
                 break;
