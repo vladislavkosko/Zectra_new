@@ -51,6 +51,7 @@ class HeaderForum
     /**
      * @var Office
      * @ORM\ManyToOne(targetEntity="Office", inversedBy="headerForums")
+     * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
      */
     private $office;
 
