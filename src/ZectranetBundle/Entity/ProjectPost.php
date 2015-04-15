@@ -263,6 +263,23 @@ class ProjectPost
         return $post;
     }
 
+    /**
+     * @param EntityManager $em
+     * @param int $post_id
+     * @param string $message
+     * @return ProjectPost
+     */
+    public static function EditPost(EntityManager $em, $post_id,$message) {
+        $post = $em->getRepository('ZectranetBundle:ProjectPost')->find($post_id);
+
+        $post->setEdited(new \DateTime());
+        $post->setMessage($message);
+
+        $em->persist($post);
+        $em->flush();
+        return $post;
+    }
+
     public function getInArray() {
         return array(
             'id' => $this->id,

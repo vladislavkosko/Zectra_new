@@ -102,30 +102,23 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             return matches;
         };
 
-        $scope.trueorfalse = function($index) {
-
+        $scope.isEditable = function($index) {
+            var one_minute = 1000 * 60;
             var now = new Date();
-            var now_times = [];
-            now_times.month = now.getMonth();
-            now_times.day = now.getDate() ;
-            now_times.hour = now.getHours() ;
-            now_times.minutes = now.getMinutes();
-
+            now = now.getTime();
             var timepost = new Date($scope.posts[$index].posted);
-            var post_times = [];
-
-            post_times.month = timepost.getMonth();
-            post_times.day = timepost.getDate();
-            post_times.hour = timepost.getHours();
-            post_times.minutes = timepost.getMinutes();
-          if( now_times.month - post_times.month == 0 &&  now_times.day - post_times.day == 0 && now_times.hour - post_times.hour == 0 &&  now_times.minutes - post_times.minutes <= 10 )
-          {
-              return true;
-          }
-
+            timepost = timepost.getTime();
+            var difference_ms = now - timepost;
+            difference_ms = difference_ms / one_minute;
+            return (difference_ms <= 20 && $scope.posts[$index].user.id == $scope.USER_ID);
         };
 
-
+        $scope.EditPost = function (post) {
+            var post_will_be_edited = post;
+            $('#textarea-post').focus();
+            $('#textarea-post').val(post_will_be_edited.message);
+            $scope.will_be_edited = true;
+        };
         console.log('Chat Controller was loaded');
 
     }]);
