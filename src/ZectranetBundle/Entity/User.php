@@ -217,7 +217,7 @@ class User implements UserInterface, \Serializable
     private $userInfo;
 
     /**
-     * @ORM\ManyToMany(targetEntity="HFForum", inversedBy="users", fetch="EXTRA_LAZY")
+     * @ORM\ManyToMany(targetEntity="HFForum", mappedBy="users", fetch="EXTRA_LAZY")
      * @var ArrayCollection
      */
     private $headerForums;
