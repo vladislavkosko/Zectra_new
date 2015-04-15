@@ -316,31 +316,33 @@ class ProjectController extends Controller
 
         switch ($type) {
             case 1:
-                $project = null;
-                try {
-                    /** @var Project $project */
-                    $project = Project::addNewProject($em, $user, $name, $type, $office_id);
-                } catch (\Exception $ex) {
-                    $from = "class: Project, function: addNewProject";
-                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
-                }
-
-                return $this->redirectToRoute('zectranet_show_project',
-                    array('project_id' => $project->getId()));
+                break;
             case 2:
                 $project = null;
                 try {
                     /** @var HeaderForum $project */
                     $project = HeaderForum::addNewHeaderForum($em, $user->getId(), $office_id, $params);
+                    return $this->redirectToRoute('zectranet_show_header_forum',
+                        array('project_id' => $project->getId()));
                 } catch (\Exception $ex) {
                     $from = "class: HeaderForum, function: addNewHeaderForum";
                     $this->get('zectranet.errorlogger')->registerException($ex, $from);
                 }
-
-                return $this->redirectToRoute('zectranet_show_header_forum',
-                    array('project_id' => $project->getId()));
+                break;
+            case 3:
+                /*$project = null;
+                try {
+                    $project = Project::addNewProject($em, $user, $name, $type, $office_id);
+                    return $this->redirectToRoute('zectranet_show_project',
+                        array('project_id' => $project->getId()));
+                } catch (\Exception $ex) {
+                    $from = "class: Project, function: addNewProject";
+                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                }*/
+                break;
+            default: break;
         }
-
+        return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office_id));
     }
 
     /**
