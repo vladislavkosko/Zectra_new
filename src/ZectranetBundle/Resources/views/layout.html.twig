@@ -54,6 +54,38 @@
 			<ul class="nav navbar-top-links navbar-right">
 
 				{% if app.user %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
+                            <div class="fa fa-fw"><b>C</b></div>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-tasks noclose list-group">
+                            <li ng-if="requests.contactRequests.length == 0" class="list-group-item">
+                                <h4 class="text-info">You haven't any requests</h4>
+                            </li>
+                            <li ng-repeat="request in requests.contactRequests" class="list-group-item">
+                                User "[[ request.contact.username ]]" has sent you contact request<br/>
+                                Message:
+                                <span style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                        [[ request.message ]]
+                                </span>
+
+                                <div class="btn-group">
+                                    <a class="btn btn-default">
+                                        Accept
+                                    </a>
+                                    <a class="btn btn-default">
+                                        Decline
+                                    </a>
+                                    <a class="btn btn-default">
+                                        More info
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 							<i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -268,7 +300,9 @@
 
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 							<i class="fa fa-bell fa-fw"></i>
-                            <span ng-if="notifications.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">[[notifications.length]]</span>
+                            <span ng-if="notifications.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
+                                [[notifications.length]]
+                            </span>
                             <i class="fa fa-caret-down"></i>
 						</a>
 
@@ -364,38 +398,6 @@
 								</a>
 							</li>
 
-							{#
-							<li>
-								<a href="{{ path('intranet_show_personal_page') }}">
-									<i class="fa fa-user fa-fw"></i>
-									<span class="description">Dashboard</span>
-								</a>
-							</li>
-							<li>
-								<a href="#">
-									<i class="fa fa-envelope fa-fw"></i>
-									Inbox
-								</a>
-							</li>
-							<li>
-								<a href="{{ path('intranet_task_activity_logs_show') }}">
-									<i class="fa fa-book fa-fw"></i>
-									Show logs
-								</a>
-							</li>
-							<li>
-								<a href="{{ path('intranet_task_reporter') }}">
-									<i class="fa fa-puzzle-piece fa-fw"></i>
-									Task Reporter
-								</a>
-							</li>
-							<li>
-								<a href="{{ path('intranet_document') }}">
-									<i class="fa fa-file-text fa-fw"></i>
-									Documents upload
-								</a>
-							</li>
-							#}
 							<li class="divider"></li>
 							<li>
 								<a class="text-danger" href="{{ path('zectranet_logout') }}">
@@ -435,6 +437,7 @@
 			<div class="row">
 				<div class="col-xs-12">
 
+                    {#
                     <div ng-if="requests.length > 0" class="hidden-element" ng-class="{'visible-element': requests.length > 0}">
                         <div class="panel panel-info request">
                             <div class="panel-body">
@@ -480,7 +483,7 @@
                             </div>
                         </div>
                     </div>
-
+                    #}
 					{% block body %}
 
 					{% endblock %}

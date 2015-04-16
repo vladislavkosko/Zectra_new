@@ -223,6 +223,12 @@ class User implements UserInterface, \Serializable
     private $headerForums;
 
     /**
+     * @ORM\ManyToMany(targetEntity="QnAForum", mappedBy="users", fetch="EXTRA_LAZY")
+     * @var ArrayCollection
+     */
+    private $QnAForums;
+
+    /**
      * @ORM\ManyToMany(targetEntity="User")
      * @ORM\JoinTable(name="user_contacts",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -253,7 +259,7 @@ class User implements UserInterface, \Serializable
      */
     public static function sendContactMembershipRequest(EntityManager $em, $user_id, $contact_id, $message) {
         $type = RequestType::getContactMembershipRequest($em);
-        Request::addNewRequest($em, $user_id, $type->getId(), $message, $contact_id);
+        Request::addNewRequest($em, $contact_id, $type->getId(), $message, $user_id);
     }
 
     /**
@@ -266,6 +272,7 @@ class User implements UserInterface, \Serializable
         $this->roles = new ArrayCollection();
         $this->headerForums = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->QnAForums = new ArrayCollection();
     }
 
     /**

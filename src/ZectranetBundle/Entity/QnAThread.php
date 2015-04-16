@@ -65,6 +65,12 @@ class QnAThread
      */
     private $keywords;
 
+    /**
+     * @var QnAForum
+     * @ORM\OneToMany(targetEntity="QnAForum", mappedBy="threads")
+     */
+    private $forum;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();

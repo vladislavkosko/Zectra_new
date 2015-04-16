@@ -13,7 +13,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
     var acceptRequestOfficeProject = JSON_URLS.acceptRequestOfficeProject;
     var declineRequestOfficeProject = JSON_URLS.declineRequestOfficeProject;
 
-    $scope.requests = [];
+    $scope.requests = {};
     $scope.notifications = null;
 	$scope.notifyHandler = null;
     $scope.notificationsLength = null;
@@ -32,14 +32,29 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 		$scope.notifyHandler = null;
 	}
 
-	$scope.getNotification =  function getNotifications() {
+    function prepareRequests (requests) {
+        var newRequests = {
+            'contactRequests': []
+        };
+
+        for (var i = 0; i < requests.length; i++) {
+            switch (requests[i].type.id) {
+                case 1: break;
+                case 2: break;
+                case 3: break;
+                case 4: break;
+                case 5: newRequests.contactRequests.push(requests[i]); break;
+            }
+        }
+        return newRequests;
+    }
+
+	$scope.getNotification = function getNotifications() {
 		$http.get(notificationsGetUrl)
 			.success(function(response){
                 if (response.result.requests && response.result.requests.length > 0){
-                    $scope.requests = response.result.requests;
+                    $scope.requests = prepareRequests(response.result.requests);
                 }
-
-                else $scope.requests = [];
 
                 if (response.result.notifications && response.result.notifications.length > 0){
                     if (response.result.notifications.length != $scope.notificationsLength){
@@ -65,7 +80,6 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 							}
 
 						}
-
                         $scope.notificationsLength = response.result.notifications.length;
 						$rootScope.NOTIFICATIONS = $scope.notifications;
                     }
