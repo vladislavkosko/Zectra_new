@@ -11,5 +11,9 @@ services:
         arguments: [@security.token_storage, @doctrine.orm.entity_manager, @router, @mailer]
 
     zectranet.errorLogger:
-            class: ZectranetBundle\Services\ErrorLogger
-            arguments: [@security.token_storage, @doctrine.orm.entity_manager]
+        class: ZectranetBundle\Services\ErrorLogger
+        arguments: [@security.token_storage, @doctrine.orm.entity_manager]
+
+    zectranet.projectLogger:
+        class: ZectranetBundle\Services\ProjectLogger
+        arguments: [@security.token_storage, @doctrine.orm.entity_manager]
