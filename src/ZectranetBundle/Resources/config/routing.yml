@@ -509,3 +509,7 @@ zectranet_show_project_versions:
     defaults: { _controller: ZectranetBundle:Project:showProjectVersion }
     requirements:
         project_id: \d+
+
+zectranet_send_request:
+    pattern: /request/send
+    defaults: { _controller: ZectranetBundle:User:# }
