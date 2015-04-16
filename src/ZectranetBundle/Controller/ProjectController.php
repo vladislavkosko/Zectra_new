@@ -19,10 +19,10 @@ use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\ProjectPost;
+use ZectranetBundle\Entity\QnAForum;
 use ZectranetBundle\Entity\RequestType;
 use ZectranetBundle\Entity\Task;
 use ZectranetBundle\Entity\User;
-use ZectranetBundle\Services\ProjectLogger;
 
 class ProjectController extends Controller
 {
@@ -88,12 +88,6 @@ class ProjectController extends Controller
         $project->setVisible($data->visible);
         $em->persist($project);
         $em->flush();
-
-        /** @var ProjectLogger $peojectLogger */
-        $projectLogger = $this->get('zectranet.projectLogger');
-        $event = 'Visible state of project has switched to '
-            . ($data->visible) ? 'On' : 'Off';
-        $projectLogger->logEvent($event, $project_id);
 
         $response = new JsonResponse(array('success' => true));
         return $response;
@@ -355,6 +349,15 @@ class ProjectController extends Controller
 
         switch ($type) {
             case 1:
+                $project = null;
+                try{
+                    $project = QnAForum::addNewQnAForum($em, $user, $office_id, $name);
+                    return $this->redirectToRoute('zectranet_show_QnA_forum',
+                        array('project_id' => $project->getId()));
+                } catch (\Exception $ex) {
+                    $from = "class: QnAForum, function: addNewQnAForum";
+                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
+                }
                 break;
             case 2:
                 $project = null;
@@ -379,8 +382,6 @@ class ProjectController extends Controller
                     $this->get('zectranet.errorlogger')->registerException($ex, $from);
                 }*/
                 break;
-
-            case 4: break;
             default: break;
         }
         return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office_id));
@@ -518,10 +519,6 @@ class ProjectController extends Controller
         $task = null;
         try {
             $task = Task::addNewTask($em, $user, $project_id, $parameters);
-            /** @var ProjectLogger $projectLogger */
-            $projectLogger = $this->get('zectranet.projectLogger');
-            $event = 'Task "' . $data->name . '" has been aded by user "' . $user->getName() . '"';
-            $projectLogger->logEvent($event, $project_id);
         } catch (\Exception $ex) {
             $from = "Class: Task, function: addNewTask";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -576,10 +573,6 @@ class ProjectController extends Controller
         $task = null;
         try {
             $task = Task::addNewSubTask($em, $user, $project_id, $parameters);
-            /** @var ProjectLogger $projectLogger */
-            $projectLogger = $this->get('zectranet.projectLogger');
-            $event = 'Task "' . $data->name . '" has been aded by user "' . $user->getName() . '"';
-            $projectLogger->logEvent($event, $project_id);
         } catch (\Exception $ex) {
             $from = "Class: Task, function: addNewSubTask";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -646,10 +639,6 @@ class ProjectController extends Controller
         $epicStory = null;
         try {
             $epicStory = Project::addEpicStory($em, $project_id, $user, $data, $project->getOfficeID());
-            /** @var ProjectLogger $projectLogger */
-            $projectLogger = $this->get('zectranet.projectLogger');
-            $event = 'Epic story "' . $data->name . '" has been aded by user "' . $user->getName() . '"';
-            $projectLogger->logEvent($event, $project_id);
         } catch (\Exception $ex) {
             $from = "Class: HFHeader, function: deleteHeader";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -701,10 +690,6 @@ class ProjectController extends Controller
         $user = $this->getUser();
         try {
             Project::addNewProjectVersion($em, $project_id, $user->getId(), $version);
-            /** @var ProjectLogger $projectLogger */
-            $projectLogger = $this->get('zectranet.projectLogger');
-            $event = 'Project version "' . $version->name . '" has been aded by user "' . $user->getName() . '"';
-            $projectLogger->logEvent($event, $project_id);
         } catch (\Exception $ex) {
             $from = "Class: Project, function: addNewProjectVersion";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);

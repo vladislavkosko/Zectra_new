@@ -83,6 +83,8 @@ class QnAForum
      */
     public function __construct() {
         $this->users = new ArrayCollection();
+        $this->created = new \DateTime();
+        $this->shared = false;
     }
 
     /**
@@ -320,5 +322,28 @@ class QnAForum
     public function getThreads()
     {
         return $this->threads;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @param $office_id
+     * @param $name
+     * @return HFForum
+     */
+    public static function addNewQnAForum($em, $user, $office_id, $name)
+    {
+        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
+
+        $project = new QnAForum();
+        $project->setOffice($office);
+        $project->setOwner($user);
+        $project->setName($name);
+        $project->addUser($user);
+
+        $em->persist($project);
+        $em->flush();
+
+        return $project;
     }
 }
