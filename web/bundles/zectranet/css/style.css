@@ -427,3 +427,8 @@
 .allNotifications:hover{
     background-color: #f8f8f8;
 }
+
+.contact-list-active{
+    background-color: #eee;
+}
+

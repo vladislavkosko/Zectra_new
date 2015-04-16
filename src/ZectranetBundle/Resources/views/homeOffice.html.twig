@@ -3,7 +3,7 @@
 {% block title %}{{ office.name }}{% endblock %}
 
 {% block body %}
-
+<div ng-controller="UserController">
     <div class="row">
         <ol class="breadcrumb" style="margin: 0 -30px; border-radius:0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
             <li class="active">
@@ -67,14 +67,14 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" ng-init="GetContactLists()">
         <div class="col-md-4">
             <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 427px; overflow-y: auto;">
                 <li class="list-group-item active"  style="background:#ddedf4; color:#606060;">
                     <b>Contact list</b>
                 </li>
-                <li class="list-group-item">
-                    <div class="row">
+                <li class="list-group-item  contact-list-active" ng-repeat="contact in contacts">
+                    <div class="row ">
                         <div class="col-xs-3">
                             <img class="img-responsive img-circle" src="{{ asset('') ~ 'documents/' ~ app.user.avatar }}" alt="avatar"/>
                         </div>
@@ -83,36 +83,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <img class="img-responsive img-circle" src="{{ asset('') ~ 'documents/' ~ app.user.avatar }}" alt="avatar"/>
-                        </div>
-                        <div class="col-xs-9">
-                            <p>{{ app.user.username }}</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <img class="img-responsive img-circle" src="{{ asset('') ~ 'documents/' ~ app.user.avatar }}" alt="avatar"/>
-                        </div>
-                        <div class="col-xs-9">
-                            <p>{{ app.user.username }}</p>
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <img class="img-responsive img-circle" src="{{ asset('') ~ 'documents/' ~ app.user.avatar }}" alt="avatar"/>
-                        </div>
-                        <div class="col-xs-9">
-                            <p>{{ app.user.username }}</p>
-                        </div>
-                    </div>
-                </li>
+
             </ul>
         </div>
 
@@ -179,7 +150,7 @@
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}
 
 {% block modals %}
