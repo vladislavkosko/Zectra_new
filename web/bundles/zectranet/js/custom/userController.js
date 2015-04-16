@@ -51,10 +51,10 @@ var userController = Zectranet.controller('UserController', ['$scope', '$http', 
         };
 
         $scope.GetContactLists = function () {
-            $http.get($scope.urlGetContactList)
+            /*$http.get($scope.urlGetContactList)
                 .success(function (response) {
                     $scope.contacts = response;
-                })
+                })*/
         };
 
 
