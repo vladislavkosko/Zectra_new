@@ -14,7 +14,10 @@ var userController = Zectranet.controller('UserController', ['$scope', '$http', 
         };
 
         $scope.urlSendRequest = JSON_URLS.urlSendRequest;
+        $scope.urlGetContactList = JSON_URLS.urlGetContactList;
 
+
+        $scope.contacts = [];
 
         $scope.SendRequest = function () {
             $http.post($scope.urlSendRequest,
@@ -45,6 +48,13 @@ var userController = Zectranet.controller('UserController', ['$scope', '$http', 
         $scope.closeNotification = function () {
             $('#add_to_contact_list').modal('hide');
             $scope.response_by_send_request.visible = false;
+        };
+
+        $scope.GetContactLists = function () {
+            $http.get($scope.urlGetContactList)
+                .success(function (response) {
+                    $scope.contacts = response;
+                })
         };
 
 
