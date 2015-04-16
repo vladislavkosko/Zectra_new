@@ -222,12 +222,50 @@ class User implements UserInterface, \Serializable
      */
     private $headerForums;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\JoinTable(name="user_contacts",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id")}
+     * )
+     * @var ArrayCollection $contacts
+     */
+    protected $contacts;
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $contact_id
+     */
+    public static function addToContactList(EntityManager $em, $user_id, $contact_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $contact = $em->find('ZectranetBundle:User', $contact_id);
+        $user->addContact($contact);
+        $em->persist($user);
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $contact_id
+     * @param string $message
+     */
+    public static function sendContactMembershipRequest(EntityManager $em, $user_id, $contact_id, $message) {
+        $type = RequestType::getContactMembershipRequest($em);
+        Request::addNewRequest($em, $user_id, $type->getId(), $message, $contact_id);
+    }
+
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->active = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
         $this->headerForums = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     /**
@@ -1321,5 +1359,38 @@ class User implements UserInterface, \Serializable
     public function getHeaderForums()
     {
         return $this->headerForums;
+    }
+
+    /**
+     * Add contacts
+     *
+     * @param \ZectranetBundle\Entity\User $contact
+     * @return User
+     */
+    public function addContact(User $contact)
+    {
+        $this->contacts[] = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Remove contacts
+     *
+     * @param \ZectranetBundle\Entity\User $contact
+     */
+    public function removeContact(User $contact)
+    {
+        $this->contacts->removeElement($contact);
+    }
+
+    /**
+     * Get contacts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
     }
 }

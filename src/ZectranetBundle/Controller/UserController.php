@@ -323,4 +323,11 @@ class UserController extends Controller
 
         return new RedirectResponse($referer);
     }
+
+    public function sendContactMembershipRequestAction(Request $request) {
+        $data = (object) (json_decode($request->getContent(), true));
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        User::sendContactMembershipRequest($em, $data->app_user_id, $data->user_id, $data->message);
+    }
 }

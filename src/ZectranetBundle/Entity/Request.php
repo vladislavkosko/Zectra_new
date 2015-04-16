@@ -55,7 +55,7 @@ class Request
     /**
      * @var integer
      *
-     * @ORM\Column(name="project_id", type="integer", nullable=true)
+     * @ORM\Column(name="project_id", type="integer", nullable=true, options={"default" = null})
      */
     private $projectid;
 
@@ -69,7 +69,7 @@ class Request
     /**
      * @var integer
      *
-     * @ORM\Column(name="office_id", type="integer", nullable=true)
+     * @ORM\Column(name="office_id", type="integer", nullable=true, options={"default" = null})
      */
     private $officeid;
 
@@ -83,7 +83,7 @@ class Request
     /**
      * @var integer
      *
-     * @ORM\Column(name="task_id", type="integer", nullable=true)
+     * @ORM\Column(name="task_id", type="integer", nullable=true, options={"default" = null})
      */
     private $taskid;
 
@@ -93,6 +93,35 @@ class Request
      * @ORM\JoinColumn(name="task_id", referencedColumnName="id")
      */
     private $task;
+
+    /**
+     * @var int
+     * @ORM\Column(name="contact_id", type="integer", nullable=true, options={"default" = null})
+     */
+    private $contactID;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     */
+    private $contact;
+
+    /**
+     * @var string
+     * @ORM\Column(name="message", type="string", length=2000, nullable=true, options={"default" = null})
+     */
+    private $message;
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->officeid = null;
+        $this->projectid = null;
+        $this->contactID = null;
+        $this->message = null;
+    }
 
     /**
      * Get id
@@ -271,7 +300,7 @@ class Request
      * @param \ZectranetBundle\Entity\Office $office
      * @return Request
      */
-    public function setOffice(\ZectranetBundle\Entity\Office $office = null)
+    public function setOffice(Office $office = null)
     {
         $this->office = $office;
 
@@ -317,7 +346,7 @@ class Request
      * @param \ZectranetBundle\Entity\Task $task
      * @return Request
      */
-    public function setTask(\ZectranetBundle\Entity\Task $task = null)
+    public function setTask(Task $task = null)
     {
         $this->task = $task;
 
@@ -347,30 +376,109 @@ class Request
                 or ($this->getType()->getLabel() == 'request_project'))
                 ? $this->getOffice()->getInArray() : null,
             'task' => ($this->getType()->getLabel() == 'request_assign_task')
-                ? $this->getTask()->getInArray() : null
+                ? $this->getTask()->getInArray() : null,
+            'message' => $this->getMessage()
         );
     }
 
     /**
      * @param EntityManager $em
-     * @param User $user
-     * @param $type
-     * @param null $project
-     * @param null $office
+     * @param int $userID
+     * @param int $typeID
+     * @param null|string $message
+     * @param int $destinationID
      */
-    public static function addNewRequest($em, $user, $type, $project = null, $office = null)
+    public static function addNewRequest(EntityManager $em, $userID, $typeID, $message = null, $destinationID)
     {
         /** @var Request $new_request */
         $new_request = new Request();
-
+        $user = $em->find('ZectranetBundle:User', $userID);
+        $type = $em->find('ZectranetBundle:RequestType', $typeID);
         $new_request->setType($type);
         $new_request->setUser($user);
-        if ($project != null)
-            $new_request->setProject($project);
-        if ($office != null)
-            $new_request->setOffice($office);
+        $new_request->setMessage($message);
+
+        switch ($type->getId()) {
+            case 1: break;
+            case 2: break;
+            case 3: break;
+            case 4: break;
+            case 5:
+                $contact = $em->find('ZectranetBundle:User', $destinationID);
+                $new_request->setContact($contact);
+                break;
+        }
 
         $em->persist($new_request);
         $em->flush();
+    }
+
+    /**
+     * Set contactID
+     *
+     * @param integer $contactID
+     * @return Request
+     */
+    public function setContactID($contactID)
+    {
+        $this->contactID = $contactID;
+
+        return $this;
+    }
+
+    /**
+     * Get contactID
+     *
+     * @return integer 
+     */
+    public function getContactID()
+    {
+        return $this->contactID;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param \ZectranetBundle\Entity\User $contact
+     * @return Request
+     */
+    public function setContact(\ZectranetBundle\Entity\User $contact = null)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \ZectranetBundle\Entity\User 
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * Set message
+     *
+     * @param string $message
+     * @return Request
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * Get message
+     *
+     * @return string 
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 }

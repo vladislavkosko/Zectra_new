@@ -70,6 +70,12 @@ class Office
     private $headerForums;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="QnAForum", mappedBy="office")
+     */
+    private $QnAForums;
+
+    /**
      * @ORM\OneToMany(targetEntity="Sprint", mappedBy="office", cascade={"remove"})
      * @var ArrayCollection
      */
@@ -543,5 +549,38 @@ class Office
     public function getHeaderForums()
     {
         return $this->headerForums;
+    }
+
+    /**
+     * Add QnAForums
+     *
+     * @param \ZectranetBundle\Entity\QnAForum $qnAForums
+     * @return Office
+     */
+    public function addQnAForum(\ZectranetBundle\Entity\QnAForum $qnAForums)
+    {
+        $this->QnAForums[] = $qnAForums;
+
+        return $this;
+    }
+
+    /**
+     * Remove QnAForums
+     *
+     * @param \ZectranetBundle\Entity\QnAForum $qnAForums
+     */
+    public function removeQnAForum(\ZectranetBundle\Entity\QnAForum $qnAForums)
+    {
+        $this->QnAForums->removeElement($qnAForums);
+    }
+
+    /**
+     * Get QnAForums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQnAForums()
+    {
+        return $this->QnAForums;
     }
 }

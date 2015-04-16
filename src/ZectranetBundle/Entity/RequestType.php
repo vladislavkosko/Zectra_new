@@ -2,6 +2,7 @@
 
 namespace ZectranetBundle\Entity;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -86,6 +87,14 @@ class RequestType
     public function getColor()
     {
         return $this->color;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return RequestType
+     */
+    public static function getContactMembershipRequest(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 5);
     }
 
     /**

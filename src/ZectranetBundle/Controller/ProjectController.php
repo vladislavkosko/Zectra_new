@@ -709,6 +709,7 @@ class ProjectController extends Controller
     public function showProjectVersionAction($project_id) {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
         return $this->render('@Zectranet/projectVersions.html.twig', array('project' => $project));
+        return $this->render('@Zectranet/projectVersions.html.twig', array('project' => $project));
 
     }
 }
