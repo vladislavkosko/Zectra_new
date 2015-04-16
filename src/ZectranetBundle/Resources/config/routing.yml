@@ -325,24 +325,6 @@ zectranet_decline_request_project:
     requirements:
         project_id: \d+
 
-zectranet_get_project_offices:
-    pattern: /project/{project_id}/getOffices
-    defaults: { _controller: ZectranetBundle:Project:getOffices }
-    requirements:
-        project_id: \d+
-
-zectranet_project_add_offices:
-    pattern: /project/{project_id}/addOffices
-    defaults: { _controller: ZectranetBundle:Project:addOffices }
-    requirements:
-        project_id: \d+
-
-zectranet_project_remove_offices:
-    pattern: /project/{project_id}/removeOffices
-    defaults: { _controller: ZectranetBundle:Project:removeOffices }
-    requirements:
-        project_id: \d+
-
 zectranet_add_project:
     path: /office/{office_id}/project/add
     defaults: { _controller: ZectranetBundle:Project:addProject }
@@ -516,6 +498,6 @@ zectranet_show_project_versions:
     requirements:
         project_id: \d+
 
-zectranet_send_request:
+zectranet_send_user_membership_request:
     pattern: /request/send
-    defaults: { _controller: ZectranetBundle:User:# }
+    defaults: { _controller: ZectranetBundle:User:sendContactMembershipRequest }

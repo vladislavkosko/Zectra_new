@@ -61,16 +61,16 @@
 
                         <div class="modal-footer">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-success btn-default" ng-click="SendRequest();" >Send Request</button>
-                                <button type="button" class="btn  btn-default" data-dismiss="modal" >  Cancel </button>
+                                <button type="button" class="btn btn-success btn-default" ng-click="SendRequest();">Send Request</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
 
-                        <div class="row" ng-if="response_by_send_request.visible">
+                        <div ng-if="response_by_send_request.visible">
                             <div class="col-xs-12 fade in" style="margin-top: 10px;">
                                 <div class="alert" ng-class="response_by_send_request.type" >
                                     <p>[[ response_by_send_request.body ]]</p><br/>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                                    <button type="button" class="btn btn-default" ng-click="closeNotification();">Close</button>
                                 </div>
                             </div>
                         </div>

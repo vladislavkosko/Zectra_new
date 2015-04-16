@@ -4,6 +4,7 @@ namespace ZectranetBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -324,10 +325,21 @@ class UserController extends Controller
         return new RedirectResponse($referer);
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function sendContactMembershipRequestAction(Request $request) {
         $data = (object) (json_decode($request->getContent(), true));
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        User::sendContactMembershipRequest($em, $data->app_user_id, $data->user_id, $data->message);
+        try {
+            User::sendContactMembershipRequest($em, $data->app_user_id, $data->user_id, $data->message);
+        } catch (\Exception $ex) {
+            $from = "Class: User, function: sendContactMembershipRequest";
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        return new JsonResponse(1);
     }
 }

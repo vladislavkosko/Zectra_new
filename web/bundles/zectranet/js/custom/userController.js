@@ -17,13 +17,18 @@ var userController = Zectranet.controller('UserController', ['$scope', '$http', 
 
 
         $scope.SendRequest = function () {
-            $http.post($scope.urlSendRequest, { 'message': $scope.atclRequest.message , 'user_id': $scope.atclRequest.user_id , 'app_user_id':  $scope.atclRequest.app_user_id })
+            $http.post($scope.urlSendRequest,
+                {
+                    'message': $scope.atclRequest.message,
+                    'user_id': $scope.atclRequest.user_id,
+                    'app_user_id':  $scope.atclRequest.app_user_id
+                })
                 .success(function (response) {
                     switch (response)
                     {
                         case 1:
                             $scope.response_by_send_request.type = 'alert-success' ;
-                            $scope.response_by_send_request.body = 'Request successful sent !!!' ;
+                            $scope.response_by_send_request.body = 'Request successfully sent !!!' ;
                             $scope.response_by_send_request.visible = true ;
                         break;
                         case -1:
@@ -35,6 +40,11 @@ var userController = Zectranet.controller('UserController', ['$scope', '$http', 
                     }
                 }
             );
+        };
+
+        $scope.closeNotification = function () {
+            $('#add_to_contact_list').modal('hide');
+            $scope.response_by_send_request.visible = false;
         };
 
 
