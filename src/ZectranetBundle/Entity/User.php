@@ -239,6 +239,18 @@ class User implements UserInterface, \Serializable
     protected $contacts;
 
     /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->active = true;
+        $this->salt = md5(uniqid(null, true));
+        $this->roles = new ArrayCollection();
+        $this->headerForums = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
+        $this->QnAForums = new ArrayCollection();
+    }
+
+    /**
      * @param EntityManager $em
      * @param int $user_id
      * @param int $contact_id
@@ -260,19 +272,6 @@ class User implements UserInterface, \Serializable
     public static function sendContactMembershipRequest(EntityManager $em, $user_id, $contact_id, $message) {
         $type = RequestType::getContactMembershipRequest($em);
         Request::addNewRequest($em, $contact_id, $type->getId(), $message, $user_id);
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->active = true;
-        $this->salt = md5(uniqid(null, true));
-        $this->roles = new ArrayCollection();
-        $this->headerForums = new ArrayCollection();
-        $this->contacts = new ArrayCollection();
-        $this->QnAForums = new ArrayCollection();
     }
 
     /**
@@ -1399,5 +1398,38 @@ class User implements UserInterface, \Serializable
     public function getContacts()
     {
         return $this->contacts;
+    }
+
+    /**
+     * Add QnAForums
+     *
+     * @param \ZectranetBundle\Entity\QnAForum $qnAForums
+     * @return User
+     */
+    public function addQnAForum(\ZectranetBundle\Entity\QnAForum $qnAForums)
+    {
+        $this->QnAForums[] = $qnAForums;
+
+        return $this;
+    }
+
+    /**
+     * Remove QnAForums
+     *
+     * @param \ZectranetBundle\Entity\QnAForum $qnAForums
+     */
+    public function removeQnAForum(\ZectranetBundle\Entity\QnAForum $qnAForums)
+    {
+        $this->QnAForums->removeElement($qnAForums);
+    }
+
+    /**
+     * Get QnAForums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getQnAForums()
+    {
+        return $this->QnAForums;
     }
 }

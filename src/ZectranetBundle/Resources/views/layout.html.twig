@@ -62,14 +62,19 @@
 
                         <ul class="dropdown-menu dropdown-tasks noclose list-group">
                             <li ng-if="requests.contactRequests.length == 0" class="list-group-item">
-                                <h4 class="text-info">You haven't any requests</h4>
+                                <h5 class="text-info">You haven't any requests</h5>
                             </li>
-                            <li ng-repeat="request in requests.contactRequests" class="list-group-item">
-                                User "[[ request.contact.username ]]" has sent you contact request<br/>
-                                Message:
-                                <span style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                        [[ request.message ]]
-                                </span>
+                            <li ng-repeat="request in requests.contactRequests | limitTo: 3" class="list-group-item">
+                                <h4>User "[[ request.contact.username ]]" has sent you contact request</h4>
+                                <div class="divider"></div>
+                                <p>
+                                    Message: <br/>
+                                    <span style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                            [[ request.message ]]
+                                    </span>
+                                </p>
+
+                                <div class="divider"></div>
 
                                 <div class="btn-group">
                                     <a class="btn btn-default">

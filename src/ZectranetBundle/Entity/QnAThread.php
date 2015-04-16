@@ -66,8 +66,15 @@ class QnAThread
     private $keywords;
 
     /**
+     * @var int
+     * @ORM\Column(name="forum_id", type="integer")
+     */
+    private $forumID;
+
+    /**
      * @var QnAForum
-     * @ORM\OneToMany(targetEntity="QnAForum", mappedBy="threads")
+     * @ORM\ManyToOne(targetEntity="QnAForum", inversedBy="threads")
+     * @ORM\JoinColumn(name="forum_id", referencedColumnName="id")
      */
     private $forum;
 
@@ -257,5 +264,51 @@ class QnAThread
     public function getPosts()
     {
         return $this->posts;
+    }
+
+    /**
+     * Set forumID
+     *
+     * @param integer $forumID
+     * @return QnAThread
+     */
+    public function setForumID($forumID)
+    {
+        $this->forumID = $forumID;
+
+        return $this;
+    }
+
+    /**
+     * Get forumID
+     *
+     * @return integer 
+     */
+    public function getForumID()
+    {
+        return $this->forumID;
+    }
+
+    /**
+     * Set forum
+     *
+     * @param \ZectranetBundle\Entity\QnAForum $forum
+     * @return QnAThread
+     */
+    public function setForum(\ZectranetBundle\Entity\QnAForum $forum = null)
+    {
+        $this->forum = $forum;
+
+        return $this;
+    }
+
+    /**
+     * Get forum
+     *
+     * @return \ZectranetBundle\Entity\QnAForum 
+     */
+    public function getForum()
+    {
+        return $this->forum;
     }
 }
