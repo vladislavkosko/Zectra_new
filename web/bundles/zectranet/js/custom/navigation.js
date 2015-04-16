@@ -49,9 +49,21 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
         return newRequests;
     }
 
+    $scope.acceptContactMembershipRequest = function () {
+        // SOme coDE
+    };
+
+    $scope.declineContactMembershipRequest = function () {
+        // SOme coDE
+    };
+
+    $scope.moreInfoContactMembershipRequest = function () {
+        // SOme coDE
+    };
+
 	$scope.getNotification = function getNotifications() {
 		$http.get(notificationsGetUrl)
-			.success(function(response){
+			.success(function(response) {
                 if (response.result.requests && response.result.requests.length > 0){
                     $scope.requests = prepareRequests(response.result.requests);
                 }

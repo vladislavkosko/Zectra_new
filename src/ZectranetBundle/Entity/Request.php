@@ -377,7 +377,10 @@ class Request
                 ? $this->getOffice()->getInArray() : null,
             'task' => ($this->getType()->getLabel() == 'request_assign_task')
                 ? $this->getTask()->getInArray() : null,
-            'message' => $this->getMessage()
+            'message' => $this->getMessage(),
+            'contact' => ($this->getUser())
+                ? $this->getContact()->getInArray()
+                : null
         );
     }
 

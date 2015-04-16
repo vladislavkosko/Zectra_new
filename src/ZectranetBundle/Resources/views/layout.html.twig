@@ -65,27 +65,29 @@
                                 <h5 class="text-info">You haven't any requests</h5>
                             </li>
                             <li ng-repeat="request in requests.contactRequests | limitTo: 3" class="list-group-item">
-                                <h4>User "[[ request.contact.username ]]" has sent you contact request</h4>
+                                <h5 class="text-info">
+                                    User "[[ request.contact.username ]]" has sent you contact request
+                                </h5>
                                 <div class="divider"></div>
                                 <p>
-                                    Message: <br/>
+                                    <b>Message:</b>
                                     <span style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
-                                            [[ request.message ]]
+                                        [[ request.message ]]
                                     </span>
                                 </p>
 
                                 <div class="divider"></div>
 
                                 <div class="btn-group">
-                                    <a class="btn btn-default">
+                                    <button class="btn btn-default" ng-click="acceptContactMembershipRequest();">
                                         Accept
-                                    </a>
-                                    <a class="btn btn-default">
+                                    </button>
+                                    <button class="btn btn-default" ng-click="declineContactMembership();">
                                         Decline
-                                    </a>
-                                    <a class="btn btn-default">
+                                    </button>
+                                    <button class="btn btn-default" ng-click="moreInfoContactMembershipRequest();">
                                         More info
-                                    </a>
+                                    </button>
                                 </div>
                             </li>
                         </ul>
