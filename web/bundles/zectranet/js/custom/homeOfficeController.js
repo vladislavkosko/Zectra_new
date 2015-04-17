@@ -35,6 +35,10 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http',
                 .get($scope.urlGetConversation.replace('0' , id))
                 .success(function (response) {
                     $scope.conversation = response;
+                    setTimeout(function () {
+                        scrollChat();
+                        return false;
+                    }, 300);
                 }
             );
         };
@@ -45,7 +49,20 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http',
                 .post($scope.urlSendConversationMessage.replace('0',conversation_id), {'message': message})
                 .success(function (response) {
                     $scope.conversation.messages.push(response);
+                    setTimeout(function () {
+                        scrollChat();
+                        return false;
+                    }, 300);
                 }
+            );
+        };
+
+        function scrollChat() {
+            var chat = $('#conversation-chat');
+            chat.animate(
+                {
+                    'scrollTop': $(this).height() + 500
+                }, 1000
             );
         }
     }

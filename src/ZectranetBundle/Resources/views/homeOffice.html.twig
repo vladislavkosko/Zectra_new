@@ -92,18 +92,16 @@
                 <div class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki;">
                     <div class="list-group-item active" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-comments fa-fw"></i>
-                        <strong>Office Chat</strong>
+                        <strong>Chat with: </strong>
                     </div>
                     <div id="posts-panel" class="list-group-item panel-body" cg-busy="conversationChatPromise">
                         <h4 ng-if="(conversation) && (conversation.messages.length == 0)" class="text-info text-center vertical-center">
                             Posts will be displayed here
                         </h4>
-                        <ul class="chat" style="height: 250px; overflow-y: auto">
+                        <ul id="conversation-chat" class="chat" style="height: 250px; overflow-y: auto">
                             <li ng-repeat="mesage in conversation.messages" style="border-bottom: none;" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
-                                <span class="chat-img"
-                                      ng-class="{'pull-right': {{ app.user.id }} == mesage.user.id, 'pull-left': {{ app.user.id }} != mesage.user.id }"
-                                      ng-init="avatar = asset + 'documents/' + mesage.user.avatar;">
-                                        <img ng-src="[[ avatar ]]" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
+                                <span class="chat-img" ng-class="{ 'pull-right': {{ app.user.id }} == mesage.user.id, 'pull-left': {{ app.user.id }} != mesage.user.id }" ng-init="avatar = asset + 'documents/' + mesage.user.avatar;">
+                                    <img ng-src="[[ avatar ]]" alt="Avatar" class="img-circle img-responsive" style="width: 50px; height: 50px;"/>
                                 </span>
                                 <div class="chat-body clearfix">
                                     <div class="header" style="height: 28px;">

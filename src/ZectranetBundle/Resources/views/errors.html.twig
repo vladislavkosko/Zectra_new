@@ -11,7 +11,7 @@
     <div ng-controller="ErrorLogsController" ng-init="getErrors();">
         <div class="row" ng-repeat="error in errors" style="margin-top: 20px;">
             <div class="col-md-12">
-                <div class="img-thumbnail" style="padding: 15px 20px; box-shadow: 0 0 6px 0 darkseagreen;">
+                <div class="img-thumbnail" style="padding: 15px 20px; box-shadow: 0 0 6px 0 darkseagreen; width: 100%;">
                     <p class="pull-right text-muted"><i>[[ error.date ]]</i></p>
                     <h4 class="text-info" style="text-shadow: 1px 0 darkorchid;">Error Message:</h4>
                     <div class="message-block" ng-bind-html="error.message"></div>
