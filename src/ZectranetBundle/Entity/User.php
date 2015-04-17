@@ -260,9 +260,14 @@ class User implements UserInterface, \Serializable
         $contact = $em->find('ZectranetBundle:User', $contact_id);
         if (!$user->getContacts()->contains($contact)) {
             $user->addContact($contact);
-            $em->persist($user);
-            $em->flush();
         }
+        if (!$contact->getContacts()->contains($user)) {
+            $contact->addContact($user);
+        }
+
+        $em->persist($user);
+        $em->persist($contact);
+        $em->flush();
     }
 
     /**

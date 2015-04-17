@@ -50,19 +50,6 @@ class Conversation
     private $user2;
 
     /**
-     * @var int
-     * @ORM\Column(name="office_id", type="integer")
-     */
-    private $officeID;
-
-    /**
-     * @var Office
-     * @ORM\ManyToOne(targetEntity="Office")
-     * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
-     */
-    private $office;
-
-    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="ConversationMessage", mappedBy="conversation")
      */
@@ -70,6 +57,52 @@ class Conversation
 
     public function __construct() {
         $this->messages = new ArrayCollection();
+    }
+
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'messages' => EntityOperations::arrayToJsonArray($this->getMessages()),
+            'user1' => $this->getUser1()->getInArray(),
+            'user2' => $this->getUser2()->getInArray(),
+        );
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $contact_id
+     */
+    public static function addConversation(EntityManager $em, $user_id, $contact_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $contact = $em->find('ZectranetBundle:User', $contact_id);
+        $conversation = new Conversation();
+        $conversation->setUser1($user);
+        $conversation->setUser2($contact);
+        $em->persist($conversation);
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user1
+     * @param int $user2
+     * @return mixed
+     */
+    public static function getConversation(EntityManager $em, $user1, $user2) {
+        $qb = $em->createQueryBuilder();
+        $query = $qb->select('c')
+            ->from('ZectranetBundle:Conversation', 'c')
+            ->where('(c.user1ID = :user1 AND c.user2ID = :user2) OR (c.user1ID = :user2 AND c.user2ID = :user1)')
+            ->setParameter('user1', $user1)
+            ->setParameter('user2', $user2)
+            ->getQuery();
+        try {
+            $conversation = $query->getSingleResult();
+        } catch (\Exception $ex) {
+
+        }
+        return ;
     }
 
     /**
@@ -129,29 +162,6 @@ class Conversation
     }
 
     /**
-     * Set officeID
-     *
-     * @param integer $officeID
-     * @return Conversation
-     */
-    public function setOfficeID($officeID)
-    {
-        $this->officeID = $officeID;
-
-        return $this;
-    }
-
-    /**
-     * Get officeID
-     *
-     * @return integer 
-     */
-    public function getOfficeID()
-    {
-        return $this->officeID;
-    }
-
-    /**
      * Set user1
      *
      * @param \ZectranetBundle\Entity\User $user1
@@ -195,29 +205,6 @@ class Conversation
     public function getUser2()
     {
         return $this->user2;
-    }
-
-    /**
-     * Set office
-     *
-     * @param \ZectranetBundle\Entity\Office $office
-     * @return Conversation
-     */
-    public function setOffice(\ZectranetBundle\Entity\Office $office = null)
-    {
-        $this->office = $office;
-
-        return $this;
-    }
-
-    /**
-     * Get office
-     *
-     * @return \ZectranetBundle\Entity\Office 
-     */
-    public function getOffice()
-    {
-        return $this->office;
     }
 
     /**

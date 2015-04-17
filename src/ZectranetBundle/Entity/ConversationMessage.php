@@ -2,6 +2,7 @@
 
 namespace ZectranetBundle\Entity;
 
+use Doctrine\Entity;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -68,6 +69,36 @@ class ConversationMessage
 
     public function __construct() {
         $this->posted = new \DateTime();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $conversation_id
+     * @param int $user_id
+     * @param string $message
+     */
+    public static function addNewMessage(EntityManager $em, $conversation_id, $user_id, $message) {
+        $conversation = $em->find('ZectranetBundle:Conversation', $conversation_id);
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $convMessage = new ConversationMessage();
+        $convMessage->setMessage($message);
+        $convMessage->setConversation($conversation);
+        $convMessage->setUser($user);
+        $em->persist($convMessage);
+        $em->flush();
+    }
+
+    /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'user' => $this->getUser()->getInArray(),
+            'conversationID' => $this->getConversationID(),
+            'message' => $this->getMessage(),
+            'posted' => $this->getPosted(),
+        );
     }
 
     /**

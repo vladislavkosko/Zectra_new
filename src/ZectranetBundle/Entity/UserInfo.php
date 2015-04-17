@@ -221,16 +221,16 @@ class UserInfo
     }
 
     public function __construct() {
-        $this->setFacebookVisible(true);
-        $this->setInterestsVisible(true);
-        $this->setSkillsVisible(true);
-        $this->setSocietiesVisible(true);
-        $this->setTwitterVisible(true);
-        $this->setWorkExpirienceVisible(true);
-        $this->setGooglePlusVisible(true);
-        $this->setLinkedInVisible(true);
-        $this->setResidenceCountryVisible(true);
-        $this->setVolunteerWorkVisible(true);
+        $this->facebookVisible = true;
+        $this->interestsVisible = true;
+        $this->skillsVisible = true;
+        $this->societiesVisible = true;
+        $this->twitterVisible = true;
+        $this->workExpirience = true;
+        $this->googlePlusVisible = true;
+        $this->linkedInVisible = true;
+        $this->residenceCountryVisible = true;
+        $this->volunteerWorkVisible = true;
     }
 
     /**

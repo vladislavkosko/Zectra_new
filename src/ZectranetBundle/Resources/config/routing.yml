@@ -512,8 +512,8 @@ zectranet_get_contact_list:
 
 zectranet_get_conversation:
     pattern: /user/get/conversation/{contact_id}
-    defaults: { _controller: ZectranetBundle:User:getConversation }
+    defaults: { _controller: ZectranetBundle:Conversation:getConversation }
 
 zectranet_send_conversation_message:
     pattern: /user/send/conversation/message/{conversation_id}
-    defaults: { _controller: ZectranetBundle:User:sendMessage }
+    defaults: { _controller: ZectranetBundle:Conversation:sendMessage }
