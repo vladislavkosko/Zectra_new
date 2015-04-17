@@ -67,19 +67,19 @@
         </div>
     </div>
 
-    <div class="row" ng-init="GetContactLists();">
+    <div class="row" ng-init="getContactList();">
         <div class="col-md-4">
             <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 427px; overflow-y: auto;">
                 <li class="list-group-item active"  style="background:#ddedf4; color:#606060;">
                     <b>Contact list</b>
                 </li>
-                <li class="list-group-item  contact-list-active" ng-repeat="contact in contacts">
+                <li class="list-group-item  " ng-repeat="contact in contacts" ng-class="{'contact-list-active':contact.checked}"  ng-click="getConversation(contact.id);">
                     <div class="row">
                         <div class="col-xs-3">
-                            <img class="img-responsive img-circle" src="{{ asset('') ~ 'documents/' ~ app.user.avatar }}" alt="avatar"/>
+                            <img class="img-responsive img-circle" ng-src="[[asset + 'documents/' + contact.avatar]]" alt="avatar"/>
                         </div>
                         <div class="col-xs-9">
-                            <p>{{ app.user.username }}</p>
+                            <p>[[ contact.username ]]</p>
                         </div>
                     </div>
                 </li>
@@ -88,8 +88,8 @@
         </div>
 
         <div class="col-md-8">
-            <div ng-controller="DocumentsController">
-                <div class="chat-panel list-group" ng-controller="ChatController" ng-init="getPosts(0, 100)" style="box-shadow: 2px 3px 6px 0 darkkhaki;">
+            <div >
+                <div class="chat-panel list-group"  style="box-shadow: 2px 3px 6px 0 darkkhaki;">
                     <div class="list-group-item active" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-comments fa-fw"></i>
                         <strong>Office Chat</strong>
@@ -99,27 +99,27 @@
                             <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
                         {% endif %}
                         <ul class="chat">
-                            <li ng-repeat="post in posts" highlight style="border-bottom: none;"  class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
+                            <li ng-repeat="mesage in conversation.messages" highlight style="border-bottom: none;"  class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
                                 <span class="chat-img"
-                                      ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }"
-                                      ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + post.user.avatar)">
+                                      ng-class="{'pull-right': {{ app.user.id }} == mesage.user.id, 'pull-left': {{ app.user.id }} != mesage.user.id }"
+                                      ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + mesage.user.avatar)">
                                         <img src="#" ng-src="[[avatar]]" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
                                 </span>
                                 <div class="chat-body clearfix">
                                     <div class="header" style="height: 28px;">
                                         <strong class="primary-font"
-                                                ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }">
-                                            [[post.user.name + ' ' + post.user.surname + ' (' + post.user.username + ')' ]]
+                                                ng-class="{'pull-right': {{ app.user.id }} == mesage.user.id, 'pull-left': {{ app.user.id }} != mesage.user.id }">
+                                            [[mesage.user.name + ' ' + mesage.user.surname + ' (' + mesage.user.username + ')' ]]
                                         </strong>
 
-                                        <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == post.user.id, 'pull-right': {{ app.user.id }} != post.user.id }">
+                                        <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == mesage.user.id, 'pull-right': {{ app.user.id }} != mesage.user.id }">
                                             <i class="fa fa-clock-o fa-fw"></i>
-                                            Posted on <span style="color: #000000; font-style: italic">[[post.posted]]</span>
-                                            <i ng-if="post.edited" class="fa fa-edit"></i>
+                                            Posted on <span style="color: #000000; font-style: italic">[[mesage.posted]]</span>
+                                            <i ng-if="mesage.edited" class="fa fa-edit"></i>
                                         </small>
                                     </div>
                                     <pre style="white-space: pre-line;">
-                                        <span ng-bind-html="post.message"></span>
+                                        <span ng-bind-html="mesage.message"></span>
                                     </pre>
                                 </div>
                             </li>
@@ -127,26 +127,17 @@
                     </div>
                     <div class="list-group-item">
                         <form class="input-group input-group-lg">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" style="height: 65px;" data-placement="top" id="add_dialog_btn"  data-toggle="modal" data-target="#add_dialog">
-                                    <i class="fa fa-file"></i>
-                                </button>
-                            </span>
+
                             <textarea id="textarea-post"  name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-model="message"></textarea>
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
+                                <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendConversationMessage(message,conversation.id)">
                                     <span>Post</span>
                                 </button>
                             </span>
                         </form>
-                        <div id="slide-down-menu-screenshots" cg-busy="documentPromise" style="display: none;">
-                            <div id="div-screenshot" style="display: none; width: auto;height: auto;">
-                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/attachments.html') ~ '\'' }}"></ng-include>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
-                {% include '@Zectranet/dialogAdd.html.twig' %}
             </div>
         </div>
     </div>
@@ -166,13 +157,10 @@
         JSON_URLS.getPosts = "{{ path('zectranet_office_get_post', { 'office_id': office.id }) }}";
         JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";
         JSON_URLS.getContactList = "{{ path('zectranet_get_contact_list') }}";
+        JSON_URLS.getConversation = "{{ path('zectranet_get_conversation', {'contact_id' : 0}) }}";
+        JSON_URLS.urlSendConversationMessage = "{{ path('zectranet_send_conversation_message', {'conversation_id' : 0}) }}";
     </script>
-    <script src="{{ asset('bundles/zectranet/js/custom/documentsController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/homeOfficeController.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/zectranet/js/upload/jquery.knob.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/zectranet/js/upload/jquery.ui.widget.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/zectranet/js/upload/jquery.iframe-transport.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/zectranet/js/upload/jquery.fileupload.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/zectranet/js/upload/script.js') }}" type="text/javascript"></script>
+
 
 {% endblock %}
