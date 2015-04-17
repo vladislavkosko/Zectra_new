@@ -76,6 +76,7 @@ class ConversationMessage
      * @param int $conversation_id
      * @param int $user_id
      * @param string $message
+     * @return ConversationMessage
      */
     public static function addNewMessage(EntityManager $em, $conversation_id, $user_id, $message) {
         $conversation = $em->find('ZectranetBundle:Conversation', $conversation_id);
@@ -86,6 +87,7 @@ class ConversationMessage
         $convMessage->setUser($user);
         $em->persist($convMessage);
         $em->flush();
+        return $convMessage;
     }
 
     /**
@@ -97,7 +99,7 @@ class ConversationMessage
             'user' => $this->getUser()->getInArray(),
             'conversationID' => $this->getConversationID(),
             'message' => $this->getMessage(),
-            'posted' => $this->getPosted(),
+            'posted' => $this->getPosted()->format('Y-m-d H:i:s'),
         );
     }
 

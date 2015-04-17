@@ -264,8 +264,12 @@ class User implements UserInterface, \Serializable
         if (!$contact->getContacts()->contains($user)) {
             $contact->addContact($user);
         }
+        $conversation = new Conversation();
+        $conversation->setUser1($user);
+        $conversation->setUser2($contact);
 
         $em->persist($user);
+        $em->persist($conversation);
         $em->persist($contact);
         $em->flush();
     }

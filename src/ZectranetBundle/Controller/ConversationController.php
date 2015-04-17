@@ -27,7 +27,7 @@ class ConversationController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $conversation = Conversation::getConversation($em, $user->getId(), $contact_id);
-        return new JsonResponse($conversation->getInArray());
+        return new JsonResponse(($conversation) ? $conversation->getInArray() : null);
     }
 
     /**
@@ -42,14 +42,15 @@ class ConversationController extends Controller {
         $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        $message = null;
         try {
             if ($data->message) {
-                ConversationMessage::addNewMessage($em, $conversation_id, $user->getId(), $data->message);
+                $message = ConversationMessage::addNewMessage($em, $conversation_id, $user->getId(), $data->message);
             }
         } catch (\Exception $ex) {
             $from = 'Class: ConversationMessage, function: addNewMessage';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
         }
-        return new JsonResponse();
+        return new JsonResponse(($message) ? $message->getInArray() : null);
     }
 }

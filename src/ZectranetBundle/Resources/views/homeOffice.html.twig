@@ -68,12 +68,12 @@
     </div>
 
     <div class="row" ng-init="getContactList();">
-        <div class="col-md-4">
-            <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 427px; overflow-y: auto;">
+        <div class="col-xs-4">
+            <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 410px; overflow-y: auto;" cg-busy="contactListPromise">
                 <li class="list-group-item active"  style="background:#ddedf4; color:#606060;">
                     <b>Contact list</b>
                 </li>
-                <li class="list-group-item  " ng-repeat="contact in contacts" ng-class="{'contact-list-active':contact.checked}"  ng-click="getConversation(contact.id);">
+                <li class="list-group-item  " ng-repeat="contact in contacts" ng-class="{'contact-list-active':contact.checked}" ng-click="getConversation(contact.id);">
                     <div class="row">
                         <div class="col-xs-3">
                             <img class="img-responsive img-circle" ng-src="[[asset + 'documents/' + contact.avatar]]" alt="avatar"/>
@@ -87,29 +87,29 @@
             </ul>
         </div>
 
-        <div class="col-md-8">
-            <div >
-                <div class="chat-panel list-group"  style="box-shadow: 2px 3px 6px 0 darkkhaki;">
+        <div class="col-xs-8">
+            <div>
+                <div class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki;">
                     <div class="list-group-item active" style="background:#ddedf4; color:#606060;">
                         <i class="fa fa-comments fa-fw"></i>
                         <strong>Office Chat</strong>
                     </div>
-                    <div id="posts-panel" class="list-group-item panel-body" style="max-height: 300px;">
-                        {% if office.postsOffice | length == 0 %}
-                            <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
-                        {% endif %}
-                        <ul class="chat">
-                            <li ng-repeat="mesage in conversation.messages" highlight style="border-bottom: none;"  class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
+                    <div id="posts-panel" class="list-group-item panel-body" cg-busy="conversationChatPromise">
+                        <h4 ng-if="(conversation) && (conversation.messages.length == 0)" class="text-info text-center vertical-center">
+                            Posts will be displayed here
+                        </h4>
+                        <ul class="chat" style="height: 250px; overflow-y: auto">
+                            <li ng-repeat="mesage in conversation.messages" style="border-bottom: none;" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
                                 <span class="chat-img"
                                       ng-class="{'pull-right': {{ app.user.id }} == mesage.user.id, 'pull-left': {{ app.user.id }} != mesage.user.id }"
-                                      ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + mesage.user.avatar)">
-                                        <img src="#" ng-src="[[avatar]]" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
+                                      ng-init="avatar = asset + 'documents/' + mesage.user.avatar;">
+                                        <img ng-src="[[ avatar ]]" alt="User Avatar" class="img-circle" style="width: 50px; height: 50px;"/>
                                 </span>
                                 <div class="chat-body clearfix">
                                     <div class="header" style="height: 28px;">
                                         <strong class="primary-font"
                                                 ng-class="{'pull-right': {{ app.user.id }} == mesage.user.id, 'pull-left': {{ app.user.id }} != mesage.user.id }">
-                                            [[mesage.user.name + ' ' + mesage.user.surname + ' (' + mesage.user.username + ')' ]]
+                                            [[ mesage.user.name + ' ' + mesage.user.surname + ' (' + mesage.user.username + ')' ]]
                                         </strong>
 
                                         <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == mesage.user.id, 'pull-right': {{ app.user.id }} != mesage.user.id }">
@@ -127,7 +127,6 @@
                     </div>
                     <div class="list-group-item">
                         <form class="input-group input-group-lg">
-
                             <textarea id="textarea-post"  name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-model="message"></textarea>
                             <span class="input-group-btn">
                                 <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendConversationMessage(message,conversation.id)">

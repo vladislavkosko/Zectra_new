@@ -97,12 +97,13 @@ class Conversation
             ->setParameter('user1', $user1)
             ->setParameter('user2', $user2)
             ->getQuery();
+        $conversation = null;
         try {
             $conversation = $query->getSingleResult();
         } catch (\Exception $ex) {
-
+            $conversation = null;
         }
-        return ;
+        return $conversation;
     }
 
     /**
