@@ -37,7 +37,7 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http',
             $scope.message = '';
             $http.post($scope.urlSendConversationMessage.replace('0',conversation_id), {'message': message})
                 .success(function (response) {
-
+                    $scope.conversation.messages.push(response);
                 })
 
 
