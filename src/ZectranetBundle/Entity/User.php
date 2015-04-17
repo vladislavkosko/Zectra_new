@@ -258,9 +258,11 @@ class User implements UserInterface, \Serializable
     public static function addToContactList(EntityManager $em, $user_id, $contact_id) {
         $user = $em->find('ZectranetBundle:User', $user_id);
         $contact = $em->find('ZectranetBundle:User', $contact_id);
-        $user->addContact($contact);
-        $em->persist($user);
-        $em->flush();
+        if (!$user->getContacts()->contains($contact)) {
+            $user->addContact($contact);
+            $em->persist($user);
+            $em->flush();
+        }
     }
 
     /**

@@ -54,15 +54,42 @@
 			<ul class="nav navbar-top-links navbar-right">
 
 				{% if app.user %}
-                    <li class="dropdown">
+                    <li class="dropdown" ng-cloak>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
+                            <div class="fa fa-fw"><b>P</b></div>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-tasks noclose list-group">
+                            <li>UNDER CONSTRUCTION</li>
+                        </ul>
+                    </li>
+
+
+                    <li class="dropdown" ng-cloak>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
+                            <div class="fa fa-fw"><b>O</b></div>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-tasks noclose list-group">
+                            <li>UNDER CONSTRUCTION</li>
+                        </ul>
+                    </li>
+
+
+                    <li class="dropdown" ng-cloak>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
                             <div class="fa fa-fw"><b>C</b></div>
+                            <span ng-if="requests.contactRequests.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
+                                [[ requests.contactRequests.length ]]
+                            </span>
                             <i class="fa fa-caret-down"></i>
                         </a>
 
                         <ul class="dropdown-menu dropdown-tasks noclose list-group">
                             <li ng-if="requests.contactRequests.length == 0" class="list-group-item">
-                                <h5 class="text-info">You haven't any requests</h5>
+                                <h5 class="text-info">You haven't any contact requests</h5>
                             </li>
                             <li ng-repeat="request in requests.contactRequests | limitTo: 3" class="list-group-item">
                                 <h5 class="text-info">
@@ -79,13 +106,13 @@
                                 <div class="divider"></div>
 
                                 <div class="btn-group">
-                                    <button class="btn btn-default" ng-click="acceptContactMembershipRequest();">
+                                    <button class="btn btn-default btn-success" ng-click="acceptContactMembershipRequest(request.id);">
                                         Accept
                                     </button>
-                                    <button class="btn btn-default" ng-click="declineContactMembership();">
+                                    <button class="btn btn-default btn-danger" ng-click="declineContactMembershipRequest(request.id);">
                                         Decline
                                     </button>
-                                    <button class="btn btn-default" ng-click="moreInfoContactMembershipRequest();">
+                                    <button class="btn btn-default btn-info" ng-click="moreInfoContactMembershipRequest(request);">
                                         More info
                                     </button>
                                 </div>
@@ -93,59 +120,7 @@
                         </ul>
                     </li>
 
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-							<i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
-						</a>
-
-						<ul class="dropdown-menu dropdown-messages">
-							<li>
-								<a href="#">
-									<div>
-										<strong>John Smith</strong>
-										<span class="pull-right text-muted">
-											<em>Yesterday</em>
-										</span>
-									</div>
-									<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-									<div>
-										<strong>John Smith</strong>
-										<span class="pull-right text-muted">
-											<em>Yesterday</em>
-										</span>
-									</div>
-									<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="#">
-									<div>
-										<strong>John Smith</strong>
-										<span class="pull-right text-muted">
-											<em>Yesterday</em>
-										</span>
-									</div>
-									<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-								</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a class="text-center" href="#">
-									<strong>Read All Messages</strong>
-									<i class="fa fa-angle-right"></i>
-								</a>
-							</li>
-						</ul>
-
-					</li>
-
-                    <li class="dropdown">
+                    <li class="dropdown" ng-cloak>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
                             <div class="clock hidden-xs">
                                 <ul>
@@ -303,7 +278,7 @@
 
                     </li>
 
-                    <li class="dropdown">
+                    <li class="dropdown" ng-cloak>
 
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 							<i class="fa fa-bell fa-fw"></i>
@@ -443,54 +418,43 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12">
-
-                    {#
-                    <div ng-if="requests.length > 0" class="hidden-element" ng-class="{'visible-element': requests.length > 0}">
-                        <div class="panel panel-info request">
-                            <div class="panel-body">
-                                <div ng-repeat="request in requests | limitTo: 1">
-
-                                    <div ng-if="(request.type.label == 'request_office')" style="margin-bottom: 20px;">
-                                        <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
-                                            You have a new request in office "[[request.office.name]]"
-                                        </div>
-                                        <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
-                                            <div ng-click="acceptRequestUserOffice(request.office.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
-                                            <div ng-click="declineRequestUserOffice(request.office.id)" class="btn btn-default">Decline</div>
-                                        </div>
-                                    </div>
-
-                                    <div ng-if="(request.type.label == 'request_user_project')" style="margin-bottom: 20px;">
-                                        <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
-                                            You have a new request in project "[[request.project.name]]"
-                                        </div>
-                                        <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
-                                            <div ng-click="acceptRequestUserProject(request.project.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
-                                            <div ng-click="declineRequestUserProject(request.project.id)" class="btn btn-default">Decline</div>
-                                        </div>
-                                    </div>
-
-                                    <div ng-if="(request.type.label == 'request_project')" style="margin-bottom: 20px;">
-                                        <div style="word-wrap: break-word; font-size: 1.2em; color: #0986a3;">
-                                            Your office "[[request.office.name]]" has a new request in project "[[request.project.name]]"
-                                        </div>
-                                        <div class="text-right" style="margin-top: 10px; padding-top: 20px; border-top: 1px solid #ccc;">
-                                            <div ng-click="acceptRequestOfficeProject(request.project.id, request.office.id)" class="btn btn-primary" style="margin-right: 20px;">Accept</div>
-                                            <div ng-click="declineRequestOfficeProject(request.project.id)" class="btn btn-default">Decline</div>
-                                        </div>
-                                    </div>
-
+                    <!-- BEGIN OF SHOW REQUEST DETAILS MODAL -->
+                    <div class="modal fade" id="request_more_info" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header label-info">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title" style="color: #f5f5f5;">
+                                        [[ requestMoreInfo.type.label ]]
+                                    </h4>
                                 </div>
-                            </div>
-                            <div class="panel-footer text-center">
-                                <a href="#" class="seeAllRequest">
-                                    <strong>See All Requests</strong>
-                                    <i class="fa fa-angle-right"></i>
-                                </a>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-offset-1 col-md-10 col-xs-offset-1 col-xs-10">
+                                            <b>Message:</b><br/>
+                                            <p>
+                                                [[ requestMoreInfo.message ]]
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-success" ng-click="acceptContactMembershipRequest(requestMoreInfo.id);">
+                                            Accept
+                                        </button>
+                                        <button type="button" class="btn btn-default btn-danger" ng-click="declineContactMembershipRequest(requestMoreInfo.id);">
+                                            Decline
+                                        </button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    #}
+                    <!-- END OF SHOW REQUEST DETAILS MODAL -->
 					{% block body %}
 
 					{% endblock %}
@@ -555,6 +519,7 @@
             declineRequestOfficeProject : "{{ url('zectranet_decline_request_project', { 'project_id': 0 }) }}",
             taskShow: "{{ url('zectranet_task_show', {task_id: 0}) }}",
 			documentTemplate: "{{ asset('bundles/zectranet/templates/document.html') }}",
+			approveContactMembershipRequest: "{{ path('zectranet_approve_contact_membership_request', { 'request_id': 'request_id' }) }}",
 		};
 
         var TEMPPARAMS = {};

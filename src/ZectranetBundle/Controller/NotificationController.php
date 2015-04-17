@@ -2,6 +2,7 @@
 
 namespace ZectranetBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\User;
+use ZectranetBundle\Entity\Request as Req;
 
 class NotificationController extends Controller
 {
@@ -32,8 +34,10 @@ class NotificationController extends Controller
     {
         /** @var User $user */
         $user = $this->getUser();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
 
-        $user_requests = $user->getrequests();
+        $user_requests = Req::getSentRequestsByUserID($em, $user->getId());
 
         $user_notifications = null;
         try {
@@ -46,7 +50,7 @@ class NotificationController extends Controller
 
         $response = new Response(json_encode(array("result" => array(
             'notifications' => array_map(function($e){return $e->getInArray();}, $user_notifications),
-            'requests' => array_map(function($e){return $e->getInArray();}, $user_requests->toArray())
+            'requests' => $user_requests
         ))));
     	$response->headers->set('Content-Type', 'application/json');
     	return $response;

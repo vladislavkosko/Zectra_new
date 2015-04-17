@@ -50,14 +50,6 @@ var userController = Zectranet.controller('UserController', ['$scope', '$http', 
             $scope.response_by_send_request.visible = false;
         };
 
-        $scope.GetContactLists = function () {
-            /*$http.get($scope.urlGetContactList)
-                .success(function (response) {
-                    $scope.contacts = response;
-                })*/
-        };
-
-
         console.log('UserController was loaded !!!')
     }
 ]);

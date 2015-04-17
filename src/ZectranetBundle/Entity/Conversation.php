@@ -28,4 +28,14 @@ class Conversation
     private $user2;
     private $officeID;
     private $messages;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

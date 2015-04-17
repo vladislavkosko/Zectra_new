@@ -11,9 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ZectranetBundle\Entity\DailyTimeSheet;
+use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\User;
 use ZectranetBundle\Entity\UserInfo;
 use ZectranetBundle\Entity\UserSettings;
+use ZectranetBundle\Entity\Request as Req;
 
 class UserController extends Controller
 {
@@ -326,6 +328,7 @@ class UserController extends Controller
     }
 
     /**
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @return RedirectResponse
      */
@@ -341,5 +344,43 @@ class UserController extends Controller
             return new JsonResponse(-1);
         }
         return new JsonResponse(1);
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $request_id
+     * @return JsonResponse
+     */
+    public function approveContactMembershipRequestAction(Request $request, $request_id) {
+        $data = json_decode($request->getContent(), true);
+        $data = $data['answer'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var Req $userRequest */
+        $userRequest = $em->find('ZectranetBundle:Request', $request_id);
+
+        if ($data) {
+            try {
+                User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
+            } catch (\Exception $ex) {
+                $from = 'Class: User, function: addToContactList';
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            }
+            Req::changeRequestState($em, $request_id, 2);
+        } else {
+            Req::changeRequestState($em, $request_id, 3);
+        }
+        return new JsonResponse();
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @return JsonResponse
+     */
+    public function getContactListAction() {
+        /** @var User $user */
+        $user = $this->getUser();
+        return new JsonResponse(EntityOperations::arrayToJsonArray($user->getContacts()));
     }
 }

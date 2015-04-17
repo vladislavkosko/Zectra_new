@@ -502,6 +502,10 @@ zectranet_send_user_membership_request:
     pattern: /request/send
     defaults: { _controller: ZectranetBundle:User:sendContactMembershipRequest }
 
+zectranet_approve_contact_membership_request:
+    pattern: /request/approve/{request_id}
+    defaults: { _controller: ZectranetBundle:User:approveContactMembershipRequest }
+
 zectranet_get_contact_list:
-    pattern: /user/get/contact/list
-    defaults: { _controller: ZectranetBundle:User:# }
+    pattern: /user/get/contact_list
+    defaults: { _controller: ZectranetBundle:User:getContactList }

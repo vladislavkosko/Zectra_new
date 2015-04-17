@@ -114,6 +114,19 @@ class Request
     private $message;
 
     /**
+     * @var int
+     * @ORM\Column(name="status_id", type="integer")
+     */
+    private $statusID;
+
+    /**
+     * @var RequestStatus
+     * @ORM\ManyToOne(targetEntity="RequestStatus")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     */
+    private $status;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -397,8 +410,11 @@ class Request
         $new_request = new Request();
         $user = $em->find('ZectranetBundle:User', $userID);
         $type = $em->find('ZectranetBundle:RequestType', $typeID);
+        $status = $em->find('ZectranetBundle:RequestStatus', 1);
+
         $new_request->setType($type);
         $new_request->setUser($user);
+        $new_request->setStatus($status);
         $new_request->setMessage($message);
 
         switch ($type->getId()) {
@@ -414,6 +430,31 @@ class Request
 
         $em->persist($new_request);
         $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $request_id
+     * @param int $status_id
+     */
+    public static function changeRequestState (EntityManager $em, $request_id, $status_id) {
+        $request = $em->find('ZectranetBundle:Request', $request_id);
+        $status = $em->find('ZectranetBundle:RequestStatus', $status_id);
+        $request->setStatus($status);
+        $em->persist($request);
+        $em->flush();
+    }
+
+
+    public static function getSentRequestsByUserID(EntityManager $em, $user_id) {
+        $qb = $em->createQueryBuilder();
+        $query = $qb->select('r')
+            ->from('ZectranetBundle:Request', 'r')
+            ->where('r.userid = :user_id')
+            ->andWhere('r.statusID = 1')
+            ->setParameter('user_id', $user_id)
+            ->getQuery();
+        return EntityOperations::arrayToJsonArray($query->getResult());
     }
 
     /**
@@ -483,5 +524,51 @@ class Request
     public function getMessage()
     {
         return $this->message;
+    }
+
+    /**
+     * Set statusID
+     *
+     * @param integer $statusID
+     * @return Request
+     */
+    public function setStatusID($statusID)
+    {
+        $this->statusID = $statusID;
+
+        return $this;
+    }
+
+    /**
+     * Get statusID
+     *
+     * @return integer 
+     */
+    public function getStatusID()
+    {
+        return $this->statusID;
+    }
+
+    /**
+     * Set status
+     *
+     * @param \ZectranetBundle\Entity\RequestStatus $status
+     * @return Request
+     */
+    public function setStatus(\ZectranetBundle\Entity\RequestStatus $status = null)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return \ZectranetBundle\Entity\RequestStatus 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

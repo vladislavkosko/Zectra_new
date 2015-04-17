@@ -12,6 +12,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
     var declineRequestUserProject = JSON_URLS.declineRequestUserProject;
     var acceptRequestOfficeProject = JSON_URLS.acceptRequestOfficeProject;
     var declineRequestOfficeProject = JSON_URLS.declineRequestOfficeProject;
+    var approveContactMembershipRequest = JSON_URLS.approveContactMembershipRequest;
 
     $scope.requests = {};
     $scope.notifications = null;
@@ -49,16 +50,29 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
         return newRequests;
     }
 
-    $scope.acceptContactMembershipRequest = function () {
-        // SOme coDE
+    $scope.acceptContactMembershipRequest = function (request_id, index) {
+        var approveUrl = approveContactMembershipRequest.replace('request_id', request_id);
+        $http.post(approveUrl, { 'answer': true })
+            .success(function (response) {
+                $scope.requests.contactRequests.splice(index, 1);
+                $('#request_more_info').modal('hide');
+            }
+        );
     };
 
-    $scope.declineContactMembershipRequest = function () {
-        // SOme coDE
+    $scope.declineContactMembershipRequest = function (request_id, index) {
+        var approveUrl = approveContactMembershipRequest.replace('request_id', request_id);
+        $http.post(approveUrl, { 'answer': false })
+            .success(function (response) {
+                $scope.requests.contactRequests.splice(index, 1);
+                $('#request_more_info').modal('hide');
+            }
+        );
     };
 
-    $scope.moreInfoContactMembershipRequest = function () {
-        // SOme coDE
+    $scope.moreInfoContactMembershipRequest = function (request) {
+        $scope.requestMoreInfo = request;
+        $('#request_more_info').modal('show');
     };
 
 	$scope.getNotification = function getNotifications() {

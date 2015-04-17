@@ -28,4 +28,14 @@ class ConversationMessage
     private $message;
     private $posted;
     private $edited;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }
