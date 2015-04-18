@@ -311,4 +311,27 @@ class QnAThread
     {
         return $this->forum;
     }
+
+    /**
+     * @param EntityManager $em
+     * @param User $user
+     * @param $forum
+     * @param $parameters
+     * @return QnAThread
+     */
+    public static function createNewQuestion($em, $user, $forum, $parameters)
+    {
+        $question = new QnAThread();
+
+        $question->setForum($forum);
+        $question->setUser($user);
+        $question->setTitle($parameters['title']);
+        $question->setKeywords($parameters['keywords']);
+        $question->setMessage($parameters['message']);
+
+        $em->persist($question);
+        $em->flush();
+
+        return $question;
+    }
 }

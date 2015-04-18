@@ -62,14 +62,14 @@ class QnAPost
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="edited", type="datetime")
+     * @ORM\Column(name="edited", type="datetime", nullable=true, options={"default" = null})
      */
     private $edited;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -235,5 +235,32 @@ class QnAPost
     public function getThread()
     {
         return $this->thread;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->posted = new \DateTime();
+        $this->edited = null;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param QnAThread $thread
+     * @param User $user
+     * @param $message
+     * @return QnAPost
+     */
+    public static function addPost($em, $thread, $user, $message)
+    {
+        $post = new QnAPost();
+        $post->setMessage($message);
+        $post->setThread($thread);
+        $post->setUser($user);
+        $em->persist($post);
+        $em->flush();
+
+        return $post;
     }
 }

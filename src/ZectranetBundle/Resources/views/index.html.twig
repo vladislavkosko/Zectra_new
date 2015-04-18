@@ -80,7 +80,7 @@
 
                             {% for project in homeOffice.QnAForums if project.users | length == 1 %}
                                 <li>
-                                    <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}">
+                                    <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}">
                                         <i class="fa fa-briefcase fa-fw"></i>
                                         {{ project.name }}
                                     </a>
@@ -111,7 +111,7 @@
                                     {% endfor %}
                                     {% for project in homeOffice.QnAForums if project.users | length > 1 %}
                                         <li>
-                                            <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}">
+                                            <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}">
                                                 <i class="fa fa-briefcase fa-fw"></i>
                                                 {{ project.name }}
                                             </a>

@@ -288,6 +288,31 @@ zectranet_show_QnA_forum:
     requirements:
         project_id: \d+
 
+zectranet_delete_QnA_forum:
+    pattern: /QnAForum/delete/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:deleteForum }
+    requirements:
+        project_id: \d+
+
+zectranet_QnA_create_new_question:
+    pattern: /QnAForum/create%question/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:createQuestion }
+    requirements:
+        project_id: \d+
+
+zectranet_show_QnA_thread:
+    pattern: /QnAForum/thread/{project_id}/{thread_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:showThread }
+    requirements:
+        project_id: \d+
+        thread_id: \d+
+
+zectranet_QnA_add_post:
+    pattern: /QnAForum/thread/add%post/{thread_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:addPost }
+    requirements:
+        thread_id: \d+
+
 zectranet_accept_request_user_office:
     pattern: /office/{office_id}/acceptRequestUserOffice
     defaults: { _controller: ZectranetBundle:Office:acceptRequestUserOffice }
