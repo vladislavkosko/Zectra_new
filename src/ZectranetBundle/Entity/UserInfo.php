@@ -226,7 +226,7 @@ class UserInfo
         $this->skillsVisible = true;
         $this->societiesVisible = true;
         $this->twitterVisible = true;
-        $this->workExpirience = true;
+        $this->workExpirienceVisible = true;
         $this->googlePlusVisible = true;
         $this->linkedInVisible = true;
         $this->residenceCountryVisible = true;
