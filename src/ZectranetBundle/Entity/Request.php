@@ -65,6 +65,34 @@ class Request
      * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
     private $project;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="hf_forum_id", type="integer", nullable=true, options={"default" = null})
+     */
+    private $HFForumID;
+
+    /**
+     * @var HFForum
+     * @ORM\ManyToOne(targetEntity="HFForum")
+     * @ORM\JoinColumn(name="hf_forum_id", referencedColumnName="id")
+     */
+    private $HFForum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="QnA_forum_id", type="integer", nullable=true, options={"default" = null})
+     */
+    private $QnAForumID;
+
+    /**
+     * @var QnAForum
+     * @ORM\ManyToOne(targetEntity="QnAForum")
+     * @ORM\JoinColumn(name="QnA_forum_id", referencedColumnName="id")
+     */
+    private $QnAForum;
 
     /**
      * @var integer
@@ -403,6 +431,7 @@ class Request
      * @param int $typeID
      * @param null|string $message
      * @param int $sourceID
+     * @return Request
      */
     public static function addNewRequest(EntityManager $em, $userID, $typeID, $message = null, $sourceID)
     {
@@ -436,6 +465,7 @@ class Request
 
         $em->persist($new_request);
         $em->flush();
+        return $new_request;
     }
 
     /**
@@ -576,5 +606,97 @@ class Request
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set HFForumID
+     *
+     * @param integer $hFForumID
+     * @return Request
+     */
+    public function setHFForumID($hFForumID)
+    {
+        $this->HFForumID = $hFForumID;
+
+        return $this;
+    }
+
+    /**
+     * Get HFForumID
+     *
+     * @return integer 
+     */
+    public function getHFForumID()
+    {
+        return $this->HFForumID;
+    }
+
+    /**
+     * Set QnAForumID
+     *
+     * @param integer $qnAForumID
+     * @return Request
+     */
+    public function setQnAForumID($qnAForumID)
+    {
+        $this->QnAForumID = $qnAForumID;
+
+        return $this;
+    }
+
+    /**
+     * Get QnAForumID
+     *
+     * @return integer 
+     */
+    public function getQnAForumID()
+    {
+        return $this->QnAForumID;
+    }
+
+    /**
+     * Set HFForum
+     *
+     * @param \ZectranetBundle\Entity\HFForum $hFForum
+     * @return Request
+     */
+    public function setHFForum(\ZectranetBundle\Entity\HFForum $hFForum = null)
+    {
+        $this->HFForum = $hFForum;
+
+        return $this;
+    }
+
+    /**
+     * Get HFForum
+     *
+     * @return \ZectranetBundle\Entity\HFForum 
+     */
+    public function getHFForum()
+    {
+        return $this->HFForum;
+    }
+
+    /**
+     * Set QnAForum
+     *
+     * @param \ZectranetBundle\Entity\QnAForum $qnAForum
+     * @return Request
+     */
+    public function setQnAForum(\ZectranetBundle\Entity\QnAForum $qnAForum = null)
+    {
+        $this->QnAForum = $qnAForum;
+
+        return $this;
+    }
+
+    /**
+     * Get QnAForum
+     *
+     * @return \ZectranetBundle\Entity\QnAForum 
+     */
+    public function getQnAForum()
+    {
+        return $this->QnAForum;
     }
 }

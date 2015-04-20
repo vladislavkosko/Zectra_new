@@ -240,4 +240,27 @@ class HeaderForumController extends Controller {
         );
         return new JsonResponse($info);
     }
+
+    /**
+     * @param Request $request
+     * @param int $project_id
+     * @return JsonResponse
+     */
+    public function sendRequestAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $user_id = $data['user_id'];
+        $message = $data['message'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        try {
+            HFForum::sendRequestToUser($em, $user_id, $project_id, $message, $user->getId());
+        } catch (\Exception $ex) {
+            $from = 'class: , function: ';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        return new JsonResponse(1);
+    }
 }

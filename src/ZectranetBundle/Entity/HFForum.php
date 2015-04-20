@@ -104,14 +104,25 @@ class HFForum
      * @param EntityManager $em
      * @param int $user_id
      * @param int $project_id
+     * @param string $message
      * @param int $initiator_id
+     * @return Request
      */
-    public static function sendRequestToUser(EntityManager $em, $user_id, $project_id, $initiator_id) {
+    public static function sendRequestToUser(EntityManager $em, $user_id, $project_id, $message, $initiator_id) {
         $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        $user = $em->find('ZectranetBundle:User', $user_id);
         $initiator = $em->find('ZectranetBundle:User', $initiator_id);
-        $message = 'User "' . $initiator->getUsername() . '" invite you to "'
-            . $project->getName() . '" project';
-        Request::addNewRequest($em, $user_id, 8, $message, $initiator_id);
+        $type = RequestType::getProjectMembershipRequest($em);
+        $request = new Request();
+        $request->setType($type);
+        $request->setUser($user);
+        $request->setContact($initiator);
+        $request->setMessage($message);
+        $request->setHFForum($project);
+
+        $em->persist($request);
+        $em->flush();
+        return $request;
     }
 
     /**
