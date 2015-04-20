@@ -48,7 +48,7 @@
     padding: 5px 3px;
     margin: 0 0 15px 15px;
     background-color: #e4edf4;
-    width: 22%;
+    width: 200px;
 }
 
 .informer-user {
@@ -76,6 +76,40 @@
     word-wrap: break-word;
     padding-bottom: 20px;
     border-bottom: 1px solid #eee;
+}
+
+.container-post-message {
+    width: 73%;
+}
+
+@media screen and (max-width: 1300px) {
+    .container-post-message {
+        width: 68%;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .container-post-message {
+        width: 65%;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .container-post-message {
+        width: 55%;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .container-post-message {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .container-post-message {
+        width: 40%;
+    }
 }
 
 @media screen and (max-width: 600px) {
