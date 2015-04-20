@@ -29,6 +29,12 @@
                                 <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
                             </a>
                         </div>
+
+                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Profile">
+                            <a href="{{ path('zectranet_project_profile_page', {'project_id': forum.id}) }}" style="cursor: pointer; text-decoration: none; font-size: 1.3em;">
+                                Profile
+                            </a>
+                        </div>
                     </div>
                 {% endif %}
             </div>

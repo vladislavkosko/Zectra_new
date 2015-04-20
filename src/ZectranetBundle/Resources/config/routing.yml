@@ -119,12 +119,6 @@ zectranet_show_office:
     requirements:
         office_id: \d+
 
-zectranet_office_profile_page:
-    pattern: /office/profile/{office_id}
-    defaults: { _controller: ZectranetBundle:Office:showProfile }
-    requirements:
-        office_id: \d+
-
 zectranet_add_office:
     path: /office/add
     defaults: { _controller: ZectranetBundle:Office:addOffice }
@@ -186,6 +180,12 @@ zectranet_office_get_post:
 zectranet_show_project:
     pattern: /project/{project_id}
     defaults: { _controller: ZectranetBundle:Project:index }
+    requirements:
+        project_id: \d+
+
+zectranet_project_profile_page:
+    pattern: /project/profile/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:showProfile }
     requirements:
         project_id: \d+
 

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\QnAPost;
 use ZectranetBundle\Entity\QnAThread;
 use ZectranetBundle\Entity\User;
@@ -23,6 +24,24 @@ class QnAForumController extends Controller {
         return $this->render('ZectranetBundle::QnAForum.html.twig', array('forum' => $project));
     }
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param $project_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showProfileAction($project_id)
+    {
+        /** @var Project $project */
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);
+
+        return $this->render('@Zectranet/projectProfile.html.twig', array('project' => $project));
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param $project_id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function settingsAction($project_id)
     {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);

@@ -1,0 +1,31 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{{ path('zectranet_show_project', { 'project_id': project.id }) }}">{{ project.name }}</a>
+            </li>
+
+            <li>Profile</li>
+        </ol>
+    </div>
+
+    <div class="page-header">
+        <div class="row">
+            <div class="col-md-12">
+                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ project.name }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            Great!!!
+        </div>
+    </div>
+
+{% endblock %}

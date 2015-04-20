@@ -46,9 +46,9 @@
 
 .informer {
     padding: 5px 3px;
-    margin: 20px 0 15px 0;
+    margin: 0 0 15px 15px;
     background-color: #e4edf4;
-    width: 200px;
+    width: 22%;
 }
 
 .informer-user {
