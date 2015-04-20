@@ -331,36 +331,11 @@ zectranet_accept_request_user_office:
     requirements:
         office_id: \d+
 
-zectranet_accept_request_user_project:
-    pattern: /project/{project_id}/acceptRequestUserProject
-    defaults: { _controller: ZectranetBundle:Project:acceptRequestUserProject }
-    requirements:
-        project_id: \d+
-
-zectranet_accept_request_project:
-    pattern: /project/{project_id}/{office_id}/acceptRequestOfficeProject
-    defaults: { _controller: ZectranetBundle:Project:acceptRequestOfficeProject }
-    requirements:
-        project_id: \d+
-        office_id: \d+
-
 zectranet_decline_request_user_office:
     pattern: /office/{office_id}/declineRequestUserOffice
     defaults: { _controller: ZectranetBundle:Office:declineRequestUserOffice }
     requirements:
         office_id: \d+
-
-zectranet_decline_request_user_project:
-    pattern: /project/{project_id}/declineRequestUserProject
-    defaults: { _controller: ZectranetBundle:Project:declineRequestUserProject }
-    requirements:
-        project_id: \d+
-
-zectranet_decline_request_project:
-    pattern: /project/{project_id}/declineRequestOfficeProject
-    defaults: { _controller: ZectranetBundle:Project:declineRequestOfficeProject }
-    requirements:
-        project_id: \d+
 
 zectranet_add_project:
     path: /office/{office_id}/project/add

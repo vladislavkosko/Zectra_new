@@ -112,6 +112,7 @@ class HFForum
         $project = $em->find('ZectranetBundle:HFForum', $project_id);
         $user = $em->find('ZectranetBundle:User', $user_id);
         $initiator = $em->find('ZectranetBundle:User', $initiator_id);
+        $status = $em->find('ZectranetBundle:RequestStatus', 1);
         $type = RequestType::getProjectMembershipRequest($em);
         $request = new Request();
         $request->setType($type);
@@ -119,6 +120,7 @@ class HFForum
         $request->setContact($initiator);
         $request->setMessage($message);
         $request->setHFForum($project);
+        $request->setStatus($status);
 
         $em->persist($request);
         $em->flush();
