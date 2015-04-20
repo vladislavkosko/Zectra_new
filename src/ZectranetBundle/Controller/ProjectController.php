@@ -94,239 +94,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/{project_id}/getMembers")
-     * @Security("has_role('ROLE_USER')")
-     * @param int $project_id
-     * @return Response
-     */
-    public function getMembersAction($project_id) {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        $jsonProjectUsers = null;
-        $jsonNotProjectUsers = null;
-        try {
-            $jsonProjectUsers = Project::getJsonProjectMembers($em, $project_id);
-        } catch (\Exception $ex) {
-            $from = "Class: Project, function: getJsonProjectMembers";
-            $this->get('zectranet.errorlogger')->registerException($ex, $from);
-            return new JsonResponse(false);
-        }
-        try {
-            $jsonNotProjectUsers = Project::getJsonNotProjectMembers($em, $project_id);
-        } catch (\Exception $ex) {
-            $from = "Class: Project, function: getJsonNotProjectMembers";
-            $this->get('zectranet.errorlogger')->registerException($ex, $from);
-            return new JsonResponse(false);
-        }
-
-        $response = new JsonResponse(array(
-            'projectMembers' => $jsonProjectUsers,
-            'users' => $jsonNotProjectUsers
-        ));
-        return $response;
-    }
-
-    /**
-     * @Route("/project/{project_id}/saveMembersState")
-     * @Security("has_role('ROLE_USER')")
-     * @param Request $request
-     * @param int $project_id
-     * @return Response
-     */
-    public function saveMembersAction(Request $request, $project_id) {
-        $data = json_decode($request->getContent(), true);
-        $ids = array();
-        foreach ($data['users'] as $user)
-        {
-            if ((!isset($user['request'])) or ((isset($user['request'])) and ($user['request'] == 2)))
-            {
-                $user = (object) $user;
-                $ids[] = $user->id;
-            }
-        }
-
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        /** @var Project $project */
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        $users = $em->getRepository('ZectranetBundle:User')->findBy(array('id' => $ids));
-
-        if ($data['status'] == 1)
-        {
-            /** @var EntityManager $em */
-            $em = $this->getDoctrine()->getManager();
-            /** @var RequestType $type */
-            $type = $this->getDoctrine()->getRepository('ZectranetBundle:RequestType')->find(2);
-
-            $usersNames = array();
-            foreach ($project->getUsers() as $user)
-                $usersNames[] = $user->getUsername();
-
-            $usersRequest = array();
-            foreach ($users as $user)
-            {
-                if (!in_array($user->getUsername(), $usersNames))
-                    $usersRequest[] = $user;
-            }
-
-            foreach ($usersRequest as $user)
-                try{
-                    \ZectranetBundle\Entity\Request::addNewRequest($em, $user, $type, $project);
-                } catch (\Exception $ex) {
-                    $from = "Class: Request, function: addNewRequest";
-                    $this->get('zectranet.errorlogger')->registerException($ex, $from);
-                    return new JsonResponse(false);
-                }
-
-            /** @var User $user */
-            $user = $this->getUser();
-            try {
-                $this->get('zectranet.notifier')->createNotification("request_user_project", $user, $usersRequest, $project);
-            } catch (\Exception $ex) {
-                $from = "Class: zectranet_notifier, function: createNotification";
-                $this->get('zectranet.errorlogger')->registerException($ex, $from);
-                return new JsonResponse(false);
-            }
-        }
-
-        if ($data['status'] == 0)
-        {
-            $project->setUsers($users);
-            $em->persist($project);
-            $em->flush();
-        }
-
-        $response = new Response(json_encode(array('success' => true)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-
-    /**
-     * @Route("/project/{project_id}/acceptRequestUserProject")
-     * @Security("has_role('ROLE_USER')")
-     * @param $project_id
-     * @return RedirectResponse
-     */
-    public function acceptRequestUserProjectAction($project_id)
-    {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $this->getUser();
-        /** @var Project $project */
-        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
-        /** @var Request $request */
-        $request = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'projectid' => $project_id, 'typeid' => 2));
-        /** @var Notification $notification */
-        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_user_project'));
-
-        $usersProject = $project->getUsers();
-        $usersProject[] = $user;
-
-        $project->setUsers($usersProject);
-        $em->persist($project);
-        $em->remove($request);
-        $em->remove($notification);
-        $em->flush();
-
-        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
-    }
-
-    /**
-     * @Route("/project/{project_id}/{office_id}/acceptRequestOfficeProject")
-     * @Security("has_role('ROLE_USER')")
-     * @param $project_id
-     * @param $office_id
-     * @return RedirectResponse
-     */
-    public function acceptRequestOfficeProjectAction($project_id, $office_id)
-    {
-       /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
-        try {
-            Project::addOfficeToProject($em, $office_id, $project_id);
-        } catch (\Exception $ex) {
-            $from = "Class: Project, function: addOfficeToProject";
-            $this->get('zectranet.errorlogger')->registerException($ex, $from);
-            return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
-        }
-
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $this->getUser();
-
-        /** @var Request $request */
-        $requestOffice = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'projectid' => $project_id, 'typeid' => 3));
-        /** @var Notification $notification */
-        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_project'));
-
-        $em->remove($requestOffice);
-        if ($notification != null)
-            $em->remove($notification);
-        $em->flush();
-
-        return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
-    }
-
-    /**
-     * @Route("/project/{project_id}/declineRequestUserProject")
-     * @Security("has_role('ROLE_USER')")
-     * @param Request $request
-     * @param $project_id
-     * @return RedirectResponse
-     */
-    public function declineRequestUserProjectAction(Request $request, $project_id)
-    {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $this->getUser();
-
-        /** @var Request $request */
-        $requestUser = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'projectid' => $project_id, 'typeid' => 2));
-        /** @var Notification $notification */
-        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_user_project'));
-
-        $em->remove($requestUser);
-        if ($notification != null)
-            $em->remove($notification);
-        $em->flush();
-
-        $referer = $request->headers->get('referer');
-        return new RedirectResponse($referer);
-    }
-
-    /**
-     * @Route("/project/{project_id}/declineRequestOfficeProject")
-     * @Security("has_role('ROLE_USER')")
-     * @param Request $request
-     * @param $project_id
-     * @return RedirectResponse
-     */
-    public function declineRequestOfficeProjectAction(Request $request, $project_id)
-    {
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $this->getUser();
-
-        /** @var Request $request */
-        $requestOffice = $em->getRepository('ZectranetBundle:Request')->findOneBy(array('userid' => $user->getId(), 'projectid' => $project_id, 'typeid' => 3));
-        /** @var Notification $notification */
-        $notification = $em->getRepository('ZectranetBundle:Notification')->findOneBy(array('userid' => $user->getId(), 'destinationid' => $project_id, 'type' => 'request_project'));
-
-        $em->remove($requestOffice);
-        if ($notification != null)
-            $em->remove($notification);
-        $em->flush();
-
-        $referer = $request->headers->get('referer');
-        return new RedirectResponse($referer);
-    }
-
-    /**
      * @Route("/project/add")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
@@ -371,8 +138,9 @@ class ProjectController extends Controller
                     $this->get('zectranet.errorlogger')->registerException($ex, $from);
                 }
                 break;
-            case 3:
-                /*$project = null;
+            case 3: break;
+            case 4:
+                $project = null;
                 try {
                     $project = Project::addNewProject($em, $user, $name, $type, $office_id);
                     return $this->redirectToRoute('zectranet_show_project',
@@ -380,7 +148,7 @@ class ProjectController extends Controller
                 } catch (\Exception $ex) {
                     $from = "class: Project, function: addNewProject";
                     $this->get('zectranet.errorlogger')->registerException($ex, $from);
-                }*/
+                }
                 break;
             default: break;
         }
@@ -709,7 +477,5 @@ class ProjectController extends Controller
     public function showProjectVersionAction($project_id) {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
         return $this->render('@Zectranet/projectVersions.html.twig', array('project' => $project));
-        return $this->render('@Zectranet/projectVersions.html.twig', array('project' => $project));
-
     }
 }

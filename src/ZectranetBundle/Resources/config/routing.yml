@@ -562,3 +562,11 @@ zectranet_get_project_settings_info:
 zectranet_send_project_request:
     pattern: /project/send_request/{project_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:sendRequest }
+
+zectranet_delete_project_user:
+    pattern: /project/remove_user/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:removeUser }
+
+zectranet_approve_project_membership_request:
+    pattern: /request/approve/{request_id}
+    defaults: { _controller: ZectranetBundle:User:approveContactMembershipRequest }

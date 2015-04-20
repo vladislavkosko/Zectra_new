@@ -254,13 +254,43 @@ class HeaderForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $contact = $em->find('ZectranetBundle:User', $user_id);
         try {
             HFForum::sendRequestToUser($em, $user_id, $project_id, $message, $user->getId());
         } catch (\Exception $ex) {
-            $from = 'class: , function: ';
+            $from = 'class: HFForum, function: sendRequestToUser';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return new JsonResponse(-1);
         }
+        $logMessage = 'User "' . $user->getUsername() . '" sent project request to user "'
+            . $contact->getUsername() . '"';
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 2);
+        return new JsonResponse(1);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $project_id
+     * @return JsonResponse
+     */
+    public function removeUserAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $user_id = $data['user_id'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        $contact = $em->find('ZectranetBundle:User', $user_id);
+        try {
+            HFForum::removeUserFromProject($em, $user_id, $project_id);
+        } catch (\Exception $ex) {
+            $from = 'class: HFForum, function: removeUserFromProject';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        $logMessage = 'User "' . $user->getUsername() . '" remove user "'
+            . $contact->getUsername() . '" from project';
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 2);
         return new JsonResponse(1);
     }
 }
