@@ -4,6 +4,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         $scope.urlAddHeader = JSON_URLS.addHeaderForumHeaders;
         $scope.urlAddSubHeader = JSON_URLS.addSubHeaderForumHeaders;
         $scope.urlDeleteHeader = JSON_URLS.deleteHeaderForumHeaders;
+        $scope.urlGetProjectSettingInfo = JSON_URLS.urlGetProjectSettingInfo;
 
         $scope.headers = null;
 
@@ -25,6 +26,11 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             'class': '',
             'message': ''
         };
+
+        $scope.HO_Contacts = [
+            {'username':'User1'},{'username':'User2'},{'username':'User3'}];
+        $scope.All_Contacts = [{'username':'User4'},{'username':'User5'},{'username':'User6'}];
+        $scope.Project_Team = [{},{},{}];
 
         $scope.getHeaders = function () {
             $http.get($scope.urlGetHeaders)
@@ -92,6 +98,25 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                     }
                 );
             }
+        };
+
+        $scope.getProjectSettingInfo = function () {
+            $http.get(urlGetProjectSettingInfo)
+                .success(function (response) {
+                    $scope.HO_Contacts = response.HO_Contacts;
+                    $scope.All_Contacts = response.All_Contacts;
+                    $scope.Project_Team = response.Project_Team;
+
+                    for(var i = 0; i < $scope.HO_Contacts.length;i++)
+                    {
+                        $scope.HO_Contacts[i].checked = false;
+                    }
+                    for(i = 0; i < $scope.All_Contacts.length;i++)
+                    {
+                        $scope.All_Contacts[i].checked = false;
+                    }
+
+                })
         };
     }
 ]);

@@ -19,6 +19,68 @@
 
         <div class="row">
             <div class="col-md-12">
+                <div class="col-md-2 " style="margin: 15px;">
+                    <label> HO Contacts</label>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="HO_Contact in HO_Contacts"> [[ HO_Contact.username ]] </li>
+
+                </ul>
+                <button type="button" class="btn btn-default btn-success" ng-click="sendRequest(HO_Contacts);">
+                    <i class="fa fa-plus-circle"></i>
+                    Send Request
+                </button>
+             </div>
+
+                <div class="col-md-2 " style="margin: 15px; ">
+                    <label> All Contacts</label>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="contact in All_Contacts">[[ contact.username ]]</li>
+
+                    </ul>
+                    <button type="button" class="btn btn-default btn-success" >
+                        <i class="fa fa-plus-circle"></i>
+                        Send Request
+                    </button>
+                </div>
+                <div class="col-md-4 list-group" style="margin: 15px;">
+                    <label> Project Team</label>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th > User Name   </th>
+                            <th > Status    </th>
+                            <th > Reply    </th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="person_team in Project_Team">
+                                <td>
+                                    [[ person_team.username ]]
+                                </td>
+                                <td>
+                                    [[ person_team.status ]]
+                                </td>
+                                <td>
+                                    [[ person_team.reply ]]
+                                </td>
+                                <td>
+                                    <i class="fa fa-close" style="color: red;"></i>
+                                </td>
+                                <td>
+
+                                    <input  type="checkbox" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-12">
                 <div class="col-md-6">
                     <p>
                         <label>
@@ -125,5 +187,6 @@
         JSON_URLS.addHeaderForumHeaders = "{{ path('zectranet_add_header_action', { 'project_id': forum.id }) }}";
         JSON_URLS.addSubHeaderForumHeaders = "{{ path('zectranet_add_subheader_action', { 'header_id': 0 }) }}";
         JSON_URLS.deleteHeaderForumHeaders = "{{ path('zectranet_delete_header_action', { 'header_id': 0 }) }}";
+        JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_project_settings_info', { 'project_id': forum.id}) }}";
     </script>
 {% endblock %}
