@@ -301,7 +301,7 @@ zectranet_delete_QnA_forum:
         project_id: \d+
 
 zectranet_QnA_create_new_question:
-    pattern: /QnAForum/create%question/{project_id}
+    pattern: /QnAForum/create_question/{project_id}
     defaults: { _controller: ZectranetBundle:QnAForum:createQuestion }
     requirements:
         project_id: \d+
@@ -314,7 +314,7 @@ zectranet_show_QnA_thread:
         thread_id: \d+
 
 zectranet_QnA_add_post:
-    pattern: /QnAForum/thread/add%post/{thread_id}
+    pattern: /QnAForum/thread/add_post/{thread_id}
     defaults: { _controller: ZectranetBundle:QnAForum:addPost }
     requirements:
         thread_id: \d+
