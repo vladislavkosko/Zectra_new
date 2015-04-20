@@ -5,6 +5,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         $scope.urlAddSubHeader = JSON_URLS.addSubHeaderForumHeaders;
         $scope.urlDeleteHeader = JSON_URLS.deleteHeaderForumHeaders;
         $scope.urlGetProjectSettingInfo = JSON_URLS.urlGetProjectSettingInfo;
+        $scope.urlSendProjectRequest = JSON_URLS.urlSendProjectRequest;
 
         $scope.headers = null;
 
@@ -27,10 +28,12 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             'message': ''
         };
 
-        $scope.HO_Contacts = [
-            {'username':'User1'},{'username':'User2'},{'username':'User3'}];
-        $scope.All_Contacts = [{'username':'User4'},{'username':'User5'},{'username':'User6'}];
-        $scope.Project_Team = [{},{},{}];
+        $scope.HO_Contacts = [];
+        $scope.All_Contacts = [];
+        $scope.Project_Team = [];
+
+        $scope.HO_contact_message = '';
+        $scope.All_contact_message = '';
 
         $scope.getHeaders = function () {
             $http.get($scope.urlGetHeaders)
@@ -101,7 +104,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         };
 
         $scope.getProjectSettingInfo = function () {
-            $http.get(urlGetProjectSettingInfo)
+            $http.get($scope.urlGetProjectSettingInfo)
                 .success(function (response) {
                     $scope.HO_Contacts = response.HO_Contacts;
                     $scope.All_Contacts = response.All_Contacts;
@@ -118,5 +121,39 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
 
                 })
         };
+
+        $scope.contactChecked = function (index, array) {
+            for(var i=0;i<array.length;i++)
+            {
+                    array[i].checked = ( i == index) ;
+            }
+        };
+
+        $scope.SendRequest = function (type,message,array)
+        {
+            var user_id = 0;
+
+            for(var i=0;i<array.length;i++)
+            {
+                if(array[i].checked)
+                {
+                    user_id = array[i].id;
+                }
+            }
+           if(type == 1)
+           {
+               $scope.HO_contact_message ='';
+           }
+            else if(type == 2)
+           {
+               $scope.All_contact_message ='';
+           }
+
+            $http.post($scope.urlSendProjectRequest,{'message':message,'user_id': user_id})
+                .success(function (response) {
+                    alert(response)
+                })
+        };
+
     }
 ]);

@@ -17,59 +17,128 @@
             <h4>Forum Settings</h4>
         </div>
 
-        <div class="row">
+        <div class="row" ng-init="getProjectSettingInfo();">
             <div class="col-md-12">
                 <div class="col-md-2 " style="margin: 15px;">
                     <label> HO Contacts</label>
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="HO_Contact in HO_Contacts"> [[ HO_Contact.username ]] </li>
+                    <li class="list-group-item " style="cursor: pointer;" ng-repeat="HO_Contact in HO_Contacts" ng-class="{'contact-list-active':HO_Contact.checked}" ng-click="contactChecked($index,HO_Contacts);" > [[ HO_Contact.username ]] </li>
 
                 </ul>
-                <button type="button" class="btn btn-default btn-success" ng-click="sendRequest(HO_Contacts);">
-                    <i class="fa fa-plus-circle"></i>
-                    Send Request
-                </button>
+                    <a class="btn btn-default btn-success" data-toggle="modal" data-target="#send_request_by_HO_contacts">
+                        Send Request
+                    </a>
              </div>
+
+                <div class="modal fade" id="send_request_by_HO_contacts" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title" style="color: #000000;" align="center">
+                                    Send Request
+                                </h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-xs-offset-1 col-xs-10">
+                                        <div class="form-group">
+                                            <label>
+                                                <b>Request Message</b>
+                                            </label>
+                                            <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="HO_contact_message"></textarea>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(1,HO_contact_message,HO_Contacts);">Send Request</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-md-2 " style="margin: 15px; ">
                     <label> All Contacts</label>
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="contact in All_Contacts">[[ contact.username ]]</li>
+                        <li class="list-group-item" style="cursor: pointer;" ng-repeat="contact in All_Contacts" ng-class="{'contact-list-active':contact.checked}" ng-click="contactChecked($index,All_Contacts);">[[ contact.username ]]</li>
 
                     </ul>
-                    <button type="button" class="btn btn-default btn-success" >
-                        <i class="fa fa-plus-circle"></i>
+                    <a class="btn btn-default btn-success" data-toggle="modal" data-target="#send_request_by_All_contacts">
                         Send Request
-                    </button>
+                    </a>
                 </div>
+
+                <div class="modal fade" id="send_request_by_All_contacts" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title" style="color: #000000;" align="center">
+                                    Send Request
+                                </h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-xs-offset-1 col-xs-10">
+                                        <div class="form-group">
+                                            <label>
+                                                <b>Request Message</b>
+                                            </label>
+                                            <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="All_contact_message"></textarea>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(2,All_contact_message,All_Contacts);">Send Request</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-4 list-group" style="margin: 15px;">
                     <label> Project Team</label>
                     <table class="table">
-                        <thead>
+                        <thead class="table-striped">
                         <tr>
-                            <th > User Name   </th>
-                            <th > Status    </th>
-                            <th > Reply    </th>
+                            <th>User Name</th>
+                            <th>Status</th>
+                            <th>Reply</th>
 
                         </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="person_team in Project_Team">
+                            <tr ng-repeat="request in Project_Team">
                                 <td>
-                                    [[ person_team.username ]]
+                                    [[ request.user.username ]]
                                 </td>
                                 <td>
-                                    [[ person_team.status ]]
+                                    [[ request.status.id ]]
                                 </td>
                                 <td>
-                                    [[ person_team.reply ]]
+                                    #
                                 </td>
                                 <td>
                                     <i class="fa fa-close" style="color: red;"></i>
                                 </td>
                                 <td>
 
-                                    <input  type="checkbox" />
+                                    <input type="checkbox" />
                                 </td>
                             </tr>
                         </tbody>
@@ -188,5 +257,6 @@
         JSON_URLS.addSubHeaderForumHeaders = "{{ path('zectranet_add_subheader_action', { 'header_id': 0 }) }}";
         JSON_URLS.deleteHeaderForumHeaders = "{{ path('zectranet_delete_header_action', { 'header_id': 0 }) }}";
         JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_project_settings_info', { 'project_id': forum.id}) }}";
+        JSON_URLS.urlSendProjectRequest = "{{ path('zectranet_send_project_request', { 'project_id': forum.id}) }}";
     </script>
 {% endblock %}
