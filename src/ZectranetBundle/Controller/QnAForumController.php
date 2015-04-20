@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use ZectranetBundle\Entity\Project;
+use ZectranetBundle\Entity\QnAForum;
 use ZectranetBundle\Entity\QnAPost;
 use ZectranetBundle\Entity\QnAThread;
 use ZectranetBundle\Entity\User;
@@ -21,7 +22,13 @@ class QnAForumController extends Controller {
     public function showForumAction($project_id)
     {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);
-        return $this->render('ZectranetBundle::QnAForum.html.twig', array('forum' => $project));
+
+        $keywords = array();
+        /** @var QnAThread $thread */
+        foreach ($project->getThreads() as $thread)
+            $keywords[]['keys'] = explode(',', $thread->getKeywords());
+
+        return $this->render('ZectranetBundle::QnAForum.html.twig', array('forum' => $project, 'keywords' => $keywords));
     }
 
     /**
@@ -77,8 +84,12 @@ class QnAForumController extends Controller {
     public function showThreadAction($project_id, $thread_id)
     {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);
+
         $thread = $this->getDoctrine()->getRepository('ZectranetBundle:QnAThread')->find($thread_id);
-        return $this->render('ZectranetBundle::QnAThread.html.twig', array('forum' => $project, 'thread' => $thread));
+
+        $keywords = explode(',', $thread->getKeywords());
+
+        return $this->render('ZectranetBundle::QnAThread.html.twig', array('forum' => $project, 'thread' => $thread, 'keywords' => $keywords));
     }
 
     /**
