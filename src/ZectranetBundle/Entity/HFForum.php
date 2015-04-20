@@ -88,6 +88,9 @@ class HFForum
         $this->users = new ArrayCollection();
     }
 
+    /**
+     * @return array
+     */
     public function getInArray() {
         return array(
             'id' => $this->getId(),
@@ -95,6 +98,87 @@ class HFForum
             'shared' => $this->getShared(),
             'headers' => EntityOperations::arrayToJsonArray($this->getHeaders()),
         );
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     * @param int $initiator_id
+     */
+    public static function sendRequestToUser(EntityManager $em, $user_id, $project_id, $initiator_id) {
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        $initiator = $em->find('ZectranetBundle:User', $initiator_id);
+        $message = 'User "' . $initiator->getUsername() . '" invite you to "'
+            . $project->getName() . '" project';
+        Request::addNewRequest($em, $user_id, 8, $message, $initiator_id);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     * @return array
+     */
+    public static function getNotProjectHomeOfficeMembers(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        $notProjectContacts = array();
+        /** @var User $contact */
+        foreach ($user->getContacts() as $contact) {
+            if (!$project->getUsers()->contains($contact)) {
+                $notProjectContacts[] = $contact->getInArray();
+            }
+        }
+        return $notProjectContacts;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @return array
+     */
+    public static function getNotProjectSiteMembers(EntityManager $em, $project_id) {
+        $users = $em->getRepository('ZectranetBundle:User')->findAll();
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        $notProjectContacts = array();
+        /** @var User $contact */
+        foreach ($users as $contact) {
+            if (!$project->getUsers()->contains($contact)) {
+                $notProjectContacts[] = $contact->getInArray();
+            }
+        }
+        return $notProjectContacts;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     */
+    public static function addUserToProject(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            $project->addUser($user);
+            $em->persist($project);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     */
+    public static function removeUserFromProject(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        if ($project->getUsers()->contains($user)) {
+            $project->removeUser($user);
+            $em->persist($project);
+            $em->flush();
+        }
     }
 
     /**

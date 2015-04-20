@@ -557,4 +557,4 @@ zectranet_send_conversation_message:
 
 zectranet_get_project_settings_info:
     pattern: /project/get/settings/info/{project_id}
-    defaults: { _controller: ZectranetBundle:Conversation:getProjectSettingsInfo }
+    defaults: { _controller: ZectranetBundle:HeaderForum:getProjectSettingsInfo }

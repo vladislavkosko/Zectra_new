@@ -34,6 +34,17 @@ class RequestType
     private $color;
 
     /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'label' => $this->getLabel(),
+            'color' => $this->getColor(),
+        );
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -98,13 +109,42 @@ class RequestType
     }
 
     /**
-     * @return array
+     * @param EntityManager $em
+     * @return RequestType
      */
-    public function getInArray() {
-        return array(
-            'id' => $this->getId(),
-            'label' => $this->getLabel(),
-            'color' => $this->getColor(),
-        );
+    public static function getContactMembershipRequestBack(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 6);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return RequestType
+     */
+    public static function getContactMembershipRequestResend(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 7);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return RequestType
+     */
+    public static function getProjectMembershipRequest(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 8);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return RequestType
+     */
+    public static function getProjectMembershipRequestBack(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 9);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return RequestType
+     */
+    public static function getProjectMembershipRequestResend(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 10);
     }
 }

@@ -402,9 +402,9 @@ class Request
      * @param int $userID
      * @param int $typeID
      * @param null|string $message
-     * @param int $destinationID
+     * @param int $sourceID
      */
-    public static function addNewRequest(EntityManager $em, $userID, $typeID, $message = null, $destinationID)
+    public static function addNewRequest(EntityManager $em, $userID, $typeID, $message = null, $sourceID)
     {
         /** @var Request $new_request */
         $new_request = new Request();
@@ -423,7 +423,13 @@ class Request
             case 3: break;
             case 4: break;
             case 5:
-                $contact = $em->find('ZectranetBundle:User', $destinationID);
+                $contact = $em->find('ZectranetBundle:User', $sourceID);
+                $new_request->setContact($contact);
+                break;
+            case 6: break;
+            case 7: break;
+            case 8:
+                $contact = $em->find('ZectranetBundle:User', $sourceID);
                 $new_request->setContact($contact);
                 break;
         }

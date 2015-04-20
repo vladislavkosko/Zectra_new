@@ -60,7 +60,7 @@ class UserInfo
 
     /**
      * @var boolean
-     * @ORM\Column(name="work_expirience_visible", type="boolean", options={"default" = true})
+     * @ORM\Column(name="work_expirience_visible", type="boolean", nullable=true, options={"default" = true})
      */
     private $workExpirienceVisible;
 
