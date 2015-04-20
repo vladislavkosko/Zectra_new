@@ -60,7 +60,9 @@
                     </div>
 
                     <div class="right-thread-content thread-keywords" style="margin: 15px 0;">
-                        <span style="color: #0c65a5;">{{ thread.keywords }}</span>
+                        {% for i in 0..keywords | length - 1 %}
+                            <span style="color: #0c65a5; margin-left: 3px;">{{ keywords[i] }}</span>
+                        {% endfor %}
                     </div>
                 </div>
 
