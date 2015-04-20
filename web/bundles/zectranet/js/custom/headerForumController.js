@@ -151,7 +151,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
 
             $http.post($scope.urlSendProjectRequest,{'message':message,'user_id': user_id})
                 .success(function (response) {
-                    alert(response)
+                    alert(response);
                 })
         };
 
