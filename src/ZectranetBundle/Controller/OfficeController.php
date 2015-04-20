@@ -45,6 +45,18 @@ class OfficeController extends Controller
         }
     }
 
+    public function showProfileAction($office_id)
+    {
+        /** @var Office $office */
+        $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+
+
+    }
+
     /**
      * @Route("/office/add")
      * @Security("has_role('ROLE_USER')")
