@@ -288,6 +288,12 @@ zectranet_show_QnA_forum:
     requirements:
         project_id: \d+
 
+zectranet_QnA_settings:
+    pattern: /QnAForum/settings/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:settings }
+    requirements:
+        project_id: \d+
+
 zectranet_delete_QnA_forum:
     pattern: /QnAForum/delete/{project_id}
     defaults: { _controller: ZectranetBundle:QnAForum:deleteForum }

@@ -23,6 +23,12 @@ class QnAForumController extends Controller {
         return $this->render('ZectranetBundle::QnAForum.html.twig', array('forum' => $project));
     }
 
+    public function settingsAction($project_id)
+    {
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);
+        return $this->render('ZectranetBundle::QnASettings.html.twig', array('forum' => $project));
+    }
+
     /**
      * @Security("has_role('ROLE_USER')")
      * @param $project_id

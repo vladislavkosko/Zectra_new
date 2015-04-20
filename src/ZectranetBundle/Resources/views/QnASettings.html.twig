@@ -1,0 +1,50 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}{{ forum.name }}{% endblock %}
+
+{% block styles %}
+    {{ parent() }}
+
+    <link href="{{ asset('bundles/zectranet/css/QnAForum.css') }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{{ path('zectranet_show_QnA_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
+            </li>
+
+            <li>Settings</li>
+        </ol>
+    </div>
+
+    <div class="page-header">
+        <div class="row">
+            <div class="col-md-12">
+                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">Settings</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <div class="text-muted">Contacts:</div>
+                <div style="min-height: 250px; border: 1px solid #eee;"></div>
+                <button class="btn btn-default" style="width: 100%;">Send invite</button>
+            </div>
+
+            <div class="col-md-2"></div>
+
+            <div class="col-md-6">
+                <div class="text-muted">Project users:</div>
+                <div style="min-height: 250px; border: 1px solid #eee;"></div>
+                <button class="btn btn-default" style="width: 100%;">Delete user</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
