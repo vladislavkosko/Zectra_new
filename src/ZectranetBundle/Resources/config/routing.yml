@@ -119,6 +119,12 @@ zectranet_show_office:
     requirements:
         office_id: \d+
 
+zectranet_office_profile_page:
+    pattern: /office/profile/{office_id}
+    defaults: { _controller: ZectranetBundle:Office:showProfile }
+    requirements:
+        office_id: \d+
+
 zectranet_add_office:
     path: /office/add
     defaults: { _controller: ZectranetBundle:Office:addOffice }
