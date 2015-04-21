@@ -34,6 +34,8 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
 
         $scope.HO_contact_message = '';
         $scope.All_contact_message = '';
+        $scope.HO_Contacts_test = false;
+        $scope.All_Contacts_test = false;
 
         $scope.getHeaders = function () {
             $http.get($scope.urlGetHeaders)
@@ -122,11 +124,12 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                 })
         };
 
-        $scope.contactChecked = function (index, array) {
+        $scope.contactChecked = function (type,index, array) {
             for(var i=0;i<array.length;i++)
             {
                     array[i].checked = ( i == index) ;
             }
+            $scope.testClickableButton(type,array);
         };
 
 
@@ -156,9 +159,40 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                             $scope.All_contact_message ='';
                             $('#send_request_by_All_contacts').modal('hide');
                         }
+                        $scope.getProjectSettingInfo();
                     }
                 })
         };
+
+        $scope.testClickableButton = function (type,array) {
+            for(var i=0; i< array.length; i++)
+            {
+                if(type == 1)
+                {
+                    if(array[i].checked)
+                    {
+                        $scope.HO_Contacts_test = true;
+                        break;
+                    }
+                    else
+                    {
+                        $scope.HO_Contacts_test = false;
+                    }
+                }
+                if(type == 2)
+                {
+                    if(array[i].checked)
+                    {
+                        $scope.All_Contacts_test = true;
+                        break;
+                    }
+                    else
+                    {
+                        $scope.All_Contacts_test = false;
+                    }
+                }
+            }
+        }
 
     }
 ]);
