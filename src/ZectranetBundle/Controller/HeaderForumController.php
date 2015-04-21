@@ -236,7 +236,7 @@ class HeaderForumController extends Controller {
         $info['HO_Contacts'] = HFForum::getNotProjectHomeOfficeMembers($em, $user->getId(), $project_id);
         $info['All_Contacts'] = HFForum::getNotProjectSiteMembers($em, $project_id);
         $info['Project_Team'] = EntityOperations::arrayToJsonArray(
-            $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id))
+            $em->getRepository('ZectranetBundle:Request')->findBy(array('HFForumID' => $project_id))
         );
         return new JsonResponse($info);
     }
