@@ -19,6 +19,7 @@ use ZectranetBundle\Entity\HFSubHeader;
 use ZectranetBundle\Entity\HFThread;
 use ZectranetBundle\Entity\HFThreadPost;
 use ZectranetBundle\Entity\User;
+use ZectranetBundle\Entity\Request as Req;
 
 class HeaderForumController extends Controller {
     /**
@@ -295,16 +296,21 @@ class HeaderForumController extends Controller {
     }
 
     /**
-     * @param $request_id
+     * @param int $project_id
+     * @param int $request_id
      * @return JsonResponse
      */
     public function deleteRequestAction($project_id, $request_id) {
+        /** @var User $user */
+        $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
-            if (HFForum::removeRequest($em, $request_id)) {
+            /** @var Req $request */
+            $request = HFForum::removeRequest($em, $request_id);
+            if ($request) {
                 $logMessage = 'User "' . $user->getUsername() . '" remove user "'
-                    . $contact->getUsername() . '" from project';
+                    . $request->getUser()->getUsername() . '" from request grid';
                 $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 2);
                 return new JsonResponse(1);
             } else {

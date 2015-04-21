@@ -143,16 +143,16 @@ class HFForum
     /**
      * @param EntityManager $em
      * @param $request_id
-     * @return boolean
+     * @return mixed
      */
     public static function removeRequest(EntityManager $em, $request_id) {
         $request = $em->find('ZectranetBundle:Request', $request_id);
         if ($request) {
             $em->remove($request);
             $em->flush();
-            return true;
+            return $request;
         } else {
-            return false;
+            return null;
         }
     }
 
