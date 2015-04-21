@@ -121,7 +121,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         function prepareNotifications(notifications) {
             notifications = _.map(notifications, function(n) {
-                if (["message_office", "request_office", "private_message_office"].indexOf(n.type) != -1)
+                if (["message_home_office", "message_office", "request_office", "private_message_office"].indexOf(n.type) != -1)
                     n.href = officeShowUrlBase.replace('0', n.destinationid);
                 else if (["message_task", "request_assign_task", "private_message_task"].indexOf(n.type) != -1)
                     n.href = taskShowUrlBase.replace('0', n.destinationid);

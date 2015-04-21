@@ -158,10 +158,7 @@ class Notifier
      */
 	private function sendNotificationEmail($user, $message, $type, $destinationid, $post = null)
 	{
-        if (in_array($type, array("message_home_office")))
-            $link = $this->router->generate('zectranet_show_office', array('office_id' => $destinationid, 'conversation_id' => $user->getId()));
-
-        elseif (in_array($type, array("message_office", "request_office", "private_message_office")))
+        if (in_array($type, array("message_home_office", "message_office", "request_office", "private_message_office")))
             $link = $this->router->generate('zectranet_show_office', array('office_id' => $destinationid), true);
 
         elseif (in_array($type, array("message_task", "request_assign_task", "private_message_task")))
