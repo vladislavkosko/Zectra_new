@@ -547,5 +547,5 @@ zectranet_approve_project_membership_request:
     defaults: { _controller: ZectranetBundle:User:approveContactMembershipRequest }
 
 zectranet_delete_project_request:
-    pattern: /request/delete/{request_id}
+    pattern: /request/{project_id}/delete/{request_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:deleteRequest }

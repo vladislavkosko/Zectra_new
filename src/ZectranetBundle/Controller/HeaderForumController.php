@@ -298,7 +298,22 @@ class HeaderForumController extends Controller {
      * @param $request_id
      * @return JsonResponse
      */
-    public function deleteRequestAction($request_id) {
-        return new JsonResponse();
+    public function deleteRequestAction($project_id, $request_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        try {
+            if (HFForum::removeRequest($em, $request_id)) {
+                $logMessage = 'User "' . $user->getUsername() . '" remove user "'
+                    . $contact->getUsername() . '" from project';
+                $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 2);
+                return new JsonResponse(1);
+            } else {
+                return new JsonResponse(0);
+            }
+        } catch (\Exception $ex) {
+            $from = 'class: HFForum, function: removeRequest';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
     }
 }

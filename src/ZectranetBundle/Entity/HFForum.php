@@ -142,6 +142,22 @@ class HFForum
 
     /**
      * @param EntityManager $em
+     * @param $request_id
+     * @return boolean
+     */
+    public static function removeRequest(EntityManager $em, $request_id) {
+        $request = $em->find('ZectranetBundle:Request', $request_id);
+        if ($request) {
+            $em->remove($request);
+            $em->flush();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param EntityManager $em
      * @param int $user_id
      * @param int $project_id
      * @return array
