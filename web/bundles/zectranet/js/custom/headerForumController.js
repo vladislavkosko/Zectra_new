@@ -129,6 +129,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             }
         };
 
+
         $scope.SendRequest = function (type,message,array)
         {
             var user_id = 0;
@@ -140,18 +141,22 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                     user_id = array[i].id;
                 }
             }
-           if(type == 1)
-           {
-               $scope.HO_contact_message ='';
-           }
-            else if(type == 2)
-           {
-               $scope.All_contact_message ='';
-           }
 
             $http.post($scope.urlSendProjectRequest,{'message':message,'user_id': user_id})
                 .success(function (response) {
-                    alert(response);
+                    if(response == 1)
+                    {
+                        if(type == 1)
+                        {
+                            $scope.HO_contact_message ='';
+                            $('#send_request_by_HO_contacts').modal('hide');
+                        }
+                        else if(type == 2)
+                        {
+                            $scope.All_contact_message ='';
+                            $('#send_request_by_All_contacts').modal('hide');
+                        }
+                    }
                 })
         };
 
