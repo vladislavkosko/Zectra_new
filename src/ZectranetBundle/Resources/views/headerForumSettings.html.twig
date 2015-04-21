@@ -81,7 +81,7 @@
                                         #
                                     </td>
                                     <td>
-                                        <i class="fa fa-close" style="color: red;"></i>
+                                        <i class="fa fa-close" style="color: red;cursor: pointer;" ng-click="deleteProjectRequest(request.id);"></i>
                                     </td>
                                     <td>
                                         <input type="checkbox" />
@@ -278,5 +278,6 @@
         JSON_URLS.deleteHeaderForumHeaders = "{{ path('zectranet_delete_header_action', { 'header_id': 0 }) }}";
         JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_project_settings_info', { 'project_id': forum.id}) }}";
         JSON_URLS.urlSendProjectRequest = "{{ path('zectranet_send_project_request', { 'project_id': forum.id}) }}";
+        JSON_URLS.urlDeleteProjectRequest = "{{ path('zectranet_send_project_request', { 'project_id': forum.id , 'request_id': 'requestid'}) }}";
     </script>
 {% endblock %}

@@ -6,6 +6,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         $scope.urlDeleteHeader = JSON_URLS.deleteHeaderForumHeaders;
         $scope.urlGetProjectSettingInfo = JSON_URLS.urlGetProjectSettingInfo;
         $scope.urlSendProjectRequest = JSON_URLS.urlSendProjectRequest;
+        $scope.urlDeleteProjectRequest = JSON_URLS.urlDeleteProjectRequest;
 
         $scope.headers = null;
 
@@ -192,6 +193,26 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                     }
                 }
             }
+        }
+        
+        $scope.deleteProjectRequest = function (request_id) {
+            var urlDeleteProjectRequest = $scope.urlDeleteProjectRequest.replace('requestid',request_id);
+            $http.delete(urlDeleteProjectRequest)
+                .success(function (response) {
+                    switch (response)
+                    {
+                        case 0:
+                            alert(' Not found ');
+                            break;
+                        case 1:
+                            alert(' Success ');
+                            break;
+                        case -1:
+                            alert(' Exception ');
+                            break;
+                    }
+                    $scope.getProjectSettingInfo();
+                })
         }
 
     }
