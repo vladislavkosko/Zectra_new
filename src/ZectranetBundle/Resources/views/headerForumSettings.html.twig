@@ -17,137 +17,158 @@
             <h4>Forum Settings</h4>
         </div>
 
-        <div class="row" ng-init="getProjectSettingInfo();">
-            <div class="col-md-12">
-                <div class="col-md-2 " style="margin: 15px;">
-                    <label> HO Contacts</label>
-                <ul class="list-group">
-                    <li class="list-group-item " style="cursor: pointer;" ng-repeat="HO_Contact in HO_Contacts" ng-class="{'contact-list-active':HO_Contact.checked}" ng-click="contactChecked($index,HO_Contacts);" > [[ HO_Contact.username ]] </li>
-
-                </ul>
-                    <a class="btn btn-default btn-success" data-toggle="modal" data-target="#send_request_by_HO_contacts">
-                        Send Request
-                    </a>
-             </div>
-
-                <div class="modal fade" id="send_request_by_HO_contacts" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header " style="background-color: #e7e7e7 !important;">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title" style="color: #000000;" align="center">
-                                    Send Request
-                                </h4>
-                            </div>
-
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-xs-offset-1 col-xs-10">
-                                        <div class="form-group">
-                                            <label>
-                                                <b>Request Message</b>
-                                            </label>
-                                            <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="HO_contact_message"></textarea>
-                                            <br/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(1,HO_contact_message,HO_Contacts);">Send Request</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2 " style="margin: 15px; ">
-                    <label> All Contacts</label>
-                    <ul class="list-group">
-                        <li class="list-group-item" style="cursor: pointer;" ng-repeat="contact in All_Contacts" ng-class="{'contact-list-active':contact.checked}" ng-click="contactChecked($index,All_Contacts);">[[ contact.username ]]</li>
-
+        <div ng-init="getProjectSettingInfo();">
+            <div class="row">
+                <div class="col-md-3 " style="margin-top: 15px;">
+                    <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px; margin-bottom: 0;">
+                        <li class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            HO Contacts
+                        </li>
+                        <li class="list-group-item" style="cursor: pointer;"
+                            ng-repeat="HO_Contact in HO_Contacts"
+                            ng-class="{'contact-list-active':HO_Contact.checked}"
+                            ng-click="contactChecked($index, HO_Contacts);" >
+                            [[ HO_Contact.username ]]
+                        </li>
                     </ul>
-                    <a class="btn btn-default btn-success" data-toggle="modal" data-target="#send_request_by_All_contacts">
+                    <a class="btn btn-default btn-success" data-toggle="modal"
+                       data-target="#send_request_by_HO_contacts" style="width: 100%;">
                         Send Request
                     </a>
                 </div>
 
-                <div class="modal fade" id="send_request_by_All_contacts" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header " style="background-color: #e7e7e7 !important;">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title" style="color: #000000;" align="center">
-                                    Send Request
-                                </h4>
-                            </div>
+                <div class="col-md-3 " style="margin-top: 15px;">
+                    <ul class="list-group"  style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px; margin-bottom: 0;">
+                        <li class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            All Contacts
+                        </li>
+                        <li class="list-group-item" style="cursor: pointer;"
+                            ng-repeat="contact in All_Contacts"
+                            ng-class="{'contact-list-active':contact.checked}"
+                            ng-click="contactChecked($index,All_Contacts);">
+                            [[ contact.username ]]
+                        </li>
+                    </ul>
+                    <a class="btn btn-default btn-success" data-toggle="modal"
+                       data-target="#send_request_by_All_contacts" style="width: 100%;">
+                        Send Request
+                    </a>
+                </div>
 
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-xs-offset-1 col-xs-10">
-                                        <div class="form-group">
-                                            <label>
-                                                <b>Request Message</b>
-                                            </label>
-                                            <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="All_contact_message"></textarea>
-                                            <br/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(2,All_contact_message,All_Contacts);">Send Request</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                </div>
-                            </div>
-
+                <div class="col-md-6">
+                    <div class="list-group" style="margin-top: 15px;">
+                        <div class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            Project Team
+                        </div>
+                        <div class="list-group-item" style="height: 240px;">
+                            <table class="table">
+                                <thead class="table-striped">
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Status</th>
+                                    <th>Reply</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="request in Project_Team">
+                                    <td>
+                                        [[ request.user.username ]]
+                                    </td>
+                                    <td>
+                                        [[ request.status.id ]]
+                                    </td>
+                                    <td>
+                                        #
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-close" style="color: red;"></i>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4 list-group" style="margin: 15px;">
-                    <label> Project Team</label>
-                    <table class="table">
-                        <thead class="table-striped">
-                        <tr>
-                            <th>User Name</th>
-                            <th>Status</th>
-                            <th>Reply</th>
+            </div>
+        </div>
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="request in Project_Team">
-                                <td>
-                                    [[ request.user.username ]]
-                                </td>
-                                <td>
-                                    [[ request.status.id ]]
-                                </td>
-                                <td>
-                                    #
-                                </td>
-                                <td>
-                                    <i class="fa fa-close" style="color: red;"></i>
-                                </td>
-                                <td>
+        <!-- START MODAL -->
+        <div class="modal fade" id="send_request_by_HO_contacts" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="color: #000000;" align="center">
+                            Send Request
+                        </h4>
+                    </div>
 
-                                    <input type="checkbox" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-offset-1 col-xs-10">
+                                <div class="form-group">
+                                    <label>
+                                        <b>Request Message</b>
+                                    </label>
+                                    <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="HO_contact_message"></textarea>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(1,HO_contact_message,HO_Contacts);">Send Request</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
 
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="send_request_by_All_contacts" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="color: #000000;" align="center">
+                            Send Request
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-offset-1 col-xs-10">
+                                <div class="form-group">
+                                    <label>
+                                        <b>Request Message</b>
+                                    </label>
+                                    <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="All_contact_message"></textarea>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(2,All_contact_message,All_Contacts);">Send Request</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- END MODAL -->
+
+
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-12">
                 <div class="col-md-6">
