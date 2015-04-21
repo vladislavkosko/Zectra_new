@@ -148,9 +148,10 @@ class HFForum
     public static function removeRequest(EntityManager $em, $request_id) {
         $request = $em->find('ZectranetBundle:Request', $request_id);
         if ($request) {
+            $clone = clone $request;
             $em->remove($request);
             $em->flush();
-            return $request;
+            return $clone;
         } else {
             return null;
         }
