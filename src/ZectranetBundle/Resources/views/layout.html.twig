@@ -306,12 +306,12 @@
                                     </div>
                                 </a>#}
 
-                                <a ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
+                                <a ng-if="(notification.type == 'message_home_office') || (notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
                                     || (notification.type == 'private_message_office') || (notification.type == 'private_message_project') || (notification.type == 'private_message_task') || (notification.type == 'private_message_epic_story')
                                     || (notification.type == 'task_added') || (notification.type == 'task_deleted') || (notification.type == 'epic_story_added') || (notification.type == 'epic_story_deleted')"
                                     href="[[notification.href]]"
                                     style="text-decoration: none; color: #000;">
-                                    <i ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
+                                    <i ng-if="(notification.type == 'message_home_office') || (notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
                                     || (notification.type == 'private_message_office') || (notification.type == 'private_message_project') || (notification.type == 'private_message_task') || (notification.type == 'private_message_epic_story')"
                                        class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
                                     <i ng-if="(notification.type == 'task_added')" class="fa fa-tasks fa-fw"></i>

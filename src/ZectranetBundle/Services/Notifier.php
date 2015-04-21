@@ -53,6 +53,8 @@ class Notifier
         "private_message_project",        // +
         "private_message_epic_story",     // +
         "private_message_task",           // +
+
+        "message_home_office"
     );
 
 	/**
@@ -132,6 +134,9 @@ class Notifier
         if (in_array($type, array("private_message_office", "private_message_project", "private_message_epic_story", "private_message_task")))
             $method = true;
 
+        if (in_array($type, array("message_home_office")))
+            $method = true;
+
         if (in_array($type, array("message_office", "message_project", "message_epic_story", "message_task")))
             $method = false;
 
@@ -153,7 +158,10 @@ class Notifier
      */
 	private function sendNotificationEmail($user, $message, $type, $destinationid, $post = null)
 	{
-		if (in_array($type, array("message_office", "request_office", "private_message_office")))
+        if (in_array($type, array("message_home_office")))
+            $link = $this->router->generate('zectranet_show_office', array('office_id' => $destinationid, 'conversation_id' => $user->getId()));
+
+        elseif (in_array($type, array("message_office", "request_office", "private_message_office")))
             $link = $this->router->generate('zectranet_show_office', array('office_id' => $destinationid), true);
 
         elseif (in_array($type, array("message_task", "request_assign_task", "private_message_task")))
@@ -187,7 +195,7 @@ class Notifier
 		$qb->delete('ZectranetBundle:Notification', 'n')
 			->where("n.userid = :userid")
 			->andWhere("n.destinationid = :destinationid")
-			->andWhere("n.type = 'message_office' OR n.type = 'private_message_office'")
+			->andWhere("n.type = 'message_office' OR n.type = 'private_message_office' OR n.type = 'message_home_office'")
 			->setParameter("userid", $this->user->getId())
 			->setParameter("destinationid", $office_id);
 
@@ -203,7 +211,7 @@ class Notifier
         $qb = $this->em->createQueryBuilder();
         $qb->delete('ZectranetBundle:Notification', 'n')
             ->where("n.destinationid = :destinationid")
-            ->andWhere("n.type = 'message_office' OR n.type = 'private_message_office'")
+            ->andWhere("n.type = 'message_office' OR n.type = 'private_message_office' OR n.type = 'message_home_office'")
             ->setParameter("destinationid", $office_id);
 
         return $qb->getQuery()->getResult();
@@ -318,6 +326,12 @@ class Notifier
 		$message = null;
 
 		if (!in_array($type, $this->types)) return false;
+
+        elseif (in_array($type, array("message_home_office")))
+        {
+            $users = array($usersRequest);
+            $message = 'New message from ' . $resource->getName() .  ' ' . $resource->getSurname() . ' in your Home Office';
+        }
 
         elseif (in_array($type, array("message_office", "message_project", "message_epic_story")))
         {

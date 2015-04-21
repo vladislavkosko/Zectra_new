@@ -279,6 +279,10 @@ class Notification
                         $method = $user_settings->getMsgSiteMessageOffice();
                         break;
 
+                    case "message_home_office":
+                        $method = $user_settings->getMsgSiteMessageOffice();
+                        break;
+
                     case "message_project":
                         $method = $user_settings->getMsgSiteMessageProject();
                         break;
@@ -321,7 +325,7 @@ class Notification
             }
         }
 
-        else $user_notifications = null;
+        else $temp_user_notifications = null;
 
         return $temp_user_notifications;
     }

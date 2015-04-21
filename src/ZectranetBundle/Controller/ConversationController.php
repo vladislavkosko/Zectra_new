@@ -51,6 +51,23 @@ class ConversationController extends Controller {
             $from = 'Class: ConversationMessage, function: addNewMessage';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
         }
+
+        /** @var Conversation $conversation */
+        $conversation = $em->find('ZectranetBundle:Conversation', $conversation_id);
+
+        if ($conversation->getUser1ID() != $user->getId())
+        {
+            $office = $conversation->getUser1()->getHomeOffice();
+            $resource = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($conversation->getUser1ID());
+        }
+        else
+        {
+            $office = $conversation->getUser2()->getHomeOffice();
+            $resource = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($conversation->getUser2ID());
+        }
+
+        $this->get('zectranet.notifier')->createNotification("message_home_office", $user, $resource, $office, null, $data);
+
         return new JsonResponse(($message) ? $message->getInArray() : null);
     }
 }

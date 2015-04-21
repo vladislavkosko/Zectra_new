@@ -114,8 +114,8 @@ zectranet_delete_all_notifications:
     defaults: { _controller: ZectranetBundle:Notification:deleteAll }
 
 zectranet_show_office:
-    pattern: /office/{office_id}
-    defaults: { _controller: ZectranetBundle:Office:index }
+    pattern: /office/{office_id}/{conversation_id}
+    defaults: { _controller: ZectranetBundle:Office:index, conversation_id = null }
     requirements:
         office_id: \d+
 
