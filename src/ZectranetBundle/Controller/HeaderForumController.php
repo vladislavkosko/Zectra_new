@@ -293,4 +293,12 @@ class HeaderForumController extends Controller {
         $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 2);
         return new JsonResponse(1);
     }
+
+    /**
+     * @param $request_id
+     * @return JsonResponse
+     */
+    public function deleteRequestAction($request_id) {
+        return new JsonResponse();
+    }
 }

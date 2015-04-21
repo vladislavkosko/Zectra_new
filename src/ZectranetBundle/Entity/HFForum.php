@@ -114,6 +114,19 @@ class HFForum
         $initiator = $em->find('ZectranetBundle:User', $initiator_id);
         $status = $em->find('ZectranetBundle:RequestStatus', 1);
         $type = RequestType::getProjectMembershipRequest($em);
+
+        // Check for old request
+        $request = $em->getRepository('ZectranetBundle:Request')->findOneBy(array(
+            'userid' => $user_id,
+            'HFForumID' => $project_id,
+            'typeid' => $type->getId(),
+        ));
+        // Delete existing request
+        if ($request) {
+            $em->remove($request);
+        }
+
+        // Create new request
         $request = new Request();
         $request->setType($type);
         $request->setUser($user);
