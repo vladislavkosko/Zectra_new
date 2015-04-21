@@ -409,6 +409,7 @@ class Request
         return array(
             'id' => $this->getId(),
             'type' => $this->getType()->getInArray(),
+            'status' => $this->getStatus()->getInArray(),
             'user' =>$this->getUser()->getInArray(),
             'project' => (($this->getType()->getLabel() == 'request_user_project')
                 or ($this->getType()->getLabel() == 'request_project'))
