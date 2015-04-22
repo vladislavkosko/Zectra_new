@@ -82,6 +82,7 @@ class HFForum
     /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="HFLog", mappedBy="project")
+     * @ORM\OrderBy({"date" = "DESC"})
      */
     private $logs;
 
@@ -101,6 +102,7 @@ class HFForum
     public function getInArray() {
         return array(
             'id' => $this->getId(),
+            'name' => $this->getName(),
             'ownerID' => $this->getOwnerID(),
             'shared' => $this->getShared(),
             'headers' => EntityOperations::arrayToJsonArray($this->getHeaders()),

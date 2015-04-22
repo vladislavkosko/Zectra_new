@@ -24,7 +24,6 @@
         <link href="{{ asset('bundles/zectranet/css/angular-busy.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('bundles/zectranet/css/lightbox.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('bundles/zectranet/css/leftSidebar.css') }}" rel="stylesheet" type="text/css">
-        <link href="{{ asset('bundles/zectranet/css/google-code-prettify/prettify.css') }}" rel="stylesheet" type="text/css">
         <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     {% endblock %}
 
@@ -69,7 +68,9 @@
                     <li class="dropdown" ng-cloak>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
                             <div class="fa fa-fw"><b>P</b></div>
-                            <span ng-if="requests.QnARequests.length + requests.hfRequests.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
+                            <span ng-if="requests.QnARequests.length + requests.hfRequests.length > 0"
+                                  style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;"
+                                    ng-class="{ 'visible-element': FirstInit }" class="hidden-element">
                                 [[ requests.QnARequests.length + requests.hfRequests.length ]]
                             </span>
                             <i class="fa fa-caret-down"></i>
@@ -77,11 +78,11 @@
 
                         <ul class="dropdown-menu dropdown-tasks noclose list-group">
                             <li ng-if="requests.QnARequests.length + requests.hfRequests.length == 0" class="list-group-item">
-                                <h5 class="text-info">You haven't any contact requests</h5>
+                                <h5 class="text-info">You haven't any project requests</h5>
                             </li>
-                            <li ng-repeat="requestQNA in requests.QnARequests | limitTo: 3" class="list-group-item">
+                            <li ng-repeat="requestQNA in requests.QnARequests | limitTo: 2" class="list-group-item">
                                 <h5 class="text-info">
-                                    User "[[ requestQNA.contact.username ]]" has sent you contact request
+                                    User "[[ requestQNA.contact.username ]]" has invite you into "[[ requestQNA.QnAForum.name ]]" project
                                 </h5>
                                 <div class="divider"></div>
                                 <p>
@@ -105,9 +106,9 @@
                                     </button>
                                 </div>
                             </li>
-                            <li ng-repeat="requesthf in requests.hfRequests | limitTo: 3" class="list-group-item">
+                            <li ng-repeat="requesthf in requests.hfRequests | limitTo: 2" class="list-group-item">
                                 <h5 class="text-info">
-                                    User "[[ requesthf.contact.username ]]" has sent you contact request
+                                    User "[[ requesthf.contact.username ]]" has invite you into "[[ requesthf.hfForum.name ]]" project
                                 </h5>
                                 <div class="divider"></div>
                                 <p>
@@ -137,7 +138,8 @@
                     <li class="dropdown" ng-cloak>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
                             <div class="fa fa-fw"><b>C</b></div>
-                            <span ng-if="requests.contactRequests.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
+                            <span ng-if="requests.contactRequests.length > 0" ng-class="{ 'visible-element': FirstInit }" class="hidden-element"
+                                  style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
                                 [[ requests.contactRequests.length ]]
                             </span>
                             <i class="fa fa-caret-down"></i>
@@ -338,7 +340,8 @@
 
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 							<i class="fa fa-bell fa-fw"></i>
-                            <span ng-if="notifications.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
+                            <span ng-if="notifications.length > 0" ng-class="{ 'visible-element': FirstInit }" class="hidden-element"
+                                  style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
                                 [[notifications.length]]
                             </span>
                             <i class="fa fa-caret-down"></i>

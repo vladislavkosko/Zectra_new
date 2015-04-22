@@ -41,8 +41,8 @@
 
 					<li>
                         {% set homeOffice = app.user.homeOffice %}
-                        {% set HOProjectsCount = homeOffice.projects | length + homeOffice.headerForums | length
-                                + homeOffice.QnAForums | length %}
+                        {% set HOProjectsCount = app.user.projects | length + app.user.connectedHFForums | length
+                                + app.user.connectedQnAForums | length %}
 						<a href="{{ path('zectranet_show_office', {'office_id': app.user.homeOffice.id }) }}"
                            class="
                                 {% if HOProjectsCount > 0 %}
@@ -53,14 +53,14 @@
 							<i class='fa fa-home'></i>
 							<span>Home Office</span>
 						</a>
-                        {% if HOProjectsCount | length > 0 %}
+                        {% if HOProjectsCount > 0 %}
                             <a href="{{ path('zectranet_show_office', {'office_id': homeOffice.id }) }}" class="collapsible-href">
                                 <i class="fa fa-arrow-down fa-fw"></i>
                             </a>
                         {% endif %}
                         <div class="clearfix"></div>
 						<ul class="nav nav-second-level">
-                            {% for project in homeOffice.projects if project.users | length == 1 %}
+                            {% for project in app.user.projects if project.users | length == 1 %}
                                 <li>
                                     <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
                                         <i class="fa fa-briefcase fa-fw"></i>
@@ -69,7 +69,7 @@
                                 </li>
                             {% endfor %}
 
-                            {% for project in homeOffice.headerForums if project.users | length == 1 %}
+                            {% for project in app.user.connectedHFForums if project.users | length == 1 %}
                                 <li>
                                     <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}">
                                         <i class="fa fa-briefcase fa-fw"></i>
@@ -78,7 +78,7 @@
                                 </li>
                             {% endfor %}
 
-                            {% for project in homeOffice.QnAForums if project.users | length == 1 %}
+                            {% for project in app.user.connectedQnAForums if project.users | length == 1 %}
                                 <li>
                                     <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}">
                                         <i class="fa fa-briefcase fa-fw"></i>
@@ -93,7 +93,7 @@
                                     <span>Connected Projects</span>
                                 </a>
                                 <ul class="nav nav-third-level">
-                                    {% for project in homeOffice.projects if project.users | length > 1 %}
+                                    {% for project in app.user.projects if project.users | length > 1 %}
                                         <li>
                                             <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
                                                 <i class="fa fa-briefcase fa-fw"></i>

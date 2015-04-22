@@ -48,6 +48,17 @@ class QnALog
     private $date;
 
     /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'date' => $this->getDate()->format('Y-m-d H:i:s'),
+            'event' => $this->getMessage(),
+        );
+    }
+
+    /**
      * Constructor
      */
     public function __construct() {

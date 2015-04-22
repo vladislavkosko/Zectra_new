@@ -112,6 +112,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                     $scope.HO_Contacts = response.HO_Contacts;
                     $scope.All_Contacts = response.All_Contacts;
                     $scope.Project_Team = response.Project_Team;
+                    $scope.HFLogs = response.HFLogs;
 
                     for(var i = 0; i < $scope.HO_Contacts.length;i++)
                     {

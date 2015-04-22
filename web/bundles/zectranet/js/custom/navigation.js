@@ -15,6 +15,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         $scope.notifications = null;
         $scope.notifyHandler = null;
         $scope.notificationsLength = null;
+        $scope.FirstInit = false;
 
         function Notify() {
             title.text((title.text() == titleValue) ? 'Incoming notifications!' : titleValue);
@@ -125,6 +126,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         $scope.getNotification = function getNotifications() {
             $http.get(notificationsGetUrl)
                 .success(function(response) {
+                    $scope.FirstInit = true;
                     if (response.result.requests){
                         $scope.requests = prepareRequests(response.result.requests);
                     }

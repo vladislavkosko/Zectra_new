@@ -234,11 +234,14 @@ class HeaderForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
         $info['HO_Contacts'] = HFForum::getNotProjectHomeOfficeMembers($em, $user->getId(), $project_id);
         $info['All_Contacts'] = HFForum::getNotProjectSiteMembers($em, $project_id);
         $info['Project_Team'] = EntityOperations::arrayToJsonArray(
             $em->getRepository('ZectranetBundle:Request')->findBy(array('HFForumID' => $project_id))
         );
+        $info['HFLogs'] = EntityOperations::arrayToJsonArray($project->getLogs());
+
         return new JsonResponse($info);
     }
 

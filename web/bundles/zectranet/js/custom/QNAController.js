@@ -5,10 +5,6 @@ Zectranet.controller('QNAController', ['$scope', '$http',
         $scope.urlSendQNAProjectRequest = JSON_URLS.urlSendQNAProjectRequest;
         $scope.urlDeleteQNAProjectRequest = JSON_URLS.urlDeleteQNAProjectRequest;
 
-
-
-
-
         $scope.HO_Contacts = [];
         $scope.All_Contacts = [];
         $scope.Project_Team = [];
@@ -26,14 +22,13 @@ Zectranet.controller('QNAController', ['$scope', '$http',
             $('#header_forum_messages_modal').modal('show');
         }
 
-
-
         $scope.getProjectSettingInfo = function () {
             $http.get($scope.urlGetQNAProjectSettingInfo)
                 .success(function (response) {
                     $scope.HO_Contacts = response.HO_Contacts;
                     $scope.All_Contacts = response.All_Contacts;
                     $scope.Project_Team = response.Project_Team;
+                    $scope.QnALogs = response.QnALogs;
 
                     for(var i = 0; i < $scope.HO_Contacts.length;i++)
                     {

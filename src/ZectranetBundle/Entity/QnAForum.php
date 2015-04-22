@@ -85,6 +85,18 @@ class QnAForum
     private $logs;
 
     /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'officeID' => $this->getOfficeID(),
+            'ownerID' => $this->getOwnerID(),
+        );
+    }
+
+    /**
      * Constructor
      */
     public function __construct() {

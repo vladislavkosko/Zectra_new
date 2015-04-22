@@ -163,11 +163,13 @@ class QnAForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
         $info['HO_Contacts'] = QnAForum::getNotProjectHomeOfficeMembers($em, $user->getId(), $project_id);
         $info['All_Contacts'] = QnAForum::getNotProjectSiteMembers($em, $project_id);
         $info['Project_Team'] = EntityOperations::arrayToJsonArray(
             $em->getRepository('ZectranetBundle:Request')->findBy(array('QnAForumID' => $project_id))
         );
+        $info['QnALogs'] = EntityOperations::arrayToJsonArray($project->getLogs());
         return new JsonResponse($info);
     }
 

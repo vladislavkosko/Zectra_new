@@ -43,6 +43,7 @@ class UserController extends Controller
     }
 
     /**
+     * @Security("has_role('ROLE_USER')")
      * @return Response
      */
     public function editProfilePageAction() {
@@ -65,6 +66,7 @@ class UserController extends Controller
     }
 
     /**
+     * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @param $user_id
      * @return RedirectResponse
@@ -399,6 +401,8 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var Req $userRequest */
         $userRequest = $em->find('ZectranetBundle:Request', $request_id);
+        /** @var User $user */
+        $user = $this->getUser();
 
         if ($data) {
             try {
@@ -408,6 +412,8 @@ class UserController extends Controller
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);
             }
             Req::changeRequestState($em, $request_id, 2);
+            $event = 'User "' . $user->getUsername() . '" has joined the project';
+            $this->get('zectranet.projectlogger')->logEvent($event, $userRequest->getHFForumID(), 2);
         } else {
             Req::changeRequestState($em, $request_id, 3);
         }
@@ -427,6 +433,8 @@ class UserController extends Controller
         $em = $this->getDoctrine()->getManager();
         /** @var Req $userRequest */
         $userRequest = $em->find('ZectranetBundle:Request', $request_id);
+        /** @var User $user */
+        $user = $this->getUser();
 
         if ($data) {
             try {
@@ -436,6 +444,8 @@ class UserController extends Controller
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);
             }
             Req::changeRequestState($em, $request_id, 2);
+            $event = 'User "' . $user->getUsername() . '" has joined the project';
+            $this->get('zectranet.projectlogger')->logEvent($event, $userRequest->getQnAForumID(), 1);
         } else {
             Req::changeRequestState($em, $request_id, 3);
         }

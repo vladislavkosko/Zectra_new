@@ -422,7 +422,13 @@ class Request
             'message' => $this->getMessage(),
             'contact' => ($this->getUser())
                 ? $this->getContact()->getInArray()
-                : null
+                : null,
+            'hfForum' => ($this->getHFForum())
+                ? $this->getHFForum()->getInArray()
+                : null,
+            'QnAForum' => ($this->getQnAForum())
+                ? $this->getQnAForum()->getInArray()
+                : null,
         );
     }
 
