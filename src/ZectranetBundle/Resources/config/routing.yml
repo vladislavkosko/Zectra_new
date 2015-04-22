@@ -295,7 +295,7 @@ zectranet_show_QnA_forum:
         project_id: \d+
 
 zectranet_QnA_settings:
-    pattern: /QnAForum/settings/{project_id}
+    pattern: /QnAForum/{project_id}/settings
     defaults: { _controller: ZectranetBundle:QnAForum:settings }
     requirements:
         project_id: \d+
@@ -313,7 +313,7 @@ zectranet_QnA_create_new_question:
         project_id: \d+
 
 zectranet_show_QnA_thread:
-    pattern: /QnAForum/thread/{project_id}/{thread_id}
+    pattern: /QnAForum/{project_id}/thread/{thread_id}
     defaults: { _controller: ZectranetBundle:QnAForum:showThread }
     requirements:
         project_id: \d+
