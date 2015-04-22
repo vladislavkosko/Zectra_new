@@ -19,7 +19,7 @@
 
     <div class="row panel panel-default" style="margin-top:20px; border:0px;">
         <div class="col-xs-2" style="padding: 10px;">
-            <img class="img-responsive" src="{{ asset('') ~ 'documents/' ~ thread.user.avatar }}" alt="{{ thread.user.username }}"/>
+            <img class="img-responsive" style="margin: 0 auto;" src="{{ asset('') ~ 'documents/' ~ thread.user.avatar }}" alt="{{ thread.user.username }}"/>
             <p class="text-center" style="margin-top: 10px;">
                 <a href="{{ path('zectranet_user_page', {'user_id': thread.userID }) }}" style="word-wrap: break-word; white-space: normal">
                     {{ thread.user.name ~ ' ' ~ thread.user.surname ~ ' (' ~ thread.user.username ~ ')' }}
@@ -51,9 +51,9 @@
         </div>
         <div class="panel-body" style="padding: 10px 25px;">
             {% for post in thread.posts %}
-                <div class="row panel panel-default" style="border-width: 1px;border-style: solid;border-color: #F2F2F2;border-radius: 3px;">
+                <div class="row panel panel-default forum-post">
                     <div class="col-xs-2" style="padding: 10px; background-color: #FAFAFA">
-                        <img class="img-responsive" src="{{ asset('') ~ 'documents/' ~ post.user.avatar }}" alt="{{ post.user.username }}"/>
+                        <img class="img-responsive" style="margin: 0 auto;" src="{{ asset('') ~ 'documents/' ~ post.user.avatar }}" alt="{{ post.user.username }}"/>
                         <p class="text-center" style="margin-top: 10px;">
                             <a href="{{ path('zectranet_user_page', {'user_id': post.userID }) }}" style="word-wrap: break-word; white-space: normal;">
                                 {{ post.user.name ~ ' ' ~ post.user.surname ~ ' (' ~ post.user.username ~ ')' }}
@@ -61,8 +61,8 @@
                         </p>
                         <p class="text-center"><small class="text-muted">2 posts</small></p>
                     </div>
-                    <div class="col-xs-10" style="min-height: 200px; border-left: 1px solid #eee;">
-                        <small class="pull-right text-muted">Posted {{ post.posted | date('Y-m-d H:i:s') }}</small>
+                    <div class="col-xs-10" style="min-height: 150px;">
+                        <small class="pull-right text-muted" style="margin-top: 8px;">Posted {{ post.posted | date('Y-m-d H:i:s') }}</small>
                         <p style="white-space: pre-line;">
                             {{ post.message }}
                         </p>

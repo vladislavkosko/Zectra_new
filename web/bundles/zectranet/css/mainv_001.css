@@ -175,3 +175,12 @@ div[data-role="editor-toolbar"] {
 .dropdown-menu a {
     cursor: pointer;
 }
+.forum-post{
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
+    border-width: 1px;
+    border-style: solid;
+    border-color: #F2F2F2;
+    border-radius: 3px;
+}
