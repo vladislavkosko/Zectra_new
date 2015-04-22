@@ -29,20 +29,168 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-4">
-                <div class="text-muted">Contacts:</div>
-                <div style="min-height: 250px; border: 1px solid #eee;"></div>
-                <button class="btn btn-default" style="width: 100%;">Send invite</button>
-            </div>
+    <div ng-controller="QNAController">
+        <div ng-init="getProjectSettingInfo();">
+            <div class="row">
+                <div class="col-md-3 " style="margin-top: 15px;">
+                    <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px;overflow-y: auto; margin-bottom: 0;">
+                        <li class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            HO Contacts
+                        </li>
+                        <li class="list-group-item" style="cursor: pointer;"
+                            ng-repeat="HO_Contact in HO_Contacts"
+                            ng-class="{'contact-list-active':HO_Contact.checked}"
+                            ng-click="contactChecked(1,$index, HO_Contacts);" >
+                            [[ HO_Contact.username ]]
+                        </li>
+                    </ul>
+                    <a ng-init="testClickableButton(1,HO_Contacts);" ng-if="HO_Contacts_test"  class="btn btn-default btn-success" data-toggle="modal"
+                       data-target="#send_request_by_HO_contacts" style="width: 100%;">
+                        Send Request
+                    </a>
+                </div>
 
-            <div class="col-md-6 col-md-offset-2">
-                <div class="text-muted">Project users:</div>
-                <div style="min-height: 250px; border: 1px solid #eee;"></div>
-                <button class="btn btn-default" style="width: 100%;">Delete user</button>
+                <div class="col-md-3 " style="margin-top: 15px;">
+                    <ul class="list-group"  style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px;overflow-y: auto; margin-bottom: 0;">
+                        <li class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            All Contacts
+                        </li>
+                        <li class="list-group-item" style="cursor: pointer;"
+                            ng-repeat="contact in All_Contacts"
+                            ng-class="{'contact-list-active':contact.checked}"
+                            ng-click="contactChecked(2,$index,All_Contacts);">
+                            [[ contact.username ]]
+                        </li>
+                    </ul>
+                    <a ng-init="testClickableButton(2,All_Contacts);" ng-if="All_Contacts_test" class="btn btn-default btn-success" data-toggle="modal"
+                       data-target="#send_request_by_All_contacts" style="width: 100%;">
+                        Send Request
+                    </a>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="list-group" style="margin-top: 15px;">
+                        <div class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            Project Team
+                        </div>
+                        <div class="list-group-item" style="height: 240px;overflow-y: auto;">
+                            <table class="table">
+                                <thead class="table-striped">
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Status</th>
+                                    <th>Reply</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="request in Project_Team">
+                                    <td>
+                                        [[ request.user.username ]]
+                                    </td>
+                                    <td>
+                                        <span class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
+                                    </td>
+                                    <td>
+                                        #
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-close" style="color: red;cursor: pointer;" ng-click="deleteProjectRequest(request.id);"></i>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- START MODAL -->
+        <div class="modal fade" id="send_request_by_HO_contacts" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="color: #000000;" align="center">
+                            Send Request
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-offset-1 col-xs-10">
+                                <div class="form-group">
+                                    <label>
+                                        <b>Request Message</b>
+                                    </label>
+                                    <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="HO_contact_message"></textarea>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(1,HO_contact_message,HO_Contacts);">Send Request</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="send_request_by_All_contacts" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="color: #000000;" align="center">
+                            Send Request
+                        </h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-offset-1 col-xs-10">
+                                <div class="form-group">
+                                    <label>
+                                        <b>Request Message</b>
+                                    </label>
+                                    <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="All_contact_message"></textarea>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(2,All_contact_message,All_Contacts);">Send Request</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- END MODAL -->
     </div>
 
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+<script src="{{ asset('bundles/zectranet/js/custom/headerForumController.js') }}"></script>
+<script>
+
+    JSON_URLS.urlGetQNAProjectSettingInfo = "{{ path('zectranet_get_QNA_project_settings_info', { 'project_id': forum.id}) }}";
+    JSON_URLS.urlSendQNAProjectRequest = "{{ path('zectranet_send_QNA_project_request', { 'project_id': forum.id}) }}";
+    JSON_URLS.urlDeleteQNAProjectRequest = "{{ path('zectranet_delete_QNA_project_request', { 'project_id': forum.id , 'request_id': 'requestid'}) }}";
+</script>
 {% endblock %}

@@ -80,17 +80,30 @@
         this.$element.find('li.active').has('ul').children('ul').addClass('collapse in');
         this.$element.find('li').not('.active').has('ul').children('ul').addClass('collapse');
 
+
         var link = this.$element.find('li').has('ul').children('a');
-        var icon = link.find('i.fa-arrow-left');
-        if (link.parent().hasClass('active')) {
-            icon.removeClass('fa-arrow-left').addClass('fa-arrow-down')
+        var icon = link.find('i.fa-arrow-down');
+
+        if ($('a.non-collapsible-href.active')) {
+            icon.removeClass('fa-arrow-up').addClass('fa-arrow-down');
         }
+        else
+        {
+            if($('nav.nav-second-level').find('a.active'))
+            {
+                icon.removeClass('fa-arrow-down').addClass('fa-arrow-up');
+            }
+           else
+            { icon.removeClass('fa-arrow-down').addClass('fa-arrow-up');}
+        }
+
 
         this.$element.find('li').has('ul').children('a').on('click.metisMenu', function(e) {
             var self = $(this);
             var icon = self.find('i');
             var $parent = self.parent('li');
             var $list = $parent.children('ul');
+
 
             /*************************************************
              ************* Begin of modified area ************
@@ -102,10 +115,10 @@
 
                 if ($parent.hasClass('active')) {
                     $this.hide($list);
-                    icon.removeClass('fa-arrow-down').addClass('fa-arrow-left');
+                    icon.removeClass('fa-arrow-up').addClass('fa-arrow-down');
                 } else {
                     $this.show($list);
-                    icon.removeClass('fa-arrow-left').addClass('fa-arrow-down');
+                    icon.removeClass('fa-arrow-down').addClass('fa-arrow-up');
                 }
             }
             /*************************************************

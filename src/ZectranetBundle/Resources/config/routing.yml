@@ -549,3 +549,15 @@ zectranet_approve_project_membership_request:
 zectranet_delete_project_request:
     pattern: /request/{project_id}/delete/{request_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:deleteRequest }
+
+zectranet_get_QNA_project_settings_info:
+    pattern: /project/get/settings/info/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:getProjectSettingsInfo }
+
+zectranet_send_QNA_project_request:
+    pattern: /project/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:sendRequest }
+
+zectranet_delete_QNA_project_request:
+    pattern: /request/{project_id}/delete/{request_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:deleteRequest }
