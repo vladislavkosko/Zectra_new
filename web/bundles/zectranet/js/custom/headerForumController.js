@@ -202,13 +202,13 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                     switch (response)
                     {
                         case 0:
-                            alert(' Not found ');
+
                             break;
                         case 1:
-                            alert(' Success ');
+
                             break;
                         case -1:
-                            alert(' Exception ');
+
                             break;
                     }
                     $scope.getProjectSettingInfo();
