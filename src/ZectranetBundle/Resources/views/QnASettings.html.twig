@@ -186,7 +186,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-<script src="{{ asset('bundles/zectranet/js/custom/headerForumController.js') }}"></script>
+<script src="{{ asset('bundles/zectranet/js/custom/QNAController.js') }}"></script>
 <script>
 
     JSON_URLS.urlGetQNAProjectSettingInfo = "{{ path('zectranet_get_QNA_project_settings_info', { 'project_id': forum.id}) }}";
