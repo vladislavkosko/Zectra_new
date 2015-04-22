@@ -6,13 +6,10 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         var officeShowUrlBase = JSON_URLS.officeShow;
         var projectShowUrlBase = JSON_URLS.projectShow;
         var taskShowUrlBase = JSON_URLS.taskShow;
-        var acceptRequestUserOffice = JSON_URLS.acceptRequestUserOffice;
-        var declineRequestUserOffice = JSON_URLS.declineRequestUserOffice;
-        var acceptRequestUserProject = JSON_URLS.acceptRequestUserProject;
-        var declineRequestUserProject = JSON_URLS.declineRequestUserProject;
-        var acceptRequestOfficeProject = JSON_URLS.acceptRequestOfficeProject;
-        var declineRequestOfficeProject = JSON_URLS.declineRequestOfficeProject;
+
         var approveContactMembershipRequest = JSON_URLS.approveContactMembershipRequest;
+        var approveHFMembershipRequest = JSON_URLS.approveHFMembershipRequest;
+        var approveQnAMembershipRequest = JSON_URLS.approveQnAMembershipRequest;
 
         $scope.requests = {};
         $scope.notifications = null;
@@ -72,6 +69,46 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.declineContactMembershipRequest = function (request_id, index) {
             var approveUrl = approveContactMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': false })
+                .success(function (response) {
+                    $scope.requests.contactRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+        };
+
+        $scope.acceptHFMembershipRequest = function (request_id, index) {
+            var approveUrl = approveHFMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': true })
+                .success(function (response) {
+                    $scope.requests.contactRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+        };
+
+        $scope.declineHFMembershipRequest = function (request_id, index) {
+            var approveUrl = approveHFMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': false })
+                .success(function (response) {
+                    $scope.requests.contactRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+        };
+
+        $scope.acceptQnAMembershipRequest = function (request_id, index) {
+            var approveUrl = approveQnAMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': true })
+                .success(function (response) {
+                    $scope.requests.contactRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+        };
+
+        $scope.declineQnAMembershipRequest = function (request_id, index) {
+            var approveUrl = approveQnAMembershipRequest.replace('request_id', request_id);
             $http.post(approveUrl, { 'answer': false })
                 .success(function (response) {
                     $scope.requests.contactRequests.splice(index, 1);

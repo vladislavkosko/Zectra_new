@@ -69,11 +69,68 @@
                     <li class="dropdown" ng-cloak>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
                             <div class="fa fa-fw"><b>P</b></div>
+                            <span ng-if="requests.QnARequests.length + requests.hfRequests.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
+                                [[ requests.QnARequests.length + requests.hfRequests.length ]]
+                            </span>
                             <i class="fa fa-caret-down"></i>
                         </a>
 
                         <ul class="dropdown-menu dropdown-tasks noclose list-group">
-                            <li>UNDER CONSTRUCTION</li>
+                            <li ng-if="requests.QnARequests.length + requests.hfRequests.length == 0" class="list-group-item">
+                                <h5 class="text-info">You haven't any contact requests</h5>
+                            </li>
+                            <li ng-repeat="requestQNA in requests.QnARequests | limitTo: 3" class="list-group-item">
+                                <h5 class="text-info">
+                                    User "[[ requestQNA.contact.username ]]" has sent you contact request
+                                </h5>
+                                <div class="divider"></div>
+                                <p>
+                                    <b>Message:</b>
+                                    <span style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                        [[ requestQNA.message ]]
+                                    </span>
+                                </p>
+
+                                <div class="divider"></div>
+
+                                <div class="btn-group">
+                                    <button class="btn btn-default btn-success" ng-click="acceptQnAMembershipRequest(requestQNA.id);">
+                                        Accept
+                                    </button>
+                                    <button class="btn btn-default btn-danger" ng-click="declineQnAMembershipRequest(requestQNA.id);">
+                                        Decline
+                                    </button>
+                                    <button class="btn btn-default btn-info" ng-click="moreInfoContactMembershipRequest(requestQNA);">
+                                        More info
+                                    </button>
+                                </div>
+                            </li>
+                            <li ng-repeat="requesthf in requests.hfRequests | limitTo: 3" class="list-group-item">
+                                <h5 class="text-info">
+                                    User "[[ requesthf.contact.username ]]" has sent you contact request
+                                </h5>
+                                <div class="divider"></div>
+                                <p>
+                                    <b>Message:</b>
+                                    <span style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
+                                        [[ requesthf.message ]]
+                                    </span>
+                                </p>
+
+                                <div class="divider"></div>
+
+                                <div class="btn-group">
+                                    <button class="btn btn-default btn-success" ng-click="acceptHFMembershipRequest(requesthf.id);">
+                                        Accept
+                                    </button>
+                                    <button class="btn btn-default btn-danger" ng-click="acceptHFMembershipRequest(requesthf.id);">
+                                        Decline
+                                    </button>
+                                    <button class="btn btn-default btn-info" ng-click="moreInfoContactMembershipRequest(requesthf);">
+                                        More info
+                                    </button>
+                                </div>
+                            </li>
                         </ul>
                     </li>
 
@@ -520,6 +577,8 @@
             taskShow: "{{ url('zectranet_task_show', {task_id: 0}) }}",
 			documentTemplate: "{{ asset('bundles/zectranet/templates/document.html') }}",
 			approveContactMembershipRequest: "{{ path('zectranet_approve_contact_membership_request', { 'request_id': 'request_id' }) }}",
+            approveHFMembershipRequest: "{{ path('zectranet_approve_hf_membership_request', { 'request_id': 'request_id' }) }}",
+            approveQnAMembershipRequest: "{{ path('zectranet_approve_QNA_membership_request', { 'request_id': 'request_id' }) }}"
 		};
 
         var TEMPPARAMS = {};
