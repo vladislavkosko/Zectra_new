@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ZectranetBundle\Entity\DailyTimeSheet;
 use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\HFForum;
+use ZectranetBundle\Entity\QnAForum;
 use ZectranetBundle\Entity\User;
 use ZectranetBundle\Entity\UserInfo;
 use ZectranetBundle\Entity\UserSettings;
@@ -404,6 +405,34 @@ class UserController extends Controller
                 HFForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getProjectid());
             } catch (\Exception $ex) {
                 $from = 'Class: HFForum, function: addUserToProject';
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            }
+            Req::changeRequestState($em, $request_id, 2);
+        } else {
+            Req::changeRequestState($em, $request_id, 3);
+        }
+        return new JsonResponse();
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $request_id
+     * @return JsonResponse
+     */
+    public function approveQnAForumMembershipRequestAction(Request $request, $request_id) {
+        $data = json_decode($request->getContent(), true);
+        $data = $data['answer'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var Req $userRequest */
+        $userRequest = $em->find('ZectranetBundle:Request', $request_id);
+
+        if ($data) {
+            try {
+                QnAForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getProjectid());
+            } catch (\Exception $ex) {
+                $from = 'Class: QnAForum, function: addUserToProject';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);
             }
             Req::changeRequestState($em, $request_id, 2);
