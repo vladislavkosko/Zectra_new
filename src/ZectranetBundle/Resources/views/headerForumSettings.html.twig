@@ -20,10 +20,12 @@
         <div ng-init="getProjectSettingInfo();">
             <div class="row">
                 <div class="col-md-3 " style="margin-top: 15px;">
-                    <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px;overflow-y: auto; margin-bottom: 0;">
-                        <li class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                    <div class="list-group" style="margin-bottom: 0;">
+                        <div class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
                             HO Contacts
-                        </li>
+                        </div>
+                    </div>
+                    <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px;overflow-y: auto; margin-bottom: 0;">
                         <li class="list-group-item" style="cursor: pointer;"
                             ng-repeat="HO_Contact in HO_Contacts"
                             ng-class="{'contact-list-active':HO_Contact.checked}"
@@ -38,10 +40,12 @@
                 </div>
 
                 <div class="col-md-3 " style="margin-top: 15px;">
-                    <ul class="list-group"  style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px;overflow-y: auto; margin-bottom: 0;">
-                        <li class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                    <div class="list-group" style="margin-bottom: 0;">
+                        <div class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
                             All Contacts
-                        </li>
+                        </div>
+                    </div>
+                    <ul class="list-group"  style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px;overflow-y: auto; margin-bottom: 0;">
                         <li class="list-group-item" style="cursor: pointer;"
                             ng-repeat="contact in All_Contacts"
                             ng-class="{'contact-list-active':contact.checked}"

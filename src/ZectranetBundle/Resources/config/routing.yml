@@ -219,12 +219,6 @@ zectranet_add_project_version:
     requirements:
         project_id: \d+
 
-zectranet_save_project_members:
-    pattern: /project/{project_id}/saveMembersState
-    defaults: { _controller: ZectranetBundle:Project:saveMembers }
-    requirements:
-        project_id: \d+
-
 zectranet_show_header_forum:
     pattern: /headerForum/{project_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:index }
@@ -565,11 +559,11 @@ zectranet_delete_QNA_project_request:
     defaults: { _controller: ZectranetBundle:QnAForum:deleteRequest }
 
 zectranet_approve_QNA_membership_request:
-    pattern: /hf/request/approve/{request_id}
+    pattern: /QnA/request/approve/{request_id}
     defaults: { _controller: ZectranetBundle:User:approveQnAForumMembershipRequest }
 
 zectranet_remove_QNA_user:
-    pattern: /hf/remove_user/{project_id}
+    pattern: /QnA/remove_user/{project_id}
     defaults: { _controller: ZectranetBundle:QnAForum:removeUser }
 
 ############################### END QNA FORUM REQUESTS ###################################

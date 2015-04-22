@@ -37,7 +37,7 @@ class HFForum
     private $owner;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="headerForums", fetch="EXTRA_LAZY")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="connectedHFForums", fetch="EXTRA_LAZY")
      * @var ArrayCollection
      */
     private $users;

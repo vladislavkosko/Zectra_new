@@ -402,7 +402,7 @@ class UserController extends Controller
 
         if ($data) {
             try {
-                HFForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getProjectid());
+                HFForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getHFForumID());
             } catch (\Exception $ex) {
                 $from = 'Class: HFForum, function: addUserToProject';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -430,7 +430,7 @@ class UserController extends Controller
 
         if ($data) {
             try {
-                QnAForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getProjectid());
+                QnAForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getQnAForumID());
             } catch (\Exception $ex) {
                 $from = 'Class: QnAForum, function: addUserToProject';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);

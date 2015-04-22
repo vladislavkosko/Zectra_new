@@ -42,7 +42,7 @@ class QnAForum
     private $owner;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="QnAForums", fetch="EXTRA_LAZY")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="connectedQnAForums", fetch="EXTRA_LAZY")
      * @var ArrayCollection
      */
     private $users;
@@ -217,7 +217,6 @@ class QnAForum
             $em->flush();
         }
     }
-
 
     /**
      * Get id

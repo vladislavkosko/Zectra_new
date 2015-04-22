@@ -131,6 +131,18 @@ class User implements UserInterface, \Serializable
     private $assignedOffices;
 
     /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="HFForum", mappedBy="users")
+     */
+    private $connectedHFForums;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\ManyToMany(targetEntity="QnAForum", mappedBy="users")
+     */
+    private $connectedQnAForums;
+
+    /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="owner", cascade={"remove"})
      * @ORM\OrderBy({"id" = "DESC"})
      * @var ArrayCollection
@@ -1192,8 +1204,6 @@ class User implements UserInterface, \Serializable
         $text = $first . $second;
         $font = __DIR__.'/../../../web/bundles/zectranet/fonts/DejaVuSansMono.ttf';
 
-        $fs = new Filesystem();
-
         $image_path = __DIR__.'/../../../web/documents/' . $user->getUsername() .'/avatar/';
         $width = 150; $height = 150;
         $center = round($width/2);
@@ -1442,5 +1452,71 @@ class User implements UserInterface, \Serializable
     public function getQnAForums()
     {
         return $this->QnAForums;
+    }
+
+    /**
+     * Add connectedHFForums
+     *
+     * @param \ZectranetBundle\Entity\HFForum $connectedHFForums
+     * @return User
+     */
+    public function addConnectedHFForum(\ZectranetBundle\Entity\HFForum $connectedHFForums)
+    {
+        $this->connectedHFForums[] = $connectedHFForums;
+
+        return $this;
+    }
+
+    /**
+     * Remove connectedHFForums
+     *
+     * @param \ZectranetBundle\Entity\HFForum $connectedHFForums
+     */
+    public function removeConnectedHFForum(\ZectranetBundle\Entity\HFForum $connectedHFForums)
+    {
+        $this->connectedHFForums->removeElement($connectedHFForums);
+    }
+
+    /**
+     * Get connectedHFForums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConnectedHFForums()
+    {
+        return $this->connectedHFForums;
+    }
+
+    /**
+     * Add connectedQnAForums
+     *
+     * @param \ZectranetBundle\Entity\QnAForum $connectedQnAForums
+     * @return User
+     */
+    public function addConnectedQnAForum(\ZectranetBundle\Entity\QnAForum $connectedQnAForums)
+    {
+        $this->connectedQnAForums[] = $connectedQnAForums;
+
+        return $this;
+    }
+
+    /**
+     * Remove connectedQnAForums
+     *
+     * @param \ZectranetBundle\Entity\QnAForum $connectedQnAForums
+     */
+    public function removeConnectedQnAForum(\ZectranetBundle\Entity\QnAForum $connectedQnAForums)
+    {
+        $this->connectedQnAForums->removeElement($connectedQnAForums);
+    }
+
+    /**
+     * Get connectedQnAForums
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConnectedQnAForums()
+    {
+        return $this->connectedQnAForums;
     }
 }
