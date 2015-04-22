@@ -80,12 +80,19 @@ class HFForum
     private $created;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="HFLog", mappedBy="project")
+     */
+    private $logs;
+
+    /**
      * Constructor
      */
     public function __construct() {
         $this->created = new \DateTime();
         $this->shared = false;
         $this->users = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     /**
@@ -480,5 +487,38 @@ class HFForum
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add logs
+     *
+     * @param \ZectranetBundle\Entity\HFLog $logs
+     * @return HFForum
+     */
+    public function addLog(\ZectranetBundle\Entity\HFLog $logs)
+    {
+        $this->logs[] = $logs;
+
+        return $this;
+    }
+
+    /**
+     * Remove logs
+     *
+     * @param \ZectranetBundle\Entity\HFLog $logs
+     */
+    public function removeLog(\ZectranetBundle\Entity\HFLog $logs)
+    {
+        $this->logs->removeElement($logs);
+    }
+
+    /**
+     * Get logs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLogs()
+    {
+        return $this->logs;
     }
 }

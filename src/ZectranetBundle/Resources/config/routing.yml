@@ -530,34 +530,34 @@ zectranet_send_conversation_message:
     pattern: /user/send/conversation/message/{conversation_id}
     defaults: { _controller: ZectranetBundle:Conversation:sendMessage }
 
-zectranet_get_project_settings_info:
-    pattern: /project/get/settings/info/{project_id}
+zectranet_get_hf_settings_info:
+    pattern: /hf/get/settings/info/{project_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:getProjectSettingsInfo }
 
-zectranet_send_project_request:
-    pattern: /project/send_request/{project_id}
+zectranet_send_hf_request:
+    pattern: /hf/send_request/{project_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:sendRequest }
 
-zectranet_remove_project_user:
-    pattern: /project/remove_user/{project_id}
+zectranet_remove_hf_user:
+    pattern: /hf/remove_user/{project_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:removeUser }
 
-zectranet_approve_project_membership_request:
-    pattern: /request/approve/{request_id}
+zectranet_approve_hf_membership_request:
+    pattern: /hf/request/approve/{request_id}
     defaults: { _controller: ZectranetBundle:User:approveContactMembershipRequest }
 
-zectranet_delete_project_request:
-    pattern: /request/{project_id}/delete/{request_id}
+zectranet_delete_hf_request:
+    pattern: /hf/request/{project_id}/delete/{request_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:deleteRequest }
 
 zectranet_get_QNA_project_settings_info:
-    pattern: /project/get/settings/info/{project_id}
-    defaults: { _controller: ZectranetBundle:HeaderForum:getProjectSettingsInfo }
+    pattern: /project/QnA/get/settings/info/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:getProjectSettingsInfo }
 
 zectranet_send_QNA_project_request:
-    pattern: /project/send_request/{project_id}
-    defaults: { _controller: ZectranetBundle:HeaderForum:sendRequest }
+    pattern: /project/QnA/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:sendRequest }
 
 zectranet_delete_QNA_project_request:
-    pattern: /request/{project_id}/delete/{request_id}
-    defaults: { _controller: ZectranetBundle:HeaderForum:deleteRequest }
+    pattern: /request/QnA/{project_id}/delete/{request_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:deleteRequest }

@@ -79,13 +79,145 @@ class QnAForum
     private $created;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="QnALog", mappedBy="project")
+     */
+    private $logs;
+
+    /**
      * Constructor
      */
     public function __construct() {
         $this->users = new ArrayCollection();
         $this->created = new \DateTime();
         $this->shared = false;
+        $this->logs = new ArrayCollection();
     }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     * @param string $message
+     * @param int $initiator_id
+     * @return Request
+     */
+    public static function sendRequestToUser(EntityManager $em, $user_id, $project_id, $message, $initiator_id) {
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $initiator = $em->find('ZectranetBundle:User', $initiator_id);
+        $status = $em->find('ZectranetBundle:RequestStatus', 1);
+        $type = RequestType::getQnAMembershipRequest($em);
+
+        // Check for old request
+        $request = $em->getRepository('ZectranetBundle:Request')->findOneBy(array(
+            'userid' => $user_id,
+            'QnAForumID' => $project_id,
+            'typeid' => $type->getId(),
+        ));
+        // Delete existing request
+        if ($request) {
+            $em->remove($request);
+        }
+
+        // Create new request
+        $request = new Request();
+        $request->setType($type);
+        $request->setUser($user);
+        $request->setContact($initiator);
+        $request->setMessage($message);
+        $request->setQnAForum($project);
+        $request->setStatus($status);
+
+        $em->persist($request);
+        $em->flush();
+        return $request;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $request_id
+     * @return mixed
+     */
+    public static function removeRequest(EntityManager $em, $request_id) {
+        $request = $em->find('ZectranetBundle:Request', $request_id);
+        if ($request) {
+            $clone = clone $request;
+            $em->remove($request);
+            $em->flush();
+            return $clone;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     * @return array
+     */
+    public static function getNotProjectHomeOfficeMembers(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
+        $notProjectContacts = array();
+        /** @var User $contact */
+        foreach ($user->getContacts() as $contact) {
+            if (!$project->getUsers()->contains($contact)) {
+                $notProjectContacts[] = $contact->getInArray();
+            }
+        }
+        return $notProjectContacts;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @return array
+     */
+    public static function getNotProjectSiteMembers(EntityManager $em, $project_id) {
+        $users = $em->getRepository('ZectranetBundle:User')->findAll();
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
+        $notProjectContacts = array();
+        /** @var User $contact */
+        foreach ($users as $contact) {
+            if (!$project->getUsers()->contains($contact)) {
+                $notProjectContacts[] = $contact->getInArray();
+            }
+        }
+        return $notProjectContacts;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     */
+    public static function addUserToProject(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            $project->addUser($user);
+            $em->persist($project);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     */
+    public static function removeUserFromProject(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
+        if ($project->getUsers()->contains($user)) {
+            $project->removeUser($user);
+            $em->persist($project);
+            $em->flush();
+        }
+    }
+
 
     /**
      * Get id
@@ -345,5 +477,38 @@ class QnAForum
         $em->flush();
 
         return $project;
+    }
+
+    /**
+     * Add logs
+     *
+     * @param \ZectranetBundle\Entity\QnALog $logs
+     * @return QnAForum
+     */
+    public function addLog(\ZectranetBundle\Entity\QnALog $logs)
+    {
+        $this->logs[] = $logs;
+
+        return $this;
+    }
+
+    /**
+     * Remove logs
+     *
+     * @param \ZectranetBundle\Entity\QnALog $logs
+     */
+    public function removeLog(\ZectranetBundle\Entity\QnALog $logs)
+    {
+        $this->logs->removeElement($logs);
+    }
+
+    /**
+     * Get logs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLogs()
+    {
+        return $this->logs;
     }
 }

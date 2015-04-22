@@ -107,7 +107,7 @@ class User implements UserInterface, \Serializable
 
     /**
      * @var int
-     * @ORM\Column(name="home_office_id", type="integer")
+     * @ORM\Column(name="home_office_id", type="integer", nullable=true)
      */
     private $homeOfficeID;
 

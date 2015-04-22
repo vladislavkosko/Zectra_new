@@ -276,8 +276,8 @@
         JSON_URLS.addHeaderForumHeaders = "{{ path('zectranet_add_header_action', { 'project_id': forum.id }) }}";
         JSON_URLS.addSubHeaderForumHeaders = "{{ path('zectranet_add_subheader_action', { 'header_id': 0 }) }}";
         JSON_URLS.deleteHeaderForumHeaders = "{{ path('zectranet_delete_header_action', { 'header_id': 0 }) }}";
-        JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_project_settings_info', { 'project_id': forum.id}) }}";
-        JSON_URLS.urlSendProjectRequest = "{{ path('zectranet_send_project_request', { 'project_id': forum.id}) }}";
-        JSON_URLS.urlDeleteProjectRequest = "{{ path('zectranet_delete_project_request', { 'project_id': forum.id , 'request_id': 'requestid'}) }}";
+        JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_hf_settings_info', { 'project_id': forum.id}) }}";
+        JSON_URLS.urlSendProjectRequest = "{{ path('zectranet_send_hf_request', { 'project_id': forum.id}) }}";
+        JSON_URLS.urlDeleteProjectRequest = "{{ path('zectranet_delete_hf_request', { 'project_id': forum.id , 'request_id': 'requestid'}) }}";
     </script>
 {% endblock %}

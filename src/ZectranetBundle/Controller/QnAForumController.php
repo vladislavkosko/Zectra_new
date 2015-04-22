@@ -5,12 +5,15 @@ namespace ZectranetBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\QnAForum;
 use ZectranetBundle\Entity\QnAPost;
 use ZectranetBundle\Entity\QnAThread;
 use ZectranetBundle\Entity\User;
+use ZectranetBundle\Entity\Request as Req;
 
 class QnAForumController extends Controller {
 
@@ -148,5 +151,104 @@ class QnAForumController extends Controller {
         }
 
         return $this->redirectToRoute('zectranet_show_QnA_thread', array('project_id' => $thread->getForumID(), 'thread_id' => $thread_id));
+    }
+
+    /**
+     * @param int $project_id
+     * @return JsonResponse
+     */
+    public function getProjectSettingsInfoAction($project_id) {
+        $info = array();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        $info['HO_Contacts'] = QnAForum::getNotProjectHomeOfficeMembers($em, $user->getId(), $project_id);
+        $info['All_Contacts'] = QnAForum::getNotProjectSiteMembers($em, $project_id);
+        $info['Project_Team'] = EntityOperations::arrayToJsonArray(
+            $em->getRepository('ZectranetBundle:Request')->findBy(array('QnAForumID' => $project_id))
+        );
+        return new JsonResponse($info);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $project_id
+     * @return JsonResponse
+     */
+    public function sendRequestAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $user_id = $data['user_id'];
+        $message = $data['message'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        $contact = $em->find('ZectranetBundle:User', $user_id);
+        try {
+            QnAForum::sendRequestToUser($em, $user_id, $project_id, $message, $user->getId());
+        } catch (\Exception $ex) {
+            $from = 'class: QnAForum, function: sendRequestToUser';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        $logMessage = 'User "' . $user->getUsername() . '" sent project request to user "'
+            . $contact->getUsername() . '"';
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);
+        return new JsonResponse(1);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $project_id
+     * @return JsonResponse
+     */
+    public function removeUserAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $user_id = $data['user_id'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        $contact = $em->find('ZectranetBundle:User', $user_id);
+        try {
+            QnAForum::removeUserFromProject($em, $user_id, $project_id);
+        } catch (\Exception $ex) {
+            $from = 'class: QnAForum, function: removeUserFromProject';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        $logMessage = 'User "' . $user->getUsername() . '" remove user "'
+            . $contact->getUsername() . '" from project';
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);
+        return new JsonResponse(1);
+    }
+
+    /**
+     * @param int $project_id
+     * @param int $request_id
+     * @return JsonResponse
+     */
+    public function deleteRequestAction($project_id, $request_id) {
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        try {
+            /** @var Req $request */
+            $request = QnAForum::removeRequest($em, $request_id);
+            if ($request) {
+                $logMessage = 'User "' . $user->getUsername() . '" remove user "'
+                    . $request->getUser()->getUsername() . '" from request grid';
+                $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);
+                return new JsonResponse(1);
+            } else {
+                return new JsonResponse(0);
+            }
+        } catch (\Exception $ex) {
+            $from = 'class: HFForum, function: removeRequest';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
     }
 }

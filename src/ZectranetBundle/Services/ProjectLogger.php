@@ -12,6 +12,7 @@ use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\ProjectLog;
+use ZectranetBundle\Entity\QnALog;
 use ZectranetBundle\Entity\TaskLog;
 use ZectranetBundle\Entity\User;
 
@@ -39,13 +40,18 @@ class ProjectLogger
     public function logEvent($eventMsg = null, $projectID, $projectTypeID) {
         $event = null;
         switch ($projectTypeID) {
-            case 1: break;
+            case 1:
+                $event = new QnALog();
+                $project = $this->em->find('ZectranetBundle:QnAForum', $projectID);
+                $event->setProject($project);
+                break;
             case 2:
                 $event = new HFLog();
                 $project = $this->em->find('ZectranetBundle:HFForum', $projectID);
                 $event->setProject($project);
                 break;
-            case 3: break;
+            case 3:
+                break;
             case 4:
                 $event = new ProjectLog();
                 $project = $this->em->find('ZectranetBundle:Project', $projectID);

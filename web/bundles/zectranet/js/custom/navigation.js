@@ -109,9 +109,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                             $scope.notificationsLength = response.result.notifications.length;
                             $rootScope.NOTIFICATIONS = $scope.notifications;
                         }
-                    }
-
-                    else {
+                    } else {
                         StopNotify();
                         $scope.notifications = [];
                     }
@@ -134,34 +132,6 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
             return notifications;
         }
-
-        $scope.acceptRequestUserOffice = function(office_id){
-            window.location.href = acceptRequestUserOffice.replace('0', office_id);
-        };
-
-        $scope.acceptRequestUserProject = function(project_id){
-            window.location.href = acceptRequestUserProject.replace('0', project_id);
-        };
-
-        $scope.acceptRequestOfficeProject = function(project_id, office_id){
-            window.location.href = acceptRequestOfficeProject
-                .replace('0', 'project_id')
-                .replace('1', 'office_id')
-                .replace('project_id', project_id)
-                .replace('office_id', office_id);
-        };
-
-        $scope.declineRequestUserOffice = function(office_id){
-            window.location.href = declineRequestUserOffice.replace('0', office_id);
-        };
-
-        $scope.declineRequestUserProject = function(project_id){
-            window.location.href = declineRequestUserProject.replace('0', project_id);
-        };
-
-        $scope.declineRequestOfficeProject = function(project_id){
-            window.location.href = declineRequestOfficeProject.replace('0', project_id);
-        };
 
         console.log('NavigationController was loaded!');
 
