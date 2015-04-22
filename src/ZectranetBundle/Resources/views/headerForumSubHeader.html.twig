@@ -30,47 +30,42 @@
 
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default" data-target="#header_forum_thread_add" data-toggle="modal">
-                Start new thread
+            <button class="btn btn-primary pull-right" data-target="#header_forum_thread_add" data-toggle="modal">
+                Start new threadss
             </button>
         </div>
     </div>
-    <hr/>
-    <div class="col-md-12">
-        <div class="col-xs-10 col-xs-offset-1">
-            <h5>FORUM</h5>
-        </div>
-        <div class="col-xs-1">
-            <h5>POSTS</h5>
-        </div>
-    </div>
+<br>
+    {#<div class="col-md-12">#}
+        {#<div class="col-xs-10 col-xs-offset-1">#}
+            {#<h5>FORUM</h5>#}
+        {#</div>#}
+        {#<div class="col-xs-1">#}
+            {#<h5>POSTS</h5>#}
+        {#</div>#}
+    {#</div>#}
 
-    <div class="col-md-12 panel panel-default">
+    <div class="col-md-12 panel panel-default forum-shadow forum-border-topradius">
         <div class="row">
-            <div class="col-md-12" style="color: {{ sub.header.headerTextColor }}; background-color: {{ sub.header.headerBgColor }};">
-                <h4 align="center">{{ sub.header.title }}</h4>
+            <div class="col-md-12" style="color: #fff; background-color: #337AB7;">
+                <h4 align="left">{{ sub.header.title }}</h4>
             </div>
         </div>
         {% for thread in sub.threads %}
-            <div class="row" style="border-bottom: darkgray solid 1px;">
+            <div class="row forum-border">
                 <div class="panel-body">
-                    <div class="col-xs-1">
-                        <img class="img-responsive" src="{{ asset('bundles/zectranet/img/threadicon.jpg') }}" alt="thread_image"/>
-                    </div>
+
                     <div class="col-xs-10">
-                        <h4>
+                        <h4 class="header-forum-header">
                             <a class="text-info" href="{{ path('zectranet_show_header_forum_thread', {'project_id': forum.id, 'subheader_id': sub.id, 'thread_id': thread.id }) }}">
                                 {{ thread.title }}
                             </a>
                         </h4>
-                        <p>
+                        <small class="text-muted"> By
                             <a href="{{ path('zectranet_user_page', {'user_id': thread.userID}) }}">
                                 {{ thread.user.username }}
-                            </a>
-                        </p>
-                        <p>
-                            <span class="pull-left text-muted"><i>{{ thread.date | date('Y-m-d H:i:s') }}</i></span>
-                        </p>
+                            </a>, {{ thread.date | date('Y-m-d H:i:s') }}
+                        </small>
                     </div>
                     <div class="col-xs-1">
                         {{ thread.posts | length }}
