@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="row">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb"  style="margin: 0 -30px; border-radius:0px !important; padding: 12px 50px; background-color: #fbfbfb; ">
             <li>
                 <a href="{{ path('zectranet_show_header_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
             </li>
@@ -15,50 +15,54 @@
         </ol>
     </div>
 
-    <div class="row panel panel-default">
+
+
+    <div class="row panel panel-default" style="margin-top:20px; border:0px;">
         <div class="col-xs-2" style="padding: 10px;">
-            <img class="img-responsive img-thumbnail" src="{{ asset('') ~ 'documents/' ~ thread.user.avatar }}" alt="{{ thread.user.username }}"/>
-            <p>
-                <a class="btn" href="{{ path('zectranet_user_page', {'user_id': thread.userID }) }}" style="word-wrap: break-word; white-space: normal">
+            <img class="img-responsive" style="margin: 0 auto;" src="{{ asset('') ~ 'documents/' ~ thread.user.avatar }}" alt="{{ thread.user.username }}"/>
+            <p class="text-center" style="margin-top: 10px;">
+                <a href="{{ path('zectranet_user_page', {'user_id': thread.userID }) }}" style="word-wrap: break-word; white-space: normal">
                     {{ thread.user.name ~ ' ' ~ thread.user.surname ~ ' (' ~ thread.user.username ~ ')' }}
                 </a>
             </p>
+            <p class="text-center"><small class="text-muted">2 posts</small></p>
         </div>
-        <div class="col-xs-10" style="min-height: 250px; border-left: 1px solid #eee;">
+        <div class="col-xs-10" style="min-height: 150px;">
             <div class="page-header">
-                <h4 class="text-info">{{ thread.title }}</h4>
+                <h3 class="forum-header">{{ thread.title }} </h3>
+                <small class="text-muted"> Started by {{ thread.user.username }}, {{ thread.date | date('Y-m-d H:i:s') }}</small>
             </div>
-            <p class="pull-right text-muted"><i>{{ thread.date | date('Y-m-d H:i:s') }}</i></p>
-            <p style="white-space: pre-line;">
+            <p style="white-space: pre-line; margin-top: -25px;">
                 {{ thread.message }}
             </p>
-        </div>
-        {% if thread.keywords %}
-            <div class="col-xs-10 col-xs-offset-2" style="border-top: 1px solid #eee; border-left: 1px solid #eee; padding: 10px 15px;">
+            {% if thread.keywords %}
                 <p>
-                    <b>Keywords: </b> <i class="text-muted">{{ thread.keywords }}</i>
+                    <kbd>{{ thread.keywords }}</kbd>
                 </p>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
+
     </div>
 
-    <div class="row panel panel-default">
-        <div class="panel-heading">
-            <h5 align="center">Thread posts</h5>
+
+    <div class="row panel panel-default" style="border-width: 1px;border-style: solid;border-color: #F2F2F2;border-radius: 3px;">
+        <div class="panel-heading topic-header-border" style="background-color: #337AB7; height: 50px; color:#fff;">
+            <h5 align="left" style="margin-top: 6px;">Thread posts</h5>
         </div>
         <div class="panel-body" style="padding: 10px 25px;">
             {% for post in thread.posts %}
-                <div class="row panel panel-default" style="border-right: 1px solid #eee;">
-                    <div class="col-xs-2" style="padding: 10px;">
-                        <img class="img-responsive img-thumbnail" src="{{ asset('') ~ 'documents/' ~ post.user.avatar }}" alt="{{ post.user.username }}"/>
-                        <p>
-                            <a class="btn" href="{{ path('zectranet_user_page', {'user_id': post.userID }) }}" style="word-wrap: break-word; white-space: normal;">
+                <div class="row panel panel-default forum-post">
+                    <div class="col-xs-2" style="padding: 10px; background-color: #FAFAFA">
+                        <img class="img-responsive" style="margin: 0 auto;" src="{{ asset('') ~ 'documents/' ~ post.user.avatar }}" alt="{{ post.user.username }}"/>
+                        <p class="text-center" style="margin-top: 10px;">
+                            <a href="{{ path('zectranet_user_page', {'user_id': post.userID }) }}" style="word-wrap: break-word; white-space: normal;">
                                 {{ post.user.name ~ ' ' ~ post.user.surname ~ ' (' ~ post.user.username ~ ')' }}
                             </a>
                         </p>
+                        <p class="text-center"><small class="text-muted">2 posts</small></p>
                     </div>
-                    <div class="col-xs-10" style="min-height: 200px; border-left: 1px solid #eee;">
-                        <p class="pull-right text-muted"><i>{{ post.posted | date('Y-m-d H:i:s') }}</i></p>
+                    <div class="col-xs-10" style="min-height: 150px;">
+                        <small class="pull-right text-muted" style="margin-top: 8px;">Posted {{ post.posted | date('Y-m-d H:i:s') }}</small>
                         <p style="white-space: pre-line;">
                             {{ post.message }}
                         </p>
@@ -68,7 +72,7 @@
         </div>
         <form class="panel-footer" action="{{ path('zectranet_add_post_header_forum_thread', { 'thread_id': thread.id }) }}" method="post">
             <div class="input-group">
-                <textarea style="resize: vertical;" name="message" class="form-control" rows="6"></textarea>
+                <textarea name="message" class="form-control" rows="6"></textarea>
                 <div class="input-group-addon" style="padding: 0;">
                     <button type="submit" class="btn btn-default btn-primary" style="width: 132px; height: 132px;">
                         Post
@@ -76,5 +80,7 @@
                 </div>
             </div>
         </form>
+
     </div>
+
 {% endblock %}
