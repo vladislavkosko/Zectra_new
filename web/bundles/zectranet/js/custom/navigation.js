@@ -35,7 +35,9 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         function prepareRequests (requests) {
             var newRequests = {
-                'contactRequests': []
+                'contactRequests': [],
+                'hfRequests': [],
+                'QnARequests': []
             };
 
             for (var i = 0; i < requests.length; i++) {
@@ -45,6 +47,14 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                     case 3: break;
                     case 4: break;
                     case 5: newRequests.contactRequests.push(requests[i]); break;
+                    case 6: break;
+                    case 7: break;
+                    case 8: newRequests.hfRequests.push(requests[i]); break;
+                    case 9: break;
+                    case 10: break;
+                    case 13: newRequests.QnARequests.push(requests[i]); break;
+                    case 14: break;
+                    case 15: break;
                 }
             }
             return newRequests;
