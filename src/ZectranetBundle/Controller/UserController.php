@@ -407,6 +407,7 @@ class UserController extends Controller
         if ($data) {
             try {
                 HFForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getHFForumID());
+                User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             } catch (\Exception $ex) {
                 $from = 'Class: HFForum, function: addUserToProject';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);

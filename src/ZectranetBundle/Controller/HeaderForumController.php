@@ -29,6 +29,11 @@ class HeaderForumController extends Controller {
      */
     public function indexAction($project_id) {
         $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$forum->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         return $this->render('@Zectranet/headerForum.html.twig', array('forum' => $forum));
     }
 
@@ -43,6 +48,11 @@ class HeaderForumController extends Controller {
         $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         /** @var HFSubHeader $subheader */
         $subheader = $this->getDoctrine()->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$forum->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         return $this->render('@Zectranet/headerForumSubHeader.html.twig', array(
             'forum' => $forum,
             'sub' => $subheader,
@@ -56,6 +66,11 @@ class HeaderForumController extends Controller {
      */
     public function settingsAction($project_id) {
         $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$forum->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         return $this->render('@Zectranet/headerForumSettings.html.twig', array('forum' => $forum));
     }
 
@@ -66,6 +81,11 @@ class HeaderForumController extends Controller {
      */
     public function getHeadersAction($project_id) {
         $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$forum->getUsers()->contains($user)) {
+            return new JsonResponse('Not allowed!!!');
+        }
         return new JsonResponse(EntityOperations::arrayToJsonArray($forum->getHeaders()));
     }
 
@@ -76,6 +96,12 @@ class HeaderForumController extends Controller {
      * @return JsonResponse
      */
     public function addNewHeaderAction(Request $request, $project_id) {
+        $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$forum->getUsers()->contains($user)) {
+            return new JsonResponse('Not allowed!!!');
+        }
         $data = json_decode($request->getContent(), true);
         $params = array(
             'title' => $data['header']['title'],
@@ -120,6 +146,12 @@ class HeaderForumController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $header = $em->getRepository('ZectranetBundle:HFHeader')->find($header_id);
+        $forum = $header->getForum();
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$forum->getUsers()->contains($user)) {
+            return new JsonResponse('Not allowed!!!');
+        }
         try {
             HFHeader::addNewSubHeader($em, $params);
             $logMessage = 'User "' . $user->getUsername() . '" add new subheader "'
@@ -146,6 +178,11 @@ class HeaderForumController extends Controller {
         $header = $em->getRepository('ZectranetBundle:HFHeader')->find($header_id);
         $headerName = $header->getTitle();
         $forum = $header->getForum();
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$forum->getUsers()->contains($user)) {
+            return new JsonResponse('Not allowed!!!');
+        }
         try {
             HFHeader::deleteHeader($em, $header_id);
             $logMessage = 'User "' . $user->getUsername() . '" delete header "'
@@ -172,6 +209,12 @@ class HeaderForumController extends Controller {
         $subHeader = $this->getDoctrine()->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
         $thread = $this->getDoctrine()->getRepository('ZectranetBundle:HFThread')->find($thread_id);
 
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$forum->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
+
         return $this->render('@Zectranet/headerForumThread.html.twig', array(
             'forum' => $forum,
             'sub' => $subHeader,
@@ -190,6 +233,12 @@ class HeaderForumController extends Controller {
         $subHeader = $em->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
         /** @var User $user */
         $user = $this->getUser();
+
+        $forum = $subHeader->getHeader()->getForum();
+        if (!$forum->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
+
         $params = array(
             'title' => $request->request->get('title'),
             'message' => $request->request->get('message'),
@@ -206,7 +255,7 @@ class HeaderForumController extends Controller {
             $from = "Class: HFThread, function: startNewThread";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return $this->redirectToRoute('zectranet_show_header_forum_subheader', array(
-                'project_id' => $subHeader->getHeader()->getForumID(),
+                'project_id' => $forum->getId(),
                 'subheader_id' => $subheader_id,
             ));
         }
@@ -229,7 +278,12 @@ class HeaderForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+
         $thread = $em->getRepository('ZectranetBundle:HFThread')->find($thread_id);
+        $forum = $thread->getSubHeader()->getHeader()->getForum();
+        if (!$forum->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         try {
             $th = HFThreadPost::addNewPost($em, $thread_id, $user->getId(), $message);
         } catch (\Exception $ex) {
@@ -251,9 +305,12 @@ class HeaderForumController extends Controller {
         $info = array();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
         /** @var User $user */
         $user = $this->getUser();
-        $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return new JsonResponse('Not allowed!!!');
+        }
         $info['HO_Contacts'] = HFForum::getNotProjectHomeOfficeMembers($em, $user->getId(), $project_id);
         $info['All_Contacts'] = HFForum::getNotProjectSiteMembers($em, $project_id);
         $info['Project_Team'] = EntityOperations::arrayToJsonArray(
@@ -275,9 +332,14 @@ class HeaderForumController extends Controller {
         $message = $data['message'];
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        $contact = $em->find('ZectranetBundle:User', $user_id);
         /** @var User $user */
         $user = $this->getUser();
-        $contact = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return new JsonResponse('Not allowed!!!');
+        }
+
         try {
             HFForum::sendRequestToUser($em, $user_id, $project_id, $message, $user->getId());
         } catch (\Exception $ex) {
@@ -303,6 +365,11 @@ class HeaderForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $request = $em->find('ZectranetBundle:Request', $request_id);
         $contact = $em->find('ZectranetBundle:User', $request->getUserid());
+
+        $project = $em->find('ZectranetBundle:HFForum', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return new JsonResponse('Not allowed!!!');
+        }
         try {
             /** @var Req $request */
             $request = HFForum::removeRequest($em, $request_id);
