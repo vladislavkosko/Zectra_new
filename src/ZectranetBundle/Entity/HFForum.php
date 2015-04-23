@@ -87,6 +87,12 @@ class HFForum
     private $logs;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="archived", type="boolean", options={"default" = false})
+     */
+    private $archived;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -94,6 +100,7 @@ class HFForum
         $this->shared = false;
         $this->users = new ArrayCollection();
         $this->logs = new ArrayCollection();
+        $this->archived = false;
     }
 
     /**
@@ -522,5 +529,28 @@ class HFForum
     public function getLogs()
     {
         return $this->logs;
+    }
+
+    /**
+     * Set archived
+     *
+     * @param boolean $archived
+     * @return HFForum
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    /**
+     * Get archived
+     *
+     * @return boolean 
+     */
+    public function getArchived()
+    {
+        return $this->archived;
     }
 }

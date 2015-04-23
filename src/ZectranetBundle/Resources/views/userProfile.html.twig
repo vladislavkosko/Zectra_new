@@ -25,7 +25,7 @@
                                 <a href="{{ path('zectranet_edit_user_page') }}" class="btn btn-primary btn-default">
                                     Edit profile
                                 </a>
-                            {% else %}
+                            {% elseif user not in app.user.contacts %}
                                 <a class="btn btn-default btn-success" data-toggle="modal" data-target="#add_to_contact_list">
                                     Add to contact list
                                 </a>
@@ -103,46 +103,28 @@
                 <p><strong>Volunteer Work: </strong> {{ (userInfo.volunteerWork) ? userInfo.volunteerWork : '-' }}</p>
                 <hr>
                 {% endif %}
+                Socials:
                 {% if userInfo.facebookVisible %}
-                <p><strong>Facebook: </strong>
                     {% if userInfo.facebook %}
-                        <a href="{{ userInfo.facebook }}">link</a>
-                    {% else %}
-                        -
+                        <a href="{{ userInfo.facebook }}" style="margin-left: 5px;">Facebook</a>
                     {% endif %}
-                </p>
-                <hr>
                 {% endif %}
                 {% if userInfo.twitterVisible %}
-                <p><strong>Twitter: </strong>
                     {% if userInfo.twitter %}
-                        <a href="{{ userInfo.twitter }}">link</a>
-                    {% else %}
-                        -
+                        <a href="{{ userInfo.twitter }}" style="margin-left: 5px;">Twitter</a>
                     {% endif %}
-                </p>
-                <hr>
                 {% endif %}
                 {% if userInfo.linkedInVisible %}
-                <p><strong>LinkedIn: </strong>
                     {% if userInfo.linkedIn %}
-                        <a href="{{ userInfo.linkedIn }}">link</a>
-                    {% else %}
-                        -
+                        <a href="{{ userInfo.linkedIn }}" style="margin-left: 5px;">LinkedIn</a>
                     {% endif %}
-                </p>
-                <hr>
                 {% endif %}
                 {% if userInfo.googlePlusVisible %}
-                <p><strong>Google+: </strong>
                     {% if userInfo.googlePlus %}
-                        <a href="{{ userInfo.googlePlus }}">link</a>
-                    {% else %}
-                        -
+                        <a href="{{ userInfo.googlePlus }}" style="margin-left: 5px;">Google+</a>
                     {% endif %}
-                </p>
-                <hr>
                 {% endif %}
+                <hr>
 
         </div>
     </div>

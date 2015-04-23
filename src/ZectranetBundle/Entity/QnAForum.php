@@ -85,6 +85,12 @@ class QnAForum
     private $logs;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="archived", type="boolean", options={"default" = false})
+     */
+    private $archived;
+
+    /**
      * @return array
      */
     public function getInArray() {
@@ -104,6 +110,7 @@ class QnAForum
         $this->created = new \DateTime();
         $this->shared = false;
         $this->logs = new ArrayCollection();
+        $this->archived = false;
     }
 
     /**
@@ -521,5 +528,28 @@ class QnAForum
     public function getLogs()
     {
         return $this->logs;
+    }
+
+    /**
+     * Set archived
+     *
+     * @param boolean $archived
+     * @return QnAForum
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    /**
+     * Get archived
+     *
+     * @return boolean 
+     */
+    public function getArchived()
+    {
+        return $this->archived;
     }
 }

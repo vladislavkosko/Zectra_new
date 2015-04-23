@@ -131,6 +131,12 @@ class Project
     private $visible;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="archived", type="boolean", options={"default" = false})
+     */
+    private $archived;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -139,6 +145,7 @@ class Project
         $this->tasks = new ArrayCollection();
         $this->postsProject = new ArrayCollection();
         $this->visible = false;
+        $this->archived = false;
     }
 
     /**
@@ -787,5 +794,28 @@ class Project
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set archived
+     *
+     * @param boolean $archived
+     * @return Project
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    /**
+     * Get archived
+     *
+     * @return boolean 
+     */
+    public function getArchived()
+    {
+        return $this->archived;
     }
 }

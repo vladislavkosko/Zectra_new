@@ -101,6 +101,12 @@ class Office
     private $visible;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="archived", type="boolean", options={"default" = false})
+     */
+    private $archived;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -108,6 +114,7 @@ class Office
         $this->users = new ArrayCollection();
         $this->projects = new ArrayCollection();
         $this->visible = false;
+        $this->archived = false;
     }
 
     /**
@@ -582,5 +589,28 @@ class Office
     public function getQnAForums()
     {
         return $this->QnAForums;
+    }
+
+    /**
+     * Set archived
+     *
+     * @param boolean $archived
+     * @return Office
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    /**
+     * Get archived
+     *
+     * @return boolean 
+     */
+    public function getArchived()
+    {
+        return $this->archived;
     }
 }
