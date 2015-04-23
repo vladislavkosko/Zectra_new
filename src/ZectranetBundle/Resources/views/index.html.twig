@@ -88,9 +88,25 @@
                             {% endfor %}
 
                             <li>
+                                {% set connectedProjectsCount = 0 %}
+                                {% for project in app.user.projects if project.users | length > 1 %}
+                                    {% set connectedProjectsCount = connectedProjectsCount + 1 %}
+                                {% endfor %}
+                                {% for project in app.user.connectedHFForums if project.users | length > 1 %}
+                                    {% set connectedProjectsCount = connectedProjectsCount + 1 %}
+                                {% endfor %}
+                                {% for project in app.user.connectedQnAForums if project.users | length > 1 %}
+                                    {% set connectedProjectsCount = connectedProjectsCount + 1 %}
+                                {% endfor %}
+
                                 <a href="#">
                                     <i class='fa fa-briefcase'></i>
                                     <span>Connected Projects</span>
+                                    {% if connectedProjectsCount > 0 %}
+                                        <span class="text-right pull-right">
+                                            <i class="fa fa-arrow-down"></i>
+                                        </span>
+                                    {% endif %}
                                 </a>
                                 <ul class="nav nav-third-level">
                                     {% for project in app.user.projects if project.users | length > 1 %}
