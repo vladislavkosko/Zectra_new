@@ -118,6 +118,16 @@ class Office
     }
 
     /**
+     * @param EntityManager $em
+     * @param int $office_id
+     * @return array
+     */
+    public static function getOfficeArchive(EntityManager $em, $office_id) {
+        
+        return array();
+    }
+
+    /**
      * Get id
      *
      * @return integer 

@@ -20,11 +20,11 @@
 								   maxlength="50"
 								   ng-change="InputChange()"
 								   data-toggle="dropdown" type="search">
-							<span class="input-group-btn">
-								<a ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}SearchPage/[[searchInput]]" ng-click="PreCheck();" class="btn btn-default"  >
-									<i class="fa fa-search"></i>
-								</a>
-							</span>
+                                <span class="input-group-btn">
+                                    <a ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}SearchPage/[[searchInput]]" ng-click="PreCheck();" class="btn btn-default"  >
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                </span>
 						</div>
 					</li>
 				</ul>
@@ -61,28 +61,28 @@
                         <div class="clearfix"></div>
 						<ul class="nav nav-second-level">
                             {% for project in app.user.projects if project.users | length == 1 %}
-                                <li>
-                                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                                <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         <i class="fa fa-briefcase fa-fw"></i>
-                                        {{ project.name }}
+                                       <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                     </a>
                                 </li>
                             {% endfor %}
 
                             {% for project in app.user.connectedHFForums if project.users | length == 1 %}
-                                <li>
-                                    <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}">
+                                <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                    <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         <i class="fa fa-briefcase fa-fw"></i>
-                                        {{ project.name }}
+                                       <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                     </a>
                                 </li>
                             {% endfor %}
 
                             {% for project in app.user.connectedQnAForums if project.users | length == 1 %}
-                                <li>
-                                    <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}">
+                                <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                    <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         <i class="fa fa-briefcase fa-fw"></i>
-                                        {{ project.name }}
+                                       <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                     </a>
                                 </li>
                             {% endfor %}
@@ -94,28 +94,28 @@
                                 </a>
                                 <ul class="nav nav-third-level">
                                     {% for project in app.user.projects if project.users | length > 1 %}
-                                        <li>
-                                            <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
+                                        <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                            <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                 <i class="fa fa-briefcase fa-fw"></i>
-                                                {{ project.name }}
+                                                <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                             </a>
                                         </li>
                                     {% endfor %}
 
                                     {% for project in app.user.connectedHFForums if project.users | length > 1 %}
-                                        <li>
-                                            <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}">
+                                        <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                            <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                 <i class="fa fa-briefcase fa-fw"></i>
-                                                {{ project.name }}
+                                               <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                             </a>
                                         </li>
                                     {% endfor %}
 
                                     {% for project in app.user.connectedQnAForums if project.users | length > 1 %}
-                                        <li>
-                                            <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}">
+                                        <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
+                                            <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                 <i class="fa fa-briefcase fa-fw"></i>
-                                                {{ project.name }}
+                                               <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                             </a>
                                         </li>
                                     {% endfor %}
@@ -125,7 +125,7 @@
 					</li>
 
                     {% for office in app.user.ownedOffices if office.id != app.user.homeOffice.id %}
-                        <li>
+                        <li data-toggle="tooltip" data-placement="right" title="{{ office.name }}">
                             <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}"
                                class="
                                     {% if office.projects | length > 0 %}
@@ -145,8 +145,8 @@
                             <ul class="nav nav-second-level">
                                 {% for project in office.projects %}
                                 <li>
-                                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                                        {{ project.name }}
+                                    <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                       <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                     </a>
                                 </li>
                                 {% endfor %}
@@ -155,7 +155,7 @@
                     {% endfor %}
 
                     {% for office in app.user.assignedOffices if office.id != app.user.homeOffice.id %}
-                        <li>
+                        <li data-toggle="tooltip" data-placement="right" title="{{ office.name }}">
                             <a href="{{ path('zectranet_show_office', {'office_id': office.id}) }}"
                                class="
                                     {% if office.projects | length > 0 %}
@@ -175,8 +175,8 @@
                             <ul class="nav nav-second-level">
                                 {% for project in office.projects %}
                                     <li>
-                                        <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}">
-                                            {{ project.name }}
+                                        <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                           <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                         </a>
                                     </li>
                                 {% endfor %}
@@ -232,6 +232,10 @@
 		JSON_URLS.deleteScrenshots  = "{{ path('zectranet_document_delete', { fileid : 0 }) }}";
 		JSON_URLS.urlGetContactList  = "{{ path('zectranet_get_contact_list')}}";
 		JSON_URLS.urlSendRequest  = "{{ path('zectranet_send_user_membership_request')}}";
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
 	</script>
 {% endblock %}
 
