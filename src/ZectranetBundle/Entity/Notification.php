@@ -48,6 +48,12 @@ class Notification
     private $destinationid;
 
     /**
+     * @var integer
+     * @ORM\Column(name="conversation_id", type="integer", nullable=true, options={"default":NULL})
+     */
+    private $conversation_id;
+
+    /**
      * @var string
      * @ORM\Column(name="type", type="string", length=100)
      */
@@ -328,5 +334,28 @@ class Notification
         else $temp_user_notifications = null;
 
         return $temp_user_notifications;
+    }
+
+    /**
+     * Set conversation_id
+     *
+     * @param integer $conversationId
+     * @return Notification
+     */
+    public function setConversationId($conversationId)
+    {
+        $this->conversation_id = $conversationId;
+
+        return $this;
+    }
+
+    /**
+     * Get conversation_id
+     *
+     * @return integer 
+     */
+    public function getConversationId()
+    {
+        return $this->conversation_id;
     }
 }

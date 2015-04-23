@@ -66,7 +66,7 @@ class ConversationController extends Controller {
             $resource = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($conversation->getUser2ID());
         }
 
-        $this->get('zectranet.notifier')->createNotification("message_home_office", $user, $resource, $office, null, $data);
+        $this->get('zectranet.notifier')->createNotification("message_home_office", $user, $resource, $office, null, $data, null, null, null, $conversation_id);
 
         return new JsonResponse(($message) ? $message->getInArray() : null);
     }

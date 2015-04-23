@@ -40,6 +40,18 @@
     </div>
 
     <!-- Notifications -->
+    <div ng-if="contactNotifications.length > 0">
+        <div ng-repeat="contactNotification in contactNotifications" class="allNotifications">
+            <a href="[[contactNotification.href]]" style="text-decoration: none; color: #000;">
+                <i class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
+                <div style="word-wrap: break-word; display: inline-block" ng-bind-html="contactNotification.message"></div>
+                <div class="text-muted small" style="text-align: right">
+                    <i class="fa fa-clock-o"></i>
+                    [[ contactNotification.activated.date.substring(0, 16) ]]
+                </div>
+            </a>
+        </div>
+    </div>
     <div ng-if="notifications.length > 0" style="margin-bottom: 20px;">
         <div ng-repeat="notification in notifications" class="allNotifications">
             <a ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')

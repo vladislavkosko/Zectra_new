@@ -72,20 +72,23 @@ class Notifier
 	}
 
     /**
-     * @param User $user
+     * @param $user
      * @param $type
      * @param $resourceid
      * @param $destinationid
      * @param $message
-     * @param object|null $post
+     * @param null $post
+     * @param null $conversation_id
      */
-	private function postNotification($user, $type, $resourceid, $destinationid, $message, $post = null)
+	private function postNotification($user, $type, $resourceid, $destinationid, $message, $post = null, $conversation_id = null)
 	{
 		$notification = new Notification();
 		$notification->setUserid($user->getId());
 		$notification->setUser($user);
 		$notification->setResourceid($resourceid);
 		$notification->setDestinationid($destinationid);
+        if ($conversation_id != null)
+            $notification->setConversationId($conversation_id);
 		$notification->setType($type);
 
         $message = preg_replace("/<[\W\w]{1,255}>/", "", $message);
@@ -135,11 +138,12 @@ class Notifier
             $method = true;
 
         if (in_array($type, array("message_home_office")))
-            $method = true;
+            $method = false;
 
         if (in_array($type, array("message_office", "message_project", "message_epic_story", "message_task")))
             $method = false;
 
+        $method = true;
         if($method == true)
 			$this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
 		else
@@ -315,9 +319,10 @@ class Notifier
      * @param array|null $temp
      * @param null $isOffice
      * @param null $task
+     * @param null $conversation_id
      * @return bool
      */
-	public function createNotification($type, $resource, $usersRequest, $destination, $user_to_send_name = null, $post = null, $temp = null, $isOffice = null, $task = null)
+	public function createNotification($type, $resource, $usersRequest, $destination, $user_to_send_name = null, $post = null, $temp = null, $isOffice = null, $task = null, $conversation_id = null)
 	{
 		$users = null;
 		$message = null;
@@ -597,7 +602,7 @@ class Notifier
 		foreach($users as $user)
 		{
 			if ($user->getId() != $this->user->getId())
-				$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message, $post);
+				$this->postNotification($user, $type, $resource->getId(), $destination->getId(), $message, $post, $conversation_id);
 		}
 		return true;
 	}

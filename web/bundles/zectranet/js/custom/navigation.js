@@ -13,6 +13,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.requests = {};
         $scope.notifications = null;
+        $scope.contactNotifications = null;
         $scope.notifyHandler = null;
         $scope.notificationsLength = null;
         $scope.FirstInit = false;
@@ -136,7 +137,8 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                             StartNotify();
                             document.getElementById('notif_sound').play();
                             var chatUpdate = false;
-                            $scope.notifications = prepareNotifications(response.result.notifications);
+                            prepareNotifications(response.result.notifications);
+                            shareNotifications(response.result.notifications);
                             for (var i = 0; i < $scope.notifications.length; i++) {
                                 if ($scope.notifications[i].type == 'message_office'
                                     || $scope.notifications[i].type == 'message_project'
@@ -150,7 +152,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                                     chatUpdate = true;
                                 }
 
-                                if (chatUpdate) {
+                                if (chatUpdate && angular.isDefined($rootScope.updateChat)) {
                                     $rootScope.updateChat(0, 100);
                                 }
 
@@ -161,14 +163,16 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                     } else {
                         StopNotify();
                         $scope.notifications = [];
+                        $scope.contactNotifications = [];
                     }
                     setTimeout(getNotifications, 5000);
                 })
         };
 
         function prepareNotifications(notifications) {
-            notifications = _.map(notifications, function(n) {
-                if (["message_home_office", "message_office", "request_office", "private_message_office"].indexOf(n.type) != -1)
+            _.map(notifications, function(n) {
+
+                if (["message_office", "request_office", "private_message_office"].indexOf(n.type) != -1)
                     n.href = officeShowUrlBase.replace('0', n.destinationid);
                 else if (["message_task", "request_assign_task", "private_message_task"].indexOf(n.type) != -1)
                     n.href = taskShowUrlBase.replace('0', n.destinationid);
@@ -178,8 +182,20 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
                 return n;
             });
+        }
 
-            return notifications;
+        function shareNotifications(notifications) {
+            var tempNotifications = [];
+            var tempContactNotifications = [];
+            _.map(notifications, function(n) {
+                if (["message_home_office"].indexOf(n.type) != -1)
+                    tempContactNotifications.push(n);
+                else
+                    tempNotifications.push(n);
+            });
+
+            $scope.notifications = tempNotifications;
+            $scope.contactNotifications = tempContactNotifications;
         }
 
         console.log('NavigationController was loaded!');

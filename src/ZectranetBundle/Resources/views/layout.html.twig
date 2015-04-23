@@ -55,8 +55,8 @@
 
 				{% if app.user %}
                     <li class="dropdown" ng-cloak>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
-                            <div class="fa fa-fw"><b>O</b></div>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <div class="fa fa-fw"><b>P</b></div>
                             <i class="fa fa-caret-down"></i>
                         </a>
 
@@ -66,7 +66,7 @@
                     </li>
 
                     <li class="dropdown" ng-cloak>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <div class="fa fa-fw"><b>P</b></div>
                             <span ng-if="requests.QnARequests.length + requests.hfRequests.length > 0"
                                   style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;"
@@ -136,16 +136,15 @@
                     </li>
 
                     <li class="dropdown" ng-cloak>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="padding: 13px;">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <div class="fa fa-fw"><b>C</b></div>
-                            <span ng-if="requests.contactRequests.length > 0" ng-class="{ 'visible-element': FirstInit }" class="hidden-element"
-                                  style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
-                                [[ requests.contactRequests.length ]]
+                            <span ng-if="requests.contactRequests.length > 0 || contactNotifications.length > 0" style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;">
+                                [[ requests.contactRequests.length + contactNotifications.length ]]
                             </span>
                             <i class="fa fa-caret-down"></i>
                         </a>
 
-                        <ul class="dropdown-menu dropdown-tasks noclose list-group">
+                        <ul class="notifier dropdown-menu dropdown-tasks noclose list-group">
                             <li ng-if="requests.contactRequests.length == 0" class="list-group-item">
                                 <h5 class="text-info">You haven't any contact requests</h5>
                             </li>
@@ -174,6 +173,26 @@
                                         More info
                                     </button>
                                 </div>
+                            </li>
+
+                            <li ng-repeat="contactNotification in contactNotifications| limitTo: 5" class="list-group-item" style="font-size: 14px;">
+
+                                <a href="[[contactNotification.href]]" style="text-decoration: none; color: #000; padding: 2px 5px;">
+                                    <i class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
+                                    <div style="word-wrap: break-word; display: inline-block; padding-right: 10px;" ng-bind-html="contactNotification.message"></div>
+                                    <div class="text-muted small" style="text-align: right">
+                                        <i class="fa fa-clock-o"></i>
+                                        [[ contactNotification.activated.date.substring(0, 16) ]]
+                                    </div>
+                                </a>
+
+                            </li>
+
+                            <li ng-if="(contactNotifications != null) && (contactNotifications.length > 0)" style="font-size: 14px; padding-top: 8px;">
+                                <a class="text-center" href="{{ path('zectranet_all_notifications') }}">
+                                    <strong>See All Notifications</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
                             </li>
                         </ul>
                     </li>
@@ -355,28 +374,18 @@
                         <ul ng-if="notifications.length > 0" class="notifier dropdown-menu dropdown-alerts">
                             <li ng-repeat="notification in notifications| limitTo: 5">
 
-                                {#<a ng-if="(notification.type == 'request_office') || (notification.type == 'request_user_project') || (notification.type == 'request_project') || (notification.type == 'request_assign_task')"
-                                   href="#" style="text-decoration: none; color: #000;">
-                                    <i class="fa fa-question fa-fw"></i>
-                                    <div style="word-wrap: break-word; display: inline-block" ng-bind-html="notification.message"></div>
-                                    <div class="text-muted small" style="text-align: right; margin-top: 10px;">
-                                        <i class="fa fa-clock-o"></i>
-                                        [[ notification.activated.date.substring(0, 16) ]]
-                                    </div>
-                                </a>#}
-
-                                <a ng-if="(notification.type == 'message_home_office') || (notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
+                                <a ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
                                     || (notification.type == 'private_message_office') || (notification.type == 'private_message_project') || (notification.type == 'private_message_task') || (notification.type == 'private_message_epic_story')
                                     || (notification.type == 'task_added') || (notification.type == 'task_deleted') || (notification.type == 'epic_story_added') || (notification.type == 'epic_story_deleted')"
                                     href="[[notification.href]]"
                                     style="text-decoration: none; color: #000;">
-                                    <i ng-if="(notification.type == 'message_home_office') || (notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
+                                    <i ng-if="(notification.type == 'message_office') || (notification.type == 'message_project') || (notification.type == 'message_task') || (notification.type == 'message_epic_story')
                                     || (notification.type == 'private_message_office') || (notification.type == 'private_message_project') || (notification.type == 'private_message_task') || (notification.type == 'private_message_epic_story')"
                                        class="fa fa-comment fa-fw" style="vertical-align: top;"></i>
                                     <i ng-if="(notification.type == 'task_added')" class="fa fa-tasks fa-fw"></i>
                                     <i ng-if="(notification.type == 'epic_story_added')" class="fa fa-briefcase fa-fw"></i>
                                     <i ng-if="(notification.type == 'task_deleted') || (notification.type == 'epic_story_deleted')" class="fa fa-trash-o fa-fw"></i>
-                                    <div style="word-wrap: break-word; display: inline-block" ng-bind-html="notification.message"></div>
+                                    <div style="word-wrap: break-word; display: inline-block; padding-right: 10px;" ng-bind-html="notification.message"></div>
                                     <div class="text-muted small" style="text-align: right">
                                         <i class="fa fa-clock-o"></i>
                                         [[ notification.activated.date.substring(0, 16) ]]
