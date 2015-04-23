@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="informer text-muted" style="display: inline-block; vertical-align: top;">
-                    <div>asked {{ thread.date | date('Y-m-d H:i:s') }}</div>
+                    <div>asked {{ thread.date | date('Y-m-d H:i') }}</div>
 
                     <div class="informer-user">
                         <a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none; vertical-align: top;">
@@ -116,7 +116,7 @@
                         </div>
 
                         <div class="informer text-muted" style="display: inline-block; vertical-align: top;">
-                            <div>answer {{ post.posted | date('Y-m-d H:i:s') }}</div>
+                            <div>answer {{ post.posted | date('Y-m-d H:i') }}</div>
 
                             <div class="informer-user">
                                 <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none; vertical-align: top;">

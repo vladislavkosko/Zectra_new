@@ -30,7 +30,7 @@
         <div class="col-xs-10" style="min-height: 150px;">
             <div class="page-header">
                 <h3 class="forum-header">{{ thread.title }} </h3>
-                <small class="text-muted"> Started by {{ thread.user.username }}, {{ thread.date | date('Y-m-d H:i:s') }}</small>
+                <small class="text-muted"> Started by {{ thread.user.username }}, {{ thread.date | date('Y-m-d H:i') }}</small>
             </div>
             <p style="white-space: pre-line; margin-top: -25px;">
                 {{ thread.message }}
@@ -62,7 +62,7 @@
                         <p class="text-center"><small class="text-muted">2 posts</small></p>
                     </div>
                     <div class="col-xs-10" style="min-height: 150px;">
-                        <small class="pull-right text-muted" style="margin-top: 8px;">Posted {{ post.posted | date('Y-m-d H:i:s') }}</small>
+                        <small class="pull-right text-muted" style="margin-top: 8px;">Posted {{ post.posted | date('Y-m-d H:i') }}</small>
                         <p style="white-space: pre-line;">
                             {{ post.message }}
                         </p>
