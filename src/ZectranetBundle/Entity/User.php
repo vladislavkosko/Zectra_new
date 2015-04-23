@@ -229,18 +229,6 @@ class User implements UserInterface, \Serializable
     private $userInfo;
 
     /**
-     * @ORM\ManyToMany(targetEntity="HFForum", mappedBy="users", fetch="EXTRA_LAZY")
-     * @var ArrayCollection
-     */
-    private $headerForums;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="QnAForum", mappedBy="users", fetch="EXTRA_LAZY")
-     * @var ArrayCollection
-     */
-    private $QnAForums;
-
-    /**
      * @ORM\ManyToMany(targetEntity="User")
      * @ORM\JoinTable(name="user_contacts",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -257,9 +245,10 @@ class User implements UserInterface, \Serializable
         $this->active = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = new ArrayCollection();
-        $this->headerForums = new ArrayCollection();
         $this->contacts = new ArrayCollection();
-        $this->QnAForums = new ArrayCollection();
+        $this->connectedHFForums = new ArrayCollection();
+        $this->connectedQnAForums = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     /**

@@ -12,10 +12,12 @@
 {% block body %}
     <div class="page-header">
         <div class="row">
-            <div class="col-md-6">
-                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ forum.name }}</span>
+            <div class="col-md-10" style="word-wrap: break-word; white-space: normal;">
+                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">
+                    {{ forum.name }}
+                </span>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-2">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
                     <div class="pull-right">
                         <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">

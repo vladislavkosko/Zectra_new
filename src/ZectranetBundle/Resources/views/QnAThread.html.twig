@@ -25,7 +25,9 @@
     <div class="page-header" style="margin-top: 0;">
         <div class="row">
             <div class="col-md-9">
-                <span style="font-size: 22px; font-family: 'PT Sans Narrow', sans-serif;">{{ thread.title }}</span>
+                <span style="font-size: 22px; font-family: 'PT Sans Narrow', sans-serif; white-space: normal; word-wrap: break-word;">
+                    {{ thread.title }}
+                </span>
             </div>
             <div class="col-md-3">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
@@ -62,14 +64,14 @@
                             {{ thread.message }}
                         </div>
 
-                        <div class="right-thread-content thread-keywords" style="margin: 15px 0;">
+                        <div class="right-thread-content thread-keywords" style="margin: 15px 0 5px 0;">
                             {% for i in 0..keywords | length - 1 %}
                                 <span style="color: #0c65a5; margin-left: 3px;">{{ keywords[i] }}</span>
                             {% endfor %}
                         </div>
                     </div>
                     <div class="col-xs-3">
-                        <div class="informer text-muted" style="display: inline-block; vertical-align: top;">
+                        <div class="informer text-muted pull-right" style="display: inline-block; vertical-align: top;">
                             <div>asked {{ thread.date | date('d-m-y H:i') }}</div>
 
                             <div class="informer-user">
@@ -118,17 +120,19 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-3 col-md-3 text-muted informer" style="display: inline-block;">
-                            <div>answer {{ post.posted | date('d-m-y H:i') }}</div>
+                        <div class="col-xs-3 col-md-3 text-muted" style="display: inline-block;">
+                            <div class="informer pull-right">
+                                <div>answer {{ post.posted | date('d-m-y H:i') }}</div>
 
-                            <div class="informer-user">
-                                <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none;">
-                                    <img class="img-responsive" src="{{ asset('') }}documents/{{ post.user.avatar }}">
-                                </a>
+                                <div class="informer-user">
+                                    <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none;">
+                                        <img class="img-responsive" src="{{ asset('') }}documents/{{ post.user.avatar }}">
+                                    </a>
 
-                                <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none;">
-                                    {{ post.user.username }}
-                                </a>
+                                    <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none;">
+                                        {{ post.user.username }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

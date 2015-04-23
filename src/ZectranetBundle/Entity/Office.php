@@ -113,6 +113,12 @@ class Office
     private $profile;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="OfficeLog", mappedBy="office")
+     */
+    private $logs;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -121,6 +127,7 @@ class Office
         $this->projects = new ArrayCollection();
         $this->visible = false;
         $this->archived = false;
+        $this->logs = new ArrayCollection();
     }
 
     /**
@@ -129,8 +136,73 @@ class Office
      * @return array
      */
     public static function getOfficeArchive(EntityManager $em, $office_id) {
-        
-        return array();
+        $archives = array(
+            'projects' => EntityOperations::arrayToJsonArray(
+                $em->getRepository('ZectranetBundle:Project')->findBy(array('archived' => true, 'officeID' => $office_id))
+            ),
+            'hfForums' => EntityOperations::arrayToJsonArray(
+                $em->getRepository('ZectranetBundle:HFForum')->findBy(array('archived' => true, 'officeID' => $office_id))
+            ),
+            'QnAForums' => EntityOperations::arrayToJsonArray(
+                $em->getRepository('ZectranetBundle:QnAForum')->findBy(array('archived' => true, 'officeID' => $office_id))
+            ),
+        );
+
+        return $archives;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @param int $project_type
+     */
+    public static function addToArchive(EntityManager $em, $project_id, $project_type) {
+        $project = null;
+        switch ($project_type) {
+            case 1: $project = $em->find('ZectranetBundle:QnAForum', $project_id); break;
+            case 2: $project = $em->find('ZectranetBundle:HFForum', $project_id); break;
+            case 3: /*$project = $em->find('ZectranetBundle:QnAForum', $project_id);*/ break;
+            case 4: $project = $em->find('ZectranetBundle:Project', $project_id); break;
+        }
+        if ($project) {
+            $project->setArchived(true);
+            $em->persist($project);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $project_id
+     * @param int $project_type
+     */
+    public static function restoreFromArchive(EntityManager $em, $project_id, $project_type) {
+        $project = null;
+        switch ($project_type) {
+            case 1: $project = $em->find('ZectranetBundle:QnAForum', $project_id); break;
+            case 2: $project = $em->find('ZectranetBundle:HFForum', $project_id); break;
+            case 3: /*$project = $em->find('ZectranetBundle:QnAForum', $project_id);*/ break;
+            case 4: $project = $em->find('ZectranetBundle:Project', $project_id); break;
+        }
+        if ($project) {
+            $project->setArchived(false);
+            $em->persist($project);
+            $em->flush();
+        }
+    }
+
+    public static function deleteFromArchive(EntityManager $em, $project_id, $project_type) {
+        $project = null;
+        switch ($project_type) {
+            case 1: $project = $em->find('ZectranetBundle:QnAForum', $project_id); break;
+            case 2: $project = $em->find('ZectranetBundle:HFForum', $project_id); break;
+            case 3: /*$project = $em->find('ZectranetBundle:QnAForum', $project_id);*/ break;
+            case 4: $project = $em->find('ZectranetBundle:Project', $project_id); break;
+        }
+        if ($project) {
+            $em->remove($project);
+            $em->flush();
+        }
     }
 
     /**
@@ -651,5 +723,38 @@ class Office
     public function getProfile()
     {
         return $this->profile;
+    }
+
+    /**
+     * Add logs
+     *
+     * @param \ZectranetBundle\Entity\OfficeLog $logs
+     * @return Office
+     */
+    public function addLog(\ZectranetBundle\Entity\OfficeLog $logs)
+    {
+        $this->logs[] = $logs;
+
+        return $this;
+    }
+
+    /**
+     * Remove logs
+     *
+     * @param \ZectranetBundle\Entity\OfficeLog $logs
+     */
+    public function removeLog(\ZectranetBundle\Entity\OfficeLog $logs)
+    {
+        $this->logs->removeElement($logs);
+    }
+
+    /**
+     * Get logs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLogs()
+    {
+        return $this->logs;
     }
 }

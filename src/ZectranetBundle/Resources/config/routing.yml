@@ -532,10 +532,6 @@ zectranet_send_hf_request:
     pattern: /hf/send_request/{project_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:sendRequest }
 
-zectranet_remove_hf_user:
-    pattern: /hf/remove_user/{project_id}
-    defaults: { _controller: ZectranetBundle:HeaderForum:removeUser }
-
 zectranet_approve_hf_membership_request:
     pattern: /hf/request/approve/{request_id}
     defaults: { _controller: ZectranetBundle:User:approveHFForumMembershipRequest }
@@ -561,10 +557,6 @@ zectranet_delete_QNA_project_request:
 zectranet_approve_QNA_membership_request:
     pattern: /QnA/request/approve/{request_id}
     defaults: { _controller: ZectranetBundle:User:approveQnAForumMembershipRequest }
-
-zectranet_remove_QNA_user:
-    pattern: /QnA/remove_user/{project_id}
-    defaults: { _controller: ZectranetBundle:QnAForum:removeUser }
 
 ############################### END QNA FORUM REQUESTS ###################################
 

@@ -229,6 +229,7 @@ class HFForum
      * @param EntityManager $em
      * @param int $user_id
      * @param int $project_id
+     * @return boolean
      */
     public static function removeUserFromProject(EntityManager $em, $user_id, $project_id) {
         $user = $em->find('ZectranetBundle:User', $user_id);
@@ -237,6 +238,9 @@ class HFForum
             $project->removeUser($user);
             $em->persist($project);
             $em->flush();
+            return true;
+        } else {
+            return false;
         }
     }
 

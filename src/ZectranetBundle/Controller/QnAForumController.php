@@ -204,32 +204,6 @@ class QnAForumController extends Controller {
     }
 
     /**
-     * @param Request $request
-     * @param int $project_id
-     * @return JsonResponse
-     */
-    public function removeUserAction(Request $request, $project_id) {
-        $data = json_decode($request->getContent(), true);
-        $user_id = $data['user_id'];
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $this->getUser();
-        $contact = $em->find('ZectranetBundle:User', $user_id);
-        try {
-            QnAForum::removeUserFromProject($em, $user_id, $project_id);
-        } catch (\Exception $ex) {
-            $from = 'class: QnAForum, function: removeUserFromProject';
-            $this->get('zectranet.errorlogger')->registerException($ex, $from);
-            return new JsonResponse(-1);
-        }
-        $logMessage = 'User "' . $user->getUsername() . '" remove user "'
-            . $contact->getUsername() . '" from project';
-        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);
-        return new JsonResponse(1);
-    }
-
-    /**
      * @param int $project_id
      * @param int $request_id
      * @return JsonResponse
@@ -239,21 +213,27 @@ class QnAForumController extends Controller {
         $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        $request = $em->find('ZectranetBundle:Request', $request_id);
+        $contact = $em->find('ZectranetBundle:User', $request->getUserid());
         try {
             /** @var Req $request */
             $request = QnAForum::removeRequest($em, $request_id);
-            if ($request) {
-                $logMessage = 'User "' . $user->getUsername() . '" remove user "'
-                    . $request->getUser()->getUsername() . '" from request grid';
-                $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);
-                return new JsonResponse(1);
-            } else {
-                return new JsonResponse(0);
-            }
         } catch (\Exception $ex) {
             $from = 'class: HFForum, function: removeRequest';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return new JsonResponse(-1);
         }
+        try {
+            QnAForum::removeUserFromProject($em, $contact->getId(), $project_id);
+            $logMessage = 'User "' . $user->getUsername() . '" remove user "'
+                . $request->getUser()->getUsername() . '" from request grid';
+            $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);
+            return new JsonResponse(1);
+        } catch (\Exception $ex) {
+            $from = 'class: QnAForum, function: removeUserFromProject';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+
     }
 }

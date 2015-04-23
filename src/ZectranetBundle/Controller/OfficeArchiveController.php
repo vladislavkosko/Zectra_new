@@ -34,8 +34,10 @@ class OfficeArchiveController extends Controller {
      * @return JsonResponse
      */
     public function getArchiveAction($office_id) {
-        Office::
-        return new JsonResponse();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $archives = Office::getOfficeArchive($em, $office_id);
+        return new JsonResponse($archives);
     }
 
     /**
@@ -44,7 +46,18 @@ class OfficeArchiveController extends Controller {
      * @return JsonResponse
      */
     public function addToArchiveAction(Request $request, $project_id) {
-        return new JsonResponse();
+        $data = json_decode($request->getContent(), true);
+        $project_type = $data['project_type'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        try {
+            Office::addToArchive($em, $project_id, $project_type);
+        } catch (\Exception $ex) {
+            $from = 'class: Office, function: addToArchive';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        return new JsonResponse(1);
     }
 
     /**
@@ -53,7 +66,18 @@ class OfficeArchiveController extends Controller {
      * @return JsonResponse
      */
     public function restoreFromArchiveAction(Request $request, $project_id) {
-        return new JsonResponse();
+        $data = json_decode($request->getContent(), true);
+        $project_type = $data['project_type'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        try {
+            Office::addToArchive($em, $project_id, $project_type);
+        } catch (\Exception $ex) {
+            $from = 'class: Office, function: addToArchive';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        return new JsonResponse(1);
     }
 
     /**
@@ -62,6 +86,17 @@ class OfficeArchiveController extends Controller {
      * @return JsonResponse
      */
     public function deleteFromArchiveAction(Request $request, $project_id) {
-        return new JsonResponse();
+        $data = json_decode($request->getContent(), true);
+        $project_type = $data['project_type'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        try {
+            Office::addToArchive($em, $project_id, $project_type);
+        } catch (\Exception $ex) {
+            $from = 'class: Office, function: addToArchive';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        return new JsonResponse(1);
     }
 }
