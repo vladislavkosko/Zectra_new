@@ -82,10 +82,15 @@ class HeaderForumController extends Controller {
             'bgColor' => $data['header']['bgColor'],
             'textColor' => $data['header']['textColor'],
         );
+        /** @var User $user */
+        $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
             HFHeader::addNewHeader($em, $project_id, $params);
+            $logMessage = 'User "' . $user->getUsername() . '" add new header "'
+                . $params['title'] . '"';
+            $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 2);
         } catch (\Exception $ex) {
             $from = "Class: HFHeader, function: addNewHeader";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -110,11 +115,16 @@ class HeaderForumController extends Controller {
             'description' => $data['subheader']['description'],
             'admin' => $data['subheader']['admin'],
         );
+        /** @var User $user */
+        $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $header = $em->getRepository('ZectranetBundle:HFHeader')->find($header_id);
         try {
             HFHeader::addNewSubHeader($em, $params);
+            $logMessage = 'User "' . $user->getUsername() . '" add new subheader "'
+                . $params['title'] . '"';
+            $this->get('zectranet.projectlogger')->logEvent($logMessage, $header->getForumID(), 2);
         } catch (\Exception $ex) {
             $from = "Class: HFHeader, function: addNewSubHeader";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -129,12 +139,18 @@ class HeaderForumController extends Controller {
      * @return JsonResponse
      */
     public function deleteHeaderAction($header_id) {
+        /** @var User $user */
+        $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $header = $em->getRepository('ZectranetBundle:HFHeader')->find($header_id);
+        $headerName = $header->getTitle();
         $forum = $header->getForum();
         try {
             HFHeader::deleteHeader($em, $header_id);
+            $logMessage = 'User "' . $user->getUsername() . '" delete header "'
+                . $headerName . '"';
+            $this->get('zectranet.projectlogger')->logEvent($logMessage, $header->getForumID(), 2);
         } catch (\Exception $ex) {
             $from = "Class: HFHeader, function: deleteHeader";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -183,6 +199,9 @@ class HeaderForumController extends Controller {
         $thread = null;
         try {
             $thread = HFThread::startNewThread($em, $subheader_id, $user->getId(), $params);
+            $logMessage = 'User "' . $user->getUsername() . '" start new thread "'
+                . $thread->getTitle() . '"';
+            $this->get('zectranet.projectlogger')->logEvent($logMessage, $subHeader->getHeader()->getForumID(), 2);
         } catch (\Exception $ex) {
             $from = "Class: HFThread, function: startNewThread";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);

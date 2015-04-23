@@ -118,6 +118,9 @@ class QnAForumController extends Controller {
 
         try {
             $question = QnAThread::createNewQuestion($em, $user, $project, $parameters);
+            $logMessage = 'User "' . $user->getUsername() . '" add new Question "'
+                . $question->getTitle() . '"';
+            $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);
         } catch (\Exception $ex) {
             $from = "Class: QnAThread, function: createNewQuestion";
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
