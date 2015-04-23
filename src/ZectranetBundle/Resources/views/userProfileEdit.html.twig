@@ -10,124 +10,173 @@
         </div>
         <div class="col-md-12">
             <form action="{{ path('zectranet_edit_user_page_action', { 'user_id': app.user.id }) }}" method="post" class="form-horizontal">
-                <p>
-                    <label>
-                        Name:
-                        <input type="text" name="name" value="{{ user.name }}" />
-                    </label>
-                </p>
+                <div class="row">
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <label style="width: 100%;">
+                            Name:
+                            <input name="name" class="form-control" value="{{ user.name }}" />
+                        </label>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <label style="width: 100%;">
+                            Surname:
+                            <input type="text" name="surname" class="form-control" value="{{ user.surname }}" />
+                        </label>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <label style="width: 100%;">
+                            Email:
+                            <input type="email" name="email" class="form-control" value="{{ user.email }}"/>
+                        </label>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    Country:
+                                    <input type="text" name="residenceCountry" class="form-control" value="{{ userInfo.residenceCountry }}" />
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" name="residenceCountryVisible" {% if userInfo.residenceCountryVisible %}checked{% endif %}/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    Work Experience:
+                                    <textarea style="resize: vertical;" class="form-control" name="workExpirience">{{ userInfo.workExpirience }}</textarea>
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" class="checkbox checkbox-inline" name="workExpirienceVisible" {% if userInfo.workExpirienceVisible %}checked{% endif %} />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    Skills:
+                                    <textarea style="resize: vertical;" class="form-control" name="skills">{{ userInfo.skills }}</textarea>
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" name="skillsVisible" {% if userInfo.skillsVisible %}checked{% endif %}/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    Intersts:
+                                    <textarea style="resize: vertical;" class="form-control" name="interests">{{ userInfo.interests }}</textarea>
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" name="interestsVisible" {% if userInfo.interestsVisible %}checked{% endif %}/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    Volunteer Work:
+                                    <textarea style="resize: vertical;" class="form-control" name="volunteerWork">{{ userInfo.volunteerWork }}</textarea>
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" name="volunteerWorkVisible" {% if userInfo.volunteerWorkVisible %}checked{% endif %}/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-                <p>
-                    <label>
-                        Surname:
-                        <input type="text" name="surname" value="{{ user.surname }}" />
-                    </label>
-                </p>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    Facebook:
+                                    <input class="form-control" type="text" placeholder="http://" name="facebook" value="{{ userInfo.facebook }}" />
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" name="facebookVisible" {% if userInfo.facebookVisible %}checked{% endif %} />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-                <p>
-                    <label>
-                        Email:
-                        <input type="email" name="email" value="{{ user.email }}"/>
-                    </label>
-                </p>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    Twitter:
+                                    <input class="form-control" type="text" placeholder="http://" name="twitter" value="{{ userInfo.twitter }}" />
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" name="twitterVisible" {% if userInfo.twitterVisible %}checked{% endif %}/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
-                <p>
-                    <label>
-                        Country:
-                        <input type="text" name="residenceCountry" value="{{ userInfo.residenceCountry }}" />
-                    </label>
-
-                    <label>
-                        Visible
-                        <input type="checkbox" name="residenceCountryVisible" {% if userInfo.residenceCountryVisible %}checked{% endif %}/>
-                    </label>
-                </p>
-                <p>
-                    <label>
-                        Work Experience:
-                        <input type="text" name="workExpirience" value="{{ userInfo.workExpirience }}"/>
-                    </label>
-                    <label>
-                        Visible
-                        <input type="checkbox" name="workExpirienceVisible" {% if userInfo.workExpirienceVisible %}checked{% endif %} />
-                    </label>
-                </p>
-                <p>
-                    <label>
-                        Skills:
-                        <input type="text" name="skills" value="{{ userInfo.skills }}"/>
-                    </label>
-                    <label>
-                        Visible
-                        <input type="checkbox" name="skillsVisible" {% if userInfo.skillsVisible %}checked{% endif %}/>
-                    </label>
-                </p>
-
-                <p>
-                    <label>
-                        Intersts:
-                        <input type="text" name="interests" value="{{ userInfo.interests }}"/>
-                    </label>
-                    <label>
-                        Visible
-                        <input type="checkbox" name="interestsVisible" {% if userInfo.interestsVisible %}checked{% endif %}/>
-                    </label>
-                </p>
-
-                <p>
-                    <label>
-                        Volunteer Work:
-                        <input type="text" name="volunteerWork" value="{{ userInfo.volunteerWork }}" />
-                    </label>
-                    <label>
-                        Visible
-                        <input type="checkbox" name="volunteerWorkVisible" {% if userInfo.volunteerWorkVisible %}checked{% endif %}/>
-                    </label>
-                </p>
-
-                <p>
-                    <label>
-                        Facebook:
-                        <input type="text" name="facebook" value="{{ userInfo.facebook }}" />
-                    </label>
-                    <label>
-                        Visible
-                        <input type="checkbox" name="facebookVisible" {% if userInfo.facebookVisible %}checked{% endif %} />
-                    </label>
-                </p>
-
-                <p>
-                    <label>
-                        Twitter:
-                        <input type="text" name="twitter" value="{{ userInfo.twitter }}" />
-                    </label>
-                    <label>
-                        Visible
-                        <input type="checkbox" name="twitterVisible" {% if userInfo.twitterVisible %}checked{% endif %}/>
-                    </label>
-                </p>
-
-                <p>
-                    <label>
-                        LinkedIn:
-                        <input type="text" name="linkedIn" value="{{ userInfo.linkedIn }}" />
-                    </label>
-                    <label>
-                        Visible
-                        <input type="checkbox" name="linkedInVisible" {% if userInfo.linkedInVisible %}checked{% endif %}/>
-                    </label>
-                </p>
-
-                <p>
-                    <label>
-                        Google+:
-                        <input type="text" name="googlePlus" value="{{ userInfo.googlePlus }}"/>
-                    </label>
-                    <label>
-                        Visible
-                        <input type="checkbox" name="googlePlusVisible" {% if userInfo.googlePlusVisible %}checked{% endif %}/>
-                    </label>
-                </p>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    LinkedIn:
+                                    <input class="form-control" type="text" placeholder="http://" name="linkedIn" value="{{ userInfo.linkedIn }}" />
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" name="linkedInVisible" {% if userInfo.linkedInVisible %}checked{% endif %}/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" style="margin-top: 15px;">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <label style="width: 100%;">
+                                    Google+:
+                                    <input class="form-control" type="text" placeholder="http://" name="googlePlus" value="{{ userInfo.googlePlus }}"/>
+                                </label>
+                            </div>
+                            <div class="col-xs-2">
+                                <label>
+                                    Visible
+                                    <input type="checkbox" name="googlePlusVisible" {% if userInfo.googlePlusVisible %}checked{% endif %}/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <hr/>
                 <div class="btn-group">
                     <button type="submit" class="btn btn-default btn-success">

@@ -13,6 +13,7 @@ Zectranet.controller('QNAController', ['$scope', '$http',
         $scope.All_contact_message = '';
         $scope.HO_Contacts_test = false;
         $scope.All_Contacts_test = false;
+        $scope.QnALogsVisible = false;
 
 
         function somethingWentWrong() {

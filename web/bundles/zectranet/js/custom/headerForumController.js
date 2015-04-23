@@ -37,6 +37,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         $scope.All_contact_message = '';
         $scope.HO_Contacts_test = false;
         $scope.All_Contacts_test = false;
+        $scope.HFLogsVisible = false;
 
         $scope.getHeaders = function () {
             $http.get($scope.urlGetHeaders)

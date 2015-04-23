@@ -39,7 +39,15 @@
 						</a>
 					</li>
 
-					<li>
+					<li {% if office is defined %}
+                            class="active"
+                        {% elseif project is defined and project in app.user.projects %}
+                            class="active"
+                        {% elseif forum is defined and forum in app.user.connectedHFForums %}
+                            class="active"
+                        {% elseif forum is defined and forum in app.user.connectedQnAForums %}
+                            class="active"
+                        {% endif %}>
                         {% set homeOffice = app.user.homeOffice %}
                         {% set HOProjectsCount = app.user.projects | length + app.user.connectedHFForums | length
                                 + app.user.connectedQnAForums | length %}
@@ -55,7 +63,17 @@
 						</a>
                         {% if HOProjectsCount > 0 %}
                             <a href="{{ path('zectranet_show_office', {'office_id': homeOffice.id }) }}" class="collapsible-href">
-                                <i class="fa fa-arrow-down fa-fw"></i>
+                                {% if office is defined %}
+                                    <i class="fa fa-arrow-up fa-fw"></i>
+                                {% elseif project is defined and project in app.user.projects %}
+                                    <i class="fa fa-arrow-up fa-fw"></i>
+                                {% elseif forum is defined and forum in app.user.connectedHFForums %}
+                                    <i class="fa fa-arrow-up fa-fw"></i>
+                                {% elseif forum is defined and forum in app.user.connectedQnAForums %}
+                                    <i class="fa fa-arrow-up fa-fw"></i>
+                                {% else %}
+                                    <i class="fa fa-arrow-down fa-fw"></i>
+                                {% endif %}
                             </a>
                         {% endif %}
                         <div class="clearfix"></div>
@@ -104,14 +122,24 @@
                                     <span>Connected Projects</span>
                                     {% if connectedProjectsCount > 0 %}
                                         <span class="text-right pull-right">
-                                            <i class="fa fa-arrow-down"></i>
+                                            {% if office is defined %}
+                                                <i class="fa fa-arrow-up fa-fw"></i>
+                                            {% elseif project is defined and project in app.user.projects and project.users | length > 1 %}
+                                                <i class="fa fa-arrow-up fa-fw"></i>
+                                            {% elseif forum is defined and forum in app.user.connectedHFForums and forum.users | length > 1 %}
+                                                <i class="fa fa-arrow-up fa-fw"></i>
+                                            {% elseif forum is defined and forum in app.user.connectedQnAForums and forum.users | length > 1 %}
+                                                <i class="fa fa-arrow-up fa-fw"></i>
+                                            {% else %}
+                                                <i class="fa fa-arrow-down fa-fw"></i>
+                                            {% endif %}
                                         </span>
                                     {% endif %}
                                 </a>
                                 <ul class="nav nav-third-level">
                                     {% for project in app.user.projects if project.users | length > 1 %}
                                         <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
-                                            <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                            <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                 <i class="fa fa-briefcase fa-fw"></i>
                                                 <span style="overflow: hidden; text-overflow: ellipsis;">{{ project.name }}</span>
                                             </a>
