@@ -440,6 +440,7 @@ class UserController extends Controller
         if ($data) {
             try {
                 QnAForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getQnAForumID());
+                User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             } catch (\Exception $ex) {
                 $from = 'Class: QnAForum, function: addUserToProject';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);

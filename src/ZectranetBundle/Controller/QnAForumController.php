@@ -25,7 +25,11 @@ class QnAForumController extends Controller {
     public function showForumAction($project_id)
     {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);
-
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         $keywords = array();
         /** @var QnAThread $thread */
         foreach ($project->getThreads() as $thread)
@@ -43,7 +47,11 @@ class QnAForumController extends Controller {
     {
         /** @var Project $project */
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);
-
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         return $this->render('@Zectranet/projectProfile.html.twig', array('project' => $project));
     }
 
@@ -55,6 +63,11 @@ class QnAForumController extends Controller {
     public function settingsAction($project_id)
     {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         return $this->render('ZectranetBundle::QnASettings.html.twig', array('forum' => $project));
     }
 
@@ -68,10 +81,12 @@ class QnAForumController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
+        $project = $em->getRepository('ZectranetBundle:QnAForum')->find($project_id);
         /** @var User $user */
         $user = $this->getUser();
-
-        $project = $em->getRepository('ZectranetBundle:QnAForum')->find($project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         $em->remove($project);
         $em->flush();
 
@@ -87,6 +102,11 @@ class QnAForumController extends Controller {
     public function showThreadAction($project_id, $thread_id)
     {
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:QnAForum')->find($project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
 
         $thread = $this->getDoctrine()->getRepository('ZectranetBundle:QnAThread')->find($thread_id);
 
@@ -108,6 +128,9 @@ class QnAForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         $parameters = array(
             'title' => $request->request->get('title'),
             'message' => $request->request->get('message'),
@@ -141,10 +164,14 @@ class QnAForumController extends Controller {
         $message = $request->request->get('message');
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        /** @var User $user */
-        $user = $this->getUser();
         /** @var QnAThread $thread */
         $thread = $this->getDoctrine()->getRepository('ZectranetBundle:QnAThread')->find($thread_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        $project = $thread->getForum();
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
 
         try {
             $post = QnAPost::addPost($em, $thread, $user, $message);
@@ -164,9 +191,12 @@ class QnAForumController extends Controller {
         $info = array();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
         /** @var User $user */
         $user = $this->getUser();
-        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
         $info['HO_Contacts'] = QnAForum::getNotProjectHomeOfficeMembers($em, $user->getId(), $project_id);
         $info['All_Contacts'] = QnAForum::getNotProjectSiteMembers($em, $project_id);
         $info['Project_Team'] = EntityOperations::arrayToJsonArray(
@@ -189,6 +219,10 @@ class QnAForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         /** @var User $user */
         $user = $this->getUser();
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return new JsonResponse('Not Allowed!!!');
+        }
         $contact = $em->find('ZectranetBundle:User', $user_id);
         try {
             QnAForum::sendRequestToUser($em, $user_id, $project_id, $message, $user->getId());
@@ -215,6 +249,10 @@ class QnAForumController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $request = $em->find('ZectranetBundle:Request', $request_id);
         $contact = $em->find('ZectranetBundle:User', $request->getUserid());
+        $project = $em->find('ZectranetBundle:QnAForum', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return new JsonResponse('Not Allowed!!!');
+        }
         try {
             /** @var Req $request */
             $request = QnAForum::removeRequest($em, $request_id);
