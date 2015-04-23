@@ -107,6 +107,12 @@ class Office
     private $archived;
 
     /**
+     * @var OfficeProfile
+     * @ORM\OneToOne(targetEntity="OfficeProfile", mappedBy="office")
+     */
+    private $profile;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -622,5 +628,28 @@ class Office
     public function getArchived()
     {
         return $this->archived;
+    }
+
+    /**
+     * Set profile
+     *
+     * @param \ZectranetBundle\Entity\OfficeProfile $profile
+     * @return Office
+     */
+    public function setProfile(\ZectranetBundle\Entity\OfficeProfile $profile = null)
+    {
+        $this->profile = $profile;
+    
+        return $this;
+    }
+
+    /**
+     * Get profile
+     *
+     * @return \ZectranetBundle\Entity\OfficeProfile 
+     */
+    public function getProfile()
+    {
+        return $this->profile;
     }
 }

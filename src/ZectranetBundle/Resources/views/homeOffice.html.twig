@@ -7,7 +7,7 @@
     <div class="row">
         <ol class="breadcrumb" style="margin: 0 -30px; border-radius:0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
             <li class="active">
-                Home Office
+              Home Office
             </li>
         </ol>
     </div>
@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-md-12">
                 <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">
-                    {{ office.name }}
+                    <a href="{{ path('zectranet_get_office_profile',{'office_id': office.id } ) }}" style="text-decoration: none;"> {{ office.name }}</a>
                 </span>
             </div>
         </div>
@@ -29,7 +29,7 @@
                     <b>Create Project</b>
                 </li>
                 <li class="list-group-item">
-                    <form action="{{ path('zectranet_add_project', { 'office_id': office.id } ) }}" method="post">
+                    <form action="{{ path('zectranet_get_office_profile', { 'office_id': office.id } ) }}" method="post">
                         <p>
                             <label style="width: 100%;">
                                 Project name:

@@ -1,0 +1,70 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}Office Profile{% endblock %}
+
+{% block body %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                   <h5>
+                       <label>Business Name : </label>
+                       <label> Olimpic Development Ltd</label>
+                   </h5>
+                </div>
+                <div class="col-md-4">
+                    <h5>
+                        <label>Website URL : </label>
+                        <a href="http://google.com"> http://google.com </a>
+                    </h5>
+                </div>
+                <div class="col-md-4">
+                    <h5>
+                        <label>Industry : </label>
+                        <label>Google</label>
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                   <h5>
+                       <label>No employees </label>
+                       <label> 25</label>
+                   </h5>
+                </div>
+                <div class="col-md-4">
+                    <h5>
+                        <label>Employee Titles : </label>
+                        <ul>
+                            <li>User1</li>
+                            <li>User2</li>
+                            <li>User3</li>
+                            <li>User4</li>
+                            <li>User5</li>
+                        </ul>
+                    </h5>
+                </div>
+                <div class="col-md-4">
+                    <h5>
+                        <label>Skils Avaible : </label>
+                        <ul>
+                            <li>PHP</li>
+                            <li>JavaScript</li>
+                            <li>CSS3</li>
+                            <li>HTML5</li>
+                            <li>Accembler</li>
+                        </ul>
+                    </h5>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block modals %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

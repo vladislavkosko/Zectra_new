@@ -567,3 +567,7 @@ zectranet_remove_QNA_user:
     defaults: { _controller: ZectranetBundle:QnAForum:removeUser }
 
 ############################### END QNA FORUM REQUESTS ###################################
+
+zectranet_get_office_profile:
+    pattern: /office/{office_id}/profile
+    defaults: { _controller: ZectranetBundle:OfficeProfile:index }
