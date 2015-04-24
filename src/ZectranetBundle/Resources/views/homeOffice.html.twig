@@ -68,7 +68,11 @@
         </div>
     </div>
 
-    <div class="row" ng-init="getContactList();">
+    {% if conversation_id is defined %}
+        <div ng-init="conv_id = {{ conversation_id }}"></div>
+    {% endif %}
+
+    <div class="row" ng-init="getContactList(conv_id);">
         <div class="col-xs-4">
             <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 410px; overflow-y: auto;" cg-busy="contactListPromise">
                 <li class="list-group-item active"  style="background:#ddedf4; color:#606060;">

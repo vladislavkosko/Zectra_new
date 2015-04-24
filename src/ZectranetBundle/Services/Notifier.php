@@ -143,13 +143,13 @@ class Notifier
         if (in_array($type, array("message_office", "message_project", "message_epic_story", "message_task")))
             $method = false;
 
-        $method = true;
+        $method = false;
         if($method == true)
-			$this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
+			$this->sendNotificationEmail($user, $message, $type, $destinationid, $post, $conversation_id);
 		else
         {
 			if(($user_settings->getDisableAllOnEmail() == false) and ($method == true))
-                $this->sendNotificationEmail($user, $message, $type, $destinationid, $post);
+                $this->sendNotificationEmail($user, $message, $type, $destinationid, $post, $conversation_id);
         }
 	}
 
@@ -160,9 +160,20 @@ class Notifier
      * @param $destinationid
      * @param object|null $post
      */
-	private function sendNotificationEmail($user, $message, $type, $destinationid, $post = null)
+    /**
+     * @param User $user
+     * @param $message
+     * @param $type
+     * @param $destinationid
+     * @param object|null $post
+     * @param $conversation_id
+     */
+	private function sendNotificationEmail($user, $message, $type, $destinationid, $post = null, $conversation_id)
 	{
-        if (in_array($type, array("message_home_office", "message_office", "request_office", "private_message_office")))
+        if (in_array($type, array("message_home_office")))
+            $link = $this->router->generate('zectranet_show_office', array('office_id' => $destinationid, 'conversation_id' => $conversation_id), true);
+
+        elseif (in_array($type, array("message_office", "request_office", "private_message_office")))
             $link = $this->router->generate('zectranet_show_office', array('office_id' => $destinationid), true);
 
         elseif (in_array($type, array("message_task", "request_assign_task", "private_message_task")))
@@ -186,6 +197,20 @@ class Notifier
 		} catch (\Swift_RfcComplianceException $ex) {  }
 	}
 
+    public function clearNotificationsHomeOffice($contact_id)
+    {
+        $qb = $this->em->createQueryBuilder();
+
+        $qb->delete('ZectranetBundle:Notification', 'n')
+            ->where("n.userid = :userid")
+            ->andWhere("n.conversation_id = :contact_id")
+            ->andWhere("n.type = 'message_home_office'")
+            ->setParameter("userid", $this->user->getId())
+            ->setParameter("contact_id", $contact_id);
+
+        return $qb->getQuery()->getResult();
+    }
+
     /**
      * @param $office_id
      * @return mixed
@@ -196,7 +221,7 @@ class Notifier
 		$qb->delete('ZectranetBundle:Notification', 'n')
 			->where("n.userid = :userid")
 			->andWhere("n.destinationid = :destinationid")
-			->andWhere("n.type = 'message_office' OR n.type = 'private_message_office' OR n.type = 'message_home_office'")
+			->andWhere("n.type = 'message_office' OR n.type = 'private_message_office'")
 			->setParameter("userid", $this->user->getId())
 			->setParameter("destinationid", $office_id);
 
@@ -212,7 +237,7 @@ class Notifier
         $qb = $this->em->createQueryBuilder();
         $qb->delete('ZectranetBundle:Notification', 'n')
             ->where("n.destinationid = :destinationid")
-            ->andWhere("n.type = 'message_office' OR n.type = 'private_message_office' OR n.type = 'message_home_office'")
+            ->andWhere("n.type = 'message_office' OR n.type = 'private_message_office'")
             ->setParameter("destinationid", $office_id);
 
         return $qb->getQuery()->getResult();

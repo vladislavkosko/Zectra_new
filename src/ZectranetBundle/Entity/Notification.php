@@ -253,6 +253,7 @@ class Notification
             'user' => $this->getUser()->getInArray(),
             'resourceid' => $this->getResourceid(),
             'destinationid' => $this->getDestinationid(),
+            'conversationid' => $this->getConversationId(),
             'type' => $this->getType(),
             'message' => $this->getMessage(),
             'activated' => $this->getActivated()

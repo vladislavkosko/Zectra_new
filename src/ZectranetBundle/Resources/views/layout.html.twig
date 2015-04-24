@@ -584,8 +584,9 @@
 		{
 			asset: "{{ asset('') }}",
 			notificationsGet: "{{ url('zectranet_notifications_get') }}",
-            officeShow: "{{ url('zectranet_show_office', {office_id: 0}) }}",
-			projectShow: "{{ url('zectranet_show_project', {project_id: 0}) }}",
+            homeOfficeShow: "{{ url('zectranet_show_office', {'office_id': 0, 'conversation_id': 'conv_id'}) }}",
+            officeShow: "{{ url('zectranet_show_office', {'office_id': 0}) }}",
+			projectShow: "{{ url('zectranet_show_project', {'project_id': 0}) }}",
             acceptRequestUserOffice : "{{ url('zectranet_accept_request_user_office', { 'office_id': 0 }) }}",
             declineRequestUserOffice : "{{ url('zectranet_decline_request_user_office', { 'office_id': 0 }) }}",
             taskShow: "{{ url('zectranet_task_show', {task_id: 0}) }}",

@@ -6,13 +6,14 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http',
         $scope.urlSendConversationMessage = JSON_URLS.urlSendConversationMessage;
         $scope.contacts = [];
         $scope.conversation = null;
+        $scope.conv_id = null;
         $scope.asset = JSON_URLS.asset;
         $scope.message = '';
 
         $scope.contactListPromise = null;
         $scope.conversationChatPromise = null;
 
-        $scope.getContactList = function () {
+        $scope.getContactList = function (conv_id) {
             $scope.contactListPromise = $http
                 .get($scope.urlGetContactList)
                 .success(function (response) {
@@ -21,10 +22,28 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http',
                         $scope.contacts[i].checked = false;
                     }
                     if ($scope.contacts.length > 0) {
-                        $scope.getConversation($scope.contacts[0].id);
+                        if ($scope.conv_id != null)
+                        {
+                            $scope.returnConv_id($scope.contacts);
+                            $scope.getConversation($scope.contacts[$scope.conv_id].id);
+                        }
+                        else
+                            $scope.getConversation($scope.contacts[0].id);
                     }
                 }
             );
+        };
+
+        $scope.returnConv_id = function(contacts)
+        {
+            for (var i = 0; i < contacts.length; i++)
+            {
+                if (contacts[i].id == $scope.conv_id)
+                {
+                    $scope.conv_id = i;
+                    break;
+                }
+            }
         };
         
         $scope.getConversation = function (id) {

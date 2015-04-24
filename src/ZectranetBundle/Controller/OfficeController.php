@@ -22,12 +22,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class OfficeController extends Controller
 {
     /**
-     * @Route("/office/{office_id}")
+     * @Route("/office/{office_id}/{conversation_id}")
      * @Security("has_role('ROLE_USER')")
      * @param $office_id
+     * @param null $conversation_id
      * @return RedirectResponse|Response
      */
-    public function indexAction($office_id) {
+    public function indexAction($office_id, $conversation_id = null) {
         $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
         /** @var User $user */
         $user = $this->getUser();
@@ -35,12 +36,13 @@ class OfficeController extends Controller
             return $this->redirectToRoute('zectranet_user_home');
         }
 
-        //$this->get('zectranet.notifier')->clearNotificationsByOfficeId($office_id);
-
         if ($office->getId() == $user->getHomeOfficeID())
         {
-            return $this->render('@Zectranet/homeOffice.html.twig', array('office' => $office));
-        } else {
+            return $this->render('@Zectranet/homeOffice.html.twig', array('office' => $office, 'conversation_id' => $conversation_id));
+        }
+        else
+        {
+            $this->get('zectranet.notifier')->clearNotificationsByOfficeId($office_id);
             return $this->render('@Zectranet/office.html.twig', array('office' => $office));
         }
     }

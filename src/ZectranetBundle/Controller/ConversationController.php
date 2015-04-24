@@ -27,6 +27,9 @@ class ConversationController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $conversation = Conversation::getConversation($em, $user->getId(), $contact_id);
+
+        $this->get('zectranet.notifier')->clearNotificationsHomeOffice($contact_id);
+
         return new JsonResponse(($conversation) ? $conversation->getInArray() : null);
     }
 
@@ -66,7 +69,7 @@ class ConversationController extends Controller {
             $resource = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($conversation->getUser2ID());
         }
 
-        $this->get('zectranet.notifier')->createNotification("message_home_office", $user, $resource, $office, null, $data, null, null, null, $conversation_id);
+        $this->get('zectranet.notifier')->createNotification("message_home_office", $user, $resource, $office, null, $data, null, null, null, $resource->getId());
 
         return new JsonResponse(($message) ? $message->getInArray() : null);
     }
