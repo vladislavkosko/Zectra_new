@@ -1,0 +1,78 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}EditProfile {{ office.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="row page-header">
+        <div class="col-md-12" >
+            <div class="col-md-4">
+                       <label >
+                           Business Name :
+                       </label>
+                    <input class="form-control" type="text" placeholder="Olimpic Development Ltd">
+            </div>
+            <div class="col-md-4">
+                    <label >
+                        Website URL :
+                    </label>
+                    <input class="form-control" type="text" placeholder="http://google.com">
+            </div>
+            <div class="col-md-4">
+                    <label >
+                        Industry :
+                    </label>
+                    <input class="form-control" type="text" placeholder="Google">
+            </div>
+        </div>
+    </div>
+
+    <div class="row page-header">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <label >
+                    № employees :
+                </label>
+                <input class="form-control" type="text" placeholder="25">
+
+            </div>
+            <div class="col-md-4">
+                    <a href="#" class="list-group-item active">Employee Titles : </a>
+                    <ul class="list-group">
+                        <li class="list-group-item" >User1</li>
+                        <li class="list-group-item" >User2</li>
+                        <li class="list-group-item" >User3</li>
+                        <li class="list-group-item" >User4</li>
+                        <li class="list-group-item" >User5</li>
+                    </ul>
+
+            </div>
+            <div class="col-md-4">
+                    <a href="#" class="list-group-item active">Skils Avaible : </a>
+                    <ul class="list-group">
+                        <li class="list-group-item">PHP</li>
+                        <li class="list-group-item">JavaScript</li>
+                        <li class="list-group-item">CSS3</li>
+                        <li class="list-group-item">HTML5</li>
+                        <li class="list-group-item">Accembler</li>
+                    </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-1">
+                <a class="btn btn-default" href="{{ path('zectranet_get_edit_office_profile',{'office_id': office.id } ) }}"> Submit</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block modals %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

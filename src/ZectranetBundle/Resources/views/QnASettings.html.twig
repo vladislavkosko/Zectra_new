@@ -91,7 +91,9 @@
                                         <span class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
                                     </td>
                                     <td>
-                                        #
+                                       <span class="label" style="background-color: #337ab7;cursor: pointer;" ng-click="reSendRequest(request)">
+                                            Re-Send
+                                        </span>
                                     </td>
                                     <td>
                                         <i class="fa fa-close" style="color: red;cursor: pointer;" ng-click="deleteProjectRequest(request.id);"></i>
@@ -226,5 +228,6 @@
     JSON_URLS.urlGetQNAProjectSettingInfo = "{{ path('zectranet_get_QNA_project_settings_info', { 'project_id': forum.id}) }}";
     JSON_URLS.urlSendQNAProjectRequest = "{{ path('zectranet_send_QNA_project_request', { 'project_id': forum.id}) }}";
     JSON_URLS.urlDeleteQNAProjectRequest = "{{ path('zectranet_delete_QNA_project_request', { 'project_id': forum.id , 'request_id': 'requestid'}) }}";
+    JSON_URLS.urlReSendProjectRequest = "{{ path('zectranet_re_send_QNA_request', { 'project_id': forum.id}) }}";
 </script>
 {% endblock %}

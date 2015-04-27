@@ -82,7 +82,9 @@
                                        <span class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
                                     </td>
                                     <td>
-                                        #
+                                        <span class="label" style="background-color: #337ab7;cursor: pointer;" ng-click="reSendRequest(request)">
+                                            Re-Send
+                                        </span>
                                     </td>
                                     <td>
                                         <i class="fa fa-close" style="color: red;cursor: pointer;" ng-click="deleteProjectRequest(request.id);"></i>
@@ -318,6 +320,7 @@
         JSON_URLS.deleteHeaderForumHeaders = "{{ path('zectranet_delete_header_action', { 'header_id': 0 }) }}";
         JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_hf_settings_info', { 'project_id': forum.id}) }}";
         JSON_URLS.urlSendProjectRequest = "{{ path('zectranet_send_hf_request', { 'project_id': forum.id}) }}";
+        JSON_URLS.urlReSendProjectRequest = "{{ path('zectranet_re_send_hf_request', { 'project_id': forum.id}) }}";
         JSON_URLS.urlDeleteProjectRequest = "{{ path('zectranet_delete_hf_request', { 'project_id': forum.id , 'request_id': 'requestid'}) }}";
     </script>
 {% endblock %}

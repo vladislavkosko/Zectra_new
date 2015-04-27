@@ -11,6 +11,7 @@
 
 	{% block styles %}
 		<link href="{{ asset('bundles/zectranet/css/bootstrap.css') }}" rel="stylesheet" type="text/css">
+
 		<link href="{{ asset('bundles/zectranet/css/font-awesome.css') }}" rel="stylesheet" type="text/css">
 		<link href="{{ asset('bundles/zectranet/css/mainv_001.css') }}" rel="stylesheet" type="text/css">
 		<link href="{{ asset('bundles/zectranet/css/footerst.css') }}" rel="stylesheet" type="text/css">
@@ -138,7 +139,7 @@
                     <li class="dropdown" ng-cloak>
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <div class="fa fa-fw"><b>C</b></div>
-                            <span ng-if="requests.contactRequests.length > 0 || contactNotifications.length > 0"
+                            <span ng-if="requests.contactRequests.length + contactNotifications.length > 0"
                                   style="position: absolute; top: 0; right: 14px; font-size: 15px; text-shadow: 0 0 15px #00c6ff;"
                                   ng-class="{ 'visible-element': FirstInit }" class="hidden-element">
                                 [[ requests.contactRequests.length + contactNotifications.length ]]

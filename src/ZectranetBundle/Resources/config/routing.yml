@@ -532,6 +532,10 @@ zectranet_send_hf_request:
     pattern: /hf/send_request/{project_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:sendRequest }
 
+zectranet_re_send_hf_request:
+    pattern: /hf/re/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:reSendRequest }
+
 zectranet_approve_hf_membership_request:
     pattern: /hf/request/approve/{request_id}
     defaults: { _controller: ZectranetBundle:User:approveHFForumMembershipRequest }
@@ -550,6 +554,10 @@ zectranet_send_QNA_project_request:
     pattern: /project/QnA/send_request/{project_id}
     defaults: { _controller: ZectranetBundle:QnAForum:sendRequest }
 
+zectranet_re_send_QNA_request:
+    pattern: /QNA/re/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:QnAForum:reSendRequest }
+
 zectranet_delete_QNA_project_request:
     pattern: /request/QnA/{project_id}/delete/{request_id}
     defaults: { _controller: ZectranetBundle:QnAForum:deleteRequest }
@@ -563,3 +571,7 @@ zectranet_approve_QNA_membership_request:
 zectranet_get_office_profile:
     pattern: /office/{office_id}/profile
     defaults: { _controller: ZectranetBundle:OfficeProfile:index }
+
+zectranet_get_edit_office_profile:
+    pattern: /office/{office_id}/profile/edit
+    defaults: { _controller: ZectranetBundle:OfficeProfile:indexEdit }

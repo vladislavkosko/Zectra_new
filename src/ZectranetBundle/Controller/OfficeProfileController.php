@@ -13,8 +13,16 @@ use ZectranetBundle\Entity\Office;
 
 class OfficeProfileController extends Controller
 {
-        public function indexAction(Request $request)
+
+        public function indexAction(Request $request, $office_id)
         {
-            return $this->render('@Zectranet/officeProfile.html.twig');
+            $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+            return $this->render('@Zectranet/officeProfile.html.twig', array('office'=>$office));
+        }
+
+        public function indexEditAction(Request $request, $office_id)
+        {
+            $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+            return $this->render('@Zectranet/officeEditProfile.html.twig', array('office'=>$office));
         }
 }

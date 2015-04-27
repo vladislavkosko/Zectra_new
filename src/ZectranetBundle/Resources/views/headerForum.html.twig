@@ -38,40 +38,149 @@
             <h5>POSTS</h5>
         </div>
     </div>
-    {% for header in forum.headers %}
-        <div class="col-md-12 panel panel-default">
-            <div class="row">
-                <div class="col-md-12" style="color: {{ header.headerTextColor }}; background-color: {{ header.headerBgColor }};">
-                    <h4 align="center">{{ header.title }}</h4>
+
+        <div ng-controller="HeaderForumController" ng-init="getHeaders()">
+            <div class="col-md-12 panel panel-default" style="margin-bottom: 0;"  ng-repeat="oneheader in headers">
+                <div class="row">
+                    <div class="col-md-12" style="color: [[ oneheader.headerTextColor ]]; background-color: [[ oneheader.headerBgColor ]];">
+                        <h4 align="center">[[oneheader.title]]</h4>
+                    </div>
                 </div>
-            </div>
-            {% for subheader in header.subheaders %}
-                <div class="row" style="border-bottom: darkgray solid 1px;">
+
+                <div class="row" style="padding: 0;margin:0px 15px 0px 15px;border-left: darkgray solid 1px;border-right: darkgray solid 1px;border-bottom: darkgray solid 1px;" ng-repeat="onesubheader in oneheader.subHeaders">
                     <div class="panel-body">
                         <div class="col-xs-1">
                             <img class="img-responsive" src="{{ asset('bundles/zectranet/img/forumlogo.jpg') }}" alt="subheader_image"/>
                         </div>
                         <div class="col-xs-9">
                             <h4>
-                                <a class="text-info" href="{{ path('zectranet_show_header_forum_subheader', {'project_id': forum.id, 'subheader_id': subheader.id}) }}">
-                                    {{ subheader.title }}
+                                <a class="text-info" href="#">
+                                    [[ onesubheader.title ]]
                                 </a>
                             </h4>
-                            <p><i class="text-muted">{{ subheader.description }}</i></p>
+                            <p><i class="text-muted">[[ onesubheader.description ]]</i></p>
                         </div>
                         <div class="col-xs-1">
-                            {{ subheader.threads | length }}
+                            [[ onesubheader.threads.length ]]
                         </div>
-                        {% set postsCount = 0 %}
-                        {% for thread in subheader.threads %}
-                            {% set postsCount = postsCount + thread.posts | length %}
-                        {% endfor %}
-                        <div class="col-xs-1">
-                            {{ postsCount }}
+
+                        <div class="col-xs-1" ng-if="onesubheader.threads.posts == undefined">
+                            0
+                        </div>
+
+                        <div class="col-xs-1" ng-if="onesubheader.threads.posts.length > 0">
+                        [[ onesubheader.threads.posts.length ]]
                         </div>
                     </div>
                 </div>
-            {% endfor %}
+                <div style="margin: 5px 0 15px 15px;" ng-if="!(oneheader.addnewsubheader)">
+                    <a href="#"  ng-click="oneheader.addnewsubheader = true"> <i class="fa fa-plus"></i>Add new SubHeader </a>
+                </div>
+                <div ng-if="oneheader.addnewsubheader" style="margin: 5px 0 15px 15px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">Subheader title:</span>
+                                    <input type="text" class="form-control" ng-model="quicksubheader.title"  aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon2">Subheader Description:</span>
+                                    <input type="text" class="form-control" ng-model="quicksubheader.description"  aria-describedby="basic-addon2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon3">Admin subheader:</span>
+                                    <input type="checkbox" class="form-control" ng-model="quicksubheader.admin" aria-describedby="basic-addon3">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-1">
+                                <span class="btn btn-success" style="background-color: #337ab7;cursor: pointer;" ng-click="addNewSubHeaderQuick(oneheader,quicksubheader);">Add</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div style="margin: 5px 0 15px 15px;" ng-if="addnewheader == false">
+                <a href="#" ng-click="headerTrue();"> <i class="fa fa-plus"></i>Add new Header </a>
+            </div>
+            <div ng-if="addnewheader == true" style="margin: 5px 0 15px 15px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon21">Select header background color:</span>
+                                <input type="color" class="form-control" ng-model="quickheader.bgColor"  aria-describedby="basic-addon21">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon22">Select header text color:</span>
+                                <input type="color" class="form-control" ng-model="quickheader.textColor"  aria-describedby="basic-addon22">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon23">Header title:</span>
+                                <input type="text" class="form-control" ng-model="quickheader.title" aria-describedby="basic-addon23">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-1">
+                            <span class="btn btn-success" style="background-color: #337ab7;cursor: pointer;" ng-click="addNewHeaderQuick(quickheader);">Add</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
-    {% endfor %}
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+<script src="{{ asset('bundles/zectranet/js/custom/headerForumController.js') }}"></script>
+<script>
+    JSON_URLS.getHeaderForumHeaders = "{{ path('zectranet_get_header_forum_headers', { 'project_id': forum.id } ) }}";
+    JSON_URLS.addSubHeaderForumHeaders = "{{ path('zectranet_add_subheader_action', { 'header_id': 0 }) }}";
+    JSON_URLS.addHeaderForumHeaders = "{{ path('zectranet_add_header_action', { 'project_id': forum.id }) }}";
+</script>
 {% endblock %}

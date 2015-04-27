@@ -7,10 +7,18 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         $scope.urlGetProjectSettingInfo = JSON_URLS.urlGetProjectSettingInfo;
         $scope.urlSendProjectRequest = JSON_URLS.urlSendProjectRequest;
         $scope.urlDeleteProjectRequest = JSON_URLS.urlDeleteProjectRequest;
+        $scope.urlReSendProjectRequest =  JSON_URLS.urlReSendProjectRequest;
 
         $scope.headers = null;
+        $scope.addnewheader = false;
 
         $scope.header = {
+            'title': null,
+            'bgColor': '#BBBBBB',
+            'textColor': '#000000'
+        };
+
+        $scope.quickheader = {
             'title': null,
             'bgColor': '#BBBBBB',
             'textColor': '#000000'
@@ -19,6 +27,12 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         $scope.subheader = {
             'title': null,
             'header_id': null,
+            'description': null,
+            'admin': false
+        };
+
+        $scope.quicksubheader = {
+            'title': null,
             'description': null,
             'admin': false
         };
@@ -71,6 +85,23 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             );
         };
 
+        $scope.addNewHeaderQuick = function (header) {
+            $scope.addnewheader = false;
+            if (!header.title || !header.bgColor || !header.textColor) return;
+            $http.post($scope.urlAddHeader, { 'header': header })
+                .success(function (response) {
+                    if (response) {
+                        $scope.quickheader = {
+                            'title': null,
+                            'bgColor': '#BBBBBB',
+                            'textColor': '#000000'
+                        };
+                        $scope.getHeaders();
+
+                    }
+                });
+        };
+
         $scope.addNewSubHeader = function (subHeader) {
             var addSubHeaderUrl = $scope.urlAddSubHeader.replace('0', subHeader.header_id);
             $http.post(addSubHeaderUrl, { 'subheader': subHeader })
@@ -87,6 +118,28 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                 }
             );
         };
+
+        $scope.addNewSubHeaderQuick = function (oneheader,quicksubheader) {
+            oneheader.addnewsubheader = false;
+            var addSubHeaderUrl = $scope.urlAddSubHeader.replace('0', oneheader.id);
+                $http.post(addSubHeaderUrl, { 'subheader': quicksubheader })
+                    .success(function (response) {
+                        if (response) {
+                            $scope.quicksubheader = {
+                                'title': null,
+                                'description': null,
+                                'admin': false
+                            };
+                            $scope.getHeaders();
+
+                        }
+                    });
+        };
+
+        $scope.headerTrue = function () {
+            $scope.addnewheader = true;
+        };
+
 
         $scope.deleteHeader = function (header_id) {
             if (header_id) {
@@ -215,6 +268,23 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                     }
                     $scope.getProjectSettingInfo();
                 })
+        };
+
+        $scope.reSendRequest = function (request) {
+            $http.post($scope.urlReSendProjectRequest,{
+                'id': request.id,
+                'user_id': request.user.id,
+                'message': request.message,
+                'request_status': request.status.id
+            })
+                .success(function (response) {
+                    if(response == 1)
+                    {
+                        $scope.getProjectSettingInfo();
+                    }
+
+                })
+
         }
 
     }

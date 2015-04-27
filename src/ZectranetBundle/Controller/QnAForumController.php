@@ -238,6 +238,30 @@ class QnAForumController extends Controller {
     }
 
     /**
+     *@param Request $request
+     * @param int $project_id
+     * @return JsonResponse
+     */
+    public function  reSendRequestAction(Request $request, $project_id)
+    {
+        $data = json_decode($request->getContent(), true);
+        $request_id = $data['id'];
+        $user_id = $data['user_id'];
+        $contact_id = $this->getUser()->getId();
+        $message = $data['message'];
+        $request_status = $data['request_status'];
+        $hf_forum_id = $project_id;
+        $em = $this->getDoctrine()->getManager();
+        $request = QnAForum::removeRequest($em, $request_id);
+        if($request_status == 2)
+        {
+            QnAForum::removeUserFromProject($em, $user_id, $project_id);
+        }
+        QnAForum::sendRequestToUser($em, $user_id, $project_id, $message, $this->getUser()->getId());
+        return new JsonResponse( 1 );
+    }
+
+    /**
      * @param int $project_id
      * @param int $request_id
      * @return JsonResponse
