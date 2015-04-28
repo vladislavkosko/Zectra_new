@@ -165,6 +165,9 @@
                                         </label>
                                         <textarea class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="HO_contact_message"></textarea>
                                         <br/>
+                                        <div ng-if="QNASettingsErrors.HO_Contact_message_Error == true">
+                                            <span  class="label label-danger"> Please fill out this field </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -200,6 +203,9 @@
                                         </label>
                                         <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="All_contact_message"></textarea>
                                         <br/>
+                                        <div ng-if="QNASettingsErrors.All_Contact_message_Error == true">
+                                            <span  class="label label-danger"> Please fill out this field </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -17,6 +17,12 @@ Zectranet.controller('QNAController', ['$scope', '$http',
         $scope.QnALogsVisible = false;
 
 
+        $scope.QNASettingsErrors = {
+
+            'HO_Contact_message_Error' : false,
+            'All_Contact_message_Error' : false
+        };
+
         function somethingWentWrong() {
             $scope.modal.class = 'label-danger';
             $scope.modal.message = 'Something went wrong.';
@@ -55,33 +61,42 @@ Zectranet.controller('QNAController', ['$scope', '$http',
 
         $scope.SendRequest = function (type,message,array)
         {
-            var user_id = 0;
-
-            for(var i=0;i<array.length;i++)
+            if(type == 1 && message == '')
             {
-                if(array[i].checked)
-                {
-                    user_id = array[i].id;
-                }
+                $scope.QNASettingsErrors.HO_Contact_message_Error =true;
+                $scope.QNASettingsErrors.All_Contact_message_Error =false;
             }
+            else if(type == 2 && message == '')
+            {
+                $scope.QNASettingsErrors.HO_Contact_message_Error =false;
+                $scope.QNASettingsErrors.All_Contact_message_Error =true;
+            }
+            else {
+                var user_id = 0;
 
-            $http.post($scope.urlSendQNAProjectRequest,{'message':message,'user_id': user_id})
-                .success(function (response) {
-                    if(response == 1)
-                    {
-                        if(type == 1)
-                        {
-                            $scope.HO_contact_message ='';
-                            $('#send_request_by_HO_contacts').modal('hide');
-                        }
-                        else if(type == 2)
-                        {
-                            $scope.All_contact_message ='';
-                            $('#send_request_by_All_contacts').modal('hide');
-                        }
-                        $scope.getProjectSettingInfo();
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i].checked) {
+                        user_id = array[i].id;
                     }
-                })
+                }
+
+                $http.post($scope.urlSendQNAProjectRequest, {'message': message, 'user_id': user_id})
+                    .success(function (response) {
+                        if (response == 1) {
+                            if (type == 1) {
+                                $scope.HO_contact_message = '';
+                                $scope.QNASettingsErrors.HO_Contact_message_Error =false;
+                                $('#send_request_by_HO_contacts').modal('hide');
+                            }
+                            else if (type == 2) {
+                                $scope.All_contact_message = '';
+                                $scope.QNASettingsErrors.All_Contact_message_Error =false;
+                                $('#send_request_by_All_contacts').modal('hide');
+                            }
+                            $scope.getProjectSettingInfo();
+                        }
+                    })
+            }
         };
 
         $scope.testClickableButton = function (type,array) {

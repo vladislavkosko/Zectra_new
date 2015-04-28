@@ -54,7 +54,7 @@
                         </div>
                         <div class="col-xs-9">
                             <h4>
-                                <a class="text-info" href="#">
+                                <a class="text-info" href="[[onesubheader.urlShowHeaderForumSubheader]]">
                                     [[ onesubheader.title ]]
                                 </a>
                             </h4>
@@ -197,6 +197,7 @@
 <script>
     JSON_URLS.getHeaderForumHeaders = "{{ path('zectranet_get_header_forum_headers', { 'project_id': forum.id } ) }}";
     JSON_URLS.addSubHeaderForumHeaders = "{{ path('zectranet_add_subheader_action', { 'header_id': 0 }) }}";
+    JSON_URLS.urlShowHeaderForumSubheader = "{{ path('zectranet_show_header_forum_subheader', {'project_id': forum.id ,'subheader_id': 0 } ) }}";
     JSON_URLS.addHeaderForumHeaders = "{{ path('zectranet_add_header_action', { 'project_id': forum.id }) }}";
 </script>
 {% endblock %}
