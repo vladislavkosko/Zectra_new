@@ -19,7 +19,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         };
 
         $scope.quickheader = {
-            'title': null,
+            'title': '',
             'bgColor': '#BBBBBB',
             'textColor': '#000000'
         };
@@ -32,9 +32,15 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         };
 
         $scope.quicksubheader = {
-            'title': null,
-            'description': null,
+            'title': '',
+            'description': '',
             'admin': false
+        };
+
+        $scope.headerForumErrors = {
+            'subHeaderTitleError' : false,
+            'subHeaderDescriptionError' : false,
+            'headerTitleError' : false
         };
 
         $scope.modal = {
@@ -86,20 +92,28 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         };
 
         $scope.addNewHeaderQuick = function (header) {
-            $scope.addnewheader = false;
-            if (!header.title || !header.bgColor || !header.textColor) return;
-            $http.post($scope.urlAddHeader, { 'header': header })
-                .success(function (response) {
-                    if (response) {
-                        $scope.quickheader = {
-                            'title': null,
-                            'bgColor': '#BBBBBB',
-                            'textColor': '#000000'
-                        };
-                        $scope.getHeaders();
+            if($scope.quickheader.title == '')
+            {
+                $scope.headerForumErrors.headerTitleError = true;
+            }
+            else
+            {
+                $scope.headerForumErrors.headerTitleError = false;
+                $scope.addnewheader = false;
+                if (!header.title || !header.bgColor || !header.textColor) return;
+                $http.post($scope.urlAddHeader, { 'header': header })
+                    .success(function (response) {
+                        if (response) {
+                            $scope.quickheader = {
+                                'title': null,
+                                'bgColor': '#BBBBBB',
+                                'textColor': '#000000'
+                            };
+                            $scope.getHeaders();
 
-                    }
-                });
+                        }
+                    });
+            }
         };
 
         $scope.addNewSubHeader = function (subHeader) {
@@ -120,9 +134,28 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         };
 
         $scope.addNewSubHeaderQuick = function (oneheader,quicksubheader) {
-            oneheader.addnewsubheader = false;
-            var addSubHeaderUrl = $scope.urlAddSubHeader.replace('0', oneheader.id);
-                $http.post(addSubHeaderUrl, { 'subheader': quicksubheader })
+            if($scope.quicksubheader.title == '' && $scope.quicksubheader.description == '')
+            {
+                $scope.headerForumErrors.subHeaderTitleError = true;
+                $scope.headerForumErrors.subHeaderDescriptionError = true;
+            }
+            else if($scope.quicksubheader.title == '')
+            {
+               $scope.headerForumErrors.subHeaderTitleError = true;
+                $scope.headerForumErrors.subHeaderDescriptionError = false;
+            }
+            else if($scope.quicksubheader.description == '')
+            {
+                $scope.headerForumErrors.subHeaderDescriptionError = true;
+                $scope.headerForumErrors.subHeaderTitleError = false;
+            }
+            else
+            {
+                $scope.headerForumErrors.subHeaderTitleError = false;
+                $scope.headerForumErrors.subHeaderDescriptionError = false;
+                oneheader.addnewsubheader = false;
+                var addSubHeaderUrl = $scope.urlAddSubHeader.replace('0', oneheader.id);
+                $http.post(addSubHeaderUrl, {'subheader': quicksubheader})
                     .success(function (response) {
                         if (response) {
                             $scope.quicksubheader = {
@@ -134,6 +167,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
 
                         }
                     });
+            }
         };
 
         $scope.headerTrue = function () {

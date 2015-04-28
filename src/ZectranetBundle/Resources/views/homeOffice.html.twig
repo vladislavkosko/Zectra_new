@@ -36,9 +36,7 @@
                                 <input class="form-control" name="name" ng-model="projectName"  type="text"/>
                             </label>
                         </p>
-                        <div ng-if="homeOfficeInputs.projectNameError == true">
-                            <span  class="label label-danger"> Please fill out this field </span>
-                        </div>
+
                         <p>
                             <label style="width: 100%;">
                                 Project template:
@@ -51,7 +49,7 @@
                             </label>
                         </p>
                         <p align="right" ng-if="projectName != ''">
-                            <button class="btn btn-default" ng-click="testInputs(projectName)">Create</button>
+                            <button class="btn btn-default" >Create</button>
                         </p>
                     </form>
                 </li>

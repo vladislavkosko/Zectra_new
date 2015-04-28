@@ -84,6 +84,9 @@
                                     <span class="input-group-addon" id="basic-addon1">Subheader title:</span>
                                     <input type="text" class="form-control" ng-model="quicksubheader.title"  aria-describedby="basic-addon1">
                                 </div>
+                                <div ng-if="headerForumErrors.subHeaderTitleError == true">
+                                    <span  class="label label-danger"> Please fill out this field </span>
+                                </div>
                             </div>
 
                         </div>
@@ -95,6 +98,9 @@
                                 <div class="input-group">
                                     <span class="input-group-addon" id="basic-addon2">Subheader Description:</span>
                                     <input type="text" class="form-control" ng-model="quicksubheader.description"  aria-describedby="basic-addon2">
+                                </div>
+                                <div ng-if="headerForumErrors.subHeaderDescriptionError == true">
+                                    <span  class="label label-danger"> Please fill out this field </span>
                                 </div>
                             </div>
                         </div>
@@ -156,6 +162,9 @@
                             <div class="input-group">
                                 <span class="input-group-addon" id="basic-addon23">Header title:</span>
                                 <input type="text" class="form-control" ng-model="quickheader.title" aria-describedby="basic-addon23">
+                            </div>
+                            <div ng-if="headerForumErrors.headerTitleError == true">
+                                <span  class="label label-danger"> Please fill out this field </span>
                             </div>
                         </div>
 
