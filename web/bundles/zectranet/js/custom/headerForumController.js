@@ -174,6 +174,10 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             $scope.addnewheader = true;
         };
 
+        $scope.headerFalse = function () {
+            $scope.addnewheader = false;
+        };
+
 
         $scope.deleteHeader = function (header_id) {
             if (header_id) {

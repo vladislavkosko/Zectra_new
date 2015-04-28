@@ -120,8 +120,11 @@
                     <br/>
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="col-md-1">
-                                <span class="btn btn-success" style="background-color: #337ab7;cursor: pointer;" ng-click="addNewSubHeaderQuick(oneheader,quicksubheader);">Add</span>
+                            <div class="col-md-2">
+                                <div class="btn-group">
+                                    <span class="btn btn-success" style="background-color: #337ab7;cursor: pointer;" ng-click="addNewSubHeaderQuick(oneheader,quicksubheader);">Add</span>
+                                    <span class="btn btn-danger" style="cursor: pointer;" ng-click="oneheader.addnewsubheader = !(oneheader.addnewsubheader) ;">Close</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,8 +176,12 @@
                 <br/>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="col-md-1">
-                            <span class="btn btn-success" style="background-color: #337ab7;cursor: pointer;" ng-click="addNewHeaderQuick(quickheader);">Add</span>
+                        <div class="col-md-2">
+                            <div class="btn-group">
+                                <span class="btn btn-success" style="cursor: pointer;" ng-click="addNewHeaderQuick(quickheader);">Add</span>
+                                <span class="btn btn-danger" style="cursor: pointer;" ng-click="headerFalse();">Close</span>
+                            </div>
+
                         </div>
                     </div>
                 </div>
