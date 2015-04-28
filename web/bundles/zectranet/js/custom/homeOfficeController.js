@@ -4,14 +4,29 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http',
         $scope.urlGetContactList = JSON_URLS.getContactList;
         $scope.urlGetConversation = JSON_URLS.getConversation;
         $scope.urlSendConversationMessage = JSON_URLS.urlSendConversationMessage;
+
         $scope.contacts = [];
         $scope.conversation = null;
         $scope.conv_id = null;
         $scope.asset = JSON_URLS.asset;
         $scope.message = '';
+        $scope.projectName = '';
 
         $scope.contactListPromise = null;
         $scope.conversationChatPromise = null;
+
+        $scope.homeOfficeInputs =
+        {
+            'projectNameError': false
+        };
+
+
+        $scope.testInputs = function (projectName) {
+            if(projectName == '')
+            {
+                $scope.homeOfficeInputs.projectNameError = true;
+            }
+        };
 
         $scope.getContactList = function (conv_id) {
             $scope.contactListPromise = $http
@@ -33,6 +48,7 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http',
                 }
             );
         };
+
 
         $scope.returnConv_id = function(contacts)
         {
@@ -63,17 +79,22 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http',
         };
 
         $scope.SendConversationMessage = function (message, conversation_id) {
-            $scope.message = '';
-            $scope.conversationChatPromise = $http
-                .post($scope.urlSendConversationMessage.replace('0',conversation_id), {'message': message})
-                .success(function (response) {
-                    $scope.conversation.messages.push(response);
-                    setTimeout(function () {
-                        scrollChat();
-                        return false;
-                    }, 300);
-                }
-            );
+            if(message != '')
+            {
+                $scope.homeOfficeInputs.messageError = false;
+                $scope.message = '';
+                $scope.conversationChatPromise = $http
+                    .post($scope.urlSendConversationMessage.replace('0',conversation_id), {'message': message})
+                    .success(function (response) {
+                        $scope.conversation.messages.push(response);
+                        setTimeout(function () {
+                            scrollChat();
+                            return false;
+                        }, 300);
+                    }
+                );
+            }
+
         };
 
         function scrollChat() {
