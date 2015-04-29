@@ -244,6 +244,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
             $scope.notifications = tempNotifications;
             $scope.contactNotifications = tempContactNotifications;
+
         }
 
         $scope.prepareCountOfNotifications = function(contacts, contactNotifications) {
@@ -253,7 +254,13 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                 for (var j = 0; j < contactNotifications.length; j++)
                 {
                     if (contacts[i].id == contactNotifications[j].resourceid)
+                    {
                         contacts[i].notificationsLength += 1;
+                        if(contacts[i].id == $rootScope.ConversationId )
+                        {
+                            $rootScope.dinamicChatRefresh($rootScope.ConversationId);
+                        }
+                    }
                 }
             }
         };
