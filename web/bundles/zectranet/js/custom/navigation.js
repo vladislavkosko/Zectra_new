@@ -14,14 +14,19 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.formStatus = 'formNone';
         $scope.focus = false;
+        $scope.iconEdit = false;
 
         $scope.setFormEdit = function() {
             $scope.formStatus = 'formEdit';
+            document.getElementById("inputName").focus();
         };
 
         $scope.setFormNone = function() {
             if ($scope.focus == false)
+            {
                 $scope.formStatus = 'formNone';
+                $scope.iconEdit = false;
+            }
         };
 
         $scope.setFocus = function() {
@@ -31,6 +36,15 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         $scope.setBlure = function() {
             $scope.formStatus = 'formNone';
             $scope.focus = false;
+            $scope.iconEdit = false;
+        };
+
+        $scope.setIconEdit = function () {
+            $scope.iconEdit = true;
+        };
+
+        $scope.setIconNone = function () {
+            $scope.iconEdit = false;
         };
 
         $scope.requests = {};
@@ -247,7 +261,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         $scope.comentText = '';
         $scope.comentButtonActive = 'formDisable';
         $scope.comentEmpty = function () {
-            if (comentText == '')
+            if ($scope.comentText == '')
                 $scope.comentButtonActive = 'formDisable';
             else
                 $scope.comentButtonActive = 'formActive';

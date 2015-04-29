@@ -163,7 +163,7 @@
     <div class="col-md-12 coments-main">
         <div class="row">
         <form>
-            <textarea ng-model="comentText" ng-focus="comentButtonFocus()" ng-blur="comentButtonUnFocus()" class="form-control coments-textarea" placeholder="Coment"></textarea>
+            <textarea ng-change="comentEmpty()" ng-model="comentText" ng-focus="comentButtonFocus()" ng-blur="comentButtonUnFocus()" class="form-control coments-textarea" placeholder="Coment"></textarea>
 
             <button ng-class="comentButtonActive" ng-if="comentButton" type="submit" class="btn btn-default btn-primary">
                 Answer

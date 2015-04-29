@@ -15,9 +15,14 @@
         <div class="row">
             <div class="col-md-10" style="word-wrap: break-word; white-space: normal;">
                 <div ng-click="setFormEdit()" ng-mouseleave="setFormNone()" style="display: inline-block;">
-                    <span ng-if="formStatus == 'formNone'" id="spanLength" style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px;">{{ forum.name }}</span>
+                    <div ng-if="formStatus == 'formNone'" ng-mouseenter="setIconEdit()" ng-mouseleave="setIconNone()" id="spanLength">
+                        <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px;">{{ forum.name }}</span>
+                        <span ng-if="iconEdit" style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px; border-left: 1px solid #ccc;">
+                            <i style="color: #A9A6A6;" class="fa fa-edit"></i>
+                        </span>
+                    </div>
                     <form ng-class="formStatus" action="{{ path('zectranet_QnA_forum_edit_name', {'project_id' : forum.id}) }}" method="post">
-                        <input ng-focus="setFocus()" ng-blur="setBlure()" type="text" value="{{ forum.name }}" name="newName" class="form-control" style="height: 42px;" required>
+                        <input id="inputName" ng-focus="setFocus()" ng-blur="setBlure()" type="text" value="{{ forum.name }}" name="newName" class="form-control" style="height: 42px;" required>
                         <input type="submit" class="hidden">
                     </form>
                 </div>

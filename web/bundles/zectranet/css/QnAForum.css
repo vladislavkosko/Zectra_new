@@ -7,8 +7,19 @@
     display: none;
 }
 
+#spanLength {
+    border-radius: 5px;
+    border: 1px solid transparent;
+}
+
 #spanLength:hover{
     border: 1px solid #ccc;
+}
+
+#spanLengthEdit {
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 1px solid transparent;
 }
 
 .thread {
