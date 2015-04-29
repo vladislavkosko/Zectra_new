@@ -260,20 +260,32 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.comentText = '';
         $scope.comentButtonActive = 'formDisable';
+        $scope.textareaSize = 'comentsTextarea';
+        $scope.comentButton = false;
+        $scope.clickOnButton = false;
+
+        $scope.comentButtonFocus = function () {
+            $scope.comentButton = true;
+            $scope.textareaSize = 'comentsTextareaFocus';
+        };
+
+        $scope.comentButtonUnFocus = function () {
+            if ($scope.clickOnButton = false)
+            {
+                $scope.comentButton = false;
+                $scope.textareaSize = 'comentsTextarea';
+            }
+        };
+
+        $scope.clickButton = function () {
+            $scope.clickOnButton = true;
+        };
+
         $scope.comentEmpty = function () {
             if ($scope.comentText == '')
                 $scope.comentButtonActive = 'formDisable';
             else
                 $scope.comentButtonActive = 'formActive';
-        };
-
-        $scope.comentButton = false;
-        $scope.comentButtonFocus = function () {
-            $scope.comentButton = true;
-        };
-
-        $scope.comentButtonUnFocus = function () {
-            $scope.comentButton = false;
         };
 
         console.log('NavigationController was loaded!');

@@ -161,10 +161,10 @@
     }
 }
 
-.coments-textarea{
+.comentsTextarea{
     height: 34px !important;
 }
-.coments-textarea:focus{
+.comentsTextareaFocus{
     height: 100px !important;
     opacity: 1;
 }

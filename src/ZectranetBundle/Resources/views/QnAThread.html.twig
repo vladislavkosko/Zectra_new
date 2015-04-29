@@ -163,9 +163,9 @@
     <div class="col-md-12 coments-main">
         <form action="{{ path('zectranet_QnA_add_post', { 'thread_id': thread.id }) }}" method="post">
 
-            <textarea name="message" ng-change="comentEmpty()" ng-model="comentText" ng-focus="comentButtonFocus()" ng-blur="comentButtonUnFocus()" class="form-control coments-textarea" placeholder="Here is your answer"></textarea>
+            <textarea name="message" ng-class="textareaSize" ng-change="comentEmpty()" ng-model="comentText" ng-focus="comentButtonFocus()" ng-blur="comentButtonUnFocus()" class="form-control" placeholder="Here is your answer"></textarea>
 
-            <button type="submit" style="margin-top: 10px;" ng-class="comentButtonActive" ng-if="comentButton" class="btn btn-default btn-primary">
+            <button ng-click="clickButton()" type="submit" style="margin-top: 10px;" ng-class="comentButtonActive" ng-if="comentButton" class="btn btn-default btn-primary">
                 Answer
             </button>
 
