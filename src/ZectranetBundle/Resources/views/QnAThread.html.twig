@@ -160,22 +160,26 @@
 
     {% endfor %}
 
+    <div class="col-md-12 coments-main">
+        <div class="row">
+        <form>
+            <textarea ng-model="comentText" ng-focus="comentButtonFocus()" ng-blur="comentButtonUnFocus()" class="form-control coments-textarea" placeholder="Coment"></textarea>
 
+            <button ng-class="comentButtonActive" ng-if="comentButton" type="submit" class="btn btn-default btn-primary">
+                Answer
+            </button>
 
+        </form>
+        </div>
 
-
-
-
-
-
-
+    </div>
 
 
     <div class="row" style="margin-top: 10px;">
         <div class="col-md-12">
             <form action="{{ path('zectranet_QnA_add_post', { 'thread_id': thread.id }) }}" method="post">
                 <div class="input-group">
-                    <textarea style="resize: vertical;" name="message" class="form-control" rows="3"></textarea>
+                    <textarea style="resize: vertical;" name="message" class="form-control"></textarea>
                     <div class="input-group-addon" style="padding: 0;">
                         <button type="submit" class="btn btn-default btn-primary" style="width: 72px; height: 72px;">
                             Answer
@@ -185,6 +189,13 @@
             </form>
         </div>
     </div>
+
+
+
+
+
+
+
 
     <div class="modal fade" id="delete_QnA_project" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
