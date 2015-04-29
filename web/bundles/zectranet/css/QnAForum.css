@@ -181,9 +181,14 @@
 }
 
 .formDisable{
-    background: black;
+    background-color: #337AB7;
+    border-color: #2E6DA4;
+    pointer-events: none;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.65;
 }
 
 .formActive{
-    background: blue;
+
 }
