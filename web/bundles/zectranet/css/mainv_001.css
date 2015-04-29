@@ -182,9 +182,9 @@ div[data-role="editor-toolbar"] {
     cursor: pointer;
 }
 .forum-post{
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
-    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
     border-width: 1px;
     border-style: solid;
     border-color: #F2F2F2;
@@ -207,7 +207,48 @@ div[data-role="editor-toolbar"] {
     border-color: #F2F2F2;
 }
 .forum-shadow{
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
-    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.08);
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+
+.post-span{
+    border-top: 1px solid #E7E7E7;
+    background-color:#F6F6F6;
+    box-shadow: 0px 1px 0px 0px #FFF inset;
+
+}
+
+.comentsTextarea{
+    height: 34px !important;
+}
+.comentsTextareaFocus{
+    height: 100px !important;
+    opacity: 1;
+}
+
+.btn-coments{
+    opacity: 0;
+}
+
+.coments-main{
+    margin:10px;
+}
+
+.coments-main{
+    margin-bottom: 100px;
+}
+
+.formDisable{
+    background-color: #337AB7;
+    border-color: #2E6DA4;
+    pointer-events: none;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.65;
+}
+
+.formActive{
+
 }
