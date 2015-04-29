@@ -127,7 +127,7 @@ Zectranet.controller('QNAController', ['$scope', '$http',
                     }
                 }
             }
-        }
+        };
 
         $scope.deleteProjectRequest = function (request_id) {
             var urlDeleteQNAProjectRequest = $scope.urlDeleteQNAProjectRequest.replace('requestid',request_id);

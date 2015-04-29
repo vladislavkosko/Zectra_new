@@ -13,11 +13,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         $scope.headers = null;
         $scope.addnewheader = false;
 
-        $scope.header = {
-            'title': null,
-            'bgColor': '#BBBBBB',
-            'textColor': '#000000'
-        };
+
 
         $scope.quickheader = {
             'title': '',
@@ -25,12 +21,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             'textColor': '#000000'
         };
 
-        $scope.subheader = {
-            'title': null,
-            'header_id': null,
-            'description': null,
-            'admin': false
-        };
+
 
         $scope.quicksubheader = {
             'title': '',
@@ -91,22 +82,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             $('#header_forum_messages_modal').modal('show');
         }
 
-        $scope.addNewHeader = function (header) {
-            if (!header.title || !header.bgColor || !header.textColor) return;
-            $http.post($scope.urlAddHeader, { 'header': header })
-                .success(function (response) {
-                    if (response) {
-                        $scope.modal.class = 'label-success';
-                        $scope.modal.message = 'Header has been added.';
-                        $scope.modal.title = 'Success';
-                        $('#header_forum_messages_modal').modal('show');
-                        $scope.headers = response;
-                    } else {
-                        somethingWentWrong();
-                    }
-                }
-            );
-        };
+
 
         $scope.addNewHeaderQuick = function (header) {
             if($scope.quickheader.title == '')
@@ -133,22 +109,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             }
         };
 
-        $scope.addNewSubHeader = function (subHeader) {
-            var addSubHeaderUrl = $scope.urlAddSubHeader.replace('0', subHeader.header_id);
-            $http.post(addSubHeaderUrl, { 'subheader': subHeader })
-                .success(function (response) {
-                    if (response) {
-                        $scope.modal.class = 'label-success';
-                        $scope.modal.message = 'Subheader has been added.';
-                        $scope.modal.title = 'Success';
-                        $('#header_forum_messages_modal').modal('show');
-                        $scope.headers = response;
-                    } else {
-                        somethingWentWrong();
-                    }
-                }
-            );
-        };
+
 
         $scope.addNewSubHeaderQuick = function (oneheader,quicksubheader) {
             if($scope.quicksubheader.title == '' && $scope.quicksubheader.description == '')

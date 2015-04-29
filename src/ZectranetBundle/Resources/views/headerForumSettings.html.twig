@@ -119,9 +119,11 @@
                                     <label>
                                         <b>Request Message</b>
                                     </label>
-                                    <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="HO_contact_message" required></textarea>
+                                    <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="HO_contact_message"></textarea>
                                     <br/>
-
+                                    <div ng-if="headerForumSettingsErrors.HO_Contact_message_Error == true">
+                                        <span  class="label label-danger"> Please fill out this field </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -155,9 +157,11 @@
                                     <label>
                                         <b>Request Message</b>
                                     </label>
-                                    <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="All_contact_message" required></textarea>
+                                    <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="All_contact_message"></textarea>
                                     <br/>
-
+                                    <div ng-if="headerForumSettingsErrors.All_Contact_message_Error == true">
+                                        <span  class="label label-danger"> Please fill out this field </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -176,79 +180,7 @@
         <!-- END MODAL -->
 
 
-        <div class="row" style="margin-top: 20px;">
-            <div class="col-md-12">
-                <div class="col-md-6">
-                    <p>
-                        <label>
-                            Select header background color:
-                            <input type="color" ng-model="header.bgColor" />
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            Select header text color:
-                            <input type="color" ng-model="header.textColor"/>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            Header title:
-                            <input type="text" ng-model="header.title" />
-                        </label>
-                    </p>
-                    <p>
-                        <button type="button" class="btn btn-default btn-success" ng-click="addNewHeader(header);">
-                            <i class="fa fa-plus-circle"></i>
-                            Add new header
-                        </button>
-                    </p>
 
-                </div>
-
-                <div class="col-md-6">
-                    <p>
-                        <label>
-                            Select header:
-                            <select ng-model="subheader.header_id">
-                                <option ng-repeat="header in headers" value="[[ header.id ]]">
-                                    [[ header.title ]]
-                                </option>
-                            </select>
-                            <button type="button" class="btn btn-default btn-danger" ng-click="deleteHeader(subheader.header_id);">
-                                <i class="fa fa-trash"></i>
-                                Delete header
-                            </button>
-                        </label>
-                    </p>
-
-                    <p>
-                        <label>
-                            Subheader title:
-                            <input type="text" ng-model="subheader.title" />
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            Subheader Description: <br/>
-                            <textarea style="resize: vertical;" ng-model="subheader.description" cols="30" rows="5"></textarea>
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            Admin subheader:
-                            <input type="checkbox" ng-model="subheader.admin" />
-                        </label>
-                    </p>
-                    <p>
-                        <button type="button" class="btn btn-default btn-success" ng-click="addNewSubHeader(subheader);">
-                            <i class="fa fa-plus-circle"></i>
-                            Add subheader
-                        </button>
-                    </p>
-                </div>
-            </div>
-        </div>
 
         <!------------ Begin of project log ------------>
         <div class="row" style="margin-bottom: 35px;">
