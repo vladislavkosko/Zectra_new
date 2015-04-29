@@ -39,6 +39,28 @@ class HeaderForumController extends Controller {
 
     /**
      * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $project_id
+     * @return RedirectResponse
+     */
+    public function editNameAction(Request $request, $project_id)
+    {
+        $newName = $request->request->get('newName');
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var HFForum $project */
+        $project = $em->getRepository('ZectranetBundle:HFForum')->find($project_id);
+
+        $project->setName($newName);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_header_forum', array('project_id' => $project_id));
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
      * @param int $project_id
      * @param int $subheader_id
      * @return Response
@@ -57,6 +79,25 @@ class HeaderForumController extends Controller {
             'forum' => $forum,
             'sub' => $subheader,
         ));
+    }
+
+    public function editNameSubheaderAction(Request $request, $project_id, $subheader_id)
+    {
+        $newName = $request->request->get('newName');
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var HFSubHeader $subheader */
+        $subheader = $em->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
+
+        $subheader->setTitle($newName);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_header_forum_subheader', array('project_id' => $project_id, 'subheader_id' => $subheader_id));
     }
 
     /**

@@ -24,11 +24,28 @@
 
     <div class="page-header" style="margin-top: 10px;">
         <div class="row">
-            <div class="col-md-9">
-                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; white-space: normal; word-wrap: break-word;">
-                    {{ thread.title }}
-                </span>
-            </div>
+            {% if (forum.ownerID == app.user.id) or (thread.userID == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                <div class="col-md-9" style="word-wrap: break-word; white-space: normal;">
+                    <div ng-click="setFormEdit()" ng-mouseleave="setFormNone()" style="display: inline-block;">
+                        <div ng-if="formStatus == 'formNone'" ng-mouseenter="setIconEdit()" ng-mouseleave="setIconNone()" id="spanLength" style="cursor: pointer;">
+                            <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px;">{{ thread.title }}</span>
+                            <span ng-if="iconEdit" style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px; border-left: 1px solid #ccc;">
+                                <i style="color: #A9A6A6;" class="fa fa-edit"></i>
+                            </span>
+                        </div>
+                        <form ng-class="formStatus" action="{{ path('zectranet_QnA_thread_edit_name', {'project_id' : forum.id, 'thread_id' : thread.id}) }}" method="post">
+                            <input id="inputName" ng-focus="focus = true" ng-blur="setBlure()" type="text" value="{{ thread.title }}" name="newName" class="form-control" style="height: 44px; font-size: 18px;" required>
+                            <input type="submit" class="hidden">
+                        </form>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="col-md-9">
+                    <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ thread.title }}</span>
+                </div>
+
+            {% endif %}
             <div class="col-md-3" style="font-size: 18px;">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
                     <div class="pull-right">

@@ -2,6 +2,13 @@
 
 {% block title %}{{ sub.title }}{% endblock %}
 
+{% block styles %}
+    {{ parent() }}
+
+    <link href="{{ asset('bundles/zectranet/css/QnAForum.css') }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
 {% block body %}
     <div class="row">
         <ol class="breadcrumb"  style="margin: 0 -30px; border-radius:0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
@@ -16,9 +23,30 @@
 
     <div class="page-header" style="margin-top: 10px;">
         <div class="row">
-            <div class="col-xs-6 col-md-9" style="white-space: normal; word-wrap: break-word;">
-                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ sub.title }}</span>
-            </div>
+
+            {% if (forum.ownerID == app.user.id) or (thread.userID == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                <div class="col-xs-6 col-md-9" style="word-wrap: break-word; white-space: normal;">
+                    <div ng-click="setFormEdit()" ng-mouseleave="setFormNone()" style="display: inline-block;">
+                        <div ng-if="formStatus == 'formNone'" ng-mouseenter="setIconEdit()" ng-mouseleave="setIconNone()" id="spanLength" style="cursor: pointer;">
+                            <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px;">{{ sub.title }}</span>
+                            <span ng-if="iconEdit" style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px; border-left: 1px solid #ccc;">
+                                <i style="color: #A9A6A6;" class="fa fa-edit"></i>
+                            </span>
+                        </div>
+                        <form ng-class="formStatus" action="{{ path('zectranet_subheader_edit_name', {'project_id' : forum.id, 'subheader_id' : sub.id}) }}" method="post">
+                            <input id="inputName" ng-focus="focus = true" ng-blur="setBlure()" type="text" value="{{ sub.title }}" name="newName" class="form-control" style="height: 44px; font-size: 18px;" required>
+                            <input type="submit" class="hidden">
+                        </form>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="col-xs-6 col-md-9">
+                    <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ sub.title }}</span>
+                </div>
+
+            {% endif %}
+
             <div class="col-xs-6 col-md-3">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
                     <div class="pull-right">

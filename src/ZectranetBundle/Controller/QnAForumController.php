@@ -141,6 +141,32 @@ class QnAForumController extends Controller {
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
      * @param $project_id
+     * @param $thread_id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function editNameThreadAction(Request $request, $project_id, $thread_id)
+    {
+        $newName = $request->request->get('newName');
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var QnAThread $thread */
+        $thread = $em->getRepository('ZectranetBundle:QnAThread')->find($thread_id);
+
+        $thread->setTitle($newName);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_QnA_thread', array('project_id' => $project_id, 'thread_id' => $thread_id));
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $project_id
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function createQuestionAction(Request $request, $project_id)

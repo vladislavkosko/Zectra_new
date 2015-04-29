@@ -2,6 +2,13 @@
 
 {% block title %}{{ thread.title }}{% endblock %}
 
+{% block styles %}
+    {{ parent() }}
+
+    <link href="{{ asset('bundles/zectranet/css/QnAForum.css') }}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
 {% block body %}
     <div class="row">
         <ol class="breadcrumb" style="margin: 0 -30px; border-radius:0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
@@ -26,6 +33,8 @@
             
         </div>
         <div class="col-xs-10" style="min-height: 150px;">
+
+
             <div class="page-header">
                 <h3 class="forum-header">{{ thread.title }} </h3>
                 <small class="text-muted"> Started by {{ thread.user.username }}, {{ thread.date | date('Y-m-d H:i') }}</small>

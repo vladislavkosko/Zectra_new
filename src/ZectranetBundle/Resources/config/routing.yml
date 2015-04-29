@@ -225,12 +225,25 @@ zectranet_show_header_forum:
     requirements:
          project_id: \d+
 
+zectranet_header_forum_edit_name:
+    pattern: /headerForumEdit/{project_id}
+    defaults: { _controller: ZectranetBundle:HeaderForum:editName }
+    requirements:
+        project_id: \d+
+
 zectranet_show_header_forum_subheader:
     pattern: /headerForum/{project_id}/{subheader_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:forum }
     requirements:
          project_id: \d+
          subheader_id: \d+
+
+zectranet_subheader_edit_name:
+    pattern: /headerForum/{project_id}/{subheader_id}/edit
+    defaults: { _controller: ZectranetBundle:HeaderForum:editNameSubheader}
+    requirements:
+        project_id: \d+
+        subheader_id: \d+
 
 zectranet_show_header_forum_settings:
     pattern: /headerForum/{project_id}/settings
@@ -315,6 +328,13 @@ zectranet_QnA_create_new_question:
 zectranet_show_QnA_thread:
     pattern: /QnAForum/{project_id}/thread/{thread_id}
     defaults: { _controller: ZectranetBundle:QnAForum:showThread }
+    requirements:
+        project_id: \d+
+        thread_id: \d+
+
+zectranet_QnA_thread_edit_name:
+    pattern: /QnAForum/{project_id}/thread/{thread_id}/edit
+    defaults: { _controller: ZectranetBundle:QnAForum:editNameThread }
     requirements:
         project_id: \d+
         thread_id: \d+

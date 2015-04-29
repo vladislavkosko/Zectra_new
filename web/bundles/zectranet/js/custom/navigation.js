@@ -18,7 +18,9 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.setFormEdit = function() {
             $scope.formStatus = 'formEdit';
-            document.getElementById("inputName").focus();
+            //var el = document.getElementById('inputName');
+            //el.focus();
+            //el.setSelectionRange(el.value.length,el.value.length);
         };
 
         $scope.setFormNone = function() {
@@ -27,10 +29,6 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                 $scope.formStatus = 'formNone';
                 $scope.iconEdit = false;
             }
-        };
-
-        $scope.setFocus = function() {
-            $scope.focus = true;
         };
 
         $scope.setBlure = function() {
