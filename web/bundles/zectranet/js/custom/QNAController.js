@@ -22,7 +22,7 @@ Zectranet.controller('QNAController', ['$scope', '$http',
             'HO_Contact_message_Error' : false,
             'All_Contact_message_Error' : false
         };
-
+        
         function somethingWentWrong() {
             $scope.modal.class = 'label-danger';
             $scope.modal.message = 'Something went wrong.';

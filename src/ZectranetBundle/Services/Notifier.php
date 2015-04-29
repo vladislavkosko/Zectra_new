@@ -203,7 +203,7 @@ class Notifier
 
         $qb->delete('ZectranetBundle:Notification', 'n')
             ->where("n.userid = :userid")
-            ->andWhere("n.conversation_id = :contact_id")
+            ->andWhere("n.resourceid = :contact_id")
             ->andWhere("n.type = 'message_home_office'")
             ->setParameter("userid", $this->user->getId())
             ->setParameter("contact_id", $contact_id);

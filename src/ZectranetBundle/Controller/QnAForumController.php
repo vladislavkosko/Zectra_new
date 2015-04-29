@@ -40,6 +40,28 @@ class QnAForumController extends Controller {
 
     /**
      * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $project_id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function editNameAction(Request $request, $project_id)
+    {
+        $newName = $request->request->get('newName');
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var QnAForum $project */
+        $project = $em->getRepository('ZectranetBundle:QnAForum')->find($project_id);
+
+        $project->setName($newName);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_QnA_forum', array('project_id' => $project_id));
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
      * @param $project_id
      * @return \Symfony\Component\HttpFoundation\Response
      */

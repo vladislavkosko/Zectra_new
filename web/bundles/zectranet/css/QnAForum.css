@@ -1,3 +1,16 @@
+.formEdit {
+    z-index: 99999;
+    width: 350px;
+}
+
+.formNone {
+    display: none;
+}
+
+#spanLength:hover{
+    border: 1px solid #ccc;
+}
+
 .thread {
     margin: 15px;
     padding-bottom: 15px;
