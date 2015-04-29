@@ -149,3 +149,30 @@
         margin: 20px 0 20px 0;
     }
 }
+
+.coments-textarea{
+    height: 34px !important;
+}
+.coments-textarea:focus{
+    height: 100px !important;
+    opacity: 1;
+}
+
+.btn-coments{
+    opacity: 0;
+}
+
+.coments-main{
+    margin:10px;
+}
+
+.coments-main{
+}
+
+.formDisable{
+    background: black;
+}
+
+.formActive{
+    background: blue;
+}

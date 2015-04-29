@@ -244,6 +244,24 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             }
         };
 
+        $scope.comentText = '';
+        $scope.comentButtonActive = 'formDisable';
+        $scope.comentEmpty = function () {
+            if (comentText == '')
+                $scope.comentButtonActive = 'formDisable';
+            else
+                $scope.comentButtonActive = 'formActive';
+        };
+
+        $scope.comentButton = false;
+        $scope.comentButtonFocus = function () {
+            $scope.comentButton = true;
+        };
+
+        $scope.comentButtonUnFocus = function () {
+            $scope.comentButton = false;
+        };
+
         console.log('NavigationController was loaded!');
 
     }]);
