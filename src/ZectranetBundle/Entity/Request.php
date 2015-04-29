@@ -155,6 +155,12 @@ class Request
     private $status;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(name="date", type="datetime", nullable=true, options={"default" = null})
+     */
+    private $date;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -162,6 +168,7 @@ class Request
         $this->projectid = null;
         $this->contactID = null;
         $this->message = null;
+        $this->date = new \DateTime();
     }
 
     /**
@@ -705,5 +712,28 @@ class Request
     public function getQnAForum()
     {
         return $this->QnAForum;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Request
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }
