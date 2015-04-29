@@ -163,14 +163,11 @@
 
 .comentsTextarea{
     height: 34px !important;
+    transition: 0.5s;
 }
 .comentsTextareaFocus{
+    transition: 1s;
     height: 100px !important;
-    opacity: 1;
-}
-
-.btn-coments{
-    opacity: 0;
 }
 
 .coments-main{

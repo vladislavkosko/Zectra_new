@@ -109,11 +109,6 @@
         </span>
     </div>
 
-    {% if thread.posts | length == 0 %}
-        <div class="thread posts" style="font-size: 1.3em; color: #009beb">
-            Answers will be displayed here
-        </div>
-    {% endif %}
 
     {% for post in thread.posts %}
 
