@@ -115,7 +115,7 @@ zectranet_delete_all_notifications:
 
 zectranet_show_office:
     pattern: /office/{office_id}/{conversation_id}
-    defaults: { _controller: ZectranetBundle:Office:index, conversation_id = null }
+    defaults: { _controller: ZectranetBundle:Office:index, conversation_id: 0 }
     requirements:
         office_id: \d+
 
@@ -285,6 +285,12 @@ zectranet_add_post_header_forum_thread:
 zectranet_show_QnA_forum:
     pattern: /QnAForum/{project_id}
     defaults: { _controller: ZectranetBundle:QnAForum:showForum }
+    requirements:
+        project_id: \d+
+
+zectranet_QnA_forum_edit_name:
+    pattern: /QnAForum/{project_id}/edit
+    defaults: { _controller: ZectranetBundle:QnAForum:editName }
     requirements:
         project_id: \d+
 

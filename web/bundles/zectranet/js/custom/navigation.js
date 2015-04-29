@@ -12,6 +12,27 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         var approveHFMembershipRequest = JSON_URLS.approveHFMembershipRequest;
         var approveQnAMembershipRequest = JSON_URLS.approveQnAMembershipRequest;
 
+        $scope.formStatus = 'formNone';
+        $scope.focus = false;
+
+        $scope.setFormEdit = function() {
+            $scope.formStatus = 'formEdit';
+        };
+
+        $scope.setFormNone = function() {
+            if ($scope.focus == false)
+                $scope.formStatus = 'formNone';
+        };
+
+        $scope.setFocus = function() {
+            $scope.focus = true;
+        };
+
+        $scope.setBlure = function() {
+            $scope.formStatus = 'formNone';
+            $scope.focus = false;
+        };
+
         $scope.requests = {};
         $scope.notifications = null;
         $scope.contactNotifications = null;
@@ -126,7 +147,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         };
 
         $scope.getNotification = function getNotifications() {
-            $http.get(notificationsGetUrl)
+            $scope.notifPromise = $http.get(notificationsGetUrl)
                 .success(function(response) {
                     $scope.FirstInit = true;
                     if (response.result.requests){
@@ -167,7 +188,12 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                         $scope.contactNotifications = [];
                     }
                     setTimeout(getNotifications, 5000);
-                })
+                });
+
+            $scope.notifPromise.then(function () {
+                if (angular.isDefined($rootScope.contacts))
+                    $scope.prepareCountOfNotifications($rootScope.contacts, $scope.contactNotifications);
+            });
         };
 
         function prepareNotifications(notifications) {
@@ -176,7 +202,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                 if (["message_home_office"].indexOf(n.type) != -1)
                 {
                     var tempUrl = homeOfficeShowUrlBase.replace('0', n.destinationid);
-                    tempUrl = tempUrl.replace('conv_id', n.conversationid);
+                    tempUrl = tempUrl.replace('conv_id', n.resourceid);
                     n.href = tempUrl;
                 }
 
@@ -205,6 +231,18 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             $scope.notifications = tempNotifications;
             $scope.contactNotifications = tempContactNotifications;
         }
+
+        $scope.prepareCountOfNotifications = function(contacts, contactNotifications) {
+            for (var i = 0; i < contacts.length; i++)
+            {
+                contacts[i].notificationsLength = 0;
+                for (var j = 0; j < contactNotifications.length; j++)
+                {
+                    if (contacts[i].id == contactNotifications[j].resourceid)
+                        contacts[i].notificationsLength += 1;
+                }
+            }
+        };
 
         console.log('NavigationController was loaded!');
 

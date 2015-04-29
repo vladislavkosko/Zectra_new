@@ -84,7 +84,13 @@
                             <img class="img-responsive img-circle" ng-src="[[asset + 'documents/' + contact.avatar]]" alt="avatar"/>
                         </div>
                         <div class="col-xs-9">
-                            <p>[[ contact.username ]]</p>
+                            <p>
+                                [[ contact.username ]]
+                                <label ng-if="contact.notificationsLength != 0"
+                                        class="label label-default pull-right">
+                                    +[[contact.notificationsLength]]
+                                </label>
+                            </p>
                         </div>
                     </div>
                 </li>
