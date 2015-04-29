@@ -7,13 +7,15 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.taskModel = {
             'id': null, 'name': null, 'description': null, 'type': 1,
             'priority': 1, 'startdate': new Date($scope.timeNow),
-            'enddate': new Date($scope.timeNow), 'parent': null
+            'enddate': new Date($scope.timeNow), 'parent': null,
+            'sprintID': null
         };
 
         $scope.subtask = {
             'id': null, 'name': null, 'description': null, 'type': 1,
             'priority': 1, 'startdate': new Date($scope.timeNow),
-            'enddate': new Date($scope.timeNow), 'parent': null
+            'enddate': new Date($scope.timeNow), 'parent': null,
+            'sprintID': null
         };
 
         $scope.tempUser = {

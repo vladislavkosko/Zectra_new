@@ -122,10 +122,15 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
           {
               return true;
           }
-
         };
 
+        $scope.pressEnter = function ($event, message) {
+            if ($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey) {
+                $event.preventDefault();
+                $scope.SendPost(message);
+            }
+        };
 
         console.log('Chat Controller was loaded');
-
-    }]);
+    }
+]);

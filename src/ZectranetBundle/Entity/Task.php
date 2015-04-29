@@ -1080,6 +1080,9 @@ class Task
             'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
             'postCount' => count($this->getPosts()),
             'versionid' => $this->getVersionid(),
+            'sprintID' => ($this->getParentid())
+                ? $this->getParent()->getSprintid()
+                : $this->getSprintid(),
         );
     }
 
