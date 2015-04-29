@@ -88,11 +88,12 @@
                                         [[ request.user.username ]]
                                     </td>
                                     <td>
-                                        <span class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
+                                        <span ng-if="request.reSendVisibleButton == false" class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
+                                        <span ng-if="request.reSendVisibleButton == true" class="label" style="background-color: hotpink;">Pending</span>
                                     </td>
                                     <td>
 
-                                            <span  class="label" style="background-color: #337ab7;cursor: pointer;" ng-click="reSendRequest(request)">
+                                            <span ng-if="request.reSendVisibleButton == true" class="label" style="background-color: #337ab7;cursor: pointer;" ng-click="reSendRequest(request)">
                                             Re-Send
                                         </span>
 

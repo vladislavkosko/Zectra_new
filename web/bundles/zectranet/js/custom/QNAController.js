@@ -30,6 +30,10 @@ Zectranet.controller('QNAController', ['$scope', '$http',
             $('#header_forum_messages_modal').modal('show');
         }
 
+        setInterval( function() {
+            $scope.getProjectSettingInfo()
+        }, 60000);
+
         $scope.getProjectSettingInfo = function () {
             $http.get($scope.urlGetQNAProjectSettingInfo)
                 .success(function (response) {
@@ -45,6 +49,22 @@ Zectranet.controller('QNAController', ['$scope', '$http',
                     for(i = 0; i < $scope.All_Contacts.length;i++)
                     {
                         $scope.All_Contacts[i].checked = false;
+                    }
+                    for( i = 0; i < $scope.Project_Team.length;i++)
+                    {
+                        $scope.Project_Team[i].reSendVisibleButton = false;
+                        var one_minute = 1000 * 60;
+                        var now = new Date();
+                        now = now.getTime();
+                        var timeRequest = new Date($scope.Project_Team[i].date);
+                        timeRequest = timeRequest.getTime();
+                        var difference_miliseconds = now - timeRequest;
+                        difference_miliseconds = difference_miliseconds / one_minute;
+
+                        if($scope.Project_Team[i].status.id == 1 && difference_miliseconds >= 1)
+                        {
+                            $scope.Project_Team[i].reSendVisibleButton = true;
+                        }
                     }
 
                 })
