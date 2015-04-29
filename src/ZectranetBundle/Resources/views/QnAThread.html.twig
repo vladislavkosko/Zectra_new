@@ -12,7 +12,7 @@
 {% block body %}
 
     <div class="row">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb"  style="margin: 0 -30px; border-radius: 0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
             <li>
                 <a href="{{ path('zectranet_show_QnA_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
             </li>
@@ -22,25 +22,25 @@
         </ol>
     </div>
 
-    <div class="page-header" style="margin-top: 0;">
+    <div class="page-header" style="margin-top: 10px;">
         <div class="row">
             <div class="col-md-9">
-                <span style="font-size: 22px; font-family: 'PT Sans Narrow', sans-serif; white-space: normal; word-wrap: break-word;">
+                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; white-space: normal; word-wrap: break-word;">
                     {{ thread.title }}
                 </span>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="font-size: 18px;">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
                     <div class="pull-right">
                         <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
                             <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_QnA_project">
-                                <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
+                                <i class="fa text-danger fa-fw fa-trash"></i>
                             </a>
                         </div>
 
                         <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Settings">
                             <a href="{{ path('zectranet_QnA_settings', {'project_id': forum.id}) }}" style="cursor: pointer; text-decoration: none;">
-                                <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
+                                <i class="fa text-primary fa-fw fa-gear"></i>
                             </a>
                         </div>
 
@@ -55,43 +55,54 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="post">
-                <div class="row">
-                    <div class="col-xs-9">
-                        <div class="post-message">
-                            {{ thread.message }}
-                        </div>
 
-                        <div class="right-thread-content thread-keywords" style="margin: 15px 0 5px 0;">
-                            {% for i in 0..keywords | length - 1 %}
-                                <span style="color: #0c65a5; margin-left: 3px;">{{ keywords[i] }}</span>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="informer text-muted pull-right" style="display: inline-block; vertical-align: top;">
-                            <div>asked {{ thread.date | date('d-m-y H:i') }}</div>
-
-                            <div class="informer-user">
-                                <a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none; vertical-align: top;">
-                                    <img class="img-responsive" src="{{ asset('') }}documents/{{ thread.user.avatar }}">
-                                </a>
-
-                                <a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none; vertical-align: top;">
-                                    {{ thread.user.username }}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+    <div class="col-md-12 post-all">
+        <div class="row">
+            <div class="col-xs-12 post">
+                <div class="post-message">
+                    {{ thread.message }}
+                </div>
+                    <hr style="margin: 0px;">
+                <div style="margin: 0px 0 5px 17px;">
+                    {% for i in 0..keywords | length - 1 %}
+                        <small>{{ keywords[i] }}</small>
+                    {% endfor %}
                 </div>
             </div>
 
+            <div class="col-xs-12 post-span">
+
+                <ul class="list-inline" style="height: 30px;">
+                    <li>
+                        {#<a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none;">#}
+                            {#<img style="height: 25px;" class="img-responsive" src="{{ asset('') }}documents/{{ thread.user.avatar }}">#}
+                        {#</a>#}
+                    </li>
+                    <li style="margin-top: 9px;">
+                          by <a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none; ">
+                            {{ thread.user.username }}
+                        </a>
+                    </li>
+                    <li>
+                        <small class="text-muted"></small>
+                    </li>
+
+                    <li class="pull-right" style="padding: 10px 2px 10px 14px; border-left: 1px solid #dbdbdb; color: #AAA;">
+                        <div style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="asked {{ thread.date | date('d-m-y H:i') }}">
+                            <i class="fa fa-bookmark"></i>
+                        </div>
+
+
+                    </li>
+                </ul>
+
+            </div>
         </div>
     </div>
 
-    <div class="page-header" style="margin-top: 15px;">
+
+
+    <div class="page-header">
         <span style="font-size: 22px; font-family: 'PT Sans Narrow', sans-serif;">
             {{ thread.posts | length }}
             {% if thread.posts | length == 1 %}
@@ -110,38 +121,56 @@
 
     {% for post in thread.posts %}
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="post">
-                    <div class="row">
-                        <div class="col-xs-9 col-md-9" style="display: inline-block;">
-                            <div class="post-message" style="border-bottom: none;">
-                                {{ post.message }}
-                            </div>
-                        </div>
-
-                        <div class="col-xs-3 col-md-3 text-muted" style="display: inline-block;">
-                            <div class="informer pull-right">
-                                <div>answer {{ post.posted | date('d-m-y H:i') }}</div>
-
-                                <div class="informer-user">
-                                    <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none;">
-                                        <img class="img-responsive" src="{{ asset('') }}documents/{{ post.user.avatar }}">
-                                    </a>
-
-                                    <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none;">
-                                        {{ post.user.username }}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+        <div class="col-md-12 post-all">
+            <div class="row">
+                <div class="col-xs-12 post">
+                    <div class="post-message">
+                        {{ post.message }}
                     </div>
-                    <div class="clearfix"></div>
+                </div>
+
+                <div class="col-xs-12 post-span">
+
+                    <ul class="list-inline" style="height: 30px;">
+                        <li>
+                            {#<a href="{{ path('zectranet_user_page', {'user_id': thread.user.id}) }}" style="text-decoration: none;">#}
+                            {#<img style="height: 25px;" class="img-responsive" src="{{ asset('') }}documents/{{ thread.user.avatar }}">#}
+                            {#</a>#}
+                        </li>
+                        <li style="margin-top: 9px;">
+                            by <a href="{{ path('zectranet_user_page', {'user_id': post.user.id}) }}" style="text-decoration: none; ">
+                                {{ post.user.username }}
+                            </a>
+                        </li>
+                        <li>
+                            <small class="text-muted"></small>
+                        </li>
+
+                        <li class="pull-right" style="padding: 10px 2px 10px 14px; border-left: 1px solid #dbdbdb; color: #AAA;">
+                            <div style="cursor: pointer" data-toggle="tooltip" data-placement="top" title="asked {{ post.posted | date('d-m-y H:i') }}">
+                                <i class="fa fa-bookmark"></i>
+                            </div>
+
+
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </div>
 
     {% endfor %}
+
+
+
+
+
+
+
+
+
+
+
 
     <div class="row" style="margin-top: 10px;">
         <div class="col-md-12">
