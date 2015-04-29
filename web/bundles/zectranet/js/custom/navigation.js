@@ -281,6 +281,11 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             $scope.clickOnButton = true;
         };
 
+        $scope.closeForm = function() {
+            $scope.comentButton = false;
+            $scope.textareaSize = 'comentsTextarea';
+        };
+
         $scope.comentEmpty = function () {
             if ($scope.comentText == '')
                 $scope.comentButtonActive = 'formDisable';
