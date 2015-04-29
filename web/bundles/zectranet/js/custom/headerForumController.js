@@ -1,5 +1,5 @@
-Zectranet.controller('HeaderForumController', ['$scope', '$http', '$timeout',
-    function($scope, $http, $timeout) {
+Zectranet.controller('HeaderForumController', ['$scope', '$http',
+    function($scope, $http) {
         $scope.urlGetHeaders = JSON_URLS.getHeaderForumHeaders;
         $scope.urlAddHeader = JSON_URLS.addHeaderForumHeaders;
         $scope.urlAddSubHeader = JSON_URLS.addSubHeaderForumHeaders;
@@ -177,6 +177,11 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http', '$timeout',
             }
         };
 
+        setInterval( function() {
+            $scope.getProjectSettingInfo()
+        }, 60000);
+
+
         $scope.getProjectSettingInfo = function () {
             $http.get($scope.urlGetProjectSettingInfo)
                 .success(function (response) {
@@ -195,10 +200,19 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http', '$timeout',
                     }
                     for( i = 0; i < $scope.Project_Team.length;i++)
                     {
-                        //if($scope.Project_Team[i].status.id == 1)
-                        //{
-                        //
-                        //}
+                        $scope.Project_Team[i].reSendVisibleButton = false;
+                        var one_minute = 1000 * 60;
+                        var now = new Date();
+                        now = now.getTime();
+                        var timeRequest = new Date($scope.Project_Team[i].date);
+                        timeRequest = timeRequest.getTime();
+                        var difference_miliseconds = now - timeRequest;
+                        difference_miliseconds = difference_miliseconds / one_minute;
+
+                        if($scope.Project_Team[i].status.id == 1 && difference_miliseconds >= 1)
+                        {
+                            $scope.Project_Team[i].reSendVisibleButton = true;
+                        }
                     }
 
                 })
@@ -290,7 +304,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http', '$timeout',
                     }
                 }
             }
-        }
+        };
         
         $scope.deleteProjectRequest = function (request_id) {
             var urlDeleteProjectRequest = $scope.urlDeleteProjectRequest.replace('requestid',request_id);
@@ -328,7 +342,6 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http', '$timeout',
                 })
 
         };
-
 
 
     }

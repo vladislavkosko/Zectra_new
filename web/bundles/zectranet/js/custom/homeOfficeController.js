@@ -5,7 +5,6 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
         $scope.urlGetConversation = JSON_URLS.getConversation;
         $scope.urlSendConversationMessage = JSON_URLS.urlSendConversationMessage;
 
-        $scope.contacts = [];
         $scope.conversation = null;
         $scope.conv_id = 0;
         $scope.asset = JSON_URLS.asset;
