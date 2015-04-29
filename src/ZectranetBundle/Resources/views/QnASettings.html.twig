@@ -91,9 +91,11 @@
                                         <span class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
                                     </td>
                                     <td>
-                                       <span class="label" style="background-color: #337ab7;cursor: pointer;" ng-click="reSendRequest(request)">
+
+                                            <span  class="label" style="background-color: #337ab7;cursor: pointer;" ng-click="reSendRequest(request)">
                                             Re-Send
                                         </span>
+
                                     </td>
                                     <td>
                                         <i class="fa fa-close" style="color: red;cursor: pointer;" ng-click="deleteProjectRequest(request.id);"></i>
@@ -163,7 +165,11 @@
                                         <label>
                                             <b>Request Message</b>
                                         </label>
-                                        <textarea class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="HO_contact_message"></textarea>
+                                        <textarea class="form-control " rows="5" style="width: 100%;resize: vertical;"
+                                                  ng-model="HO_contact_message"
+                                                  ng-init="HO_contact_message = '{{ app.user.username ~', has invited you to join ' ~   forum.name }}'">
+
+                                        </textarea>
                                         <br/>
                                         <div ng-if="QNASettingsErrors.HO_Contact_message_Error == true">
                                             <span  class="label label-danger"> Please fill out this field </span>
@@ -201,7 +207,11 @@
                                         <label>
                                             <b>Request Message</b>
                                         </label>
-                                        <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="All_contact_message"></textarea>
+                                        <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;"
+                                                   ng-model="All_contact_message"
+                                                   ng-init="All_contact_message = '{{ app.user.username ~', has invited you to join ' ~   forum.name }}'">
+
+                                        </textarea>
                                         <br/>
                                         <div ng-if="QNASettingsErrors.All_Contact_message_Error == true">
                                             <span  class="label label-danger"> Please fill out this field </span>

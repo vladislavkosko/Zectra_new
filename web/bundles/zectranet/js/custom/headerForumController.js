@@ -1,5 +1,5 @@
-Zectranet.controller('HeaderForumController', ['$scope', '$http',
-    function($scope, $http) {
+Zectranet.controller('HeaderForumController', ['$scope', '$http', '$timeout',
+    function($scope, $http, $timeout) {
         $scope.urlGetHeaders = JSON_URLS.getHeaderForumHeaders;
         $scope.urlAddHeader = JSON_URLS.addHeaderForumHeaders;
         $scope.urlAddSubHeader = JSON_URLS.addSubHeaderForumHeaders;
@@ -56,6 +56,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         $scope.HO_Contacts_test = false;
         $scope.All_Contacts_test = false;
         $scope.HFLogsVisible = false;
+
 
         $scope.getHeaders = function () {
             $http.get($scope.urlGetHeaders)
@@ -192,6 +193,13 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                     {
                         $scope.All_Contacts[i].checked = false;
                     }
+                    for( i = 0; i < $scope.Project_Team.length;i++)
+                    {
+                        //if($scope.Project_Team[i].status.id == 1)
+                        //{
+                        //
+                        //}
+                    }
 
                 })
         };
@@ -240,6 +248,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                             $scope.HO_contact_message ='';
                             $scope.headerForumSettingsErrors.HO_Contact_message_Error =false;
                             $('#send_request_by_HO_contacts').modal('hide');
+
                         }
                         else if(type == 2)
                         {
@@ -318,7 +327,9 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
 
                 })
 
-        }
+        };
+
+
 
     }
 ]);
