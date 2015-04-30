@@ -28,14 +28,34 @@
                 <li class="list-group-item active" style="background:#ddedf4; color:#606060;">
                     <b>Create Project</b>
                 </li>
-                <li class="list-group-item">
-                    <form action="{{ path('zectranet_add_project', { 'office_id': office.id } ) }}" method="post">
-                        <p>
-                            <label style="width: 100%;">
+                <li class="list-group-item" ng-cloak>
+                    <form name="createProjectForm" action="{{ path('zectranet_add_project', { 'office_id': office.id } ) }}" method="post">
+
+                        <div class="row">
+                            <label class="col-xs-12">
                                 Project name:
-                                <input class="form-control" name="name" ng-model="projectName"  type="text"/>
                             </label>
-                        </p>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-edit"></i>
+                                    </span>
+                                    <input class="form-control" name="name" pattern="[A-Za-z0-9 _]{1,}" ng-maxlength="100" ng-minlength="1" ng-model="projectName" type="text" required />
+                                    <span class="input-group-addon" style="color: red;">
+                                        <span ng-if="createProjectForm.name.$valid">
+                                            <i style="color: lightseagreen;" class="fa fa-check"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12" ng-cloak ng-messages="createProjectForm.name.$error" style="color: red; margin-bottom: 10px;">
+                                <span ng-message="pattern">Alloved only A-Z, a-z, 0-9, underscore and space characters</span>
+                                <span ng-message="maxlength">Max length of this field is 100 characters</span>
+                            </div>
+                        </div>
 
                         <p>
                             <label style="width: 100%;">
@@ -48,7 +68,7 @@
                                 </select>
                             </label>
                         </p>
-                        <p align="right" ng-if="projectName != ''">
+                        <p align="right" ng-if="createProjectForm.$valid">
                             <button class="btn btn-default" >Create</button>
                         </p>
                     </form>

@@ -39,8 +39,8 @@ var userController = Zectranet.controller('UserController', ['$scope', '$http', 
                             $scope.response_by_send_request.body = 'Unexpected Error !!!' ;
                             $scope.response_by_send_request.visible = true ;
                         break;
-
                     }
+                    $('#add_to_contact_list').modal('hide');
                 }
             );
         };

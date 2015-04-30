@@ -18,17 +18,9 @@ Zectranet.controller('QNAController', ['$scope', '$http',
 
 
         $scope.QNASettingsErrors = {
-
             'HO_Contact_message_Error' : false,
             'All_Contact_message_Error' : false
         };
-        
-        function somethingWentWrong() {
-            $scope.modal.class = 'label-danger';
-            $scope.modal.message = 'Something went wrong.';
-            $scope.modal.title = 'Error';
-            $('#header_forum_messages_modal').modal('show');
-        }
 
         setInterval( function() {
             $scope.getProjectSettingInfo()
@@ -55,9 +47,7 @@ Zectranet.controller('QNAController', ['$scope', '$http',
                         $scope.Project_Team[i].reSendVisibleButton = false;
                         var one_minute = 1000 * 60;
                         var now = new Date();
-                        now = now.getTime();
                         var timeRequest = new Date($scope.Project_Team[i].date);
-                        timeRequest = timeRequest.getTime();
                         var difference_miliseconds = now - timeRequest;
                         difference_miliseconds = difference_miliseconds / one_minute;
 
@@ -66,16 +56,16 @@ Zectranet.controller('QNAController', ['$scope', '$http',
                             $scope.Project_Team[i].reSendVisibleButton = true;
                         }
                     }
-
-                })
+                }
+            );
         };
 
-        $scope.contactChecked = function (type,index, array) {
-            for(var i=0;i<array.length;i++)
+        $scope.contactChecked = function (type, index, array) {
+            for(var i = 0; i < array.length; i++)
             {
-                array[i].checked = ( i == index) ;
+                array[i].checked = (i == index);
             }
-            $scope.testClickableButton(type,array);
+            $scope.testClickableButton(type, array);
         };
 
 
@@ -83,17 +73,13 @@ Zectranet.controller('QNAController', ['$scope', '$http',
         {
             if(type == 1 && message == '')
             {
-                $scope.QNASettingsErrors.HO_Contact_message_Error =true;
-                $scope.QNASettingsErrors.All_Contact_message_Error =false;
-            }
-            else if(type == 2 && message == '')
-            {
-                $scope.QNASettingsErrors.HO_Contact_message_Error =false;
-                $scope.QNASettingsErrors.All_Contact_message_Error =true;
-            }
-            else {
+                $scope.QNASettingsErrors.HO_Contact_message_Error = true;
+                $scope.QNASettingsErrors.All_Contact_message_Error = false;
+            } else if(type == 2 && message == '') {
+                $scope.QNASettingsErrors.HO_Contact_message_Error = false;
+                $scope.QNASettingsErrors.All_Contact_message_Error = true;
+            } else {
                 var user_id = 0;
-
                 for (var i = 0; i < array.length; i++) {
                     if (array[i].checked) {
                         user_id = array[i].id;
@@ -115,7 +101,8 @@ Zectranet.controller('QNAController', ['$scope', '$http',
                             }
                             $scope.getProjectSettingInfo();
                         }
-                    })
+                    }
+                );
             }
         };
 
@@ -136,13 +123,10 @@ Zectranet.controller('QNAController', ['$scope', '$http',
                 }
                 if(type == 2)
                 {
-                    if(array[i].checked)
-                    {
+                    if(array[i].checked) {
                         $scope.All_Contacts_test = true;
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         $scope.All_Contacts_test = false;
                     }
                 }
