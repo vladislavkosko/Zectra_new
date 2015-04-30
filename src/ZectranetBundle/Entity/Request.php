@@ -417,7 +417,9 @@ class Request
             'id' => $this->getId(),
             'type' => $this->getType()->getInArray(),
             'status' => $this->getStatus()->getInArray(),
-            'date' => $this->getDate()->format('Y-m-d H:i:s'),
+            'date' => ($this->getDate())
+                ? $this->getDate()->format('Y-m-d H:i:s')
+                : null,
             'user' =>$this->getUser()->getInArray(),
             'project' => (($this->getType()->getLabel() == 'request_user_project')
                 or ($this->getType()->getLabel() == 'request_project'))

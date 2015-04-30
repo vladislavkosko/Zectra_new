@@ -78,7 +78,7 @@
                 <li class="list-group-item active"  style="background:#ddedf4; color:#606060;">
                     <b>Contact list</b>
                 </li>
-                <li class="list-group-item  " ng-repeat="contact in contacts" ng-class="{'contact-list-active':contact.checked}" ng-click="getConversation(contact.id);">
+                <li class="list-group-item" ng-repeat="contact in contacts" ng-class="{'contact-list-active':contact.checked}" ng-click="getConversation(contact.id);">
                     <div class="row">
                         <div class="col-xs-3">
                             <img class="img-responsive img-circle" ng-src="[[asset + 'documents/' + contact.avatar]]" alt="avatar"/>
@@ -123,7 +123,7 @@
 
                                         <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == mesage.user.id, 'pull-right': {{ app.user.id }} != mesage.user.id }">
                                             <i class="fa fa-clock-o fa-fw"></i>
-                                            Posted on <span style="color: #000000; font-style: italic">[[mesage.posted]]</span>
+                                            <span style="color: #000000; font-style: italic">[[mesage.posted | date : 'yy-MM-dd hh:ii']]</span>
                                             <i ng-if="mesage.edited" class="fa fa-edit"></i>
                                         </small>
                                     </div>
