@@ -14,6 +14,9 @@
     <div class="row">
         <ol class="breadcrumb"  style="margin: 0 -30px; border-radius: 0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
             <li>
+                <a href="{{ path('zectranet_show_office', { 'office_id': forum.office.id }) }}">{{ forum.office.name }}</a>
+            </li>
+            <li>
                 <a href="{{ path('zectranet_show_QnA_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
             </li>
             <li class="active">

@@ -10,6 +10,18 @@
 {% endblock %}
 
 {% block body %}
+
+    <div class="row">
+        <ol class="breadcrumb"  style="margin: 0 -30px; border-radius: 0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
+            <li>
+                <a href="{{ path('zectranet_show_office', { 'office_id': forum.office.id }) }}">{{ forum.office.name }}</a>
+            </li>
+            <li class="active">
+                {{ forum.name }}
+            </li>
+        </ol>
+    </div>
+
     <div class="page-header">
         <div class="row">
 
