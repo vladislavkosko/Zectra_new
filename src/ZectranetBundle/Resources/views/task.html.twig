@@ -1,6 +1,14 @@
 {% extends '@Zectranet/index.html.twig' %}
 
-{% block title %}{{ task.name }}{% endblock %}
+{% set idInArray = -1 %}
+{% if task.parent %}
+    {% for i, item in task.parent.subtasks if item.id == task.id %}
+        {% set idInArray = i + 1 %}
+    {% endfor %}
+{% endif %}
+
+{% set id = (task.parent) ? '[' ~ task.parent.id ~ '.' ~ idInArray ~ '] ' : '[' ~ task.id ~ '] '  %}
+{% block title %}{{ id ~ task.name }}{% endblock %}
 
 {% block body %}
     <div ng-cloak>
@@ -170,7 +178,7 @@
 
                     </div>
 
-                    <!-- Begin Of Task SPRINT Details -->
+                    <!-- Begin Of Task Parent Details -->
                     {% set parent = task.parent %}
 
                     <div class="row" style="margin-bottom: 10px;">
@@ -196,7 +204,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End Of Task SPRINT Details -->
+                    <!-- End Of Task Parent Details -->
                 </form>
                 <!--End of Main Task Info-->
 
