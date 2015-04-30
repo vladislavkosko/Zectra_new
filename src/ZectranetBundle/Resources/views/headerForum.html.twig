@@ -37,18 +37,18 @@
 
             {% endif %}
 
-            <div class="col-md-3 col-xs-6">
+            <div class="col-md-3 col-xs-6" style="font-size: 18px;">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
                     <div class="pull-right">
                         <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
                             <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
-                                <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
+                                <i class="fa text-danger fa-fw fa-trash"></i>
                             </a>
                         </div>
 
                         <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Settings">
                             <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_show_header_forum_settings', {'project_id': forum.id}) }}">
-                                <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
+                                <i class="fa text-primary fa-fw fa-gear"></i>
                             </a>
                         </div>
                     </div>

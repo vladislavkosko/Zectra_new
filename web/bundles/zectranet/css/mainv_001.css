@@ -222,11 +222,11 @@ div[data-role="editor-toolbar"] {
 
 .comentsTextarea{
     height: 34px !important;
-    transition: 1s;
+    transition: 0.5s;
 }
 .comentsTextareaFocus{
     height: 100px !important;
-    transition: 1s;
+    transition: 0.5s;
 }
 
 .coments-main{

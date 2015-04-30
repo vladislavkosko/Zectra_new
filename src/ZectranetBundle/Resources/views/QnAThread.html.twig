@@ -46,7 +46,7 @@
                 </div>
 
             {% endif %}
-            <div class="col-md-3" style="font-size: 18px;">
+            <div class="col-md-3" style="font-size: 18px;"style="font-size: 18px;">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
                     <div class="pull-right">
                         <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
@@ -157,7 +157,7 @@
                         </li>
 
                         <li class="pull-right" style="padding: 10px 2px 10px 14px; border-left: 1px solid #dbdbdb; color: #AAA;">
-                            <small>asked {{ post.posted | date('d-m-y H:i') }}</small>
+                            <small>answered {{ post.posted | date('d-m-y H:i') }}</small>
                         </li>
                     </ul>
 
