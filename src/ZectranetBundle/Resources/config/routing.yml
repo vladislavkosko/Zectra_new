@@ -339,6 +339,13 @@ zectranet_QnA_thread_edit_name:
         project_id: \d+
         thread_id: \d+
 
+zectranet_QnA_thread_edit_message:
+    pattern: /QnAForum/{project_id}/thread/{thread_id}/editMessage
+    defaults: { _controller: ZectranetBundle:QnAForum:editMessageThread }
+    requirements:
+        project_id: \d+
+        thread_id: \d+
+
 zectranet_QnA_add_post:
     pattern: /QnAForum/thread/add_post/{thread_id}
     defaults: { _controller: ZectranetBundle:QnAForum:addPost }

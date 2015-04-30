@@ -24,7 +24,7 @@
                         </span>
                     </div>
                     <form ng-class="formStatus" action="{{ path('zectranet_QnA_forum_edit_name', {'project_id' : forum.id}) }}" method="post">
-                        <input id="inputName" ng-focus="setFocus()" ng-blur="setBlure()" type="text" value="{{ forum.name }}" name="newName" class="form-control" style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; height: 44px;" required>
+                        <input id="inputName" ng-focus="focus = true" ng-blur="setBlure()" type="text" value="{{ forum.name }}" name="newName" class="form-control" style="height: 44px; font-size: 18px;" required>
                         <input type="submit" class="hidden">
                     </form>
                 </div>
@@ -61,6 +61,7 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-12">
             <h4 style="padding-bottom: 10px; border-bottom: 1px solid #eee;">

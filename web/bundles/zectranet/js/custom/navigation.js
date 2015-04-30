@@ -16,6 +16,8 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         $scope.focus = false;
         $scope.iconEdit = false;
 
+        $scope.formStatusQuestion = false;
+
         $scope.setFormEdit = function() {
             $scope.formStatus = 'formEdit';
             //var el = document.getElementById('inputName');
@@ -43,6 +45,17 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.setIconNone = function () {
             $scope.iconEdit = false;
+        };
+
+        $scope.setFormEditQuestion = function() {
+            $scope.formStatusQuestion = true;
+            //var el = document.getElementById('textareaName');
+            //el.focus();
+            //el.setSelectionRange(el.value.length,el.value.length);
+        };
+
+        $scope.setFormNoneQuestion = function () {
+            $scope.formStatusQuestion = false;
         };
 
         $scope.requests = {};
