@@ -19,15 +19,12 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
             'projectNameError': false
         };
 
-
         $scope.testInputs = function (projectName) {
             if(projectName == '')
             {
                 $scope.homeOfficeInputs.projectNameError = true;
             }
         };
-
-
 
         $scope.getContactList = function (conv_id) {
             $scope.contactListPromise = $http
@@ -62,34 +59,27 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
             }
         };
 
-        $rootScope.dinamicChatRefresh = function(id)
-        {
-            if(id == $rootScope.ConversationId )
-            {
-                $scope.getConversation(id);
-            }
-
-        };
-
-        $scope.getConversation = function (id) {
-
-            for(var i=0; i<$rootScope.contacts.length; i++) {
+        $scope.getConversation = function GetConversation(id) {
+            for(var i = 0; i < $rootScope.contacts.length; i++) {
                 $rootScope.contacts[i].checked = ($rootScope.contacts[i].id == id) ;
                 if($rootScope.contacts[i].checked == true)
                 {
-                    $rootScope.ConversationId =$rootScope.contacts[i].id;
+                    $rootScope.ContactID = $rootScope.contacts[i].id;
+                    if ($scope.$parent.notificationsLength) {
+                        $scope.$parent.notificationsLength -= $scope.contacts[i].notificationsLength;
+                    }
                 }
             }
             $scope.conversationChatPromise = $http
                 .get($scope.urlGetConversation.replace('0' , id))
                 .success(function (response) {
                     $scope.conversation = response;
-                        scrollChat();
                 }
             );
-            $scope.conversationChatPromise.then(function () {
-                $scope.prepareCountOfNotifications($rootScope.contacts, $scope.contactNotifications);
-            });
+        };
+
+        $rootScope.dynamicChatRefresh = function (id) {
+            $scope.getConversation(id);
         };
 
         $scope.SendConversationMessage = function (message, conversation_id) {
@@ -101,23 +91,21 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
                     .post($scope.urlSendConversationMessage.replace('0',conversation_id), {'message': message})
                     .success(function (response) {
                         $scope.conversation.messages.push(response);
-                        setTimeout(function () {
+                        /*setTimeout(function () {
                             scrollChat();
                             return false;
-                        }, 300);
+                        }, 300);*/
                     }
                 );
             }
 
         };
 
-        function scrollChat() {
-            var chat = $('#conversation-chat');
-            chat.animate(
-                {
-                    'scrollTop': $(this).height() + 500
-                }, 1000
-            );
-        }
+        $scope.pressEnter = function ($event, message, conv_id) {
+            if ($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey) {
+                $event.preventDefault();
+                $scope.SendConversationMessage(message, conv_id);
+            }
+        };
     }
 ]);

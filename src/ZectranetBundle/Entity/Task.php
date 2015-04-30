@@ -218,6 +218,7 @@ class Task
         $this->estimatedMinutes = 0;
         $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->versionid = null;
+        $this->subtasks = new ArrayCollection();
     }
 
     /**

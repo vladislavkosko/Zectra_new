@@ -109,7 +109,7 @@
                         <h4 ng-if="(conversation) && (conversation.messages.length == 0)" class="text-info text-center vertical-center">
                             Posts will be displayed here
                         </h4>
-                        <ul id="conversation-chat" class="chat" style="height: 250px; overflow-y: auto">
+                        <ul id="conversation-chat" class="chat" scroll-glue="true" style="height: 250px; overflow-y: auto">
                             <li ng-repeat="mesage in conversation.messages" style="border-bottom: none;" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
                                 <span class="chat-img" ng-class="{ 'pull-right': {{ app.user.id }} == mesage.user.id, 'pull-left': {{ app.user.id }} != mesage.user.id }" ng-init="avatar = asset + 'documents/' + mesage.user.avatar;">
                                     <img ng-src="[[ avatar ]]" alt="Avatar" class="img-circle img-responsive" style="width: 50px; height: 50px;"/>
@@ -136,10 +136,10 @@
                     </div>
                     <div class="list-group-item">
                         <form class="input-group input-group-lg">
-                            <textarea id="textarea-post"  name="message" class="form-control" rows="3"  style="resize: vertical; font-size: 11px; height: 65px;" ng-model="message"></textarea>
+                            <textarea id="textarea-post"  name="message" class="form-control" rows="3" ng-keypress="pressEnter($event, message, conversation.id)" style="resize: vertical; font-size: 11px; height: 65px;" ng-model="message"></textarea>
 
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendConversationMessage(message,conversation.id)">
+                                <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendConversationMessage(message, conversation.id)">
                                     <span>Post</span>
                                 </button>
                             </span>

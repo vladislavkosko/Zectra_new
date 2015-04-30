@@ -49,7 +49,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         $scope.notifications = null;
         $scope.contactNotifications = null;
         $scope.notifyHandler = null;
-        $scope.notificationsLength = null;
+        $scope.notificationsLength = 0;
         $scope.FirstInit = false;
 
         function Notify() {
@@ -171,6 +171,8 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                             StartNotify();
                             document.getElementById('notif_sound').play();
                             var chatUpdate = false;
+                            $scope.notificationsLength = response.result.notifications.length;
+                            $rootScope.NOTIFICATIONS = $scope.notifications;
                             prepareNotifications(response.result.notifications);
                             shareNotifications(response.result.notifications);
                             for (var i = 0; i < $scope.notifications.length; i++) {
@@ -189,10 +191,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                                 if (chatUpdate && angular.isDefined($rootScope.updateChat)) {
                                     $rootScope.updateChat(0, 100);
                                 }
-
                             }
-                            $scope.notificationsLength = response.result.notifications.length;
-                            $rootScope.NOTIFICATIONS = $scope.notifications;
                         }
                     } else {
                         StopNotify();
@@ -205,7 +204,8 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             $scope.notifPromise.then(function () {
                 if (angular.isDefined($rootScope.contacts))
                     $scope.prepareCountOfNotifications($rootScope.contacts, $scope.contactNotifications);
-            });
+                }
+            );
         };
 
         function prepareNotifications(notifications) {
@@ -246,6 +246,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         }
 
         $scope.prepareCountOfNotifications = function(contacts, contactNotifications) {
+            var needRefresh = false;
             for (var i = 0; i < contacts.length; i++)
             {
                 contacts[i].notificationsLength = 0;
@@ -254,12 +255,15 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                     if (contacts[i].id == contactNotifications[j].resourceid)
                     {
                         contacts[i].notificationsLength += 1;
-                        if(contacts[i].id == $rootScope.ConversationId )
-                        {
-                            $rootScope.dinamicChatRefresh($rootScope.ConversationId);
+                        if(contacts[i].id == $rootScope.ContactID) {
+                            needRefresh = true;
                         }
                     }
                 }
+            }
+
+            if (needRefresh) {
+                $rootScope.dynamicChatRefresh($rootScope.ContactID);
             }
         };
 

@@ -369,22 +369,12 @@ class Notifier
             if (count($temp) > 0)
             {
                 $users = array();
-                foreach ($destination->getUsers() as $user)
+                foreach ($destination->getUsers() as $user) {
                     if (!in_array($user->getUsername(), $temp)) $users[] = $user;
+                }
 
-                if (!in_array($destination->getOwner()->getUsername(), $temp))
+                if (!in_array($destination->getOwner()->getUsername(), $temp)) {
                     $users[] = $destination->getOwner();
-
-                if (($isOffice == null) and (count($destination->getOffices())) > 0)
-                {
-                    foreach ($destination->getOffices() as $office)
-                    {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
-                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                                $users[] = $office->getOwner();
-                        foreach ($office->getUsers() as $user)
-                            if (!in_array($user->getUsername(), $temp)) $users[] = $user;
-                    }
                 }
             }
             else
@@ -394,18 +384,6 @@ class Notifier
                     $users[] = $user;
                 if ($this->user->getUsername() != $destination->getOwner()->getUsername())
                     $users[] = $destination->getOwner();
-
-                if (($isOffice == null) and (count($destination->getOffices())) > 0)
-                {
-                    foreach ($destination->getOffices() as $office)
-                    {
-                        if (($this->user->getUsername() != $office->getOwner()->getUsername())
-                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                                $users[] = $office->getOwner();
-                        foreach ($office->getUsers() as $user)
-                            $users[] = $user;
-                    }
-                }
             }
         }
 
@@ -424,15 +402,6 @@ class Notifier
 
                 if (!in_array($destination->getOwner()->getUsername(), $temp))
                     $users[] = $destination->getOwner();
-
-                foreach ($destination->getOffices() as $office)
-                {
-                    if ($this->user->getUsername() != $office->getOwner()->getUsername()
-                        and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                            $users[] = $office->getOwner();
-                    foreach ($office->getUsers() as $user)
-                        if (!in_array($user->getUsername(), $temp)) $users[] = $user;
-                }
             }
             else
             {
@@ -442,14 +411,6 @@ class Notifier
                 if ($this->user->getUsername() != $destination->getOwner()->getUsername())
                     $users[] = $destination->getOwner();
 
-                foreach ($destination->getOffices() as $office)
-                {
-                    if ($this->user->getUsername() != $office->getOwner()->getUsername()
-                        and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                            $users[] = $office->getOwner();
-                    foreach ($office->getUsers() as $user)
-                        $users[] = $user;
-                }
             }
             $destination = $task;
         }
@@ -480,18 +441,6 @@ class Notifier
                     $users[] = $user;
                 if ($this->user->getUsername() != $destination->getOwner()->getUsername())
                     $users[] = $destination->getOwner();
-
-                if (($isOffice == null) and (count($destination->getOffices())) > 0)
-                {
-                    foreach ($destination->getOffices() as $office)
-                    {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
-                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                                $users[] = $office->getOwner();
-                        foreach ($office->getUsers() as $user)
-                            $users[] = $user;
-                    }
-                }
             }
             if ($task != null) $destination = $task;
         }
@@ -541,15 +490,6 @@ class Notifier
 
                     if ($this->user->getUsername() != $destination->getOwner()->getUsername())
                         $users[] = $destination->getOwner();
-
-                    foreach ($destination->getOffices() as $office)
-                    {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
-                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                                $users[] = $office->getOwner();
-                        foreach ($office->getUsers() as $user)
-                            $users[] = $user;
-                    }
                     break;
                 }
 
@@ -563,15 +503,6 @@ class Notifier
 
                     if ($this->user->getUsername() != $destination->getOwner()->getUsername())
                         $users[] = $destination->getOwner();
-
-                    foreach ($destination->getOffices() as $office)
-                    {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
-                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                                $users[] = $office->getOwner();
-                        foreach ($office->getUsers() as $user)
-                            $users[] = $user;
-                    }
                     break;
                 }
 
@@ -588,15 +519,6 @@ class Notifier
 
                     if ($this->user->getUsername() != $destination->getOwner()->getUsername())
                         $users[] = $destination->getOwner();
-
-                    foreach ($destination->getOffices() as $office)
-                    {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
-                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                                $users[] = $office->getOwner();
-                        foreach ($office->getUsers() as $user)
-                            $users[] = $user;
-                    }
                     break;
                 }
 
@@ -610,15 +532,6 @@ class Notifier
 
                     if ($this->user->getUsername() != $destination->getOwner()->getUsername())
                         $users[] = $destination->getOwner();
-
-                    foreach ($destination->getOffices() as $office)
-                    {
-                        if ($this->user->getUsername() != $office->getOwner()->getUsername()
-                            and ($office->getOwner()->getUsername() != $destination->getOwner()->getUsername()))
-                                $users[] = $office->getOwner();
-                        foreach ($office->getUsers() as $user)
-                            $users[] = $user;
-                    }
                     break;
                 }
             }

@@ -168,6 +168,34 @@
                         </div>
                         <!-- End Of Task END DATE Select -->
 
+                        <!-- Begin Of Task Parent Details -->
+                        {% set parent = task.parent %}
+
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <label class="text-muted form-control-static" style="color: #777;font-weight: 300;">
+                                        Parent task:
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    {% if parent %}
+                                        <a style="font-weight: bold;" href="{{ path('zectranet_task_show', {'task_id': parent.id}) }}" class="btn form-control-static text-info">
+                                            {{ parent.name }}
+                                        </a>
+                                    {% else %}
+                                        <a style="font-weight: bold;" href="#" class="btn form-control-static text-info">
+                                            none
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Of Task Parent Details -->
+
                     </div>
                 </form>
                 <!--End of Main Task Info-->
@@ -213,11 +241,6 @@
                                             {% set usersForAssign = usersForAssign | merge([user]) %}
                                         {% endfor %}
                                         {% set taskProject = (task.project.parent) ? task.project.parent : task.project %}
-                                        {% for office in taskProject.offices %}
-                                            {% for user in office.users if user not in usersForAssign %}
-                                                {% set usersForAssign = usersForAssign | merge([user]) %}
-                                            {% endfor %}
-                                        {% endfor %}
 
                                         {% for user in usersForAssign %}
                                             {% if user.id != task.owner.id %}
@@ -339,9 +362,38 @@
                             </div>
                         </div>
                         <!-- End Of Task ESTIMATED MINUTES Select -->
+
+                        <!-- Begin Of Task SPRINT Details -->
+                        {% set sprint = (task.parentId) ? task.parent.sprint : task.sprint %}
+
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <label class="text-muted form-control-static" style="color: #777;font-weight: 300;">
+                                        Sprint:
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    {% if sprint %}
+                                        <a style="font-weight: bold;" href="{{ path('zectranet_show_sprint', {'sprint_id': sprint.id, 'office_id': sprint.office.id }) }}" class="btn form-control-static text-info">
+                                            {{ sprint.name }}
+                                        </a>
+                                    {% else %}
+                                        <a style="font-weight: bold;" href="#" class="btn form-control-static text-info">
+                                            none
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Of Task SPRINT Details -->
+
+                        <!-- Begin Of Task Version Select -->
                         {% set versions = (task.project.parent) ? task.project.parent.versions : task.project.versions %}
                         {% if versions | length > 0 %}
-                        <!-- Begin Of Task Version Select -->
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">
                                 <div class="input-group">
@@ -525,7 +577,7 @@
                                         <i class="fa fa-file"></i>
                                     </button>
                                 </span>
-                                <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
+                                <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event, message)" ng-model="message"></textarea>
                                         <span class="input-group-btn">
                                         <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
                                             <span>Post</span>

@@ -119,6 +119,15 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             $('#textarea-post').val(post_will_be_edited.message);
             $scope.will_be_edited = true;
         };
+
+
+        $scope.pressEnter = function ($event, message) {
+            if ($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey) {
+                $event.preventDefault();
+                $scope.SendPost(message);
+            }
+        };
+
         console.log('Chat Controller was loaded');
 
     }]);
