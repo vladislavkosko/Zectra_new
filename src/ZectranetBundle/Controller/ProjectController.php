@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -534,9 +535,7 @@ class ProjectController extends Controller
         }
         $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory, null, $parameters['name']);
 
-        $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return new JsonResponse($task->getInArray());
     }
 
     /**
@@ -574,11 +573,9 @@ class ProjectController extends Controller
             $project = $project->getParent();
         }
         $this->get('zectranet.notifier')->createNotification("task_added", $project, $user, $project, $nameEpicStory, null, $parameters['name']);
+        $task = $em->find('ZectranetBundle:Task', $task->getId());
 
-
-        $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return new JsonResponse($task->getInArray());
     }
 
     /**

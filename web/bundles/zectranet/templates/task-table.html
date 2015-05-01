@@ -22,7 +22,7 @@
     </thead>
 
     <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter"
-           ng-init="task.expand = false; parentTask = task">
+           ng-init="parentTask = task">
     <tr ng-if="task.parentid == null">
         <td class="col-xs-1" style="font-size: 10px;">
             <span style="vertical-align: middle;">
