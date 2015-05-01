@@ -24,6 +24,11 @@
         <link href="{{ asset('bundles/zectranet/css/angular-busy.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('bundles/zectranet/css/lightbox.css') }}" rel="stylesheet" type="text/css">
         <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700' rel='stylesheet' type='text/css'>
+        <style>
+            [ng\:cloak], [ng-cloak], .ng-cloak {
+                display: hidden !important;
+            }
+        </style>
     {% endblock %}
 
 	{% block head %}
@@ -31,7 +36,7 @@
 	{% endblock %}
 </head>
 
-<body ng-cloak ng-controller="NavigationController" ng-init="getNotification()">
+<body ng-controller="NavigationController" ng-init="getNotification()">
 
 <div id="wrapper" class="active">
 	<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">

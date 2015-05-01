@@ -248,7 +248,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 for (var i = 0; i < subtasks.length; i++) {
                     meanNumber += subtasks[i].progress;
                 }
-                return Math.round((meanNumber + progress) / (subtasks.length + 1));
+                return ~~((meanNumber + progress) / (subtasks.length + 1));
             }
 
             function calculateMeanEstimation (subtasks, hours, minutes) {
@@ -271,21 +271,19 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     'in_progress': 0, 'done': 0
                 };
                 for (var i = 0; i < subtasks.length; i++) {
-                    if (subtasks[i].type.id != 2) {
-                        switch (subtasks[i].status.id) {
-                            case 1:
-                                statuses.story++;
-                                break;
-                            case 2:
-                                statuses.todo++;
-                                break;
-                            case 3:
-                                statuses.in_progress++;
-                                break;
-                            case 4:
-                                statuses.done++;
-                                break;
-                        }
+                    switch (subtasks[i].status.id) {
+                        case 1:
+                            statuses.story++;
+                            break;
+                        case 2:
+                            statuses.todo++;
+                            break;
+                        case 3:
+                            statuses.in_progress++;
+                            break;
+                        case 4:
+                            statuses.done++;
+                            break;
                     }
                 }
                 if (statuses.done == subtasks.length) {
