@@ -12,6 +12,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
 
         $scope.headers = null;
         $scope.addnewheader = false;
+        var timeNow = new Date(TIME_NOW);
 
 
 
@@ -83,8 +84,6 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             $('#header_forum_messages_modal').modal('show');
         }
 
-
-
         $scope.addNewHeaderQuick = function (header) {
             if($scope.quickheader.title == '')
             {
@@ -104,15 +103,13 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                                 'textColor': '#000000'
                             };
                             $scope.getHeaders();
-
                         }
-                    });
+                    }
+                );
             }
         };
 
-
-
-        $scope.addNewSubHeaderQuick = function (oneheader,quicksubheader) {
+        $scope.addNewSubHeaderQuick = function (oneheader, quicksubheader) {
             if($scope.quicksubheader.title == '' && $scope.quicksubheader.description == '')
             {
                 $scope.headerForumErrors.subHeaderTitleError = true;
@@ -120,16 +117,14 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             }
             else if($scope.quicksubheader.title == '')
             {
-               $scope.headerForumErrors.subHeaderTitleError = true;
+                $scope.headerForumErrors.subHeaderTitleError = true;
                 $scope.headerForumErrors.subHeaderDescriptionError = false;
             }
             else if($scope.quicksubheader.description == '')
             {
                 $scope.headerForumErrors.subHeaderDescriptionError = true;
                 $scope.headerForumErrors.subHeaderTitleError = false;
-            }
-            else
-            {
+            } else {
                 $scope.headerForumErrors.subHeaderTitleError = false;
                 $scope.headerForumErrors.subHeaderDescriptionError = false;
                 oneheader.addnewsubheader = false;
@@ -145,7 +140,8 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                             $scope.getHeaders();
 
                         }
-                    });
+                    }
+                );
             }
         };
 
@@ -179,7 +175,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
 
         setInterval( function() {
             $scope.getProjectSettingInfo()
-        }, 60000);
+        }, 30000);
 
 
         $scope.getProjectSettingInfo = function () {
@@ -190,122 +186,104 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                     $scope.Project_Team = response.Project_Team;
                     $scope.HFLogs = response.HFLogs;
 
-                    for(var i = 0; i < $scope.HO_Contacts.length;i++)
+                    for(var i = 0; i < $scope.HO_Contacts.length; i++)
                     {
                         $scope.HO_Contacts[i].checked = false;
                     }
-                    for(i = 0; i < $scope.All_Contacts.length;i++)
+                    for(i = 0; i < $scope.All_Contacts.length; i++)
                     {
                         $scope.All_Contacts[i].checked = false;
                     }
-                    for( i = 0; i < $scope.Project_Team.length;i++)
+                    for( i = 0; i < $scope.Project_Team.length; i++)
                     {
                         $scope.Project_Team[i].reSendVisibleButton = false;
                         var one_minute = 1000 * 60;
-                        var now = new Date();
-                        now = now.getTime();
+                        var now = new Date(response.timeNow);
                         var timeRequest = new Date($scope.Project_Team[i].date);
-                        timeRequest = timeRequest.getTime();
                         var difference_miliseconds = now - timeRequest;
                         difference_miliseconds = difference_miliseconds / one_minute;
 
-                        if($scope.Project_Team[i].status.id == 1 && difference_miliseconds >= 1)
-                        {
+                        if(($scope.Project_Team[i].status.id == 1 || $scope.Project_Team[i].status.id == 3)
+                            && difference_miliseconds >= 5) {
                             $scope.Project_Team[i].reSendVisibleButton = true;
                         }
                     }
-
-                })
+                }
+            );
         };
 
-        $scope.contactChecked = function (type,index, array) {
-            for(var i=0;i<array.length;i++)
-            {
-                    array[i].checked = ( i == index) ;
+        $scope.contactChecked = function (type, index, array) {
+            for(var i = 0; i < array.length; i++) {
+                array[i].checked = (i == index);
             }
-            $scope.testClickableButton(type,array);
+            $scope.testClickableButton(type, array);
         };
 
 
-        $scope.SendRequest = function (type,message,array)
-        {
-            if(type == 1 && message == '')
-            {
+        $scope.SendRequest = function (type, message, array) {
+            if(type == 1 && message == '') {
                 $scope.headerForumSettingsErrors.HO_Contact_message_Error =true;
                 $scope.headerForumSettingsErrors.All_Contact_message_Error =false;
             }
-            else if(type == 2 && message == '')
-            {
+            else if(type == 2 && message == '') {
                 $scope.headerForumSettingsErrors.HO_Contact_message_Error =false;
                 $scope.headerForumSettingsErrors.All_Contact_message_Error =true;
-            }
-            else
-            {
+            } else {
+                var user_id = 0;
 
-
-            var user_id = 0;
-
-            for(var i=0;i<array.length;i++)
-            {
-                if(array[i].checked)
+                for(var i=0; i<array.length; i++)
                 {
-                    user_id = array[i].id;
-                }
-            }
-
-            $http.post($scope.urlSendProjectRequest,{'message':message,'user_id': user_id})
-                .success(function (response) {
-                    if(response == 1)
+                    if(array[i].checked)
                     {
-                        if(type == 1)
-                        {
-                            $scope.HO_contact_message ='';
-                            $scope.headerForumSettingsErrors.HO_Contact_message_Error =false;
-                            $('#send_request_by_HO_contacts').modal('hide');
-
-                        }
-                        else if(type == 2)
-                        {
-                            $scope.All_contact_message ='';
-                            $scope.headerForumSettingsErrors.All_Contact_message_Error =false;
-                            $('#send_request_by_All_contacts').modal('hide');
-                        }
-                        $scope.getProjectSettingInfo();
+                        user_id = array[i].id;
                     }
-                })
+                }
+
+                $http.post($scope.urlSendProjectRequest,{'message':message,'user_id': user_id})
+                    .success(function (response) {
+                        if(response == 1)
+                        {
+                            if(type == 1)
+                            {
+                                $scope.HO_contact_message ='';
+                                $scope.headerForumSettingsErrors.HO_Contact_message_Error =false;
+                                $('#send_request_by_HO_contacts').modal('hide');
+
+                            }
+                            else if(type == 2)
+                            {
+                                $scope.All_contact_message ='';
+                                $scope.headerForumSettingsErrors.All_Contact_message_Error =false;
+                                $('#send_request_by_All_contacts').modal('hide');
+                            }
+                            $scope.getProjectSettingInfo();
+                        }
+                    }
+                );
             }
         };
 
         $scope.testClickableButton = function (type,array) {
             for(var i=0; i< array.length; i++)
             {
-                if(type == 1)
-                {
-                    if(array[i].checked)
-                    {
+                if(type == 1) {
+                    if(array[i].checked) {
                         $scope.HO_Contacts_test = true;
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         $scope.HO_Contacts_test = false;
                     }
-                }
-                if(type == 2)
-                {
-                    if(array[i].checked)
-                    {
+                } if(type == 2) {
+                    if(array[i].checked) {
                         $scope.All_Contacts_test = true;
                         break;
-                    }
-                    else
-                    {
+                    } else {
                         $scope.All_Contacts_test = false;
                     }
                 }
             }
         };
-        
+
         $scope.deleteProjectRequest = function (request_id) {
             var urlDeleteProjectRequest = $scope.urlDeleteProjectRequest.replace('requestid',request_id);
             $http.delete(urlDeleteProjectRequest)
@@ -327,22 +305,19 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
         };
 
         $scope.reSendRequest = function (request) {
-            $http.post($scope.urlReSendProjectRequest,{
+            $http.post($scope.urlReSendProjectRequest, {
                 'id': request.id,
                 'user_id': request.user.id,
                 'message': request.message,
                 'request_status': request.status.id
-            })
+                })
                 .success(function (response) {
                     if(response == 1)
                     {
                         $scope.getProjectSettingInfo();
                     }
-
-                })
-
+                }
+            );
         };
-
-
     }
 ]);

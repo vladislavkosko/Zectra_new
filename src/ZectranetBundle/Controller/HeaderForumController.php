@@ -358,6 +358,7 @@ class HeaderForumController extends Controller {
             $em->getRepository('ZectranetBundle:Request')->findBy(array('HFForumID' => $project_id))
         );
         $info['HFLogs'] = EntityOperations::arrayToJsonArray($project->getLogs());
+        $info['timeNow'] = (new \DateTime())->format('Y-m-d H:i:s');
 
         return new JsonResponse($info);
     }

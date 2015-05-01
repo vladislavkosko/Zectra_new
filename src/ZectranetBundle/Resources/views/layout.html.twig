@@ -604,6 +604,8 @@
 		{% if searchText is defined and searchText != null %}
 			SearchText = '{{ searchText }}';
 		{% endif %}
+
+        var TIME_NOW = "{{ 'now' | date('Y-m-d H:i:s') }}";
 	</script>
 
     <!-- script for Clock -->
