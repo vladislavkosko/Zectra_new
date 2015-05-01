@@ -4,25 +4,25 @@
 
 <table ng-if="(tasks) && (tasks.length > 0)" class="table">
     <thead>
-        <tr>
-            <th class="col-xs-1">ID</th>
-            <th class="hidden-sm hidden-xs">Type</th>
-            <th class="col-xs-2">Name</th>
-            <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
-            <th class="col-xs-1 hidden-sm hidden-xs">Status</th>
-            <th class="col-xs-1 hidden-xs">Progress</th>
-            <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
-            <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
-            <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
-            <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
-            <th class="col-xs-1 hidden-sm hidden-xs">Assigned</th>
-            <th class="col-xs-1 hidden-xs">Sprint</th>
-            <th class="col-xs-1">Fun</th>
-        </tr>
+    <tr>
+        <th class="col-xs-1">ID</th>
+        <th class="hidden-sm hidden-xs">Type</th>
+        <th class="col-xs-2">Name</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Status</th>
+        <th class="col-xs-1 hidden-xs">Progress</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
+        <th class="col-xs-1 hidden-sm hidden-xs">Assigned</th>
+        <th class="col-xs-1 hidden-xs">Sprint</th>
+        <th class="col-xs-1">Fun</th>
+    </tr>
     </thead>
 
     <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter"
-           ng-init="task.expand = false; parentTask = task">
+           ng-init="parentTask = task">
     <tr ng-if="task.parentid == null">
         <td class="col-xs-1" style="font-size: 10px;">
             <span style="vertical-align: middle;">

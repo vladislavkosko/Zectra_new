@@ -1064,8 +1064,12 @@ class Task
             'id' => $this->getId(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
-            'parentid' => $this->getParentid(),
-            'projectid' => $this->getProjectid(),
+            'parentid' => ($this->getParent())
+                ? $this->getParent()->getId()
+                : null,
+            'projectid' => ($this->getProject())
+                ? $this->getProject()->getId()
+                : null,
             'progress' => $this->getProgress(),
             'assigned' => ($this->assigned) ? $this->getAssigned()->getInArray() : null,
             'assignedid' => $this->getAssignedid(),
@@ -1077,10 +1081,13 @@ class Task
             'status' => $this->getStatus()->getInArray(),
             'type' => $this->getType()->getInArray(),
             'priority' => $this->getPriority()->getInArray(),
-            'subtasks' => EntityOperations::arrayToJsonArray($this->subtasks),
+            'subtasks' => EntityOperations::arrayToJsonArray($this->getSubtasks()),
             'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
             'postCount' => count($this->getPosts()),
             'versionid' => $this->getVersionid(),
+            'sprintID' => ($this->getParentid())
+                ? $this->getParent()->getSprintid()
+                : $this->getSprintid(),
         );
     }
 

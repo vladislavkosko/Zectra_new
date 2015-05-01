@@ -307,9 +307,7 @@ class ProjectController extends Controller
             return new JsonResponse(false);
         }
 
-        $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return new JsonResponse($task->getInArray());
     }
 
     /**
@@ -361,10 +359,9 @@ class ProjectController extends Controller
             return new JsonResponse(false);
         }
 
+        $task = $em->find('ZectranetBundle:Task', $task->getId());
 
-        $response = new Response(json_encode(array('Tasks' => $task->getInArray())));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return new JsonResponse($task->getInArray());
     }
 
     /**
