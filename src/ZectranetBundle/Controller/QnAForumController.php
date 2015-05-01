@@ -148,9 +148,6 @@ class QnAForumController extends Controller {
     {
         $newName = $request->request->get('newName');
 
-        /** @var User $user */
-        $user = $this->getUser();
-
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -158,6 +155,22 @@ class QnAForumController extends Controller {
         $thread = $em->getRepository('ZectranetBundle:QnAThread')->find($thread_id);
 
         $thread->setTitle($newName);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_QnA_thread', array('project_id' => $project_id, 'thread_id' => $thread_id));
+    }
+
+    public function editMessageThreadAction(Request $request, $project_id, $thread_id)
+    {
+        $newMessage = $request->request->get('newMessage');
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var QnAThread $thread */
+        $thread = $em->getRepository('ZectranetBundle:QnAThread')->find($thread_id);
+
+        $thread->setMessage($newMessage);
         $em->flush();
 
         return $this->redirectToRoute('zectranet_show_QnA_thread', array('project_id' => $project_id, 'thread_id' => $thread_id));

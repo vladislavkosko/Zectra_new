@@ -7,6 +7,10 @@
         <div class="row">
             <ol class="breadcrumb">
                 <li>
+                    <a href="{{ path('zectranet_show_office', { 'office_id': forum.office.id }) }}">{{ forum.office.name }}</a>
+                </li>
+
+                <li>
                     <a href="{{ path('zectranet_show_header_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
                 </li>
                 <li class="active">Settings</li>

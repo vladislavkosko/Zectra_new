@@ -10,6 +10,18 @@
 {% endblock %}
 
 {% block body %}
+
+    <div class="row">
+        <ol class="breadcrumb"  style="margin: 0 -30px; border-radius: 0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
+            <li>
+                <a href="{{ path('zectranet_show_office', { 'office_id': forum.office.id }) }}">{{ forum.office.name }}</a>
+            </li>
+            <li class="active">
+                {{ forum.name }}
+            </li>
+        </ol>
+    </div>
+
     <div class="page-header">
         <div class="row">
 
@@ -69,94 +81,92 @@
     </div>
 
         <div ng-controller="HeaderForumController" ng-init="getHeaders()">
-            <div class="col-md-12 panel panel-default" style="margin-bottom: 0;"  ng-repeat="oneheader in headers">
+
+            <div class="col-md-12 forum-all" style="margin-bottom: 15px;"  ng-repeat="oneheader in headers">
                 <div class="row">
-                    <div class="col-md-12" style="color: [[ oneheader.headerTextColor ]]; background-color: [[ oneheader.headerBgColor ]];">
-                        <h4 align="center">[[oneheader.title]]</h4>
+                    <div class="forum-main-header">
+                        <h4>[[oneheader.title]]</h4>
                     </div>
                 </div>
 
-                <div class="row" style="padding: 0;margin:0px 15px 0px 15px;border-left: darkgray solid 1px;border-right: darkgray solid 1px;border-bottom: darkgray solid 1px;" ng-repeat="onesubheader in oneheader.subHeaders">
-                    <div class="panel-body">
-                        <div class="col-xs-1">
-                            <img class="img-responsive" src="{{ asset('bundles/zectranet/img/forumlogo.jpg') }}" alt="subheader_image"/>
+<div class="row">
+                <div class="col-xs-12 subheader-body" ng-repeat="onesubheader in oneheader.subHeaders">
+
+                        <div class="col-xs-1 hidden-xs">
+                            <img height="40px" style="margin-left: 9px; margin-top:5px; " src="{{ asset('bundles/zectranet/img/forumlogo.png') }}" alt="subheader_image"/>
                         </div>
-                        <div class="col-xs-9">
-                            <h4>
-                                <a class="text-info" href="[[onesubheader.urlShowHeaderForumSubheader]]">
-                                    [[ onesubheader.title ]]
-                                </a>
-                            </h4>
-                            <p><i class="text-muted">[[ onesubheader.description ]]</i></p>
+                        <div class="col-xs-8">
+
+                            <a href="[[onesubheader.urlShowHeaderForumSubheader]]">
+                                <h4>[[ onesubheader.title ]]</h4>
+                            </a>
+
+                            <small class="text-muted forum-description-small">
+                                [[ onesubheader.description ]]
+                            </small>
                         </div>
                         <div class="col-xs-1">
-                            [[ onesubheader.threads.length ]]
+                            <h4 class="text-muted"> [[ onesubheader.threads.length ]]</h4>
                         </div>
 
                         <div class="col-xs-1" ng-if="onesubheader.threads.posts == undefined">
-                            0
+                            <h4 class="text-muted"> 0</h4>
                         </div>
 
                         <div class="col-xs-1" ng-if="onesubheader.threads.posts.length > 0">
-                        [[ onesubheader.threads.posts.length ]]
+                            <h4 class="text-muted">[[ onesubheader.threads.posts.length ]]</h4>
                         </div>
-                    </div>
+
                 </div>
-                <div style="margin: 5px 0 15px 15px;" ng-if="!(oneheader.addnewsubheader)">
-                    <a href="#"  ng-click="oneheader.addnewsubheader = true"> <i class="fa fa-plus"></i>Add new SubHeader </a>
+</div>
+<div class="row">
+                <div class="col-xs-12 subheader-body add-sub-heaedr-body" ng-if="!(oneheader.addnewsubheader)">
+                    <a class="add-sub-heaedr pull-right" href="#"  ng-click="oneheader.addnewsubheader = true">
+                        <small class="text-muted"><i class="fa fa-plus"></i> Add SubHeader</small>
+                    </a>
                 </div>
-                <div ng-if="oneheader.addnewsubheader" style="margin: 5px 0 15px 15px;">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="col-md-5">
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon1">Subheader title:</span>
-                                    <input type="text" class="form-control" ng-model="quicksubheader.title"  aria-describedby="basic-addon1">
-                                </div>
+</div>
+
+                <div ng-if="oneheader.addnewsubheader">
+                    <div class="row new-subheader-main-all">
+                        <div class="col-xs-12 subheader-body new-subheader-main">
+
+                            <div class="col-xs-1 hidden-xs">
+                                <img height="40px" style="margin-left: 9px; margin-top:5px; " src="{{ asset('bundles/zectranet/img/new.png') }}" alt="subheader_image"/>
+                            </div>
+
+                            <div class="col-xs-8">
+                                <h4>
+                                <input type="text" placeholder="Subheader title ..." class="form-control subheader-body-input-h3" ng-model="quicksubheader.title" >
+                                </h4>
                                 <div ng-if="headerForumErrors.subHeaderTitleError == true">
-                                    <span  class="label label-danger"> Please fill out this field </span>
+                                    <span style="margin-left: 10px;"  class="label label-danger"> Please fill out this field </span>
                                 </div>
-                            </div>
+                                <h4>
+                                    <input type="text" placeholder="Subheader description ..." class="form-control input-sm" ng-model="quicksubheader.description">
+                                </h4>
 
-                        </div>
-                    </div>
-                    <br/>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="col-md-5">
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon2">Subheader Description:</span>
-                                    <input type="text" class="form-control" ng-model="quicksubheader.description"  aria-describedby="basic-addon2">
-                                </div>
                                 <div ng-if="headerForumErrors.subHeaderDescriptionError == true">
-                                    <span  class="label label-danger"> Please fill out this field </span>
+                                    <span style="margin-left: 10px;"  class="label label-danger"> Please fill out this field </span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br/>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon3">Admin subheader:</span>
-                                    <input type="checkbox" class="form-control" ng-model="quicksubheader.admin" aria-describedby="basic-addon3">
+
+                                <div class="checkbox checkbox-info" style="margin-left:10px;">
+
+                                    <input type="checkbox" class="form-control" ng-model="quicksubheader.admin">
+                                    <label for="checkbox2" style="color:#999;">Admin subheader</label>
+
                                 </div>
+
+                                <div style="margin-left:10px; margin-bottom:8px;">
+                                    <span class="btn btn-primary btn-sm" style="background-color: #337ab7;cursor: pointer;" ng-click="addNewSubHeaderQuick(oneheader,quicksubheader);">Add</span>
+                                    <span class="btn btn-default btn-sm" style="cursor: pointer;" ng-click="oneheader.addnewsubheader = !(oneheader.addnewsubheader) ;">Close</span>
+                                </div>
+
                             </div>
 
                         </div>
                     </div>
-                    <br/>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="col-md-2">
-                                <div class="btn-group">
-                                    <span class="btn btn-success" style="background-color: #337ab7;cursor: pointer;" ng-click="addNewSubHeaderQuick(oneheader,quicksubheader);">Add</span>
-                                    <span class="btn btn-danger" style="cursor: pointer;" ng-click="oneheader.addnewsubheader = !(oneheader.addnewsubheader) ;">Close</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                 </div>
 

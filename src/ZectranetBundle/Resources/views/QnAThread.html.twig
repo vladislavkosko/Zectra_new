@@ -14,6 +14,9 @@
     <div class="row">
         <ol class="breadcrumb"  style="margin: 0 -30px; border-radius: 0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
             <li>
+                <a href="{{ path('zectranet_show_office', { 'office_id': forum.office.id }) }}">{{ forum.office.name }}</a>
+            </li>
+            <li>
                 <a href="{{ path('zectranet_show_QnA_forum', { 'project_id': forum.id }) }}">{{ forum.name }}</a>
             </li>
             <li class="active">
@@ -76,9 +79,39 @@
     <div class="col-md-12 post-all">
         <div class="row">
             <div class="col-xs-12 post">
-                <div class="post-message">
-                    {{ thread.message }}
-                </div>
+
+                {% if (forum.ownerID == app.user.id) or (thread.userID == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                    <div style="display: inline-block; width: 100%;">
+
+                        <div ng-click="setFormEditQuestion()" ng-if="!formStatusQuestion" id="spanLength" style="cursor: pointer;">
+                            <div id="question" class="post-message" style="display: block; width: 100%;">
+                                {{ thread.message }}
+                            </div>
+                        </div>
+
+                        <form ng-if="formStatusQuestion" action="{{ path('zectranet_QnA_thread_edit_message', {'project_id' : forum.id, 'thread_id' : thread.id}) }}" method="post">
+                            <textarea style="height: 100px;" name="newMessage" id="textareaName" class="form-control" required>{{ thread.message }}</textarea>
+                            <div class="pull-right" style="margin-top: 3px;">
+                                <button type="submit" class="btn" style="height: 32px; width: 32px; background-color: #eee; padding: 0; color: #30B22C;">
+                                    <i class="fa fa-check"></i>
+                                </button>
+
+                                <button ng-click="setFormNoneQuestion()" class="btn" style="height: 32px; width: 32px; background-color: #eee; padding: 0; color: #EF2323;">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+
+                    </div>
+
+                {% else %}
+                    <div id="question" class="post-message" style="display: block; width: 100%;">
+                        {{ thread.message }}
+                    </div>
+
+                {% endif %}
+
                 <hr style="margin: 0px;">
                 <div style="margin: 0px 0 5px 17px;">
                     {% for i in 0..keywords | length - 1 %}
@@ -169,7 +202,7 @@
 
     <div class="col-md-1">
 
-        <img style="height: 40px; margin-top: 7px;" class="img-responsive" src="{{ asset('') }}documents/{{ thread.user.avatar }}">
+        <img style="height: 40px; margin-top: 7px;" class="img-responsive" src="{{ asset('') }}documents/{{ app.user.avatar }}">
     </div>
 
 
