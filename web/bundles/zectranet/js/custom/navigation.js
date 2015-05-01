@@ -12,11 +12,15 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         var approveHFMembershipRequest = JSON_URLS.approveHFMembershipRequest;
         var approveQnAMembershipRequest = JSON_URLS.approveQnAMembershipRequest;
 
+        // ---- For editable fields in projects ----
+
         $scope.formStatus = 'formNone';
         $scope.focus = false;
         $scope.iconEdit = false;
 
         $scope.formStatusQuestion = false;
+
+        $scope.formStatusAnswer = [];
 
         $scope.setFormEdit = function() {
             $scope.formStatus = 'formEdit';
@@ -57,6 +61,16 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         $scope.setFormNoneQuestion = function () {
             $scope.formStatusQuestion = false;
         };
+
+        $scope.setFormEditAnswer = function (i) {
+            $scope.formStatusAnswer[i] = true;
+        };
+
+        $scope.setFormNoneAnswer = function (i) {
+            $scope.formStatusAnswer[i] = false;
+        };
+
+        // ---- End of editable fields in projects ----
 
         $scope.requests = {};
         $scope.notifications = null;

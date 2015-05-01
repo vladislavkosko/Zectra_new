@@ -160,6 +160,13 @@ class QnAForumController extends Controller {
         return $this->redirectToRoute('zectranet_show_QnA_thread', array('project_id' => $project_id, 'thread_id' => $thread_id));
     }
 
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $project_id
+     * @param $thread_id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function editMessageThreadAction(Request $request, $project_id, $thread_id)
     {
         $newMessage = $request->request->get('newMessage');
@@ -242,6 +249,31 @@ class QnAForumController extends Controller {
         }
 
         return $this->redirectToRoute('zectranet_show_QnA_thread', array('project_id' => $thread->getForumID(), 'thread_id' => $thread_id));
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $post_id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function editPostAction(Request $request, $post_id)
+    {
+        $newMessage = $request->request->get('newMessage');
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var QnAPost $post */
+        $post = $em->find('ZectranetBundle:QnAPost', $post_id);
+
+        $post->setMessage($newMessage);
+        $em->flush();
+
+        return $this->redirectToRoute('zectranet_show_QnA_thread', array('project_id' => $post->getThread()->getForumID(), 'thread_id' => $post->getThreadID()));
     }
 
     /**

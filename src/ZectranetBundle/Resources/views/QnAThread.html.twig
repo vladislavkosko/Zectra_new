@@ -96,9 +96,8 @@
                                     <i class="fa fa-check"></i>
                                 </button>
 
-                                <button ng-click="setFormNoneQuestion()" class="btn" style="height: 32px; width: 32px; background-color: #eee; padding: 0; color: #EF2323;">
-                                    <i class="fa fa-close"></i>
-                                </button>
+                                <i ng-click="setFormNoneQuestion()" class="fa fa-close btn" style="height: 32px; width: 32px; background-color: #eee; padding: 7px; color: #EF2323;"></i>
+
                             </div>
                             <div class="clearfix"></div>
                         </form>
@@ -160,14 +159,43 @@
     </div>
 
 
-    {% for post in thread.posts %}
+    {% for i, post in thread.posts %}
 
-        <div class="col-md-12 post-all">
+        <div class="col-md-12 post-all" ng-init="formStatusAnswer[{{ i }}] = false">
             <div class="row">
                 <div class="col-xs-12 post">
-                    <div class="post-message">
-                        {{ post.message }}
-                    </div>
+
+                    {% if (post.userID == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                        <div style="display: inline-block; width: 100%;">
+
+                            <div ng-click="setFormEditAnswer({{ i }})" ng-if="!formStatusAnswer[{{ i }}]" id="spanLength" style="cursor: pointer;">
+                                <div id="question" class="post-message" style="display: block; width: 100%;">
+                                    {{ post.message }}
+                                </div>
+                            </div>
+
+                            <form ng-if="formStatusAnswer[{{ i }}]" action="{{ path('zectranet_QnA_post_edit', {'post_id' : post.id}) }}" method="post">
+                                <textarea style="height: 100px;" name="newMessage" id="textareaName" class="form-control" required>{{ post.message }}</textarea>
+                                <div class="pull-right" style="margin-top: 3px;">
+                                    <button type="submit" class="btn" style="height: 32px; width: 32px; background-color: #eee; padding: 0; color: #30B22C;">
+                                        <i class="fa fa-check"></i>
+                                    </button>
+
+                                    <i ng-click="setFormNoneAnswer({{ i }})" class="fa fa-close btn" style="height: 32px; width: 32px; background-color: #eee; padding: 7px; color: #EF2323;"></i>
+
+                                </div>
+                                <div class="clearfix"></div>
+                            </form>
+
+                        </div>
+
+                    {% else %}
+                        <div id="question" class="post-message" style="display: block; width: 100%;">
+                            {{ post.message }}
+                        </div>
+
+                    {% endif %}
+
                 </div>
 
                 <div class="col-xs-12 post-span">
