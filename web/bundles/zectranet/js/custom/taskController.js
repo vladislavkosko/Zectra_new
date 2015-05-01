@@ -437,16 +437,17 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     'id': [], 'priority': [],
                     'status': [], 'progress': [],
                     'owner': [], 'assigned': [],
-                    'sprint': [], 'uniques':
-                {
-                    'id': [], 'priority': [],
-                    'status': [], 'progress': [],
-                    'owner': [], 'assigned': [],
-                    'sprint': []
-                }
+                    'sprint': [],
+                    'uniques':
+                    {
+                        'id': [], 'priority': [],
+                        'status': [], 'progress': [],
+                        'owner': [], 'assigned': [],
+                        'sprint': []
+                    }
                 };
 
-                $scope.tasksOrderBy = [null, null, null, null, null, null, null];
+                $scope.tasksOrderBy = ['-id', null, null, null, null, null, null];
                 initUniquesCount();
             }
 
