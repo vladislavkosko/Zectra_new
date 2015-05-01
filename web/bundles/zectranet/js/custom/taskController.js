@@ -417,6 +417,8 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
         // ------------ Begin of filter functions ------------ \\
         {
+            $scope.tasksOrderBy = ['-id', null, null, null, null, null, null];
+
             function initFilter() {
                 $scope.tasksFilter =
                     [
@@ -447,7 +449,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     }
                 };
 
-                $scope.tasksOrderBy = ['-id', null, null, null, null, null, null];
                 initUniquesCount();
             }
 
