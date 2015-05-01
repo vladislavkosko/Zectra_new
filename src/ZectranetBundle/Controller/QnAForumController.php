@@ -333,27 +333,33 @@ class QnAForumController extends Controller {
     }
 
     /**
-     *@param Request $request
+     * @param Request $request
      * @param int $project_id
      * @return JsonResponse
      */
-    public function  reSendRequestAction(Request $request, $project_id)
-    {
+    public function reSendRequestAction(Request $request, $project_id) {
         $data = json_decode($request->getContent(), true);
         $request_id = $data['id'];
         $user_id = $data['user_id'];
-        $contact_id = $this->getUser()->getId();
         $message = $data['message'];
-        $request_status = $data['request_status'];
-        $hf_forum_id = $project_id;
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $request = QnAForum::removeRequest($em, $request_id);
-        if($request_status == 2)
-        {
-            QnAForum::removeUserFromProject($em, $user_id, $project_id);
+        $contact = $em->find('ZectranetBundle:User', $user_id);
+        try {
+            QnAForum::removeRequest($em, $request_id);
+            QnAForum::sendRequestToUser($em, $user_id, $project_id, $message, $this->getUser()->getId());
+        } catch (\Exception $ex) {
+            $from = 'class: QnAForumController, function: reSendRequestAction';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
         }
-        QnAForum::sendRequestToUser($em, $user_id, $project_id, $message, $this->getUser()->getId());
-        return new JsonResponse( 1 );
+        $logMessage = 'User "' . $user->getUsername() . '" resent project request to user "'
+            . $contact->getUsername() . '"';
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);
+
+        return new JsonResponse(1);
     }
 
     /**

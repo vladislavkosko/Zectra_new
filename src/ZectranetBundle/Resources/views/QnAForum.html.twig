@@ -25,50 +25,49 @@
     <div class="page-header" id="notSelect">
         <div class="row">
             {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
-
                 <div class="col-md-10" style="word-wrap: break-word; white-space: normal;">
                     <div ng-click="setFormEdit()" ng-mouseleave="setFormNone()" style="display: inline-block;">
                         <div ng-if="formStatus == 'formNone'" ng-mouseenter="setIconEdit()" ng-mouseleave="setIconNone()" id="spanLength" style="cursor: pointer;">
                             <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px;">{{ forum.name }}</span>
-                        <span ng-if="iconEdit" style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px; border-left: 1px solid #ccc;">
-                            <i style="color: #A9A6A6;" class="fa fa-edit"></i>
-                        </span>
+                            <span ng-if="iconEdit" style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px; border-left: 1px solid #ccc;">
+                                <i style="color: #A9A6A6;" class="fa fa-edit"></i>
+                            </span>
+                        </div>
+                        <form ng-class="formStatus" action="{{ path('zectranet_QnA_forum_edit_name', {'project_id' : forum.id}) }}" method="post">
+                            <input id="inputName" ng-focus="focus = true" ng-blur="setBlure()" type="text" value="{{ forum.name }}" name="newName" class="form-control" style="height: 44px; font-size: 18px;" required>
+                            <input type="submit" class="hidden">
+                        </form>
                     </div>
-                    <form ng-class="formStatus" action="{{ path('zectranet_QnA_forum_edit_name', {'project_id' : forum.id}) }}" method="post">
-                        <input id="inputName" ng-focus="focus = true" ng-blur="setBlure()" type="text" value="{{ forum.name }}" name="newName" class="form-control" style="height: 44px; font-size: 18px;" required>
-                        <input type="submit" class="hidden">
-                    </form>
                 </div>
-
             {% else %}
                 <div class="col-md-10">
                     <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ forum.name }}</span>
                 </div>
-
             {% endif %}
 
-            <div class="col-md-2" style="font-size: 18px;">
-                {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
-                    <div class="pull-right">
-                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
-                            <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_QnA_project">
-                                <i class="fa text-danger fa-fw fa-trash"></i>
-                            </a>
-                        </div>
+                <div class="col-md-2" style="font-size: 18px;">
+                    {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
+                        <div class="pull-right">
+                            <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
+                                <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_QnA_project">
+                                    <i class="fa text-danger fa-fw fa-trash"></i>
+                                </a>
+                            </div>
 
-                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Settings">
-                            <a href="{{ path('zectranet_QnA_settings', {'project_id': forum.id}) }}" style="cursor: pointer; text-decoration: none;">
-                                <i class="fa text-primary fa-fw fa-gear"></i>
-                            </a>
-                        </div>
+                            <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Settings">
+                                <a href="{{ path('zectranet_QnA_settings', {'project_id': forum.id}) }}" style="cursor: pointer; text-decoration: none;">
+                                    <i class="fa text-primary fa-fw fa-gear"></i>
+                                </a>
+                            </div>
 
-                        {#<div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Profile">
-                            <a href="{{ path('zectranet_project_profile_page', {'project_id': forum.id}) }}" style="cursor: pointer; text-decoration: none; font-size: 1.3em;">
-                                Profile
-                            </a>
-                        </div>#}
-                    </div>
-                {% endif %}
+                            {#<div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Profile">
+                                <a href="{{ path('zectranet_project_profile_page', {'project_id': forum.id}) }}" style="cursor: pointer; text-decoration: none; font-size: 1.3em;">
+                                    Profile
+                                </a>
+                            </div>#}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
