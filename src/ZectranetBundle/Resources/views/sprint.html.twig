@@ -3,72 +3,89 @@
 {% block title %}Sprint page{% endblock %}
 
 {% block body %}
-    <div class="row" ng-controller="SprintController" ng-init="getTasks();">
-        <ol class="breadcrumb" style="margin: 0 -15px;">
-            <li>
-                <a href="{{ path('zectranet_user_home') }}">Summary</a>
-            </li>
-            <li>
-                <a href="{{ path('zectranet_show_office', { 'office_id': office.id }) }}">
-                    {{ office.name }}
-                </a>
-            </li>
-            <li class="active">
-                {{ sprint.name }}
-            </li>
-        </ol>
+    <div ng-controller="SprintController" ng-init="getTasks();">
+        <div class="row">
+            <ol class="breadcrumb" style="margin: 0 -15px;">
+                <li>
+                    <a href="{{ path('zectranet_user_home') }}">Summary</a>
+                </li>
+                <li>
+                    <a href="{{ path('zectranet_show_office', { 'office_id': office.id }) }}">
+                        {{ office.name }}
+                    </a>
+                </li>
+                <li class="active">
+                    {{ sprint.name }}
+                </li>
+            </ol>
+        </div>
 
-        <div class="page-header">
-            <div class="row">
-                <div class="col-md-6">
-                    <i class="fa fa-repeat fa-2x"></i>
+        <div class="row">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <i class="fa fa-repeat fa-2x"></i>
                 <span style="font-size: 25px;">
                     {{ sprint.name }}
                     <span style="color: {{ sprint.status.color }}">
                         {{ ' (' ~ sprint.status.label ~ ')'  }}
                     </span>
                 </span>
-                </div>
+                    </div>
 
-                <div class="col-md-6">
-                    <!-- Begin of Office controll buttons -->
-                    {% if (office.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
-                        <div class="pull-right">
-                            <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Delete This Sprint">
-                                <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_sprint">
-                                    <i class="fa text-danger fa-fw fa-trash fa-2x"></i>
-                                </a>
-                            </div>
-
-                            <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="## Under Construction ##">
-                                <a style="cursor: pointer; text-decoration: none;">
-                                    <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
-                                </a>
-                            </div>
-
-                            {% if sprint.status.label == 'Open' %}
-                                <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Start Sprint">
-                                    <a href="{{ path('zectranet_sprint_change_state', {'sprint_id': sprint.id, 'state': 2}) }}" style="text-decoration: none;">
-                                        <i class="fa fa-fw fa-play-circle fa-2x" style="color: {{ sprint_status[1].color }}"></i>
+                    <div class="col-md-6">
+                        <!-- Begin of Office controll buttons -->
+                        {% if (office.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                            <div class="pull-right">
+                                <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Delete This Sprint">
+                                    <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_sprint">
+                                        <i class="fa text-danger fa-fw fa-trash fa-2x"></i>
                                     </a>
                                 </div>
-                            {% elseif sprint.status.label == 'In-Progress' %}
-                                <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Stop Sprint">
-                                    <a href="{{ path('zectranet_sprint_change_state', {'sprint_id': sprint.id, 'state': 3}) }}" style="text-decoration: none;">
-                                        <i class="fa fa-fw fa-pause fa-2x" style="color: {{ sprint_status[2].color }}"></i>
+
+                                <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="## Under Construction ##">
+                                    <a style="cursor: pointer; text-decoration: none;">
+                                        <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
                                     </a>
                                 </div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    <!-- End of Office controll buttons -->
+
+                                {% if sprint.status.label == 'Open' %}
+                                    <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Start Sprint">
+                                        <a href="{{ path('zectranet_sprint_change_state', {'sprint_id': sprint.id, 'state': 2}) }}" style="text-decoration: none;">
+                                            <i class="fa fa-fw fa-play-circle fa-2x" style="color: {{ sprint_status[1].color }}"></i>
+                                        </a>
+                                    </div>
+                                {% elseif sprint.status.label == 'In-Progress' %}
+                                    <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Stop Sprint">
+                                        <a href="{{ path('zectranet_sprint_change_state', {'sprint_id': sprint.id, 'state': 3}) }}" style="text-decoration: none;">
+                                            <i class="fa fa-fw fa-pause fa-2x" style="color: {{ sprint_status[2].color }}"></i>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <!-- End of Office controll buttons -->
+                    </div>
                 </div>
             </div>
         </div>
+
         {% include '@Zectranet/sprintDelete.html.twig' %}
 
-        <!-- Begin of Tasks -->
-        <div class="col-md-12">
+        <div class="row" ng-cloak>
+            <div class="col-xs-12" style="margin-bottom: 15px;">
+                <h4 class="pull-right text-muted" style="margin-left: 20px;">
+                    Total estimation: [[ totalEstimation.h + 'h ' + totalEstimation.m + 'm' ]]
+                </h4>
+                <h4 class="pull-right text-muted">
+                    Total Progress: [[ totalProgress + '%' ]]
+                </h4>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Begin of Tasks -->
             <div class="panel panel-default list-group">
                 <div class="list-group-item active">
                     <i class="fa fa-tasks"></i>
@@ -122,8 +139,8 @@
                     </div>
                 </div>
             </div>
+            <!-- End of Tasks -->
         </div>
-        <!-- End of Tasks -->
     </div>
 {% endblock %}
 

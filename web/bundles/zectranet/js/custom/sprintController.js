@@ -9,6 +9,7 @@ var sprintController = Zectranet.controller('SprintController', ['$scope', '$htt
             'h': 0,
             'm': 0
         };
+        $scope.totalProgress = 0;
 
         function calcuateTotalEstimation(tasks) {
             var est = {
@@ -20,6 +21,7 @@ var sprintController = Zectranet.controller('SprintController', ['$scope', '$htt
                 if (!tasks[i].parentid) {
                     est.h += tasks[i].estimatedHours;
                     est.m += tasks[i].estimatedMinutes;
+
                     for (var j = 0; j < tasks[i].subtasks.length; j++) {
                         est.h += tasks[i].subtasks[j].estimatedHours;
                         est.m += tasks[i].subtasks[j].estimatedMinutes;
@@ -34,11 +36,20 @@ var sprintController = Zectranet.controller('SprintController', ['$scope', '$htt
             return est;
         }
 
+        function calculateTotalProgress (tasks) {
+            var totalProgress = 0;
+            for (var i = 0; i < tasks.length; i++) {
+                totalProgress += tasks[i].progress;
+            }
+            return ~~(totalProgress / tasks.length);
+        }
+
         $scope.getTasks = function () {
             $scope.promise = $http.get($scope.urlGetTasks)
                 .success(function (response) {
+                    $scope.totalEstimation = calcuateTotalEstimation(response.Tasks);
                     $scope.tasks = $scope.prepareTasks(response.Tasks);
-                    $scope.totalEstimation = calcuateTotalEstimation($scope.tasks);
+                    $scope.totalProgress = calculateTotalProgress($scope.tasks);
                 }
             );
         };
