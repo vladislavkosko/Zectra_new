@@ -161,17 +161,17 @@
     </div>
 
     <div ng-controller="DocumentsController">
-    <div class="chat-panel list-group" ng-controller="ChatController" ng-init="getPosts(0, 100)">
+    <div class="list-group" ng-controller="ChatController" ng-init="getPosts(0, 100)">
         <div class="list-group-item" style="background:#ddedf4; color:#606060;">
             <i class="fa fa-comments fa-fw"></i>
             <strong>Office Chat</strong>
         </div>
-        <div id="posts-panel" class="list-group-item panel-body" style="max-height: 300px;">
+        <div id="posts-panel" class="list-group-item panel-body" style="min-height: 200px;">
             {% if office.postsOffice | length == 0 %}
                 <h4 class="text-info text-center vertical-center">Posts will be displayed here</h4>
             {% endif %}
-            <ul class="chat">
-                <li ng-repeat="post in posts" highlight style="border-bottom: none;"  class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
+            <ul class="chat" style="height: 300px; overflow: auto;" scroll-glue="true">
+                <li ng-repeat="post in posts" highlight style="border-bottom: none;" class="clearfix" ng-class="{'right': {{ app.user.id }} == post.user.id, 'left': {{ app.user.id }} != post.user.id }">
                     <span class="chat-img"
                         ng-class="{'pull-right': {{ app.user.id }} == post.user.id, 'pull-left': {{ app.user.id }} != post.user.id }"
                         ng-init="avatar = generateAsset('{{ asset('') }}', 'documents/' + post.user.avatar)">

@@ -27,17 +27,8 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                    $scope.posts = preparePosts(response.Posts);
                     $scope.posts.reverse();
                     var chatList = $('.chat');
-                    setTimeout(function () {
-                        var postsPanel = $('#posts-panel');
-                        postsPanel.animate(
-                            {
-                                'scrollTop': $(this).height() + chatList.height() + 500
-                            }, 1000
-                        );
-                        return false;
-                    }, 200);
-
-                });
+                }
+            );
         };
 
         $rootScope.updateChat = $scope.getPosts;
