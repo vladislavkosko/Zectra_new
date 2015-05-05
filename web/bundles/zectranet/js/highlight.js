@@ -58,7 +58,7 @@ jQuery.fn.removeHighlight = function() {
             var next = child.nextSibling;
             if (next == null || next.nodeType != 3) { continue; }
             var combined_text = child.nodeValue + next.nodeValue;
-            new_node = node.ownerDocument.createTextNode(combined_text);
+            var new_node = node.ownerDocument.createTextNode(combined_text);
             node.insertBefore(new_node, child);
             node.removeChild(child);
             node.removeChild(next);
