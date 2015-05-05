@@ -655,3 +655,16 @@ zectranet_get_office_profile:
 zectranet_get_edit_office_profile:
     pattern: /office/{office_id}/profile/edit
     defaults: { _controller: ZectranetBundle:OfficeProfile:indexEdit }
+
+
+##################################################################################
+########################## BEGIN OF SEARCH ROUTINGS ##############################
+##################################################################################
+
+zectranet_quick_search:
+    pattern: /quick_search
+    defaults: { _controller: ZectranetBundle:Search:MiniSearch }
+
+##################################################################################
+########################## END OF SEARCH ROUTINGS ################################
+##################################################################################

@@ -273,6 +273,17 @@ class HFForum
     }
 
     /**
+     * @param ArrayCollection $forums
+     * @param string $slug
+     * @return array
+     */
+    public static function searchHFForums($forums, $slug) {
+        $results = array();
+        // DO search ....
+        return $results;
+    }
+
+    /**
      * Get id
      *
      * @return integer 

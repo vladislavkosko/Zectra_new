@@ -195,6 +195,11 @@ class Office
         }
     }
 
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @param $project_type
+     */
     public static function deleteFromArchive(EntityManager $em, $project_id, $project_type) {
         $project = null;
         switch ($project_type) {
@@ -207,6 +212,19 @@ class Office
             $em->remove($project);
             $em->flush();
         }
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param int $office_id
+     * @param string $slug
+     * @return array
+     */
+    public static function searchHomeOffice(EntityManager $em, $office_id, $slug) {
+        $office = $em->find('ZectranetBundle:Office', $office_id);
+        // Do Search in chat...
+        $results = array();
+        return $results;
     }
 
     /**

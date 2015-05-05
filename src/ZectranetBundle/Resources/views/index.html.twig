@@ -19,12 +19,43 @@
 								   placeholder="Search..."
 								   maxlength="50"
 								   ng-change="InputChange(searchInput)"
-								   data-toggle="dropdown" type="search">
-                                <span class="input-group-btn">
-                                    <a ng-href="{{ path('zectranet_user_page',{ 'user_id' : app.user.id }) }}SearchPage/[[searchInput]]" ng-click="PreCheck();" class="btn btn-default"  >
-                                        <i class="fa fa-search"></i>
-                                    </a>
-                                </span>
+								   data-toggle="dropdown"
+                                   type="search" />
+
+                            <span class="input-group-btn">
+                                <a ng-href="{{ path('zectranet_user_page', { 'user_id' : app.user.id }) }}SearchPage/[[searchInput]]"
+                                   class="btn btn-default" ng-class="{ 'disabled': searchInput.length == 0 }" target="_blank">
+                                    <i class="fa fa-search"></i>
+                                </a>
+                            </span>
+
+                            <div class="dropdown-menu">
+                                <div class="list-group" style="margin-bottom: 0;">
+                                    <div ng-if="miniSearchResults.total == 0" class="list-group-item">
+                                        <h5 class="text-info" align="center">Search for <i>[[ searchInput ]]</i>...</h5>
+                                    </div>
+                                    <div ng-if="miniSearchResults.total == -1" class="list-group-item">
+                                        <h5 class="text-info" align="center">Didn't found any match</h5>
+                                    </div>
+                                    <div ng-if="miniSearchResults.total > 0">
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.homeOffice">
+                                            <a href="#" target="_self">[[ item ]]</a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums">
+                                            <a href="#" target="_self">[[ item ]]</a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums">
+                                            <a href="#" target="_self">[[ item ]]</a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects">
+                                            <a href="#" target="_self">[[ item ]]</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 						</div>
 					</li>
 				</ul>

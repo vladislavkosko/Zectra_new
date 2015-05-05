@@ -237,6 +237,17 @@ class QnAForum
     }
 
     /**
+     * @param ArrayCollection $forums
+     * @param string $slug
+     * @return array
+     */
+    public static function searchQnAForums($forums, $slug) {
+        $results = array();
+        // DO search ....
+        return $results;
+    }
+
+    /**
      * Get id
      *
      * @return integer 

@@ -382,6 +382,17 @@ class Project
     }
 
     /**
+     * @param ArrayCollection $forums
+     * @param string $slug
+     * @return array
+     */
+    public static function searchProjects($forums, $slug) {
+        $results = array();
+        // DO search ....
+        return $results;
+    }
+
+    /**
      * Get id
      *
      * @return integer 
