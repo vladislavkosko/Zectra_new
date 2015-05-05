@@ -31,7 +31,8 @@ class HeaderForumController extends Controller {
         $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         /** @var User $user */
         $user = $this->getUser();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then redirect to home office
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
         }
         return $this->render('@Zectranet/headerForum.html.twig', array('forum' => $forum));
@@ -72,7 +73,8 @@ class HeaderForumController extends Controller {
         $subheader = $this->getDoctrine()->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
         /** @var User $user */
         $user = $this->getUser();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then redirect to home office
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
         }
         return $this->render('@Zectranet/headerForumSubHeader.html.twig', array(
@@ -109,7 +111,8 @@ class HeaderForumController extends Controller {
         $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         /** @var User $user */
         $user = $this->getUser();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then redirect to home office
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
         }
         return $this->render('@Zectranet/headerForumSettings.html.twig', array('forum' => $forum));
@@ -124,7 +127,8 @@ class HeaderForumController extends Controller {
         $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         /** @var User $user */
         $user = $this->getUser();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then deny access
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return new JsonResponse('Not allowed!!!');
         }
         return new JsonResponse(EntityOperations::arrayToJsonArray($forum->getHeaders()));
@@ -140,7 +144,8 @@ class HeaderForumController extends Controller {
         $forum = $this->getDoctrine()->getRepository('ZectranetBundle:HFForum')->find($project_id);
         /** @var User $user */
         $user = $this->getUser();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then deny access
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return new JsonResponse('Not allowed!!!');
         }
         $data = json_decode($request->getContent(), true);
@@ -190,7 +195,8 @@ class HeaderForumController extends Controller {
         $forum = $header->getForum();
         /** @var User $user */
         $user = $this->getUser();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then deny access
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return new JsonResponse('Not allowed!!!');
         }
         try {
@@ -212,8 +218,6 @@ class HeaderForumController extends Controller {
      * @return JsonResponse
      */
     public function deleteHeaderAction($header_id) {
-        /** @var User $user */
-        $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $header = $em->getRepository('ZectranetBundle:HFHeader')->find($header_id);
@@ -221,7 +225,8 @@ class HeaderForumController extends Controller {
         $forum = $header->getForum();
         /** @var User $user */
         $user = $this->getUser();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then deny access
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return new JsonResponse('Not allowed!!!');
         }
         try {
@@ -252,7 +257,8 @@ class HeaderForumController extends Controller {
 
         /** @var User $user */
         $user = $this->getUser();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then redirect to home office
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
         }
 
@@ -274,9 +280,9 @@ class HeaderForumController extends Controller {
         $subHeader = $em->getRepository('ZectranetBundle:HFSubHeader')->find($subheader_id);
         /** @var User $user */
         $user = $this->getUser();
-
         $forum = $subHeader->getHeader()->getForum();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then redirect to home office
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
         }
 
@@ -322,7 +328,8 @@ class HeaderForumController extends Controller {
 
         $thread = $em->getRepository('ZectranetBundle:HFThread')->find($thread_id);
         $forum = $thread->getSubHeader()->getHeader()->getForum();
-        if (!$forum->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then redirect to home office
+        if (!$forum->getUsers()->contains($user) || $forum->getArchived()) {
             return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
         }
         try {
@@ -349,7 +356,8 @@ class HeaderForumController extends Controller {
         $project = $em->find('ZectranetBundle:HFForum', $project_id);
         /** @var User $user */
         $user = $this->getUser();
-        if (!$project->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then deny access
+        if (!$project->getUsers()->contains($user) || $project->getArchived()) {
             return new JsonResponse('Not allowed!!!');
         }
         $info['HO_Contacts'] = HFForum::getNotProjectHomeOfficeMembers($em, $user->getId(), $project_id);
@@ -378,7 +386,8 @@ class HeaderForumController extends Controller {
         /** @var User $user */
         $user = $this->getUser();
         $project = $em->find('ZectranetBundle:HFForum', $project_id);
-        if (!$project->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then deny access
+        if (!$project->getUsers()->contains($user) || $project->getArchived()) {
             return new JsonResponse('Not allowed!!!');
         }
 
@@ -440,7 +449,8 @@ class HeaderForumController extends Controller {
         $contact = $em->find('ZectranetBundle:User', $request->getUserid());
 
         $project = $em->find('ZectranetBundle:HFForum', $project_id);
-        if (!$project->getUsers()->contains($user)) {
+        // If user not in forum or forum is archived then deny access
+        if (!$project->getUsers()->contains($user) || $project->getArchived()) {
             return new JsonResponse('Not allowed!!!');
         }
         try {

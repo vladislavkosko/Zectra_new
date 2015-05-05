@@ -49,8 +49,17 @@
                             class="active"
                         {% endif %}>
                         {% set homeOffice = app.user.homeOffice %}
-                        {% set HOProjectsCount = app.user.projects | length + app.user.connectedHFForums | length
-                                + app.user.connectedQnAForums | length %}
+
+                        {% set HOProjectsCount = 0 %}
+                        {% for project in app.user.projects if not project.archived %}
+                            {% set HOProjectsCount = HOProjectsCount + 1 %}
+                        {% endfor %}
+                        {% for project in app.user.connectedHFForums if not project.archived %}
+                            {% set HOProjectsCount = HOProjectsCount + 1 %}
+                        {% endfor %}
+                        {% for project in app.user.connectedQnAForums if not project.archived %}
+                            {% set HOProjectsCount = HOProjectsCount + 1 %}
+                        {% endfor %}
 						<a href="{{ path('zectranet_show_office', {'office_id': app.user.homeOffice.id }) }}"
                            class="
                                 {% if HOProjectsCount > 0 %}
@@ -78,7 +87,7 @@
                         {% endif %}
                         <div class="clearfix"></div>
 						<ul class="nav nav-second-level">
-                            {% for project in app.user.projects if project.users | length == 1 %}
+                            {% for project in app.user.projects if project.users | length == 1 and not project.archived %}
                                 <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
                                     <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         <i class="fa fa-briefcase fa-fw"></i>
@@ -87,7 +96,7 @@
                                 </li>
                             {% endfor %}
 
-                            {% for project in app.user.connectedHFForums if project.users | length == 1 %}
+                            {% for project in app.user.connectedHFForums if project.users | length == 1 and not project.archived %}
                                 <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
                                     <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         <i class="fa fa-briefcase fa-fw"></i>
@@ -96,7 +105,7 @@
                                 </li>
                             {% endfor %}
 
-                            {% for project in app.user.connectedQnAForums if project.users | length == 1 %}
+                            {% for project in app.user.connectedQnAForums if project.users | length == 1 and not project.archived %}
                                 <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
                                     <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         <i class="fa fa-briefcase fa-fw"></i>
@@ -107,13 +116,13 @@
 
                             <li>
                                 {% set connectedProjectsCount = 0 %}
-                                {% for project in app.user.projects if project.users | length > 1 %}
+                                {% for project in app.user.projects if project.users | length > 1 and not project.archived %}
                                     {% set connectedProjectsCount = connectedProjectsCount + 1 %}
                                 {% endfor %}
-                                {% for project in app.user.connectedHFForums if project.users | length > 1 %}
+                                {% for project in app.user.connectedHFForums if project.users | length > 1 and not project.archived %}
                                     {% set connectedProjectsCount = connectedProjectsCount + 1 %}
                                 {% endfor %}
-                                {% for project in app.user.connectedQnAForums if project.users | length > 1 %}
+                                {% for project in app.user.connectedQnAForums if project.users | length > 1 and not project.archived %}
                                     {% set connectedProjectsCount = connectedProjectsCount + 1 %}
                                 {% endfor %}
 
@@ -122,11 +131,11 @@
                                     <span>Connected Projects</span>
                                     {% if connectedProjectsCount > 0 %}
                                         <span class="text-right pull-right">
-                                            {% if project is defined and project in app.user.projects and project.users | length > 1 %}
+                                            {% if project is defined and project in app.user.projects and project.users | length > 1 and not project.archived %}
                                                 <i class="fa fa-arrow-up fa-fw"></i>
-                                            {% elseif forum is defined and forum in app.user.connectedHFForums and forum.users | length > 1 %}
+                                            {% elseif forum is defined and forum in app.user.connectedHFForums and forum.users | length > 1 and not project.archived %}
                                                 <i class="fa fa-arrow-up fa-fw"></i>
-                                            {% elseif forum is defined and forum in app.user.connectedQnAForums and forum.users | length > 1 %}
+                                            {% elseif forum is defined and forum in app.user.connectedQnAForums and forum.users | length > 1 and not project.archived %}
                                                 <i class="fa fa-arrow-up fa-fw"></i>
                                             {% else %}
                                                 <i class="fa fa-arrow-down fa-fw"></i>
@@ -135,7 +144,7 @@
                                     {% endif %}
                                 </a>
                                 <ul class="nav nav-third-level">
-                                    {% for project in app.user.projects if project.users | length > 1 %}
+                                    {% for project in app.user.projects if project.users | length > 1 and not project.archived %}
                                         <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
                                             <a href="{{ path('zectranet_show_project', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                 <i class="fa fa-briefcase fa-fw"></i>
@@ -144,7 +153,7 @@
                                         </li>
                                     {% endfor %}
 
-                                    {% for project in app.user.connectedHFForums if project.users | length > 1 %}
+                                    {% for project in app.user.connectedHFForums if project.users | length > 1 and not project.archived %}
                                         <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
                                             <a href="{{ path('zectranet_show_header_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                 <i class="fa fa-briefcase fa-fw"></i>
@@ -153,7 +162,7 @@
                                         </li>
                                     {% endfor %}
 
-                                    {% for project in app.user.connectedQnAForums if project.users | length > 1 %}
+                                    {% for project in app.user.connectedQnAForums if project.users | length > 1 and not project.archived %}
                                         <li data-toggle="tooltip" data-placement="right" title="{{ project.name }}">
                                             <a href="{{ path('zectranet_show_QnA_forum', {'project_id': project.id }) }}" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                                 <i class="fa fa-briefcase fa-fw"></i>

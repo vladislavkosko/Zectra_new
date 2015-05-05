@@ -3,5 +3,88 @@
 {% block title %}Office Archive{% endblock %}
 
 {% block body %}
-    <h1 align="center">Archive Page</h1>
+    <div ng-controller="OfficeArchiveController" ng-init="getArchive();">
+        <div class="page-header">
+            <h3>Office Archive</h3>
+        </div>
+
+        <!-- BEGIN OF QnA FORUM ARCHIVE -->
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Func</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="QnA in archives.QnAForums">
+                        <td>[[ $index + 1 ]]</td>
+                        <td>[[ QnA.name ]]</td>
+                        <td>TEMPLATE</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END OF QnA FORUM ARCHIVE -->
+
+        <!-- BEGIN OF HEADER FORUM ARCHIVE -->
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Func</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="hf in archives.hfForums">
+                        <td>[[ $index + 1 ]]</td>
+                        <td>[[ hf.name ]]</td>
+                        <td>TEMPLATE</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END OF HEADER FORUM ARCHIVE -->
+
+        <!-- BEGIN OF DEVELOPMENT TEMPLATE ARCHIVE -->
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Func</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="project in archives.projects">
+                        <td>[[ $index + 1 ]]</td>
+                        <td>[[ project.name ]]</td>
+                        <td>TEMPLATE</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END OF DEVELOPMENT TEMPLATE ARCHIVE -->
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        JSON_URLS.getOfficeArchive = "{{ path('zectranet_get_office_archive', { 'office_id': office.id }) }}";
+        JSON_URLS.restoreFromArchive = "";
+        JSON_URLS.deleteFromArchive = "";
+    </script>
+    <script src="{{ asset('bundles/zectranet/js/custom/officeArchiveController.js') }}"></script>
 {% endblock %}
