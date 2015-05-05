@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-<div class="row">
+            <div class="row">
                 <div class="col-xs-12 subheader-body" ng-repeat="onesubheader in oneheader.subHeaders">
 
                         <div class="col-xs-1 hidden-xs">
@@ -97,7 +97,7 @@
                         </div>
                         <div class="col-xs-8">
 
-                            <a href="[[onesubheader.urlShowHeaderForumSubheader]]">
+                            <a ng-href="[[ onesubheader.urlShowHeaderForumSubheader ]]">
                                 <h4>[[ onesubheader.title ]]</h4>
                             </a>
 
@@ -118,14 +118,14 @@
                         </div>
 
                 </div>
-</div>
-<div class="row">
+            </div>
+            <div class="row">
                 <div class="col-xs-12 subheader-body add-sub-heaedr-body" ng-if="!(oneheader.addnewsubheader)">
                     <a class="add-sub-heaedr pull-right" href="#"  ng-click="oneheader.addnewsubheader = true">
                         <small class="text-muted"><i class="fa fa-plus"></i> Add SubHeader</small>
                     </a>
                 </div>
-</div>
+            </div>
 
                 <div ng-if="oneheader.addnewsubheader">
                     <div class="row new-subheader-main-all">
@@ -236,7 +236,7 @@
 <script>
     JSON_URLS.getHeaderForumHeaders = "{{ path('zectranet_get_header_forum_headers', { 'project_id': forum.id } ) }}";
     JSON_URLS.addSubHeaderForumHeaders = "{{ path('zectranet_add_subheader_action', { 'header_id': 0 }) }}";
-    JSON_URLS.urlShowHeaderForumSubheader = "{{ path('zectranet_show_header_forum_subheader', {'project_id': forum.id ,'subheader_id': 0 } ) }}";
+    JSON_URLS.urlShowHeaderForumSubheader = "{{ path('zectranet_show_header_forum_subheader', {'project_id': forum.id ,'subheader_id': 'subheaderID' } ) }}";
     JSON_URLS.addHeaderForumHeaders = "{{ path('zectranet_add_header_action', { 'project_id': forum.id }) }}";
 </script>
 {% endblock %}

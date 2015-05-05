@@ -232,11 +232,9 @@ zectranet_header_forum_edit_name:
         project_id: \d+
 
 zectranet_show_header_forum_subheader:
-    pattern: /headerForum/{project_id}/{subheader_id}
+    pattern: /headerForum/{project_id}/subheader/{subheader_id}
     defaults: { _controller: ZectranetBundle:HeaderForum:forum }
-    requirements:
-         project_id: \d+
-         subheader_id: \d+
+
 
 zectranet_subheader_edit_name:
     pattern: /headerForum/{project_id}/{subheader_id}/edit

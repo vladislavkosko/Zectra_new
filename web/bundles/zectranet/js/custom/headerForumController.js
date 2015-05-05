@@ -63,16 +63,11 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
             $http.get($scope.urlGetHeaders)
                 .success(function (response) {
                     $scope.headers = response;
-                    for(var i=0;i<$scope.headers.length;i++)
-                    {
-                        for(var j=0;j<$scope.headers[i].subHeaders.length;i++)
-                        {
-                            $scope.headers[i].subHeaders[j].urlShowHeaderForumSubheader =  $scope.urlShowHeaderForumSubheader;
-                            $scope.headers[i].subHeaders[j].urlShowHeaderForumSubheader =  $scope.headers[i].subHeaders[j].urlShowHeaderForumSubheader.replace('0',$scope.headers[i].subHeaders[j].id)
+                    for(var i = 0; i < $scope.headers.length; i++) {
+                        for(var j = 0; j < $scope.headers[i].subHeaders.length; j++) {
+                            $scope.headers[i].subHeaders[j].urlShowHeaderForumSubheader = $scope.urlShowHeaderForumSubheader.replace('subheaderID', $scope.headers[i].subHeaders[j].id);
                         }
-
                     }
-
                 }
             );
         };
