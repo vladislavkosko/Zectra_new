@@ -81,7 +81,7 @@ class HFForum
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="HFLog", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="HFLog", mappedBy="project", cascade={"remove"})
      * @ORM\OrderBy({"date" = "DESC"})
      */
     private $logs;
@@ -93,6 +93,12 @@ class HFForum
     private $archived;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Request", mappedBy="HFForum", cascade={"remove"})
+     */
+    private $requests;
+
+    /**
      * Constructor
      */
     public function __construct() {
@@ -101,6 +107,7 @@ class HFForum
         $this->users = new ArrayCollection();
         $this->logs = new ArrayCollection();
         $this->archived = false;
+        $this->requests = new ArrayCollection();
     }
 
     /**
@@ -556,5 +563,28 @@ class HFForum
     public function getArchived()
     {
         return $this->archived;
+    }
+
+    /**
+     * Add requests
+     *
+     * @param \ZectranetBundle\Entity\Request $requests
+     * @return HFForum
+     */
+    public function addRequest(\ZectranetBundle\Entity\Request $requests)
+    {
+        $this->requests[] = $requests;
+
+        return $this;
+    }
+
+    /**
+     * Get requests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRequests()
+    {
+        return $this->requests;
     }
 }

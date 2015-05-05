@@ -133,9 +133,9 @@
                                         <span class="text-right pull-right">
                                             {% if project is defined and project in app.user.projects and project.users | length > 1 and not project.archived %}
                                                 <i class="fa fa-arrow-up fa-fw"></i>
-                                            {% elseif forum is defined and forum in app.user.connectedHFForums and forum.users | length > 1 and not project.archived %}
+                                            {% elseif forum is defined and forum in app.user.connectedHFForums and forum.users | length > 1 %}
                                                 <i class="fa fa-arrow-up fa-fw"></i>
-                                            {% elseif forum is defined and forum in app.user.connectedQnAForums and forum.users | length > 1 and not project.archived %}
+                                            {% elseif forum is defined and forum in app.user.connectedQnAForums and forum.users | length > 1 %}
                                                 <i class="fa fa-arrow-up fa-fw"></i>
                                             {% else %}
                                                 <i class="fa fa-arrow-down fa-fw"></i>

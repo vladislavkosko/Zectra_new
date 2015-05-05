@@ -62,22 +62,29 @@ class OfficeArchiveController extends Controller {
 
     /**
      * @param Request $request
-     * @param int $project_id
-     * @return JsonResponse
+     * @param $project_id
+     * @return RedirectResponse
      */
     public function restoreFromArchiveAction(Request $request, $project_id) {
-        $data = json_decode($request->getContent(), true);
-        $project_type = $data['project_type'];
+        $project_type = $request->request->get('project_type');
+        /** @var User $user */
+        $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
             Office::restoreFromArchive($em, $project_id, $project_type);
+            switch ($project_type) {
+                case 1: return $this->redirectToRoute('zectranet_show_QnA_forum', array('project_id' => $project_id));
+                case 2: return $this->redirectToRoute('zectranet_show_header_forum', array('project_id' => $project_id));
+                case 3: return null;
+                case 4: return $this->redirectToRoute('zectranet_show_project', array('project_id' => $project_id));
+                default: return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+            }
         } catch (\Exception $ex) {
             $from = 'class: Office, function: restoreFromArchive';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
-            return new JsonResponse(-1);
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
         }
-        return new JsonResponse(1);
     }
 
     /**
@@ -91,7 +98,7 @@ class OfficeArchiveController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
-            Office::addToArchive($em, $project_id, $project_type);
+            Office::deleteFromArchive($em, $project_id, $project_type);
         } catch (\Exception $ex) {
             $from = 'class: Office, function: addToArchive';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);

@@ -93,9 +93,7 @@ var sprintController = Zectranet.controller('SprintController', ['$scope', '$htt
                 for (var i = 0; i < tasks.length; i++) {
                     tasks[i] = executeCalculateOperations(tasks[i]);
                 }
-                if ($rootScope.NOTIFICATIONS && $scope.tasks) {
-                    tasks = CalculateTaskNewCommentsCount($rootScope.NOTIFICATIONS, tasks);
-                }
+
                 return tasks;
             }
 
@@ -104,7 +102,7 @@ var sprintController = Zectranet.controller('SprintController', ['$scope', '$htt
                 for (var i = 0; i < subtasks.length; i++) {
                     meanNumber += subtasks[i].progress;
                 }
-                return ~~((meanNumber + progress) / (subtasks.length + 1));
+                return ~~((meanNumber + progress) / (subtasks.length));
             }
 
             function calculateMeanEstimation (subtasks, hours, minutes) {

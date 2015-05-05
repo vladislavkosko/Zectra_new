@@ -3,33 +3,48 @@ Zectranet.controller('OfficeArchiveController', ['$scope', '$http', '$rootScope'
 
         var urlGetOfficeArchive = JSON_URLS.getOfficeArchive;
         var urlRestoreFromArchive = JSON_URLS.restoreFromArchive;
-        var urlDeleteFromArchive = JSON_URLS.deleteFromArchive ;
+        var urlDeleteFromArchive = JSON_URLS.deleteFromArchive;
 
         $scope.archives = {};
+        $scope.officeArchivePromise = null;
+
+        function prepareArchives (archives) {
+            for (var i = 0; i < archives.QnAForums.length; i++) {
+                archives.QnAForums[i].href = urlRestoreFromArchive.replace('project_id', archives.QnAForums[i].id)
+            }
+
+            for (i = 0; i < archives.hfForums.length; i++) {
+                archives.hfForums[i].href = urlRestoreFromArchive.replace('project_id', archives.hfForums[i].id)
+            }
+
+            for (i = 0; i < archives.projects.length; i++) {
+                archives.projects[i].href = urlRestoreFromArchive.replace('project_id', archives.projects[i].id)
+            }
+
+            return archives;
+        }
 
         $scope.getArchive = function () {
-            $http.get(urlGetOfficeArchive)
+            $scope.officeArchivePromise = $http
+                .get(urlGetOfficeArchive)
                 .success(function (response) {
-                    $scope.archives = response;
+                    $scope.archives = prepareArchives(response);
                 }
             );
         };
 
-        $scope.restoreFromArchive = function (project_id, project_type) {
-            $http.post(urlRestoreFromArchive.replace('0', project_id), { 'project_type': project_type })
-                .success(function (response) {
-
+        $scope.deleteFromArchive = function (project_id, project_type, index) {
+            $scope.officeArchivePromise = $http
+                .post(urlDeleteFromArchive.replace('project_id', project_id), { 'project_type': project_type })
+                .success(function () {
+                    switch (project_type) {
+                        case 1: $scope.archives.QnAForums.splice(index, 1); break;
+                        case 2: $scope.archives.hfForums.splice(index, 1); break;
+                        case 3: break;
+                        case 4: $scope.archives.projects.splice(index, 1); break;
+                    }
                 }
             );
         };
-
-        $scope.deleteFromArchive = function (project_id, project_type) {
-            $http.post(urlDeleteFromArchive.replace('0', project_id), { 'project_type': project_type })
-                .success(function (response) {
-
-                }
-            );
-        };
-
     }
 ]);

@@ -136,6 +136,14 @@ zectranet_add_project_to_archive:
         office_id: \d+
         project_id: \d+
 
+zectranet_restore_project_from_archive:
+    pattern: /office/{office_id}/archive/restore/{project_id}
+    defaults: { _controller: ZectranetBundle:OfficeArchive:restoreFromArchive }
+
+zectranet_delete_project_from_archive:
+    pattern: /office/{office_id}/archive/delete/{project_id}
+    defaults: { _controller: ZectranetBundle:OfficeArchive:deleteFromArchive }
+
 zectranet_show_office:
     pattern: /office/{office_id}/{conversation_id}
     defaults: { _controller: ZectranetBundle:Office:index, conversation_id: 0 }

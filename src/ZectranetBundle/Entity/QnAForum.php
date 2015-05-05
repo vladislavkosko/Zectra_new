@@ -80,7 +80,7 @@ class QnAForum
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="QnALog", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="QnALog", mappedBy="project", cascade={"remove"})
      */
     private $logs;
 
@@ -134,11 +134,10 @@ class QnAForum
             'QnAForumID' => $project_id,
             'typeid' => $type->getId(),
         ));
-        // Delete existing request
+        // Delete old request if existing
         if ($request) {
             $em->remove($request);
         }
-
         // Create new request
         $request = new Request();
         $request->setType($type);
