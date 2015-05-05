@@ -4,7 +4,6 @@
 
 {% block styles %}
     {{ parent() }}
-
     <link href="{{ asset('bundles/zectranet/css/QnAForum.css') }}" rel="stylesheet" type="text/css">
 
 {% endblock %}
@@ -52,8 +51,8 @@
             <div class="col-md-3 col-xs-6" style="font-size: 18px;">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
                     <div class="pull-right">
-                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
-                            <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
+                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Forum">
+                            <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_header_forum">
                                 <i class="fa text-danger fa-fw fa-trash"></i>
                             </a>
                         </div>
@@ -68,6 +67,9 @@
             </div>
         </div>
     </div>
+
+    {% include '@Zectranet/headerForumDelete.html.twig' %}
+
     <div class="col-md-12">
         <div class="col-xs-9 col-xs-offset-1">
             <h5>FORUM</h5>

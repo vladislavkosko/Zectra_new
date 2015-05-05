@@ -177,6 +177,11 @@ zectranet_office_get_post:
     requirements:
         office_id: \d+
 
+zectranet_add_project_to_archive:
+    pattern: /office/{office_id}/addToArchive/{project_id}
+    defaults: { _controller: ZectranetBundle:OfficeArchive:addToArchive }
+
+
 zectranet_show_project:
     pattern: /project/{project_id}
     defaults: { _controller: ZectranetBundle:Project:index }
@@ -218,6 +223,10 @@ zectranet_add_project_version:
     defaults: { _controller: ZectranetBundle:Project:addNewProjectVersion }
     requirements:
         project_id: \d+
+
+##############################################################################
+####################### BEGIN OF HEADER FORUM ROUTINGS #######################
+##############################################################################
 
 zectranet_show_header_forum:
     pattern: /headerForum/{project_id}
@@ -292,6 +301,10 @@ zectranet_add_post_header_forum_thread:
     defaults: { _controller: ZectranetBundle:HeaderForum:addNewPost }
     requirements:
         thread_id: \d+
+
+##############################################################################
+####################### END OF HEADER FORUM ROUTINGS #########################
+##############################################################################
 
 zectranet_show_QnA_forum:
     pattern: /QnAForum/{project_id}

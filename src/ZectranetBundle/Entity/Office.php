@@ -155,6 +155,7 @@ class Office
      * @param EntityManager $em
      * @param int $project_id
      * @param int $project_type
+     * @return null|Office
      */
     public static function addToArchive(EntityManager $em, $project_id, $project_type) {
         $project = null;
@@ -168,6 +169,9 @@ class Office
             $project->setArchived(true);
             $em->persist($project);
             $em->flush();
+            return $project->getOfficeID();
+        } else {
+            return null;
         }
     }
 

@@ -1,4 +1,4 @@
-<div class="modal fade" id="delete_private_project" tabindex="-1">
+<div class="modal fade" id="delete_QnA_forum" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header label-danger">
@@ -14,8 +14,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <form action="{{ path('zectranet_add_project_to_archive', { 'office_id': project.officeID, 'project_id': project.id }) }}" method="post">
-                        <input type="hidden" name="project_type" value="4"/>
+                    <form action="{{ path('zectranet_add_project_to_archive', { 'office_id': forum.officeID, 'project_id': forum.id }) }}" method="post">
+                        <input type="hidden" name="project_type" value="1"/>
                         <div class="btn-group">
                             <button type="submit" class="btn btn-danger">
                                 Delete

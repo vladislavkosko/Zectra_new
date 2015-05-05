@@ -42,22 +42,22 @@ class OfficeArchiveController extends Controller {
 
     /**
      * @param Request $request
+     * @param int $office_id
      * @param int $project_id
      * @return JsonResponse
      */
-    public function addToArchiveAction(Request $request, $project_id) {
-        $data = json_decode($request->getContent(), true);
-        $project_type = $data['project_type'];
+    public function addToArchiveAction(Request $request, $office_id, $project_id) {
+        $project_type = $request->request->get('project_type');
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
             Office::addToArchive($em, $project_id, $project_type);
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office_id));
         } catch (\Exception $ex) {
             $from = 'class: Office, function: addToArchive';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
-            return new JsonResponse(-1);
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office_id));
         }
-        return new JsonResponse(1);
     }
 
     /**
@@ -71,9 +71,9 @@ class OfficeArchiveController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
-            Office::addToArchive($em, $project_id, $project_type);
+            Office::restoreFromArchive($em, $project_id, $project_type);
         } catch (\Exception $ex) {
-            $from = 'class: Office, function: addToArchive';
+            $from = 'class: Office, function: restoreFromArchive';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return new JsonResponse(-1);
         }
