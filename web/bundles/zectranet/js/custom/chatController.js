@@ -133,9 +133,13 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
 
 
         $scope.pressEnter = function ($event, message) {
-            if ($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey) {
+            if ($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey && $scope.editPostButtonVisible == false) {
                 $event.preventDefault();
-                $scope.SendPost(message);
+                $scope.SendPost($('#textarea-post').val());
+            }
+            else if($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey && $scope.editPostButtonVisible == true)
+            {
+                $scope.EditPost($('#textarea-post').val());
             }
             if ($event.keyCode == '38' && !$event.shiftKey && !$event.ctrlKey && $('#textarea-post').val() == '') {
                 var user_posts = [];
