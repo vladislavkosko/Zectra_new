@@ -415,6 +415,12 @@ zectranet_add_project:
     path: /office/{office_id}/project/add
     defaults: { _controller: ZectranetBundle:Project:addProject }
 
+zectranet_project_post_edit:
+    pattern: /project/edit/post/{post_id}
+    defaults: { _controller: ZectranetBundle:ProjectPost:editPost }
+    requirements:
+        post_id: \d+
+
 zectranet_delete_project:
     pattern: /project/{project_id}/delete
     defaults: { _controller: ZectranetBundle:Project:delete }
@@ -603,6 +609,10 @@ zectranet_get_conversation:
 zectranet_send_conversation_message:
     pattern: /user/send/conversation/message/{conversation_id}
     defaults: { _controller: ZectranetBundle:Conversation:sendMessage }
+
+zectranet_edit_conversation_message:
+    pattern: /user/edit/conversation/message/{message_id}
+    defaults: { _controller: ZectranetBundle:Conversation:editMessage }
 
 zectranet_get_hf_settings_info:
     pattern: /hf/get/settings/info/{project_id}

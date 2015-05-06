@@ -160,10 +160,15 @@
                                             <i class="fa fa-file"></i>
                                         </button>
                                     </span>
-                                    <textarea id="textarea-post" name="message" class="form-control" rows="3" style="resize: vertical;font-size: 11px; height: 65px;" ng-keypress="pressEnter($event)" ng-model="message"></textarea>
-                                    <span class="input-group-btn">
+                                    <textarea id="textarea-post" name="message" class="form-control" rows="3" style="resize: vertical;font-size: 11px; height: 65px;"  ng-keyup="pressEnter($event);" ng-model="message"></textarea>
+                                    <span class="input-group-btn" ng-if="editPostButtonVisible == false">
                                         <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
                                             <span>Post</span>
+                                        </button>
+                                    </span>
+                                    <span class="input-group-btn" ng-if="editPostButtonVisible == true">
+                                        <button  class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="EditPost(message)">
+                                            <span>Edit</span>
                                         </button>
                                     </span>
                                 </form>
@@ -308,6 +313,7 @@
 
         JSON_URLS.addPost = "{{ path('zectranet_project_add_post', { 'project_id': 0 }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_project_get_post', { 'project_id': 0 }) }}";
+        JSON_URLS.editPost = "{{ path('zectranet_project_post_edit', { 'post_id': 0 }) }}";
 
         JSON_URLS.addTask = "{{ path('zectranet_project_add_task', { 'project_id': 0 }) }}";
         JSON_URLS.addSubTask = "{{ path('zectranet_project_add_subtask', { 'project_id': 0 }) }}";

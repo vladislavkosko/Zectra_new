@@ -90,6 +90,18 @@ class ConversationMessage
         return $convMessage;
     }
 
+    public static function editMessage(EntityManager $em, $message_id, $message) {
+
+        $post = $em->getRepository('ZectranetBundle:ConversationMessage')->find($message_id);
+
+        $post->setEdited(new \DateTime());
+        $post->setMessage($message);
+
+        $em->persist($post);
+        $em->flush();
+        return $post;
+    }
+
     /**
      * @return array
      */
@@ -100,6 +112,7 @@ class ConversationMessage
             'conversationID' => $this->getConversationID(),
             'message' => $this->getMessage(),
             'posted' => $this->getPosted()->format('Y-m-d H:i:s'),
+            'edited' => ($this->getEdited() != null) ? $this->getEdited()->format('Y-m-d H:i:s') : null,
         );
     }
 

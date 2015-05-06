@@ -7,10 +7,13 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             $rootScope.message = '';
             $scope.urlAddPost = JSON_URLS.addPost;
             $scope.urlGetPosts = JSON_URLS.getPosts;
+            $scope.urlEditPost = JSON_URLS.editPost;
 
             $scope.urlAsset = JSON_URLS.asset;
             $scope.USER_ID = TEMPPARAMS.USER_ID;
             $rootScope.DocumentsInChat = [];
+            $scope.editPostButtonVisible = false;
+            $scope.editedPostID = null;
 
         }
         // ------------ END OF SCOPE VARIABLES --------------- \\
@@ -114,10 +117,18 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         };
 
         $scope.EditPost = function (post) {
-            var post_will_be_edited = post;
-            $('#textarea-post').focus();
-            $('#textarea-post').val(post_will_be_edited.message);
-            $scope.will_be_edited = true;
+            $http.post($scope.urlEditPost.replace('0',$scope.editedPost.id),{'message': post})
+                .success(function(response)
+                {
+                    if(response == 1)
+                    {
+                        $scope.editPostButtonVisible = false;
+                        $scope.editedPost = null;
+                        $scope.getPosts(0,100);
+                        $('#textarea-post').val('');
+                    }
+                })
+
         };
 
 
@@ -126,8 +137,39 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                 $event.preventDefault();
                 $scope.SendPost(message);
             }
+            if ($event.keyCode == '38' && !$event.shiftKey && !$event.ctrlKey && $('#textarea-post').val() == '') {
+                var user_posts = [];
+               for(var i=0;i<$scope.posts.length;i++)
+               {
+                   if($scope.posts[i].user.id == $scope.USER_ID)
+                   {
+                       user_posts.push($scope.posts[i]);
+                   }
+               }
+                var last_post = user_posts[user_posts.length-1];
+                var one_minute = 1000 * 60;
+                var now = new Date();
+                now = now.getTime();
+                var timepost = new Date(last_post.posted);
+                timepost = timepost.getTime();
+                var difference_ms = now - timepost;
+                difference_ms = difference_ms / one_minute;
+                if(difference_ms <= 20)
+                {
+
+                    $('#textarea-post').val(last_post.message);
+                    $scope.editPostButtonVisible = true;
+                    $scope.editedPost = last_post;
+
+                }
+                else{
+                    $('#textarea-post').val('Editing time are gone');
+                }
+            }
+
         };
 
         console.log('Chat Controller was loaded');
+
 
     }]);

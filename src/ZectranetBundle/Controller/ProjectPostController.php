@@ -102,9 +102,17 @@ class ProjectPostController extends Controller
         return $response;
     }
 
-    public function editPostAction(Request $request,$post_id_id)
+    public function editPostAction(Request $request,$post_id)
     {
+        $post = json_decode($request->getContent(), true);
 
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $message = ProjectPost::EditPost($em,$post_id,$post['message']);
+        if($message != null)
+        {
+            return new JsonResponse('1');
+        }
     }
 
     public function getPostsAction(Request $request, $project_id) {

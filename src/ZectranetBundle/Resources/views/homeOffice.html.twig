@@ -64,7 +64,7 @@
                                     <option value="1" selected>QnA Forum</option>
                                     <option value="2">Header forum</option>
                                     <option value="3">Trading office(not working yet)</option>
-                                    <option value="4">Development(not working yet)</option>
+                                    <option value="4">Development</option>
                                 </select>
                             </label>
                         </p>
@@ -148,8 +148,8 @@
 
                                         <small class="text-muted" ng-class="{'pull-left': {{ app.user.id }} == mesage.user.id, 'pull-right': {{ app.user.id }} != mesage.user.id }">
                                             <i class="fa fa-clock-o fa-fw"></i>
-                                            <span style="color: #000000; font-style: italic">[[mesage.posted | date : 'yy-MM-dd hh:ii']]</span>
-                                            <i ng-if="mesage.edited" class="fa fa-edit"></i>
+                                            <span ng-if="mesage.edited == null" style="color: #000000; font-style: italic">[[mesage.posted]]</span>
+                                            <span ng-if="mesage.edited != null" style="color: #000000; font-style: italic">[[mesage.edited]] <i  class="fa fa-edit"></i></span>
                                         </small>
                                     </div>
                                     <pre style="white-space: pre-line;">
@@ -161,11 +161,14 @@
                     </div>
                     <div class="list-group-item">
                         <form class="input-group input-group-lg">
-                            <textarea id="textarea-post"  name="message" class="form-control" rows="3" ng-keypress="pressEnter($event, message, conversation.id)" style="resize: vertical; font-size: 11px; height: 65px;" ng-model="message"></textarea>
+                            <textarea id="textarea-post"  name="message" class="form-control" rows="3" ng-keyup="testEditPostButtonVisible($event)" ng-keypress="pressEnter($event, message, conversation.id)" style="resize: vertical; font-size: 11px; height: 65px;" ng-model="message"></textarea>
 
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendConversationMessage(message, conversation.id)">
+                                <button  ng-if="editPostButtonVisible == false" class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendConversationMessage(message, conversation.id)">
                                     <span>Post</span>
+                                </button>
+                                <button  ng-if="editPostButtonVisible == true" class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="EditMessage(message)">
+                                    <span>Edit</span>
                                 </button>
                             </span>
                         </form>
@@ -185,6 +188,7 @@
     {{ parent() }}
     <script>
         var getDocuments_;
+        var USER_ID = {{ app.user.id }}
         JSON_URLS.documentsGet = "{{ path('zectranet_document_get') }}";
         JSON_URLS.addPost = "{{ path('zectranet_office_add_post', { 'office_id': office.id }) }}";
         JSON_URLS.getPosts = "{{ path('zectranet_office_get_post', { 'office_id': office.id }) }}";
@@ -192,6 +196,7 @@
         JSON_URLS.getContactList = "{{ path('zectranet_get_contact_list') }}";
         JSON_URLS.getConversation = "{{ path('zectranet_get_conversation', {'contact_id' : 0}) }}";
         JSON_URLS.urlSendConversationMessage = "{{ path('zectranet_send_conversation_message', {'conversation_id' : 0}) }}";
+        JSON_URLS.urlEditPost = "{{ path('zectranet_edit_conversation_message', {'message_id' : 0}) }}";
     </script>
     <script src="{{ asset('bundles/zectranet/js/custom/homeOfficeController.js') }}" type="text/javascript"></script>
 

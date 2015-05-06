@@ -73,4 +73,16 @@ class ConversationController extends Controller {
 
         return new JsonResponse(($message) ? $message->getInArray() : null);
     }
+
+    public function editMessageAction(Request $request,$message_id)
+    {
+        $data = json_decode($request->getContent(), true);
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $message = ConversationMessage::EditMessage($em,$message_id,$data['message']);
+        if($message != null)
+        {
+            return new JsonResponse('1');
+        }
+    }
 }
