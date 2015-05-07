@@ -417,13 +417,13 @@ zectranet_add_project:
 
 zectranet_project_post_edit:
     pattern: /project/edit/post/{post_id}
-    defaults: { _controller: ZectranetBundle:Task:editPost }
+    defaults: { _controller: ZectranetBundle:ProjectPost:editPost }
     requirements:
         post_id: \d+
 
 zectranet_task_post_edit:
     pattern: /task/edit/post/{post_id}
-    defaults: { _controller: ZectranetBundle:ProjectPost:editPost }
+    defaults: { _controller: ZectranetBundle:Task:editPost }
     requirements:
         post_id: \d+
 
