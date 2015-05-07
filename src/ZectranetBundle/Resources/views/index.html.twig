@@ -42,8 +42,12 @@
                                             <a ng-href="[[ item.href ]]" target="_self">[[ item.message ]]</a>
                                         </div>
 
-                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums">
-                                            <a href="#" target="_self">[[ item ]]</a>
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.threads">
+                                            <a href="#" target="_self">[[ item.href ]]</a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.posts">
+                                            <a href="#" target="_self">[[ item.href ]]</a>
                                         </div>
 
                                         <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums">

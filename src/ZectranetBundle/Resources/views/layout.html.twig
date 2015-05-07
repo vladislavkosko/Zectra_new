@@ -587,6 +587,7 @@
 		{
 			asset: "{{ asset('') }}",
 			miniSearch: "{{ path('zectranet_quick_search') }}",
+            urlMiniSearchThread: "{{ path('zectranet_show_header_forum_thread', {'project_id': 0, 'subheader_id': 1, 'thread_id': 2 }) }}",
 			notificationsGet: "{{ url('zectranet_notifications_get') }}",
             homeOfficeShow: "{{ url('zectranet_show_office', {'office_id': 0, 'conversation_id': 'conv_id'}) }}",
             officeShow: "{{ url('zectranet_show_office', {'office_id': 0}) }}",

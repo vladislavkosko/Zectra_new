@@ -14,6 +14,10 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         var userID = USER_ID;
         $scope.searchInput = '';
         $scope.miniSearchResults = miniSearchTemp;
+        $scope.urlMiniSearchThread = JSON_URLS.urlMiniSearchThread;
+        $scope.urlMiniSearchThread.replace(0,'HFForumID');
+        $scope.urlMiniSearchThread.replace(1,'subHeaderID');
+        $scope.urlMiniSearchThread.replace(2,'id');
 
         function prepareSlug(slug) {
             slug = slug.replace(new RegExp('-', 'gi'), '\\W')
@@ -32,6 +36,20 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
             for (var i = 0; i < homeOffice.length; i++) {
                 homeOffice[i].href = urlHomeOffice.replace('0', homeOfficeID)
                     .replace('conv_id', (homeOffice[i].contact_id));
+            }
+            var threads = results.HFForums.threads;
+            for( i = 0;i < threads.length;i++ ) {
+                threads[i].href = $scope.urlMiniSearchThread
+                    .replace('HFForumID',threads[i].HFForumID)
+                    .replace('subHeaderID',threads[i].subHeaderID)
+                    .replace('id',threads[i].id);
+            }
+            var posts = results.HFForums.posts;
+            for( i = 0;i < posts.length;i++ ) {
+                posts[i].href = $scope.urlMiniSearchThread
+                    .replace('HFForumID',posts[i].HFForumID)
+                    .replace('subHeaderID',posts[i].subHeaderID)
+                    .replace('id',posts[i].threadID);
             }
             return results;
         }
