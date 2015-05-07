@@ -61,7 +61,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
                 .success(function (response) {
                     $scope.miniSearchResults = prepareSearchResults(response);
                     $scope.miniSearchResults.total = response.QnAForums.length;
-                    $scope.miniSearchResults.total += response.HFForums.length;
+                    $scope.miniSearchResults.total += response.HFForums.threads.length + response.HFForums.posts.length;
                     $scope.miniSearchResults.total += response.Projects.length;
                     $scope.miniSearchResults.total += response.homeOffice.length;
                     if ($scope.miniSearchResults.total == 0) {
