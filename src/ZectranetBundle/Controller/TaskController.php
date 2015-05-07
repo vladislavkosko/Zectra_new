@@ -159,6 +159,19 @@ class TaskController extends Controller {
         return $response;
     }
 
+    public function editPostAction(Request $request,$post_id)
+    {
+        $post = json_decode($request->getContent(), true);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $message = TaskPost::EditMessage($em,$post_id,$post['message']);
+        if($message != null)
+        {
+            return new JsonResponse('1');
+        }
+    }
+
     /**
      * @param Request $request
      * @param int $task_id

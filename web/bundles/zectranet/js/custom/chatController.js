@@ -72,18 +72,28 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             {
                 documents = documents + $rootScope.DocumentsInChat[i];
             }
-            $('#textarea-post').val('');
-          $scope.documentPromise = $http.post($scope.urlAddPost, {'message': message + '<br>' + documents, 'usersForPrivateMessage': usersForPrivateMessage})
-                .success(function (response) {
-                    $scope.getPosts(0, 100);
-                    $('#slide-down-menu-screenshots').fadeOut(1500);
-                    setTimeout(function () {
-                        $('.img-screenshots').remove();
-                    }, 1500);
-                  $rootScope.DocumentsInChat =[];
+            if($scope.editPostButtonVisible == true)
+            {
+                $scope.EditPost($('#textarea-post').val() + '<br>' + documents);
+            }
+            else {
 
-                });
-        };
+                $('#textarea-post').val('');
+                $scope.documentPromise = $http.post($scope.urlAddPost, {
+                    'message': message + '<br>' + documents,
+                    'usersForPrivateMessage': usersForPrivateMessage
+                })
+                    .success(function (response) {
+                        $scope.getPosts(0, 100);
+                        $('#slide-down-menu-screenshots').fadeOut(1500);
+                        setTimeout(function () {
+                            $('.img-screenshots').remove();
+                        }, 1500);
+                        $rootScope.DocumentsInChat = [];
+
+                    });
+            }
+            };
 
         // ---- generate users for send private message to Email ----
 
@@ -139,7 +149,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
             }
             else if($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey && $scope.editPostButtonVisible == true)
             {
-                $scope.EditPost($('#textarea-post').val());
+                $scope.SendPost($('#textarea-post').val());
             }
             if ($event.keyCode == '38' && !$event.shiftKey && !$event.ctrlKey && $('#textarea-post').val() == '') {
                 var user_posts = [];

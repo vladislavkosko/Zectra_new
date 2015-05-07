@@ -82,7 +82,7 @@ class TaskPost
             'user' => $this->getUser()->getInArray(),
             'message' => $this->getMessage(),
             'posted' => $this->getPosted()->format('Y-m-d H:i:s'),
-            'edited' => $this->getEdited()
+            'edited' => ($this->getEdited() != null) ? $this->getEdited()->format('Y-m-d H:i:s') : null,
         );
     }
 
@@ -292,6 +292,18 @@ class TaskPost
         $em->persist($post);
         $em->flush();
 
+        return $post;
+    }
+
+    public static function editMessage(EntityManager $em, $message_id, $message) {
+
+        $post = $em->getRepository('ZectranetBundle:TaskPost')->find($message_id);
+
+        $post->setEdited(new \DateTime());
+        $post->setMessage($message);
+
+        $em->persist($post);
+        $em->flush();
         return $post;
     }
 }

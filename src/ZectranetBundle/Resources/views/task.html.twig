@@ -566,11 +566,17 @@
                                     <a ng-init="Href = userHref(post.user.id)" ng-href="[[Href]]" style="display: inline-block; text-decoration: none;">
                                         <img style="width: 50px;height: 50px; object-fit: cover;" ng-src="[[avatar]]" alt="User Avatar" class="img-circle"/>
                                     </a>
-                                    <span style="vertical-align: top;font-weight: 300;  color: #A9A9A9;">
+                                    <span style="vertical-align: top;font-weight: 300;  color: #A9A9A9;" ng-if="post.edited == null">
                                         <strong style="vertical-align: top; color: #337ab7;">
                                             [[post.user.name]]
                                         </strong>
                                         added a comment - [[ post.posted ]]
+                                    </span>
+                                    <span style="vertical-align: top;font-weight: 300;  color: #A9A9A9;" ng-if="post.edited != null">
+                                        <strong style="vertical-align: top; color: #337ab7;">
+                                            [[post.user.name]]
+                                        </strong>
+                                        edited a comment - [[ post.edited ]]
                                     </span>
                                 </p>
                                 <p style="margin: -10px 0 0 83px; white-space: pre-wrap;" ng-bind-html="post.message"></p>
@@ -585,12 +591,17 @@
                                         <i class="fa fa-file"></i>
                                     </button>
                                 </span>
-                                <textarea id="textarea-post" name="message" class="form-control" rows="3" style="font-size: 11px; height: 65px;" ng-keypress="pressEnter($event, message)" ng-model="message"></textarea>
-                                        <span class="input-group-btn">
+                                <textarea id="textarea-post" name="message" class="form-control" rows="3" style="resize: vertical;font-size: 11px; height: 65px;"  ng-keyup="pressEnter($event);" ng-model="message"></textarea>
+                                    <span class="input-group-btn" ng-if="editPostButtonVisible == false">
                                         <button class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendPost(message)">
                                             <span>Post</span>
                                         </button>
-                                </span>
+                                    </span>
+                                    <span class="input-group-btn" ng-if="editPostButtonVisible == true">
+                                        <button  class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="EditPost(message)">
+                                            <span>Edit</span>
+                                        </button>
+                                    </span>
                             </form>
                             <div id="slide-down-menu-screenshots" cg-busy="documentPromise" style="display: none;">
                                 <div id="div-screenshot" style="display: none; width: auto;height: auto;">
@@ -619,6 +630,7 @@
         JSON_URLS.saveTaskInfo = "{{ path('zectranet_task_edit_info', { 'task_id': task.id }) }}";
         JSON_URLS.getSingleTask = "{{ path('zectranent_task_get_single', { 'task_id': task.id }) }}";
         TEMPPARAMS.TASK_ID = {{ task.id }};
+        JSON_URLS.editPost = "{{ path('zectranet_task_post_edit', { 'post_id': 0 }) }}";
     </script>
     <script src="{{ asset('bundles/zectranet/js/custom/taskController.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/chatController.js') }}" type="text/javascript"></script>
