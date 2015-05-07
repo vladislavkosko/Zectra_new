@@ -587,7 +587,11 @@
 		{
 			asset: "{{ asset('') }}",
 			miniSearch: "{{ path('zectranet_quick_search') }}",
-			notificationsGet: "{{ url('zectranet_notifications_get') }}",
+            urlMiniSearchHeaderThread: "{{ path('zectranet_show_header_forum_thread', {'project_id': 0, 'subheader_id': 1, 'thread_id': 2 }) }}",
+			urlMiniSearchQnaThread: "{{ path('zectranet_show_QnA_thread', {'project_id': 0, 'thread_id' : 1}) }}",
+            urlMiniSearchProject: "{{ path('zectranet_show_project', {'project_id': 0}) }}",
+            urlMiniSearchTask: "{{ path('zectranet_task_show', {'task_id': 0}) }}",
+            notificationsGet: "{{ url('zectranet_notifications_get') }}",
             homeOfficeShow: "{{ url('zectranet_show_office', {'office_id': 0, 'conversation_id': 'conv_id'}) }}",
             officeShow: "{{ url('zectranet_show_office', {'office_id': 0}) }}",
 			projectShow: "{{ url('zectranet_show_project', {'project_id': 0}) }}",
@@ -601,8 +605,10 @@
 		};
 
         var TEMPPARAMS = {};
-        var userHomeOfficeID = "{{ app.user.homeOfficeID }}";
-        var USER_ID = {{ app.user.id }};
+        {% if app.user %}
+            var userHomeOfficeID = "{{ app.user.homeOfficeID }}";
+            var USER_ID = {{ app.user.id }};
+        {% endif %}
 
 		var SearchText = null;
 		{% if searchText is defined and searchText != null %}

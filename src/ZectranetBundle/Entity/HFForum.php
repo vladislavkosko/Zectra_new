@@ -273,14 +273,51 @@ class HFForum
     }
 
     /**
-     * @param ArrayCollection $forums
+     * @param $forums
      * @param string $slug
+     * @param null|int $limit
      * @return array
      */
-    public static function searchHFForums($forums, $slug) {
-        $results = array();
-        // DO search ....
-        return $results;
+    public static function searchHFForums($forums, $slug, $limit = null) {
+        $threads = array();
+        $posts = array();
+        /** @var HFForum $forum */
+        foreach ($forums as $forum) {
+            $iterations = $limit;
+            /** @var HFHeader $header */
+            foreach ($forum->getHeaders() as $header) {
+                /** @var HFSubHeader $sub */
+                foreach ($header->getSubHeaders() as $sub) {
+                    /** @var HFThread $thread */
+                    foreach ($sub->getThreads() as $thread) {
+                        $matchesLength = preg_match('/' . $slug . '/mi', $thread->getTitle(), $matches);
+                        if ($matchesLength > 0) {
+                            $jsonThread = $thread->getInArray();
+                            $jsonThread['HFForumID'] = $thread->getSubHeader()->getHeader()->getForumID();
+                            $threads[] = $jsonThread;
+                            $iterations = ($iterations) ? $iterations - 1 : null;
+                        }
+                        /** @var HFThreadPost $post */
+                        foreach ($thread->getPosts() as $post) {
+                            $matchesLength = preg_match('/' . $slug . '/mi', $post->getMessage(), $matches);
+                            if ($matchesLength > 0) {
+                                $jsonPost = $post->getInArray();
+                                $jsonPost['subHeaderID'] = $post->getThread()->getSubHeaderID();
+                                $jsonPost['HFForumID'] = $post->getThread()->getSubHeader()->getHeader()->getForumID();
+                                $posts[] = $jsonPost;
+                                $iterations = ($iterations) ? $iterations - 1 : null;
+                            }
+                            if (!$iterations && $limit) break;
+                        }
+                        if (!$iterations && $limit) break;
+                    }
+                }
+            }
+        }
+        return array(
+            'threads' => $threads,
+            'posts' => $posts,
+        );
     }
 
     /**

@@ -67,6 +67,18 @@ class QnAPost
     private $edited;
 
     /**
+     * @return array
+     */
+    public function getInArray() {
+        return array(
+            'id' => $this->getId(),
+            'threadID' => $this->getThreadID(),
+            'message' => $this->getMessage(),
+            'userID' => $this->getUserID(),
+        );
+    }
+
+    /**
      * Get id
      *
      * @return integer

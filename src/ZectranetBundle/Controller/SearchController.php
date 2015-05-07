@@ -42,8 +42,8 @@ class SearchController extends Controller {
         } else {
             $result = array(
                 'homeOffice' => Office::searchHomeOffice($em, $user->getHomeOfficeID(), $slug, 3),
-                'HFForums' => HFForum::searchHFForums($user->getConnectedHFForums(), $slug),
-                'QnAForums' => QnAForum::searchQnAForums($user->getConnectedQnAForums(), $slug),
+                'HFForums' => HFForum::searchHFForums($user->getConnectedHFForums(), $slug, 3),
+                'QnAForums' => QnAForum::searchQnAForums($user->getConnectedQnAForums(), $slug, 3),
                 'reserved' => array(),
                 'Projects' => Project::searchProjects($user->getProjects(), $slug),
                 'Tasks' => array(),
