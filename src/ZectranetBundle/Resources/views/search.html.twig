@@ -12,75 +12,10 @@
     </div>
 {% endblock %}
 
-{% block content %}
-    <div class="row">
-        <div class="col-md-12" ng-controller="ExtendedSearchController as ExSctrl">
-            <div class="col-md-9 profile-tabs" ng-init="searchInput='{{ SearchString }}'; InputChange();">
-                <span style="display:inline-block;">
-                    <input ng-model="searchInput" style="width: 450px; height: 35px;" maxlength="50" ng-change="InputChange();" type="search" class="form-control" placeholder="Search here...">
-                </span>
-            </div><br>
-            <ul id="myTab" class="nav nav-tabs" style="padding-left: 15px; padding-top: 40px;">
-                <li class="active"><a href="#projects" data-toggle="tab">Projects<span ng-if="(search_projects != null) && (searchCount > 0)">: [[search_projects.length]]</span></a></li>
-                <li><a href="#tasks" data-toggle="tab">Tasks<span ng-if="(search_tasks != null) || (search_task_posts != null) && (searchCount > 0)">: [[search_tasks.length + search_task_posts.length]]</span></a></li>
-                <li><a href="#office_chat" data-toggle="tab">Office chats<span ng-if="(search_chats != null) && (searchCount > 0)">: [[search_chats.length]]</span></a></li>
-                <li><span ng-if="searchCount > 0 && (searchInput.length >= 3)" class="label label-success search-labels">Total count: [[searchCount]]</span></li>
-                <li><span ng-if="searchCount == 0 && (searchInput.length >= 3)" class="label label-warning search-labels">Total count: [[searchCount]]</span></li>
-            </ul>
-
-            <div id="myTabContent" class="tab-content">
-
-                <div class="tab-pane in active" id="projects">
-                    <div class="list-group">
-                        <h1 ng-if="((search_projects.length == 0) || (search_projects == null)) && (searchCount != null) && (searchInput.length > 0)" class="list-group-item" style="margin: 0; color: #999999; font-size: 18px;">
-                            Search in projects have no results...
-                        </h1>
-                        <h1 ng-if="(searchCount == null) && (searchInput.length > 0)" class="list-group-item" style="margin: 0; color: #999999; font-size: 18px;">Search for [[searchInput]]...</h1>
-                        <a tabindex="-1" ng-href="{{ path('intranet_main_homepage') }}office/[[res.id]]" ng-if="(searchCount > 0) && (searchInput.length > 0)" class="list-group-item" ng-repeat="res in search_projects">
-                            <span style="font-size: 16px;" class="quicksearch-result">[[res.name]]</span>
-                            <span style="font-size: 12px;" class="quicksearch-source">[[res.Office.name]]</span><br>
-                            <span style="font-size: 13px; font-style: italic;" class="quicksearch-result">[[res.description]]</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="tab-pane" id="tasks">
-                    <div class="list-group">
-                        <h1 ng-if="((search_tasks.length + search_task_posts.length == 0) || (search_tasks == null && search_task_posts == null)) && (searchCount != null) && (searchInput.length > 0)" class="list-group-item" style="margin: 0; color: #999999; font-size: 18px;">Search in tasks have no results...</h1>
-                        <h1 ng-if="(searchCount == null) && (searchInput.length > 0)" class="list-group-item" style="margin: 0; color: #999999; font-size: 18px;">Search for [[searchInput]]...</h1>
-                        <a tabindex="-1" ng-href="{{ path('intranet_main_homepage') }}office/[[res.officeid]]/[[searchInput]]" ng-if="(searchCount > 0) && (searchInput.length > 0)" class="list-group-item" ng-repeat="res in search_tasks">
-                            <span style="font-size: 16px;" class="quicksearch-result">[[res.name]]</span>
-                            <span style="font-size: 12px;" class="quicksearch-source">[[res.Office.name]]</span><br>
-                            <span style="font-size: 13px; font-style: italic;" class="quicksearch-result">[[res.description]]</span>
-                        </a>
-                        <a tabindex="-1" ng-href="{{ path('intranet_main_homepage') }}office/[[res.Office.officeid]]/[[searchInput]]" ng-if="(searchCount > 0) && (searchInput.length > 0)" class="list-group-item" ng-repeat="res in search_task_posts">
-                            <span style="font-size: 16px;" class="quicksearch-result">[[res.message]]</span>
-                            <span style="font-size: 12px;" class="quicksearch-source">[[res.Office.name]]</span><br>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="tab-pane" id="office_chat">
-                    <div class="list-group">
-                        <div ng-repeat="res in search_chats">
-                            <h1 ng-if="((search_chats.length == 0) || (search_chats == null)) && (searchCount != null) && (searchInput.length > 0)" class="list-group-item" style="margin: 0; color: #999999; font-size: 18px;">Search in chats have no results...</h1>
-                            <h1 ng-if="(searchCount == null) && (searchInput.length > 0)" class="list-group-item" style="margin: 0; color: #999999; font-size: 18px;">Search for [[searchInput]]...</h1>
-                            <a tabindex="-1" ng-href="{{ path('intranet_main_homepage') }}office/[[res.officeid]]/[[searchInput]]" ng-if="(searchCount > 0) && (searchInput.length > 0) && (res.Topics == null)" class="list-group-item">
-                                <span style="font-size: 16px;" class="quicksearch-result">[[res.message]]</span>
-                                <span style="font-size: 12px;" class="quicksearch-source">[[res.Offices.name]]</span>
-                            </a>
-                            <a tabindex="-1" ng-href="{{ path('intranet_main_homepage') }}topic/[[res.topicid]]/[[searchInput]]" ng-if="(searchCount > 0) && (searchInput.length > 0) && (res.Offices == null)" class="list-group-item">
-                                <span style="font-size: 16px;" class="quicksearch-result">[[res.message]]</span>
-                                <span style="font-size: 12px;" class="quicksearch-source">[[res.Topics.name]]</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
+{% block body %}
+    <!-- PLACE YOUR PAGE HERE -->
 {% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}

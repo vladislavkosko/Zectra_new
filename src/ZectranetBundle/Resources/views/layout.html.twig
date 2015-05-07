@@ -606,8 +606,8 @@
 
         var TEMPPARAMS = {};
         {% if app.user %}
-        var userHomeOfficeID = "{{ app.user.homeOfficeID }}";
-        var USER_ID = {{ app.user.id }};
+            var userHomeOfficeID = "{{ app.user.homeOfficeID }}";
+            var USER_ID = {{ app.user.id }};
         {% endif %}
 
 		var SearchText = null;

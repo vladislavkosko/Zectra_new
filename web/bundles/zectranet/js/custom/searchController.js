@@ -15,16 +15,16 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         $scope.searchInput = '';
         $scope.miniSearchResults = miniSearchTemp;
         $scope.urlMiniSearchThread = JSON_URLS.urlMiniSearchHeaderThread
-            .replace('0','HFForumID')
-            .replace('1','subHeaderID')
-            .replace('2','id');
+            .replace('0', 'HFForumID')
+            .replace('1', 'subHeaderID')
+            .replace('2', 'id');
         $scope.urlMiniSearchQnaThread = JSON_URLS.urlMiniSearchQnaThread
-            .replace('0','forumID' )
-            .replace('1','threadID' );
+            .replace('0', 'forumID' )
+            .replace('1', 'threadID' );
         $scope.urlMiniSearchProject = JSON_URLS.urlMiniSearchProject
-            .replace('0','projectID' );
+            .replace('0', 'projectID' );
         $scope.urlMiniSearchTask = JSON_URLS.urlMiniSearchTask
-            .replace('0','taskID' );
+            .replace('0', 'taskID' );
 
 
         function prepareSlug(slug) {
