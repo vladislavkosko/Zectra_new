@@ -9,6 +9,12 @@
 
 {% block body %}
     <div ng-controller="ErrorLogsController" ng-init="getErrors();">
+        <div class="row">
+            <div class="col-md-12">
+                <draw-chart width="500" height="500"></draw-chart>
+            </div>
+        </div>
+
         <div class="row" ng-repeat="error in errors" style="margin-top: 20px;">
             <div class="col-md-12">
                 <div class="img-thumbnail" style="padding: 15px 20px; box-shadow: 0 0 6px 0 darkseagreen; width: 100%;">

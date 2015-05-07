@@ -107,6 +107,27 @@ class Conversation
     }
 
     /**
+     * @param EntityManager $em
+     * @param int $userID
+     * @return mixed
+     */
+    public static function getConversationByUser(EntityManager $em, $userID) {
+        $qb = $em->createQueryBuilder();
+        $query = $qb->select('c')
+            ->from('ZectranetBundle:Conversation', 'c')
+            ->where('c.user1ID = :user OR c.user2ID = :user')
+            ->setParameter('user', $userID)
+            ->getQuery();
+        $conversations = null;
+        try {
+            $conversations = $query->getResult();
+        } catch (\Exception $ex) {
+            $conversation = null;
+        }
+        return $conversations;
+    }
+
+    /**
      * Get id
      *
      * @return integer 

@@ -29,23 +29,30 @@ class SearchController extends Controller {
         $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-
         $result = null;
-
         if ($task) {
             $result = array(
-                //'tasks' => Task::
+                'homeOffice' => array(),
+                'HFForums' => array(),
+                'QnAForums' => array(),
+                'reserved' => array(),
+                'Projects' => array(),
+                'Tasks' => array(),
             );
         } else {
             $result = array(
-                'homeOffice' => Office::searchHomeOffice($em, $user->getHomeOfficeID(), $slug),
+                'homeOffice' => Office::searchHomeOffice($em, $user->getHomeOfficeID(), $slug, 3),
                 'HFForums' => HFForum::searchHFForums($user->getConnectedHFForums(), $slug),
                 'QnAForums' => QnAForum::searchQnAForums($user->getConnectedQnAForums(), $slug),
-                'reserved' => array($slug),
+                'reserved' => array(),
                 'Projects' => Project::searchProjects($user->getProjects(), $slug),
+                'Tasks' => array(),
             );
         }
-
         return new JsonResponse($result);
+    }
+
+    public function SearchAction() {
+
     }
 }

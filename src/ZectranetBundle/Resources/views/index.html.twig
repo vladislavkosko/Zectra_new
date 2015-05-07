@@ -39,7 +39,7 @@
                                     </div>
                                     <div ng-if="miniSearchResults.total > 0">
                                         <div class="list-group-item" ng-repeat="item in miniSearchResults.homeOffice">
-                                            <a href="#" target="_self">[[ item ]]</a>
+                                            <a ng-href="[[ item.href ]]" target="_self">[[ item.message ]]</a>
                                         </div>
 
                                         <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums">
