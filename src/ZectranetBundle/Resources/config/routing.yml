@@ -463,6 +463,12 @@ zectranet_project_get_tasks:
     requirements:
         project_id: \d+
 
+zectranet_change_task_status:
+    pattern: /task/{task_id}/changeStatus
+    defaults: { _controller: ZectranetBundle:Task:changeTaskStatus }
+    requirements:
+        task_id: \d+
+
 zectranet_project_get_epic_stories:
     pattern: /project/{project_id}/getEpicStories
     defaults: { _controller: ZectranetBundle:Project:getEpicStories }

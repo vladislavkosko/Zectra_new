@@ -39,6 +39,19 @@ class TaskStatus
     private $tasks;
 
     /**
+     * @param $array
+     * @return array
+     */
+    public static function arrayToJson($array) {
+        $jsonArray = array();
+        /** @var TaskStatus $task */
+        foreach ($array as $task) {
+            $jsonArray[] = $task->getInArray();
+        }
+        return $jsonArray;
+    }
+
+    /**
      * @return array
      */
     public function getInArray() {

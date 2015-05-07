@@ -10,6 +10,7 @@ use ZectranetBundle\Entity\Task;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use ZectranetBundle\Entity\TaskPost;
+use ZectranetBundle\Entity\TaskStatus;
 use ZectranetBundle\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -58,7 +59,11 @@ class TaskController extends Controller {
             }
         }
 
-        $response = new Response(json_encode(array('Tasks' => $jsonTasks)));
+        $task_statuses = $this->getDoctrine()->getRepository('ZectranetBundle:TaskStatus')->findAll();
+
+        $task_statuses = TaskStatus::arrayToJson($task_statuses);
+
+        $response = new Response(json_encode(array('Tasks' => $jsonTasks, 'taskStatuses' => $task_statuses)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
@@ -104,6 +109,33 @@ class TaskController extends Controller {
 
         $response = new Response(json_encode(null));
         $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param $task_id
+     * @return Response
+     */
+    public function changeTaskStatusAction(Request $request, $task_id)
+    {
+        $data = json_decode($request->getContent(), true);
+        $data = (object) $data['objTask'];
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var TaskStatus $status */
+        $status = $this->getDoctrine()->getRepository('ZectranetBundle:TaskStatus')->find($data->statusId);
+
+        /** @var Task $task */
+        $task = $em->getRepository('ZectranetBundle:Task')->find($task_id);
+
+        $task->setStatus($status);
+        $em->flush();
+
+        $response = new Response(json_encode(array('task' => $task->getInArray())));
         return $response;
     }
 

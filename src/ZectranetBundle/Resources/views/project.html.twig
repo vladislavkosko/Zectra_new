@@ -310,6 +310,7 @@
         JSON_URLS.getTasks = "{{ path('zectranet_project_get_tasks', { 'project_id': 0 }) }}";
         JSON_URLS.deleteTask = "{{ path('zectranet_task_delete', { 'task_id': 0 }) }}";
         JSON_URLS.showTask = "{{ path('zectranet_task_show', { 'task_id': 0 }) }}";
+        JSON_URLS.changeStatusTask = "{{ path('zectranet_change_task_status', {'task_id': 0}) }}";
 
         JSON_URLS.getEpicStories = "{{ path('zectranet_project_get_epic_stories', { 'project_id': project.id }) }}";
         JSON_URLS.addEpicStory = "{{ path('zectranet_project_add_epic_story', { 'project_id': project.id }) }}";
