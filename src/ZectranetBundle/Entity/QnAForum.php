@@ -237,14 +237,42 @@ class QnAForum
     }
 
     /**
-     * @param ArrayCollection $forums
+     * @param $forums
      * @param string $slug
+     * @param null|int $limit
      * @return array
      */
-    public static function searchQnAForums($forums, $slug) {
-        $results = array();
-        // DO search ....
-        return $results;
+    public static function searchQnAForums($forums, $slug, $limit = null) {
+        $threads = array();
+        $posts = array();
+        /** @var QnAForum $forum */
+        foreach ($forums as $forum) {
+            $iterations = $limit;
+            /** @var QnAThread $thread */
+            foreach ($forum->getThreads() as $thread) {
+                $matchesLength = preg_match('/' . $slug . '/mi', $thread->getTitle(), $matches);
+                if ($matchesLength > 0) {
+                    $threads[] = $thread->getInArray();
+                    $iterations = ($iterations) ? $iterations - 1 : null;
+                }
+                /** @var QnAPost $post */
+                foreach ($thread->getPosts() as $post) {
+                    $matchesLength = preg_match('/' . $slug . '/mi', $post->getMessage(), $matches);
+                    if ($matchesLength > 0) {
+                        $jsonPost = $post->getInArray();
+                        $jsonPost['forumID'] = $post->getThread()->getForumID();
+                        $posts[] = $jsonPost;
+                        $iterations = ($iterations) ? $iterations - 1 : null;
+                    }
+                    if (!$iterations && $limit) break;
+                }
+                if (!$iterations && $limit) break;
+            }
+        }
+        return array(
+            'threads' => $threads,
+            'posts' => $posts,
+        );
     }
 
     /**

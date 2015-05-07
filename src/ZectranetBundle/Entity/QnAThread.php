@@ -78,6 +78,15 @@ class QnAThread
      */
     private $forum;
 
+    public function getInArray() {
+        return array(
+           'id' => $this->getId(),
+           'title' => $this->getTitle(),
+           'message' => $this->getMessage(),
+           'forumID' => $this->getForumID(),
+        );
+    }
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
