@@ -14,10 +14,11 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         var userID = USER_ID;
         $scope.searchInput = '';
         $scope.miniSearchResults = miniSearchTemp;
-        $scope.urlMiniSearchThread = JSON_URLS.urlMiniSearchThread;
-        $scope.urlMiniSearchThread.replace(0,'HFForumID');
-        $scope.urlMiniSearchThread.replace(1,'subHeaderID');
-        $scope.urlMiniSearchThread.replace(2,'id');
+        $scope.urlMiniSearchThread = JSON_URLS.urlMiniSearchThread
+            .replace('0','HFForumID')
+            .replace('1','subHeaderID')
+            .replace('2','id');
+
 
         function prepareSlug(slug) {
             slug = slug.replace(new RegExp('-', 'gi'), '\\W')
