@@ -100,7 +100,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
                 var url = $scope.urlChangeStatusTask.replace('0', task.id);
 
-                $scope.promiseChangeStatus =  $http.post(url, {'objTask': objTask})
+                $scope.promise = $http.post(url, {'objTask': objTask})
                     .success(function (response) {
                         var tempTask = response.task;
                         task.status.id = tempTask.status.id;
@@ -108,7 +108,8 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                         task.status.color = tempTask.status.color;
                     });
 
-                $scope.promiseChangeStatus.then(function () {
+                $scope.promise.then(function () {
+
                     return task;
                 });
             }

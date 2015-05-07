@@ -26,7 +26,6 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         $scope.urlMiniSearchTask = JSON_URLS.urlMiniSearchTask
             .replace('0', 'taskID' );
 
-
         function prepareSlug(slug) {
             slug = slug.replace(new RegExp('-', 'gi'), '\\W')
                 .replace(new RegExp('-','g'), "\\W")
@@ -49,9 +48,9 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
             var headerThreads = results.HFForums.threads;
             for( i = 0;i < headerThreads.length;i++ ) {
                 headerThreads[i].href = $scope.urlMiniSearchThread
-                    .replace('HFForumID',headerThreads[i].HFForumID)
-                    .replace('subHeaderID',headerThreads[i].subHeaderID)
-                    .replace('id',headerThreads[i].id);
+                    .replace('HFForumID', headerThreads[i].HFForumID)
+                    .replace('subHeaderID', headerThreads[i].subHeaderID)
+                    .replace('id', headerThreads[i].id);
             }
 
             var headerPosts = results.HFForums.posts;
@@ -65,33 +64,33 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
             var QnAThreads = results.QnAForums.threads;
             for( i = 0;i < QnAThreads.length;i++ ) {
                 QnAThreads[i].href = $scope.urlMiniSearchQnaThread
-                    .replace('forumID',QnAThreads[i].forumID)
-                    .replace('threadID',QnAThreads[i].id);
+                    .replace('forumID', QnAThreads[i].forumID)
+                    .replace('threadID', QnAThreads[i].id);
             }
 
             var QnAPosts = results.QnAForums.posts;
             for( i = 0;i < QnAPosts.length;i++ ) {
                 QnAPosts[i].href = $scope.urlMiniSearchQnaThread
-                    .replace('forumID',QnAPosts[i].forumID)
-                    .replace('threadID',QnAPosts[i].threadID);
+                    .replace('forumID', QnAPosts[i].forumID)
+                    .replace('threadID', QnAPosts[i].threadID);
             }
 
             var projectPosts = results.Projects.posts;
-            for( i = 0;i < projectPosts.length;i++ ) {
+            for( i = 0; i < projectPosts.length; i++ ) {
                 projectPosts[i].href = $scope.urlMiniSearchProject
-                    .replace('projectID',projectPosts[i].projectID);
+                    .replace('projectID', projectPosts[i].projectID);
             }
 
             var tasks = results.Projects.tasks;
-            for( i = 0;i < tasks.length;i++ ) {
+            for( i = 0; i < tasks.length; i++ ) {
                 tasks[i].href = $scope.urlMiniSearchTask
-                    .replace('taskID',tasks[i].id);
+                    .replace('taskID', tasks[i].id);
             }
 
             var tasksPosts = results.Projects.taskPosts;
-            for( i = 0;i < tasksPosts.length;i++ ) {
-                tasks[i].href = $scope.urlMiniSearchTask
-                    .replace('taskID',tasksPosts[i].taskID);
+            for( i = 0; i < tasksPosts.length; i++ ) {
+                tasksPosts[i].href = $scope.urlMiniSearchTask
+                    .replace('taskID', tasksPosts[i].taskid);
             }
             return results;
         }
@@ -104,7 +103,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
                     $scope.miniSearchResults = prepareSearchResults(response);
                     $scope.miniSearchResults.total = response.QnAForums.threads.length + response.QnAForums.posts.length;
                     $scope.miniSearchResults.total += response.HFForums.threads.length + response.HFForums.posts.length;
-                    $scope.miniSearchResults.total += response.Projects.length;
+                    $scope.miniSearchResults.total += response.Projects.tasks.length + response.Projects.taskPosts.length + response.Projects.posts.length;
                     $scope.miniSearchResults.total += response.homeOffice.length;
                     if ($scope.miniSearchResults.total == 0) {
                         $scope.miniSearchResults.total = -1;

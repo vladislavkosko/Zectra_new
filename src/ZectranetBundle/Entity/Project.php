@@ -382,20 +382,68 @@ class Project
     }
 
     /**
-     * @param ArrayCollection $forums
+     * @param $projects
      * @param string $slug
+     * @param null|int $limit
      * @return array
      */
-    public static function searchProjects($forums, $slug) {
-        $results = array();
-        // DO search ....
-        return $results;
+    public static function searchProjects($projects, $slug, $limit = null)
+    {
+        $tasks = array();
+        $taskPosts = array();
+        $posts = array();
+
+        /** @var Project $project */
+        foreach ($projects as $project) {
+            $iterations = $limit;
+            /** @var ProjectPost $post */
+            foreach ($project->getPostsProject() as $post) {
+                $matchesLength = preg_match('/' . $slug . '/mi', $post->getMessage(), $matches);
+                if ($matchesLength > 0) {
+                    $jsonPost = $post->getInArray();
+                    $jsonPost['projectID'] = $post->getProjectid();
+                    $posts[] = $jsonPost;
+                    $iterations = ($iterations) ? $iterations - 1 : null;
+                    if (!$iterations && $limit) break;
+                }
+            }
+
+            /** @var Task $task */
+            foreach ($project->getTasks() as $task) {
+                $matchesLength = preg_match('/' . $slug . '/mi', $task->getName(), $matches);
+                $matchesLength += preg_match('/' . $slug . '/mi', $task->getDescription(), $matches);
+                if ($matchesLength > 0) {
+                    $tasks[] = $task->getInArray();
+                    $iterations = ($iterations) ? $iterations - 1 : null;
+                }
+
+                /** @var TaskPost $post */
+                foreach ($task->getPosts() as $post) {
+                    $matchesLength = preg_match('/' . $slug . '/mi', $post->getMessage(), $matches);
+                    if ($matchesLength > 0) {
+                        $jsonTaskPost = $post->getInArray();
+                        $jsonTaskPost['projectID'] = $post->getTask()->getProjectid();
+                        $taskPosts[] = $jsonTaskPost;
+                        $iterations = ($iterations) ? $iterations - 1 : null;
+                        if (!$iterations && $limit) break;
+                    }
+                }
+
+                if (!$iterations && $limit) break;
+            }
+        }
+
+        return array(
+            'tasks' => $tasks,
+            'taskPosts' => $taskPosts,
+            'posts' => $posts,
+        );
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -418,7 +466,7 @@ class Project
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -441,7 +489,7 @@ class Project
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -464,7 +512,7 @@ class Project
     /**
      * Get ownerid
      *
-     * @return integer 
+     * @return integer
      */
     public function getOwnerid()
     {
@@ -487,7 +535,7 @@ class Project
     /**
      * Get parentid
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentid()
     {
@@ -510,7 +558,7 @@ class Project
     /**
      * Get officeID
      *
-     * @return integer 
+     * @return integer
      */
     public function getOfficeID()
     {
@@ -533,7 +581,7 @@ class Project
     /**
      * Get visible
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisible()
     {
@@ -556,7 +604,7 @@ class Project
     /**
      * Get owner
      *
-     * @return \ZectranetBundle\Entity\User 
+     * @return \ZectranetBundle\Entity\User
      */
     public function getOwner()
     {
@@ -579,7 +627,7 @@ class Project
     /**
      * Get parent
      *
-     * @return \ZectranetBundle\Entity\Project 
+     * @return \ZectranetBundle\Entity\Project
      */
     public function getParent()
     {
@@ -599,7 +647,7 @@ class Project
     /**
      * Get epicStories
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getEpicStories()
     {
@@ -632,7 +680,7 @@ class Project
     /**
      * Get versions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getVersions()
     {
@@ -665,7 +713,7 @@ class Project
     /**
      * Get users
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsers()
     {
@@ -688,7 +736,7 @@ class Project
     /**
      * Get office
      *
-     * @return \ZectranetBundle\Entity\Office 
+     * @return \ZectranetBundle\Entity\Office
      */
     public function getOffice()
     {
@@ -721,7 +769,7 @@ class Project
     /**
      * Get tasks
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTasks()
     {
@@ -754,7 +802,7 @@ class Project
     /**
      * Get postsProject
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPostsProject()
     {
@@ -777,7 +825,7 @@ class Project
     /**
      * Get typeID
      *
-     * @return integer 
+     * @return integer
      */
     public function getTypeID()
     {
@@ -800,7 +848,7 @@ class Project
     /**
      * Get type
      *
-     * @return \ZectranetBundle\Entity\ProjectType 
+     * @return \ZectranetBundle\Entity\ProjectType
      */
     public function getType()
     {
@@ -823,7 +871,7 @@ class Project
     /**
      * Get archived
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getArchived()
     {

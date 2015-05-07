@@ -45,7 +45,7 @@ class SearchController extends Controller {
                 'HFForums' => HFForum::searchHFForums($user->getConnectedHFForums(), $slug, 3),
                 'QnAForums' => QnAForum::searchQnAForums($user->getConnectedQnAForums(), $slug, 3),
                 'reserved' => array(),
-                'Projects' => Project::searchProjects($user->getProjects(), $slug),
+                'Projects' => Project::searchProjects($user->getProjects(), $slug, 3),
                 'Tasks' => array(),
             );
         }
