@@ -21,6 +21,10 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         $scope.urlMiniSearchQnaThread = JSON_URLS.urlMiniSearchQnaThread
             .replace('0','forumID' )
             .replace('1','threadID' );
+        $scope.urlMiniSearchProject = JSON_URLS.urlMiniSearchProject
+            .replace('0','projectID' );
+        $scope.urlMiniSearchTask = JSON_URLS.urlMiniSearchTask
+            .replace('0','taskID' );
 
 
         function prepareSlug(slug) {
@@ -65,11 +69,29 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
                     .replace('threadID',QnAThreads[i].id);
             }
 
-            var QnAPosts = results.QnAForums.threads;
+            var QnAPosts = results.QnAForums.posts;
             for( i = 0;i < QnAPosts.length;i++ ) {
                 QnAPosts[i].href = $scope.urlMiniSearchQnaThread
                     .replace('forumID',QnAPosts[i].forumID)
                     .replace('threadID',QnAPosts[i].threadID);
+            }
+
+            var projectPosts = results.Projects.posts;
+            for( i = 0;i < projectPosts.length;i++ ) {
+                projectPosts[i].href = $scope.urlMiniSearchProject
+                    .replace('projectID',projectPosts[i].projectID);
+            }
+
+            var tasks = results.Projects.tasks;
+            for( i = 0;i < tasks.length;i++ ) {
+                tasks[i].href = $scope.urlMiniSearchTask
+                    .replace('taskID',tasks[i].id);
+            }
+
+            var tasksPosts = results.Projects.taskPosts;
+            for( i = 0;i < tasksPosts.length;i++ ) {
+                tasks[i].href = $scope.urlMiniSearchTask
+                    .replace('taskID',tasksPosts[i].taskID);
             }
             return results;
         }
