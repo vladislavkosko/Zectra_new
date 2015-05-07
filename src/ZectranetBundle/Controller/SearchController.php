@@ -52,7 +52,11 @@ class SearchController extends Controller {
         return new JsonResponse($result);
     }
 
-    public function SearchAction() {
-
+    /**
+     * @param null $slug
+     * @return Response
+     */
+    public function SearchAction($slug = null) {
+        return $this->render('@Zectranet/search.html.twig');
     }
 }
