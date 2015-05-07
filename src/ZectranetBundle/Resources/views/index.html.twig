@@ -43,15 +43,19 @@
                                         </div>
 
                                         <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.threads">
-                                            <a ng-href="[[ item.href ]]" target="_self">[[ item.title ]]</a>
+                                            <a ng-href="[[ item.href ]]" target="_self">[[ item.title + ' ' + item.message ]]</a>
                                         </div>
 
                                         <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.posts">
                                             <a ng-href="[[ item.href ]]" target="_self">[[ item.message ]]</a>
                                         </div>
 
-                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums">
-                                            <a href="#" target="_self">[[ item ]]</a>
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.threads">
+                                            <a ng-href="[[ item.href ]]" target="_self">[[ item.title + ' ' + item.message ]]</a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.posts">
+                                            <a ng-href="[[ item.href ]]" target="_self">[[ item.message ]]</a>
                                         </div>
 
                                         <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects">
