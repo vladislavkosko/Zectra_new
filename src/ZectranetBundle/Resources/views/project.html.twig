@@ -66,39 +66,29 @@
 
                 <!-- BEGIN OF OFFICE USERS PANEL -->
                 <div class="row">
-                <div class="col-md-12 col-xs-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" style="background:#ddedf4; color:#606060;">
-                            <i class="fa fa-users"></i>
-                            <strong>Project Users</strong>
-                        </div>
-                        <div class="panel-body" style="max-height: 250px; overflow-y: auto;">
-                            <div class="row">
-
-                                {% for user in project.users %}
-                                    <div class="col-md-3 col-xs-4 col-sm-3">
-                                        <div class="user-chat center-block">
-                                            <a href="{{ path('zectranet_user_page', {'user_id': user.id}) }}" style="display: block; text-decoration: none;">
-                                                <p class="text-muted label label-default label-primary text-center center-block" style="margin:0 2px 0px 2px; border-radius: 0px;">
-                                                    {% if project.ownerid == user.id %}
-                                                        {{ 'Owner' }}
-                                                    {% else %}
-                                                        {{ 'Member' }}
-                                                    {% endif %}
-                                                </p>
-                                                <img src="{{ asset('') ~ 'documents/' ~ user.avatar }}" class="img-responsive center-block" style="width: 60px; height: 60px;">
-                                            </a>
-                                            <a style="cursor: pointer;">
-                                                <p class="text-center" style="font-weight: bold;">{{ user.name ~ ' ' ~ user.surname }}</p>
-                                            </a>
-                                        </div>
+                    <div class="col-xs-9">
+                        <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 410px; overflow-y: auto;" >
+                            <li class="list-group-item active"  style="background:#ddedf4; color:#606060;">
+                                <b>Project Users</b>
+                            </li>
+                            {% for user in project.users %}
+                            <li class="list-group-item"  >
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <img class="img-responsive img-circle"  src="{{ asset('') ~ 'documents/' ~ user.avatar }}" alt="avatar"/>
                                     </div>
+                                    <div class="col-xs-9">
+                                        <p>
+                                            {{ user.name ~ ' ' ~ user.surname }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
 
-                                {% endfor %}
-                            </div>
-                        </div>
+                        </ul>
                     </div>
-                </div>
+
                 <!-- END OF OFFICE USERS PANEL -->
 
                 <div class="col-xs-12 col-md-12">
