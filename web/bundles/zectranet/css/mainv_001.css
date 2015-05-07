@@ -489,3 +489,28 @@ div[data-role="editor-toolbar"] {
     border-color: #5cb85c; }
 .radio-success input[type="radio"]:checked + label::after {
     background-color: #5cb85c; }
+
+.search-result-main{
+    margin-top: 6px;
+    font-family: 'PT Sans Narrow', sans-serif;
+    padding: 10px;
+    background: #fff;
+    border-width: 1px;
+    border-style: solid;
+    -moz-border-top-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    border-image: none;
+    border-color: #E5E6E9 #DFE0E4 #D0D1D5;
+    border-radius: 3px;
+}
+.search-result-main h2{
+    margin: 0px;
+    padding: 0px;
+}
+.search-result-main span{
+    margin-top: 5px;
+    font-size: 16px;
+}
+
