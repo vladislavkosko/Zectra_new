@@ -267,10 +267,12 @@ div[data-role="editor-toolbar"] {
     box-shadow: 0px 1px 0px 0px #FFF inset;
     color: #999;
 }
+
 .forum-main-header h4{
     padding: 9px;
     margin: 0px;
 }
+
 .subheader-body{
     padding: 5px;
     border: 1px solid #eee;

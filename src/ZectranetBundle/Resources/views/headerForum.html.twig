@@ -43,12 +43,12 @@
 
             {% else %}
                 <div class="col-md-9 col-xs-6">
-                    <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">{{ forum.name }}</span>
+                    <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; margin-top: 10px;">{{ forum.name }}</span>
                 </div>
 
             {% endif %}
 
-            <div class="col-md-3 col-xs-6" style="font-size: 18px;">
+            <div class="col-md-3 col-xs-6" style="font-size: 18px; margin-top: 10px;">
                 {% if forum.ownerID == app.user.id or (is_granted('ROLE_ADMIN')) %}
                     <div class="pull-right">
                         <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Forum">
@@ -173,10 +173,56 @@
                 </div>
 
             </div>
-            <div style="margin: 5px 0 15px 15px;" ng-if="addnewheader == false">
-                <a href="#" ng-click="headerTrue();"> <i class="fa fa-plus"></i>Add new Header </a>
+
+<div class="clearfix"></div>
+
+            <div class="col-xs-12">
+                <div class="row forum-all ">
+                    <div class="forum-main-header col-xs-12" ng-if="addnewheader == false">
+                        <h5><a href="#" ng-click="headerTrue();"> <i class="fa fa-plus"></i> Add new Header Сука </a></h5>
+                    </div>
+                </div>
             </div>
-            <div ng-if="addnewheader == true" style="margin: 5px 0 15px 15px;">
+
+            <div ng-if="addnewheader == true">
+
+                {#<div class="col-xs-12">#}
+                    {#<div class="row forum-all ">#}
+
+                        {#<div class="forum-main-header col-xs-12">#}
+                            {#<h5>Add new Header Сука</h5>#}
+                        {#</div>#}
+
+
+
+
+
+                        {#<div class="col-xs-12 subheader-body new-subheader-main">#}
+                            {#<div class="row new-subheader-main-all">#}
+
+                                {#<div class="col-xs-1 hidden-xs">#}
+                                    {#<img height="40px" style="margin-left: 9px; margin-top:5px; " src="{{ asset('bundles/zectranet/img/new.png') }}" alt="subheader_image"/>#}
+                                {#</div>#}
+
+                                {#<div class="col-md-8">#}
+                                    {#<h4>#}
+                                        {#<input type="text" placeholder="Subheader title ..." class="form-control subheader-body-input-h3" ng-model="quickheader.title" aria-describedby="basic-addon23">#}
+                                    {#</h4>#}
+                                {#</div>#}
+
+                            {#</div>#}
+                        {#</div>#}
+
+
+
+                    {#</div>#}
+                {#</div>#}
+
+
+
+
+
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-5">

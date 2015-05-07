@@ -29,7 +29,7 @@
         <div class="row">
 
             {% if (forum.ownerID == app.user.id) or (thread.userID == app.user.id) or (is_granted('ROLE_ADMIN')) %}
-                <div class="col-xs-6 col-md-9" style="word-wrap: break-word; white-space: normal;">
+                <div class="col-xs-6 col-md-9" style="word-wrap: break-word; white-space: normal; margin-top: 10px;">
                     <div ng-click="setFormEdit()" ng-mouseleave="setFormNone()" style="display: inline-block;">
                         <div ng-if="formStatus == 'formNone'" ng-mouseenter="setIconEdit()" ng-mouseleave="setIconNone()" id="spanLength" style="cursor: pointer;">
                             <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold; padding: 0 5px;">{{ sub.title }}</span>
