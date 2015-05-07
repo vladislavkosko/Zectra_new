@@ -2,6 +2,24 @@ Zectranet.controller('ErrorLogsController', ['$scope', '$http',
     function($scope, $http) {
         $scope.errors = null;
 
+        $scope.data = [
+            { 'x': 1, 'y': 5 },
+            { 'x': 2, 'y': 12 },
+            { 'x': 3, 'y': 11 },
+            { 'x': 4, 'y': 8 },
+            { 'x': 5, 'y': 0 },
+            { 'x': 6, 'y': 3 },
+            { 'x': 7, 'y': 10 },
+            { 'x': 8, 'y': 15 },
+            { 'x': 9, 'y': 7 },
+            { 'x': 10, 'y': 9 },
+            { 'x': 11, 'y': 2 },
+            { 'x': 12, 'y': 0 },
+            { 'x': 13, 'y': 0 },
+            { 'x': 14, 'y': 4 },
+            { 'x': 15, 'y': 5 }
+        ];
+
         $scope.urlGetErrors = JSON_URLS.getErrors;
 
         function highlightSyntax(text) {

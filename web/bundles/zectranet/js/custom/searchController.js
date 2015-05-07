@@ -1,6 +1,5 @@
 Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
     function($scope, $http, $rootScope) {
-
         var miniSearchTemp = {
             'homeOffice': [],
             'HFForums': [],
@@ -10,19 +9,31 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         };
         var timerHandler = null;
         var urlMiniSearch = JSON_URLS.miniSearch;
+        var urlHomeOffice = JSON_URLS.homeOfficeShow;
+        var homeOfficeID = userHomeOfficeID;
+        var userID = USER_ID;
         $scope.searchInput = '';
         $scope.miniSearchResults = miniSearchTemp;
 
         function prepareSlug(slug) {
-            slug = slug.replace(new RegExp('-', 'gi'), '%')
-                .replace(new RegExp('-','g'), "%")
-                .replace(new RegExp('/','g'), "%")
-                .replace(new RegExp(',','g'), "%")
-                .replace(new RegExp('_','g'), "%")
-                .replace(new RegExp(';','g'), "%")
-                .replace(new RegExp(':','g'), "%")
-                .replace(new RegExp(' ','g'), "%");
+            slug = slug.replace(new RegExp('-', 'gi'), '\\W')
+                .replace(new RegExp('-','g'), "\\W")
+                .replace(new RegExp('/','g'), "\\W")
+                .replace(new RegExp(',','g'), "\\W")
+                .replace(new RegExp('_','g'), "\\W")
+                .replace(new RegExp(';','g'), "\\W")
+                .replace(new RegExp(':','g'), "\\W")
+                .replace(new RegExp(' ','g'), "\\W");
             return slug;
+        }
+
+        function prepareSearchResults(results) {
+            var homeOffice = results.homeOffice;
+            for (var i = 0; i < homeOffice.length; i++) {
+                homeOffice[i].href = urlHomeOffice.replace('0', homeOfficeID)
+                    .replace('conv_id', (homeOffice[i].contact_id));
+            }
+            return results;
         }
 
         function miniSearch(slug, taskSearch) {
@@ -30,7 +41,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
 
             $http.post(urlMiniSearch, { 'slug': slug, 'task': taskSearch })
                 .success(function (response) {
-                    $scope.miniSearchResults = response;
+                    $scope.miniSearchResults = prepareSearchResults(response);
                     $scope.miniSearchResults.total = response.QnAForums.length;
                     $scope.miniSearchResults.total += response.HFForums.length;
                     $scope.miniSearchResults.total += response.Projects.length;

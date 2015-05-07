@@ -218,13 +218,34 @@ class Office
      * @param EntityManager $em
      * @param int $office_id
      * @param string $slug
+     * @param null|int $limit
      * @return array
      */
-    public static function searchHomeOffice(EntityManager $em, $office_id, $slug) {
+    public static function searchHomeOffice(EntityManager $em, $office_id, $slug, $limit = null) {
         $office = $em->find('ZectranetBundle:Office', $office_id);
-        // Do Search in chat...
-        $results = array();
-        return $results;
+        /** @var User $user */
+        $user = $office->getOwner();
+        $conversations = Conversation::getConversationByUser($em, $user->getId());
+        $jsonMessages = array();
+
+        /** @var Conversation $conv */
+        foreach ($conversations as $conv) {
+            $iterations = $limit;
+            /** @var ConversationMessage $message */
+            foreach ($conv->getMessages() as $message) {
+                $matchesLength = preg_match('/' . $slug . '/mi', $message->getMessage(), $matches);
+                if ($matchesLength > 0) {
+                    $jsonMessage = $message->getInArray();
+                    $jsonMessage['contact_id'] = ($message->getConversation()->getUser1ID() == $user->getId())
+                        ? $message->getConversation()->getUser2ID()
+                        : $message->getConversation()->getUser1ID();
+                    $jsonMessages[] = $jsonMessage;
+                    $iterations = ($iterations) ? $iterations - 1 : null;
+                }
+                if (!$iterations && $limit) break;
+            }
+        }
+        return $jsonMessages;
     }
 
     /**
