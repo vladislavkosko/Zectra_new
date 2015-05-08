@@ -57,6 +57,6 @@ class SearchController extends Controller {
      * @return Response
      */
     public function SearchAction($slug = null) {
-        return $this->render('@Zectranet/search.html.twig', $slug);
+        return $this->render('@Zectranet/search.html.twig', array('slug' => $slug));
     }
 }
