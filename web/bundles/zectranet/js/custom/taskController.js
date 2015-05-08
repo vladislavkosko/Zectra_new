@@ -24,7 +24,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
 
         $scope.sprint_id = null;
         $scope.tasks = null;
-        $scope.taskStatuses = null;
         $scope.tasksFilter = null;
         $scope.promise = null;
         $scope.taskInfoEdit = null;
@@ -48,7 +47,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         $scope.urlAsset = JSON_URLS.asset;
         $scope.urlgetSingleTask = JSON_URLS.getSingleTask;
         $scope.urlSaveTaskInfo = JSON_URLS.saveTaskInfo;
-        $scope.urlChangeStatusTask = JSON_URLS.changeStatusTask;
+        var urlSprintDetachTask = JSON_URLS.sprintDetachTask;
 
         $rootScope.initTaskController = function (page_id) {
             $scope.urlGetTasks = JSON_URLS.getTasks.replace('0', page_id);
@@ -57,69 +56,10 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             $scope.getTasks();
         };
 
-        function prepareShowStatusLabel(tasks) {
-            for (var i = 0; i < tasks.length; i++)
-            {
-                if (tasks[i].subtasks.length == 0)
-                {
-                    if (!angular.isDefined(tasks[i].showStatusLabel))
-                    {
-                        tasks[i].showStatusLabel = false;
-                        tasks[i].status.selected = tasks[i].status.id;
-                    }
-                }
-                else
-                {
-                    for (var j = 0; j < tasks[i].subtasks.length; j++)
-                    {
-                        if (!angular.isDefined(tasks[i].subtasks[j].showStatusLabel))
-                        {
-                            tasks[i].subtasks[j].showStatusLabel = false;
-                            tasks[i].subtasks[j].status.selected = tasks[i].subtasks[j].status.id;
-                        }
-                    }
-                }
-            }
-
-            return tasks;
-        }
-
-        $scope.clickOnStatus = function (showStatus) {
-            if (angular.isDefined(showStatus))
-                showStatus = true;
-            return showStatus;
-        };
-
-        $scope.changeStatus = function (task) {
-            if (task.status.id != task.status.selected)
-            {
-                var objTask = {
-                    'id': task.id,
-                    'statusId': task.status.selected
-                };
-
-                var url = $scope.urlChangeStatusTask.replace('0', task.id);
-
-                $scope.promise = $http.post(url, {'objTask': objTask})
-                    .success(function (response) {
-                        var tempTask = response.task;
-                        task.status.id = tempTask.status.id;
-                        task.status.label = tempTask.status.label;
-                        task.status.color = tempTask.status.color;
-                    });
-
-                $scope.promise.then(function () {
-
-                    return task;
-                });
-            }
-        };
-
         $scope.getTasks = function () {
             $scope.promise = $http.get($scope.urlGetTasks)
                 .success(function (response) {
                     $scope.tasks = response.Tasks;
-                    $scope.taskStatuses = response.taskStatuses;
                     separationTasksByStatus(response.Tasks);
                 }
             );
@@ -132,8 +72,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     tasks[i] = initTaskFields(tasks[i]);
                 }
                 $scope.tasks = tasks;
-                tasks = $scope.tasks;
-                $scope.tasks = prepareShowStatusLabel(tasks);
                 initUniquesCount();
                 calculateUniques($scope.tasks);
             });
@@ -280,7 +218,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             function executeCalculateOperations(task) {
                 if (task.subtasks && task.subtasks.length > 0) {
                     task.subtasks = giveSubtaskIndex(task.subtasks);
-                    task.progress = calculateMeanProgress(task.subtasks, task.progress);
+                    task.progress = calculateMeanProgress(task.subtasks);
                     var estimatedTime = calculateMeanEstimation(
                         task.subtasks, task.estimatedHours, task.estimatedMinutes
                     );
@@ -311,7 +249,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 for (var i = 0; i < subtasks.length; i++) {
                     meanNumber += subtasks[i].progress;
                 }
-                return ~~((meanNumber + progress) / (subtasks.length + 1));
+                return ~~(meanNumber / subtasks.length);
             }
 
             function calculateMeanEstimation (subtasks, hours, minutes) {
@@ -436,8 +374,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                             addTaskToStatusCategory(task);
                             task.expand = false;
                             $scope.tasks.push(task);
-                            var tasks = $scope.tasks;
-                            $scope.tasks = prepareShowStatusLabel(tasks);
                         }
                     }
                 );
@@ -466,8 +402,6 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                             if (parentIndex != -1) {
                                 var task = $scope.tasks[parentIndex];
                                 task.subtasks.push(subtask);
-                                var tasks = $scope.tasks;
-                                $scope.tasks = prepareShowStatusLabel(tasks);
                                 task = executeCalculateOperations(task);
                                 $scope.tasks[parentIndex] = task;
                             }
@@ -489,7 +423,8 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 $scope.promise = $http.post(url, {'task_id': task_id})
                     .success(function (response) {
                         $scope.getTasks();
-                    });
+                    }
+                );
             }
         };
 
@@ -500,12 +435,31 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 $scope.promise = $http
                     .post($scope.urlAddTasksToSprint.replace('0', sprint_id), { 'tasks': tasks })
                     .success(function (response) {
-                        if (response.success) {
-                            $scope.getTasks();
+                        for (var i = 0; i < response.length; i++) {
+                            for (var j = 0; j < $scope.tasks.length; j++) {
+                                if ($scope.tasks[j].id == response[i].id) {
+                                    $scope.tasks[j].sprint = response[i].sprint;
+                                    break;
+                                }
+                            }
                         }
                     }
                 );
             }
+        };
+
+        $scope.detachTaskFromSprint = function (task, $index) {
+            $scope.promise = $http.get(urlSprintDetachTask.replace('0', task.id))
+                .success(function (response) {
+                    for (var i = 0; i < $scope.tasks.length; i++) {
+                        if ($scope.tasks[i].id == response.id) {
+                            $scope.tasks[i].sprint = {
+                                'name': 'none'
+                            }
+                        }
+                    }
+                }
+            );
         };
 
         $scope.assignTaskHref = function (task_id) {
@@ -834,8 +788,5 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             );
 
         };
-
-
-        console.log('Task Controller was loaded');
     }
 ]);

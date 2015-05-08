@@ -343,4 +343,18 @@ class TaskController extends Controller {
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+
+    /**
+     * @param int $task_id
+     * @return JsonResponse
+     */
+    public function detachFromSprintAction($task_id) {
+        $em = $this->getDoctrine()->getManager();
+        $task = $em->find('ZectranetBundle:Task', $task_id);
+        $task->setSprint(null);
+        $task->setSprintId(null);
+        $em->persist($task);
+        $em->flush();
+        return new JsonResponse($task->getInArray());
+    }
 }

@@ -567,6 +567,12 @@ zectranet_sprint_add_tasks:
     requirements:
         sprint_id: \d+
 
+zectranet_detach_task_from_sprint:
+    pattern: /task/detach_from_sprint/{task_id}
+    defaults: { _controller: ZectranetBundle:Task:detachFromSprint }
+    requirements:
+        task_id: \d+
+
 zectranet_sprint_get_tasks:
     pattern: /sprint/{sprint_id}/getTasks
     defaults: { _controller: ZectranetBundle:Sprint:getTasks }

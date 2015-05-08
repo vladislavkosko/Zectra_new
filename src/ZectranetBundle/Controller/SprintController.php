@@ -54,17 +54,7 @@ class SprintController extends Controller {
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $sprint = null;
-        try {
-            $sprint = Sprint::addNewSprint($em, $office_id, $params);
-        } catch (\Exception $ex) {
-            $from = "Class: HFHeader, function: deleteHeader";
-            $this->get('zectranet.errorlogger')->registerException($ex, $from);
-            return $this->redirectToRoute('zectranet_show_sprint', array(
-                'office_id' => $office_id,
-                'sprint_id' => $sprint->getId()
-            ));
-        }
+        $sprint = Sprint::addNewSprint($em, $office_id, $params);
 
         return $this->redirectToRoute('zectranet_show_sprint', array(
             'office_id' => $office_id,
@@ -111,17 +101,9 @@ class SprintController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        try {
-            Sprint::addTasksToSprint($em, $sprint_id, $ids);
-        } catch (\Exception $ex) {
-            $from = "Class: Sprint, function: addTasksToSprint";
-            $this->get('zectranet.errorlogger')->registerException($ex, $from);
-            return new JsonResponse(false);
-        }
+        $tasks = Sprint::addTasksToSprint($em, $sprint_id, $ids);
 
-        $response = new Response(json_encode(array('success' => true)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return new JsonResponse($tasks);
     }
 
     /**
@@ -165,6 +147,3 @@ class SprintController extends Controller {
         ));
     }
 }
-
-
-

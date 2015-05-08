@@ -72,7 +72,7 @@ class Sprint
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -95,7 +95,7 @@ class Sprint
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -118,7 +118,7 @@ class Sprint
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -141,7 +141,7 @@ class Sprint
     /**
      * Get statusid
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatusid()
     {
@@ -174,7 +174,7 @@ class Sprint
     /**
      * Get tasks
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTasks()
     {
@@ -197,7 +197,7 @@ class Sprint
     /**
      * Get status
      *
-     * @return \ZectranetBundle\Entity\SprintStatus 
+     * @return \ZectranetBundle\Entity\SprintStatus
      */
     public function getStatus()
     {
@@ -220,7 +220,7 @@ class Sprint
     /**
      * Get officeid
      *
-     * @return integer 
+     * @return integer
      */
     public function getOfficeid()
     {
@@ -243,7 +243,7 @@ class Sprint
     /**
      * Get office
      *
-     * @return \ZectranetBundle\Entity\Office 
+     * @return \ZectranetBundle\Entity\Office
      */
     public function getOffice()
     {
@@ -294,18 +294,25 @@ class Sprint
      * @param EntityManager $em
      * @param int $sprint_id
      * @param array $task_ids
+     * @return array
      */
     public static function addTasksToSprint(EntityManager $em, $sprint_id, $task_ids) {
         $tasks = $em->getRepository('ZectranetBundle:Task')
             ->findBy(array('id' => $task_ids));
+        $jsonTasks = array();
+        $taskIds = array();
         if (count($tasks) > 0) {
             $sprint = $em->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
             /** @var Task $task */
             foreach ($tasks as $task) {
                 $task->setSprint($sprint);
                 $em->persist($task);
+                $taskIds[] = $task->getId();
             }
             $em->flush();
+            $jsonTasks = $em->getRepository('ZectranetBundle:Task')->findBy(array('id' => $taskIds));
+            $jsonTasks = EntityOperations::arrayToJsonArray($jsonTasks);
         }
+        return $jsonTasks;
     }
 }
