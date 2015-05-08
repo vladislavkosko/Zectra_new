@@ -26,4 +26,13 @@ class PublicMarketController extends Controller {
             'offices' => $offices
         ));
     }
+
+    /**
+     * @Route("/public_market/all_contacts")
+     * @Security("has_role('ROLE_USER')")
+     * @return Response
+     */
+    public function getAllContactsAction() {
+        return $this->render('@Zectranet/publicMarketAllMembers.html.twig');
+    }
 }

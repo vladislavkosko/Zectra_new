@@ -49,9 +49,21 @@ zectranet_wde:
     path: /wde
     defaults: { _controller: ZectranetBundle:User:wde }
 
+#################################################################################
+####################### Begin Of Public Market Functions ########################
+#################################################################################
+
 zectranet_public_market:
     path: /public_market
     defaults: { _controller: ZectranetBundle:PublicMarket:index }
+
+zectranet_public_market_all_contacts:
+    path: /public_market/all_contacts
+    defaults: { _controller: ZectranetBundle:PublicMarket:getAllContacts }
+
+#################################################################################
+####################### End Of Public Market Functions ##########################
+#################################################################################
 
 zectranet_edit_user_page:
     path: /userProfile/edit
