@@ -288,6 +288,10 @@ zectranet_project_get_post:
     requirements:
         project_id: \d+
 
+zectranet_subtask_make_task:
+    pattern: /subtask/{task_id}/makeTask
+    defaults: { _controller: ZectranetBundle:Task:makeSubtaskTask }
+
 zectranet_project_add_task:
     pattern: /project/{project_id}/addNewTask
     defaults: { _controller: ZectranetBundle:Project:addTask }
@@ -403,6 +407,12 @@ zectranet_sprint_add_tasks:
     defaults: { _controller: ZectranetBundle:Sprint:addTasksToSprint }
     requirements:
         sprint_id: \d+
+
+zectranet_detach_task_from_sprint:
+    pattern: /task/detach_from_sprint/{task_id}
+    defaults: { _controller: ZectranetBundle:Task:detachFromSprint }
+    requirements:
+        task_id: \d+
 
 zectranet_sprint_get_tasks:
     pattern: /sprint/{sprint_id}/getTasks

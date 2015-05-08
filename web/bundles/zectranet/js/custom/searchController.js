@@ -6,8 +6,8 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope', funct
     $scope.InputChange = function ()
     {
         if ($scope.searchInput.length >= 3 || !isNaN(parseInt($scope.searchInput))) {
-             Highlight($scope.searchInput);
-          //  FastSearch($scope.searchInput);
+            Highlight($scope.searchInput);
+            //  FastSearch($scope.searchInput);
         }
         else {
             $('.row').find('span.highlight').removeClass('highlight');
@@ -15,12 +15,9 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope', funct
     };
 
     function Highlight(searchTerm) {
-            if (searchTerm)
-            {
-                $('.row').highlight(searchTerm);
-            }
+        if (searchTerm)
+        {
+            $('.row').highlight(searchTerm);
+        }
     }
-
-
-
 }]);

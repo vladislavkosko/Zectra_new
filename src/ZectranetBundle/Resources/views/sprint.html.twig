@@ -1,6 +1,6 @@
 {% extends '@Zectranet/index.html.twig' %}
 
-{% block title %}Sprint page{% endblock %}
+{% block title %}{{ sprint.name }}{% endblock %}
 
 {% block body %}
     <div ng-controller="SprintController" ng-init="getTasks();">

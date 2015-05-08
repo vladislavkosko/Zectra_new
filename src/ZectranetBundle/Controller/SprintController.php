@@ -5,6 +5,7 @@ namespace ZectranetBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,11 +101,9 @@ class SprintController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
-        Sprint::addTasksToSprint($em, $sprint_id, $ids);
+        $tasks = Sprint::addTasksToSprint($em, $sprint_id, $ids);
 
-        $response = new Response(json_encode(array('success' => true)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return new JsonResponse($tasks);
     }
 
     /**

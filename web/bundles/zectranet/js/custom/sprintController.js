@@ -73,7 +73,7 @@ var sprintController = Zectranet.controller('SprintController', ['$scope', '$htt
             function executeCalculateOperations(task) {
                 if (task.subtasks && task.subtasks.length > 0) {
                     task.subtasks = giveSubtaskIndex(task.subtasks);
-                    task.progress = calculateMeanProgress(task.subtasks, task.progress);
+                    task.progress = calculateMeanProgress(task.subtasks);
                     var estimatedTime = calculateMeanEstimation(
                         task.subtasks, task.estimatedHours, task.estimatedMinutes
                     );
@@ -99,12 +99,12 @@ var sprintController = Zectranet.controller('SprintController', ['$scope', '$htt
                 return tasks;
             }
 
-            function calculateMeanProgress (subtasks, progress) {
+            function calculateMeanProgress (subtasks) {
                 var meanNumber = 0;
                 for (var i = 0; i < subtasks.length; i++) {
                     meanNumber += subtasks[i].progress;
                 }
-                return ~~((meanNumber + progress) / (subtasks.length));
+                return ~~((meanNumber) / (subtasks.length));
             }
 
             function calculateMeanEstimation (subtasks, hours, minutes) {
@@ -197,7 +197,5 @@ var sprintController = Zectranet.controller('SprintController', ['$scope', '$htt
         $scope.assignTaskHref = function (task_id) {
             return $scope.urlShowTask.replace('0', task_id);
         };
-
-        console.log('Sprint Controller was loaded...');
     }
 ]);

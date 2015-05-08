@@ -3,6 +3,7 @@ namespace ZectranetBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\Task;
@@ -156,6 +157,13 @@ class TaskController extends Controller {
         return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
     }
 
+    public function makeSubtaskTaskAction($task_id) {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        Task::makeSubtaskTask($em, $task_id);
+        return $this->redirectToRoute('zectranet_task_show', array('task_id' => $task_id));
+    }
+
     public function getPostsAction(Request $request, $task_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
@@ -172,7 +180,6 @@ class TaskController extends Controller {
         $response = new Response(json_encode(array('Posts' => $jsonPosts)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
-
     }
 
     public function addPostAction(Request $request, $task_id)
@@ -238,5 +245,19 @@ class TaskController extends Controller {
         $response = new Response(json_encode(array('newPost' => $new_post->getInArray())));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    /**
+     * @param int $task_id
+     * @return JsonResponse
+     */
+    public function detachFromSprintAction($task_id) {
+        $em = $this->getDoctrine()->getManager();
+        $task = $em->find('ZectranetBundle:Task', $task_id);
+        $task->setSprint(null);
+        $task->setSprintId(null);
+        $em->persist($task);
+        $em->flush();
+        return new JsonResponse($task->getInArray());
     }
 }

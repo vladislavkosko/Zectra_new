@@ -1057,6 +1057,18 @@ class Task
     }
 
     /**
+     * @param EntityManager $em
+     * @param $task_id
+     */
+    public static function makeSubtaskTask(EntityManager $em, $task_id) {
+        $task = $em->find('ZectranetBundle:Task', $task_id);
+        $task->setParent(null);
+        $task->setParentid(null);
+        $em->persist($task);
+        $em->flush();
+    }
+
+    /**
      * @return array
      */
     public function getInArray() {
@@ -1082,7 +1094,7 @@ class Task
             'type' => $this->getType()->getInArray(),
             'priority' => $this->getPriority()->getInArray(),
             'subtasks' => EntityOperations::arrayToJsonArray($this->getSubtasks()),
-            'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
+            'sprint' => ($this->getSprint()) ? $this->getSprint()->getInArray() : null,
             'postCount' => count($this->getPosts()),
             'versionid' => $this->getVersionid(),
             'sprintID' => ($this->getParentid())

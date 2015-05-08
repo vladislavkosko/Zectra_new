@@ -12,6 +12,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
     var declineRequestUserProject = JSON_URLS.declineRequestUserProject;
     var acceptRequestOfficeProject = JSON_URLS.acceptRequestOfficeProject;
     var declineRequestOfficeProject = JSON_URLS.declineRequestOfficeProject;
+    var notificationsInitialized = false;
 
     $scope.requests = [];
     $scope.notifications = null;
@@ -34,19 +35,24 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 
 	$scope.getNotification =  function getNotifications() {
 		$http.get(notificationsGetUrl)
-			.success(function(response){
+			.success(function(response) {
                 if (response.result.requests && response.result.requests.length > 0){
                     $scope.requests = response.result.requests;
+                } else {
+                    $scope.requests = [];
                 }
-
-                else $scope.requests = [];
 
                 if (response.result.notifications && response.result.notifications.length > 0){
                     if (response.result.notifications.length != $scope.notificationsLength){
+
                         StartNotify();
-                        document.getElementById('notif_sound').play();
-						var chatUpdate = false;
+                        if (notificationsInitialized) {
+                            document.getElementById('notif_sound').play();
+                        }
+
+                        var chatUpdate = false;
                         $scope.notifications = prepareNotifications(response.result.notifications);
+
 						for (var i = 0; i < $scope.notifications.length; i++) {
 							if ($scope.notifications[i].type == 'message_office'
 								|| $scope.notifications[i].type == 'message_project'
@@ -59,24 +65,23 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope', f
 							) {
 								chatUpdate = true;
 							}
-
-							if (chatUpdate) {
-								$rootScope.updateChat(0, 100);
-							}
-
 						}
+
+                        if (chatUpdate && notificationsInitialized) {
+                            $rootScope.updateChat(0, 100);
+                        }
 
                         $scope.notificationsLength = response.result.notifications.length;
 						$rootScope.NOTIFICATIONS = $scope.notifications;
                     }
-                }
-
-                else {
+                } else {
 					StopNotify();
 					$scope.notifications = [];
 				}
+                notificationsInitialized = true;
 				setTimeout(getNotifications, 5000);
-			})
+			}
+        );
     };
 
 	function prepareNotifications(notifications) {

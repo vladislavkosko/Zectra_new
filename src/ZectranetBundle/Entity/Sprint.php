@@ -294,18 +294,25 @@ class Sprint
      * @param EntityManager $em
      * @param int $sprint_id
      * @param array $task_ids
+     * @return array
      */
     public static function addTasksToSprint(EntityManager $em, $sprint_id, $task_ids) {
         $tasks = $em->getRepository('ZectranetBundle:Task')
             ->findBy(array('id' => $task_ids));
+        $jsonTasks = array();
+        $taskIds = array();
         if (count($tasks) > 0) {
             $sprint = $em->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
             /** @var Task $task */
             foreach ($tasks as $task) {
                 $task->setSprint($sprint);
                 $em->persist($task);
+                $taskIds[] = $task->getId();
             }
             $em->flush();
+            $jsonTasks = $em->getRepository('ZectranetBundle:Task')->findBy(array('id' => $taskIds));
+            $jsonTasks = EntityOperations::arrayToJsonArray($jsonTasks);
         }
+        return $jsonTasks;
     }
 }
