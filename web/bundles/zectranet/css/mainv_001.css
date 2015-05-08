@@ -515,12 +515,10 @@ div[data-role="editor-toolbar"] {
 }
 
 .classHoverStatus {
-    border: 4px solid transparent;
     transition: 0.15s linear all;
 }
 
 .classHoverStatus:hover {
-    /*border: 4px solid #ccc;*/
     cursor: pointer;
     box-shadow: 0 0 10px 0 black;
 }
