@@ -522,3 +522,16 @@ div[data-role="editor-toolbar"] {
     cursor: pointer;
     box-shadow: 0 0 10px 0 black;
 }
+.publickMarker-all-member{
+    margin-top: 10px;
+}
+.all-member-text{
+    margin-left: 0px;
+
+}
+.all-member-text h4{
+    margin: 0px;
+}
+.all-member-work .all-member-address{
+    font-size: 13px;
+}
