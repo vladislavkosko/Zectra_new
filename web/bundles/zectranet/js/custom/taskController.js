@@ -118,9 +118,16 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                         task.status.id = tempTask.status.id;
                         task.status.label = tempTask.status.label;
                         task.status.color = tempTask.status.color;
-                    });
+                    }
+                );
 
                 $scope.promise.then(function () {
+                    var arr = [];
+                    arr.push(task);
+                    calculateUniques(task);
+                    if (!task.parent) {
+                        executeCalculateOperations(task);
+                    }
                     return task;
                 });
             }
@@ -147,6 +154,18 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 $scope.tasks = prepareShowStatusLabel(tasks);
                 initUniquesCount();
                 calculateUniques($scope.tasks);
+                var status = {
+                    status: { 'id': 7, 'label': 'signed off', 'color': 'darkgreen' },
+                    'checked': false
+                };
+                var statuses = $scope.uniqueFilterOptions.status;
+                $scope.filterByStatus(status);
+                for (i = 0; i < statuses.length; i++) {
+                    if (statuses[i].status.id == 7) {
+                        statuses[i].checked = false;
+                        break;
+                    }
+                }
             });
         };
 
@@ -258,10 +277,12 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
         });
 
         function separationTasksByStatus(tasks) {
-            $scope.storyTasks = [] ;
-            $scope.todoTasks = [] ;
-            $scope.inProgresTasks = [] ;
-            $scope.doneTasks = [] ;
+            $scope.storyTasks = [];
+            $scope.todoTasks = [];
+            $scope.inProgresTasks = [];
+            $scope.doneTasks = [];
+            $scope.canceledTasks = [];
+            $scope.signedOffTasks = [];
 
             for(var i = 0; i < tasks.length; i++) {
                 addTaskToStatusCategory(tasks[i]);
@@ -281,6 +302,12 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     break;
                 case 'done':
                     $scope.doneTasks.push(task);
+                    break;
+                case 'canceled':
+                    $scope.canceledTasks.push(task);
+                    break;
+                case 'signed off':
+                    $scope.signedOffTasks.push(task);
                     break;
             }
         }
@@ -342,7 +369,8 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             function calculateMeanStatus (subtasks) {
                 var statuses = {
                     'story': 0, 'todo': 0,
-                    'in_progress': 0, 'done': 0
+                    'in_progress': 0, 'done': 0,
+                    canceled: 0, signedOff: 0
                 };
                 for (var i = 0; i < subtasks.length; i++) {
                     switch (subtasks[i].status.id) {
@@ -358,16 +386,26 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                         case 4:
                             statuses.done++;
                             break;
+                        case 6:
+                            statuses.canceled++;
+                            break;
+                        case 7:
+                            statuses.signedOff++;
+                            break;
                     }
                 }
-                if (statuses.done == subtasks.length) {
-                    return { id: 4, label: 'done', 'color': 'green' };
+                if(statuses.signedOff == subtasks.length) {
+                    return { 'id': 7, 'label': 'signed off', 'color': 'darkgreen' };
+                } else if (statuses.canceled == subtasks.length) {
+                    return { 'id': 6, 'label': 'canceled', 'color': 'red' };
+                } else if ((statuses.done + statuses.signedOff) == subtasks.length) {
+                    return { 'id': 4, 'label': 'done', 'color': 'green' };
                 } else if (statuses.in_progress > 0) {
-                    return { id: 3, label: 'in-progress', 'color': 'violet' };
+                    return { 'id': 3, 'label': 'in-progress', 'color': 'violet' };
                 } else if (statuses.todo > 0 || statuses.done > 0) {
-                    return { id: 2, label: 'todo', 'color': 'blue' };
+                    return { 'id': 2, 'label': 'todo', 'color': 'blue' };
                 } else {
-                    return { id: 1, label: 'story', 'color': 'lightgray' };
+                    return { 'id': 1, 'label': 'story', 'color': 'lightgray' };
                 }
             }
 
@@ -385,6 +423,12 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                             $scope.agileInProgressSubtasks.push(subtasks[i]);
                             break;
                         case 4:
+                            $scope.agileDoneSubtasks.push(subtasks[i]);
+                            break;
+                        case 6:
+                            $scope.agileStorySubtasks.push(subtasks[i]);
+                            break;
+                        case 7:
                             $scope.agileDoneSubtasks.push(subtasks[i]);
                             break;
                     }
@@ -856,14 +900,12 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     break;
             }
 
-
             $scope.urlSaveTaskInfo = $scope.urlSaveTaskInfo.replace('0', draggebletask.id);
             $scope.promise =  $http.post($scope.urlSaveTaskInfo, { 'task': draggebletask })
                 .success(function () {
                     $scope.getTasks();
                 }
             );
-
         };
     }
 ]);
