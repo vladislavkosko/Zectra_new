@@ -10,6 +10,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         var timerHandler = null;
         var urlMiniSearch = JSON_URLS.miniSearch;
         var urlHomeOffice = JSON_URLS.homeOfficeShow;
+        var urlSearchPage = JSON_URLS.searchPage;
         var homeOfficeID = userHomeOfficeID;
         var userID = USER_ID;
         $scope.searchInput = '';
@@ -143,5 +144,11 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
                 }
             }, 700);
         };
+
+        $scope.searchAction = function ( slug ) {
+            if (slug) {
+                location.href = urlSearchPage.replace('slug', slug);
+            }
+        }
     }
 ]);
