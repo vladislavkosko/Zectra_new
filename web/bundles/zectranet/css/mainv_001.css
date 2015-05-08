@@ -514,3 +514,11 @@ div[data-role="editor-toolbar"] {
     font-size: 16px;
 }
 
+.classHoverStatus {
+    border: 1px solid transparent;
+}
+
+.classHoverStatus:hover {
+    border: 1px solid #000;
+    cursor: pointer;
+}

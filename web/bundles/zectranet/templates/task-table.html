@@ -53,7 +53,15 @@
             </div>
         </td>
         <td class="col-xs-1 hidden-xs">
-            <div class="label label-default" style="background-color: [[ task.status.color ]];">
+
+            <select ng-if="(task.subtasks.length == 0) && (task.showStatusLabel)" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
+                <option ng-repeat="status in taskStatuses"
+                        style="color: [[ status.color ]]" value="[[ status.id ]]" ng-selected="status.id == task.status.id">
+                    [[status.label]]
+                </option>
+            </select>
+
+            <div ng-class="{'classHoverStatus': NeedClassHover(task)}" ng-if="!task.showStatusLabel" ng-click="task.showStatusLabel = clickOnStatus(task.showStatusLabel)" class="label label-default" style="background-color: [[ task.status.color ]];">
                 [[ task.status.label ]]
             </div>
         </td>
@@ -123,7 +131,15 @@
             </div>
         </td>
         <td class="col-xs-1 hidden-xs">
-            <div class="label label-default" style="background-color: [[ task.status.color ]];">
+
+            <select ng-if="task.showStatusLabel" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
+                <option ng-repeat="status in taskStatuses"
+                        style="color: [[ status.color ]]" value="[[ status.id ]]" ng-selected="status.id == task.status.id">
+                    [[status.label]]
+                </option>
+            </select>
+
+            <div ng-class="{'classHoverStatus': NeedClassHover(task)}" ng-if="!task.showStatusLabel" ng-click="task.showStatusLabel = clickOnStatus(task.showStatusLabel)" class="label label-default" style="background-color: [[ task.status.color ]];">
                 [[ task.status.label ]]
             </div>
         </td>
