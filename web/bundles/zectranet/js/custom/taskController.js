@@ -125,8 +125,13 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     var arr = [];
                     arr.push(task);
                     calculateUniques(task);
-                    if (!task.parent) {
-                        executeCalculateOperations(task);
+                    var tasks = $scope.tasks;
+                    if (task.parentid) {
+                        for (var i = 0; i < tasks.length; i++) {
+                            if (task.parentid == tasks[i].id) {
+                                executeCalculateOperations(tasks[i]);
+                            }
+                        }
                     }
                     return task;
                 });
