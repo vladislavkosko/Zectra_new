@@ -168,15 +168,11 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                 timepost = timepost.getTime();
                 var difference_ms = now - timepost;
                 difference_ms = difference_ms / one_minute;
-                if(difference_ms <= 20)
-                {
-
+                if(difference_ms <= 20) {
                     $('#textarea-post').val(last_post.message);
                     $scope.editPostButtonVisible = true;
                     $scope.editedPost = last_post;
-
-                }
-                else{
+                } else {
                     $('#textarea-post').val('Editing time are gone');
                 }
             }
@@ -184,6 +180,5 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
         };
 
         console.log('Chat Controller was loaded');
-
-
-    }]);
+    }
+]);

@@ -2,19 +2,9 @@
 
 {% block title %}Search Page{% endblock %}
 
-{% block breadcrumbs %}
-    <div class="row">
-        <div class="col-md-12">
-            <ul class="breadcrumb">
-                <li class="active">Search</li>
-            </ul>
-        </div>
-    </div>
-{% endblock %}
-
 {% block body %}
 
-    <div class="row">
+    {#<div class="row">
         <ol class="breadcrumb" style="margin: 0 -30px; border-radius: 0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
             <li>
                 <a href="#">Hello men</a>
@@ -23,36 +13,191 @@
                 Hello
             </li>
         </ol>
-    </div>
+    </div>#}
 
-    <div class="row" {% if slug %}ng-init="InputChange('{{ slug }}');"{% endif %}>
-        <div class="col-md-12">
-            <h2 class="page-header" style="margin-top:15px; font-family: 'PT Sans Narrow', sans-serif">Search result</h2>
-        </div>
-
-        <div class="col-md-12">
-            <div class="input-group" style="margin-bottom: 15px;">
-                <input type="text" class="form-control" placeholder="Search...">
-
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button">Search</button>
-                </span>
+    <div ng-controller="SearchController">
+        <div class="row" {% if slug %}ng-init="searchInput = '{{ slug }}'; InputChange('{{ slug }}');"{% endif %}>
+            <div class="col-md-12">
+                <h2 class="page-header" style="margin-top:15px; font-family: 'PT Sans Narrow', sans-serif">Search results</h2>
             </div>
 
+            <div class="col-md-12">
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <input type="text" class="form-control" ng-model="searchInput" placeholder="Search...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button">Search</button>
+                    </span>
+                </div>
 
-        <div class="col-md-12 search-result-main">
-            <h2><a href="#">Hello world this is the </a></h2>
-            <span class="text-muted">Hello world you know what dose mean</span>
-        </div>
+                <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.homeOffice">
+                    <a ng-href="[[ item.href ]]" target="_self">
+                        <h2></h2>
+                        <span class="text-muted">[[ item.message ]]</span>
 
-        <div class="col-md-12 search-result-main">
-            <h2><a href="#">Hello world this is the </a></h2>
-            <span class="text-muted">Hello world you know what dose mean</span>
-        </div>
+                        <span class="clearfix"></span>
+                        <div class="pull-right">
+                            <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                        </div>
+                        <span class="clearfix"></span>
+                    </a>
+                </div>
 
-        <div class="col-md-12 search-result-main">
-            <h2><a href="#">Hello world this is the </a></h2>
-            <span class="text-muted">Hello world you know what dose mean</span>
+                <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.HFForums.threads">
+                    <a ng-href="[[ item.href ]]" target="_self">
+                        <span class="text-muted">[[ item.title ]]</span>
+
+                        <span class="clearfix"></span>
+                        <div class="pull-right">
+                            <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                        </div>
+                        <span class="clearfix"></span>
+                    </a>
+                </div>
+
+                <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.posts">
+                    <a ng-href="[[ item.href ]]" target="_self">
+                        [[ item.message ]]
+                        <span class="clearfix"></span>
+                        <div class="pull-right" style="font-size: 10px;">
+                            <i class="text-muted">header forums posts</i>
+                        </div>
+                        <span class="clearfix"></span>
+                    </a>
+                </div>
+
+                <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.HFForums.posts">
+                    <a ng-href="[[ item.href ]]" target="_self">
+                        <h2>[[ item.title ]]</h2>
+                        <span class="text-muted">[[ item.message ]]</span>
+
+                        <span class="clearfix"></span>
+                        <div class="pull-right">
+                            <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                        </div>
+                        <span class="clearfix"></span>
+                    </a>
+                </div>
+
+
+                <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.homeOffice">
+                    <a ng-href="[[ item.href ]]" target="_self">
+                        <h2></h2>
+                        <span class="text-muted">[[ item.message ]]</span>
+
+                        <span class="clearfix"></span>
+                        <div class="pull-right">
+                            <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                        </div>
+                        <span class="clearfix"></span>
+                    </a>
+                </div>
+
+                <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.homeOffice">
+                    <a ng-href="[[ item.href ]]" target="_self">
+                        <h2></h2>
+                        <span class="text-muted">[[ item.message ]]</span>
+
+                        <span class="clearfix"></span>
+                        <div class="pull-right">
+                            <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                        </div>
+                        <span class="clearfix"></span>
+                    </a>
+                </div>
+
+                <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.homeOffice">
+                    <a ng-href="[[ item.href ]]" target="_self">
+                        <h2></h2>
+                        <span class="text-muted">[[ item.message ]]</span>
+
+                        <span class="clearfix"></span>
+                        <div class="pull-right">
+                            <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                        </div>
+                        <span class="clearfix"></span>
+                    </a>
+                </div>
+
+                <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.homeOffice">
+                    <a ng-href="[[ item.href ]]" target="_self">
+                        <h2></h2>
+                        <span class="text-muted">[[ item.message ]]</span>
+
+                        <span class="clearfix"></span>
+                        <div class="pull-right">
+                            <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                        </div>
+                        <span class="clearfix"></span>
+                    </a>
+                </div>
+
+
+                <div class="list-group" style="margin-bottom: 0;">
+                    <div ng-if="miniSearchResults.total > 0">
+
+
+
+
+
+
+                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.threads">
+                            <a ng-href="[[ item.href ]]" target="_self" style="text-decoration: none;">
+                                <h4 class="text-info">[[ item.title ]]</h4>
+                                <p style="color: black; font-style: italic; font-size: 11px;">[[ item.message ]]</p>
+                                <span class="clearfix"></span>
+                                <div class="pull-right" style="font-size: 10px;">
+                                    <i class="text-muted">QnA forums threads</i>
+                                </div>
+                                <span class="clearfix"></span>
+                            </a>
+                        </div>
+
+                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.posts">
+                            <a ng-href="[[ item.href ]]" target="_self">
+                                [[ item.message ]]
+                                <span class="clearfix"></span>
+                                <div class="pull-right" style="font-size: 10px;">
+                                    <i class="text-muted">QnA forums posts</i>
+                                </div>
+                                <span class="clearfix"></span>
+                            </a>
+                        </div>
+
+                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.tasks">
+                            <a ng-href="[[ item.href ]]" target="_self">
+                                [[ item.name ]]
+                                <span class="clearfix"></span>
+                                <div class="pull-right" style="font-size: 10px;">
+                                    <i class="text-muted">tasks</i>
+                                </div>
+                                <span class="clearfix"></span>
+                            </a>
+                        </div>
+
+                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.taskPosts">
+                            <a ng-href="[[ item.href ]]" target="_self">
+                                [[ item.message ]]
+                                <span class="clearfix"></span>
+                                <div class="pull-right" style="font-size: 10px;">
+                                    <i class="text-muted">task posts</i>
+                                </div>
+                                <span class="clearfix"></span>
+                            </a>
+                        </div>
+
+                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.posts">
+                            <a ng-href="[[ item.href ]]" target="_self">
+                                [[ item.message ]]
+                                <span class="clearfix"></span>
+                                <div class="pull-right" style="font-size: 10px;">
+                                    <i class="text-muted">development posts</i>
+                                </div>
+                                <span class="clearfix"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

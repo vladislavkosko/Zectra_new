@@ -586,6 +586,9 @@
 		var JSON_URLS =
 		{
 			asset: "{{ asset('') }}",
+			'documents': {
+                'getDocuments': "{{ path('zectranet_document_get') }}",
+            },
 			miniSearch: "{{ path('zectranet_quick_search') }}",
             urlMiniSearchHeaderThread: "{{ path('zectranet_show_header_forum_thread', {'project_id': 0, 'subheader_id': 1, 'thread_id': 2 }) }}",
 			urlMiniSearchQnaThread: "{{ path('zectranet_show_QnA_thread', {'project_id': 0, 'thread_id' : 1}) }}",

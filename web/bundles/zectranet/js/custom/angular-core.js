@@ -237,4 +237,21 @@ Zectranet.directive("calendar", function() {
     }
 });
 
-console.log('Angular core is loaded...');
+Zectranet.factory('$documents', ['$http', '$q',
+    function($http, $q) {
+        return {
+            documents: [],
+            getDocuments: function() {
+                var deffered = $q.defer();
+
+                $http.get(JSON_URLS.documents.getDocuments)
+                    .success(function (response) {
+                        deffered.resolve(response);
+                    }
+                );
+
+                return deffered.promise;
+            }
+        };
+    }
+]);

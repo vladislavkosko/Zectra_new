@@ -144,7 +144,7 @@
                                 <div class="list-group-item">
                                     <form class="input-group input-group-lg">
                                         <span class="input-group-btn">
-                                            <button class="btn btn-default" type="button" style="height: 65px;"  data-placement="top" id="add_dialog_btn"  data-toggle="modal" data-target="#add_dialog">
+                                            <button class="btn btn-default" type="button" style="height: 65px;" data-placement="top" id="add_dialog_btn" data-toggle="modal" data-target="#add_dialog">
                                                 <i class="fa fa-file"></i>
                                             </button>
                                         </span>
@@ -228,14 +228,6 @@
                             </div>
                             <!-- End of Task Table View -->
 
-                            {#
-                            <!-- Begin of Task List View -->
-                            <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
-                                <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
-                            </div>
-                            <!-- End of Task List View -->
-                            #}
-
                             <!-- Begin of Task Agile View -->
                             <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
                                 <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-agile.html') ~ '\'' }}"></ng-include>
@@ -265,8 +257,6 @@
     {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
         <!-- Begin of Delete Private Project Modal -->
         {% include '@Zectranet/projectDelete.html.twig' %}
-
-
         <!-- End of Delete Private Project Modal -->
     {% endif %}
 
