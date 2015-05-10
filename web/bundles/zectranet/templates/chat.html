@@ -1,4 +1,4 @@
-<ul class="chat" scroll-glue="true" style=" height: 500px; overflow: auto;">
+<ul class="chat" scroll-glue style=" height: 500px; overflow-y: scroll;">
     <li highlight ng-repeat="post in posts" style="border-bottom: none;" class="clearfix" ng-class="{'right': USER_ID == post.user.id, 'left': USER_ID != post.user.id }">
         <span class="chat-img"
               ng-class="{'pull-right': USER_ID == post.user.id, 'pull-left': USER_ID != post.user.id }"
