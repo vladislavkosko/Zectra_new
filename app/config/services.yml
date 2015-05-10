@@ -17,3 +17,7 @@ services:
     zectranet.projectLogger:
         class: ZectranetBundle\Services\ProjectLogger
         arguments: [@security.token_storage, @doctrine.orm.entity_manager]
+
+    zectranet.officeArchiveLogger:
+        class: ZectranetBundle\Services\OfficeArchiveLogger
+        arguments: [@security.token_storage, @doctrine.orm.entity_manager]

@@ -171,8 +171,26 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                         break;
                     }
                 }
+
+                togglePopups();
             });
         };
+
+
+
+        function togglePopups() {
+            setTimeout(function () {
+                var popovers = $('[data-toggle="popover"]');
+                popovers.popover();
+                popovers.bind('mouseenter', function () {
+                    $(this).popover('show');
+                });
+                popovers.bind('mouseleave', function () {
+                    $(this).popover('hide');
+                });
+                return false;
+            }, 500);
+        }
 
         function initTaskFields(task) {
             if ($.inArray(task, $scope.tasksFilter) < 0) {
@@ -498,6 +516,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                             $scope.tasks.push(task);
                             var tasks = $scope.tasks;
                             $scope.tasks = prepareShowStatusLabel(tasks);
+                            togglePopups();
                         }
                     }
                 );
@@ -532,6 +551,7 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                                 $scope.tasks[parentIndex] = task;
                             }
                             addTaskToStatusCategory(subtask);
+                            togglePopups();
                         }
                     }
                 );

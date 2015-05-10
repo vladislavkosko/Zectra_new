@@ -619,11 +619,21 @@
 		{% endif %}
 
         var TIME_NOW = "{{ 'now' | date('Y-m-d H:i:s') }}";
+
+        $(function () {
+            var popovers = $('[data-toggle="popover"]');
+            popovers.popover();
+            popovers.bind('mouseenter', function () {
+                $(this).popover('show');
+            });
+            popovers.bind('mouseleave', function () {
+                $(this).popover('hide');
+            });
+        });
 	</script>
 
     <!-- script for Clock -->
     <script type="text/javascript">
-
         // create new object for Date
         var newDate = new Date();
 

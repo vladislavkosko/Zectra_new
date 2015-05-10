@@ -5,26 +5,25 @@
 <table ng-if="(tasks) && (tasks.length > 0)" class="table">
     <thead>
     <tr>
-        <th class="col-xs-1">ID</th>
+        <th>ID</th>
         <th class="hidden-sm hidden-xs">Type</th>
-        <th class="col-xs-2">Name</th>
-        <th class="col-xs-1 hidden-sm hidden-xs">Priority</th>
-        <th class="col-xs-1 hidden-sm hidden-xs">Status</th>
-        <th class="col-xs-1 hidden-xs">Progress</th>
-        <th class="col-xs-1 hidden-sm hidden-xs">Estimated</th>
-        <th class="col-xs-1 hidden-sm hidden-xs">Start Date</th>
-        <th class="col-xs-1 hidden-sm hidden-xs">End Date</th>
-        <th class="col-xs-1 hidden-sm hidden-xs">Owner</th>
-        <th class="col-xs-1 hidden-sm hidden-xs">Assigned</th>
-        <th class="col-xs-1 hidden-xs">Sprint</th>
-        <th class="col-xs-1">Fun</th>
+        <th>Name</th>
+        <th class="hidden-sm hidden-xs">Priority</th>
+        <th class="hidden-sm hidden-xs">Status</th>
+        <th class="hidden-xs">Progress</th>
+        <th class="hidden-sm hidden-xs">Estimated</th>
+        <th class="hidden-sm hidden-xs">Owner</th>
+        <th class="hidden-sm hidden-xs">Assigned</th>
+        <th class="hidden-xs">Sprint</th>
+        <th>Fun</th>
     </tr>
     </thead>
 
     <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter"
            ng-init="parentTask = task">
     <tr ng-if="task.parentid == null">
-        <td class="col-xs-1" style="font-size: 10px;">
+
+        <td style="font-size: 10px;">
             <span style="vertical-align: middle;">
                 [[ task.id ]]
             </span>
@@ -36,23 +35,26 @@
             <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
         </td>
 
-        <td class="col-xs-3">
+        <td>
             <a ng-show="task.subtasks.length > 0" ng-click="task.expand = !task.expand" style="text-decoration: none; cursor: pointer;">
                 <i ng-hide="task.expand" class="fa fa-plus"></i>
                 <i ng-show="task.expand" class="fa fa-minus"></i>
             </a>
-            <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]">
+            <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[ taskHref ]]"
+               data-toggle="popover"
+               data-placement="top"
+               data-content="[[ task.description.substr(0, 250); ]]">
                 <span class="badge" style="background-color: blueviolet;" ng-if="task.newCommentsCount">[[task.newCommentsCount]]</span>
                 <span class="badge" style="background-color: cadetblue;" ng-if="(task.newSubCommentsCount) && (!task.expand)">[[task.newSubCommentsCount]]</span>
                 <span>[[ task.name ]]</span>
             </a>
         </td>
-        <td class="col-xs-1 hidden-sm hidden-xs">
+        <td class="hidden-sm hidden-xs">
             <div class="label label-default" style="background-color: [[ task.priority.color ]];">
                 [[ task.priority.label ]]
             </div>
         </td>
-        <td class="col-xs-1 hidden-xs">
+        <td class="hidden-xs">
 
             <select ng-if="(task.subtasks.length == 0) && (task.showStatusLabel)" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
                 <option ng-repeat="status in taskStatuses"
@@ -65,13 +67,11 @@
                 [[ task.status.label ]]
             </div>
         </td>
-        <td class="col-xs-1 hidden-xs">[[ task.progress ]]%</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.username ]]</td>
-        <td class="col-xs-1 hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
-        <td class="col-xs-1 hidden-xs">
+        <td class="hidden-xs">[[ task.progress ]]%</td>
+        <td class="hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
+        <td class="hidden-sm hidden-xs">[[ task.owner.username ]]</td>
+        <td class="hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
+        <td class="hidden-xs">
             <div ng-if="task.sprint.name != 'none'">
                 <a ng-init="task.sprint.href = assignSprintHref(task.sprint.officeid, task.sprint.id)"
                    ng-href="[[task.sprint.href]]">
@@ -80,8 +80,7 @@
             </div>
             <div ng-if="task.sprint.name == 'none'">none</div>
         </td>
-        <td class="col-xs-1">
-
+        <td>
             <div class="btn-group">
                 <button class="btn btn-default dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">
                     <i class="fa fa-ellipsis-v"></i>
@@ -109,7 +108,7 @@
     </tr>
 
     <tr ng-show="parentTask.expand" class="angular-show-transition-2-ms" ng-repeat="task in task.subtasks">
-        <td class="col-xs-1" style="font-size: 10px;">
+        <td style="font-size: 10px;">
             <span style="vertical-align: middle;">
                 [[ parentTask.id ]].[[ $index + 1 ]]
             </span>
@@ -119,18 +118,21 @@
             <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
             <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
         </td>
-        <td class="col-xs-3">
-            <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]">
+        <td>
+            <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
+               data-toggle="popover"
+               data-placement="top"
+               data-content="[[ task.description.substr(0, 250); ]]">
                 <span class="badge" style="background-color: blueviolet;" ng-if="task.newCommentsCount">[[task.newCommentsCount]]</span>
                 <span>[[ task.name ]]</span>
             </a>
         </td>
-        <td class="col-xs-1 hidden-sm hidden-xs">
+        <td class="hidden-sm hidden-xs">
             <div class="label label-default" style="background-color: [[ task.priority.color ]];">
                 [[ task.priority.label ]]
             </div>
         </td>
-        <td class="col-xs-1 hidden-xs">
+        <td class="hidden-xs">
 
             <select ng-if="task.showStatusLabel" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
                 <option ng-repeat="status in taskStatuses"
@@ -143,15 +145,12 @@
                 [[ task.status.label ]]
             </div>
         </td>
-        <td class="col-xs-1 hidden-xs">[[ task.progress ]]%</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.startDate ]]</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.endDate ]]</td>
-        <td class="col-xs-1 hidden-sm hidden-xs">[[ task.owner.username ]]</td>
-        <td class="col-xs-1 hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
+        <td class="hidden-xs">[[ task.progress ]]%</td>
+        <td class="hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
+        <td class="hidden-sm hidden-xs">[[ task.owner.username ]]</td>
+        <td class="hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
         <td></td>
-
-        <td class="col-xs-1">
+        <td>
             <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
                ng-click="addDeleteTaskId(task.id)" style="width: 22px; height: 22px;">
                 <i class="fa fa-trash"></i>
