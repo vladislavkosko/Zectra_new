@@ -228,9 +228,9 @@ class Office
         $conversations = Conversation::getConversationByUser($em, $user->getId());
         $jsonMessages = array();
 
+        $iterations = $limit;
         /** @var Conversation $conv */
         foreach ($conversations as $conv) {
-            $iterations = $limit;
             /** @var ConversationMessage $message */
             foreach ($conv->getMessages() as $message) {
                 $matchesLength = preg_match('/' . $slug . '/mi', $message->getMessage(), $matches);

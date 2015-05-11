@@ -408,6 +408,7 @@ class Project
                 }
             }
 
+            $iterations = $limit;
             /** @var Task $task */
             foreach ($project->getTasks() as $task) {
                 $matchesLength = preg_match('/' . $slug . '/mi', $task->getName(), $matches);

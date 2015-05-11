@@ -245,9 +245,9 @@ class QnAForum
     public static function searchQnAForums($forums, $slug, $limit = null) {
         $threads = array();
         $posts = array();
+        $iterations = $limit;
         /** @var QnAForum $forum */
         foreach ($forums as $forum) {
-            $iterations = $limit;
             /** @var QnAThread $thread */
             foreach ($forum->getThreads() as $thread) {
                 $matchesLength = preg_match('/' . $slug . '/mi', $thread->getTitle(), $matches);

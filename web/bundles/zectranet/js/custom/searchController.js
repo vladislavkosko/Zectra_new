@@ -9,6 +9,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         };
         var timerHandler = null;
         var urlMiniSearch = JSON_URLS.miniSearch;
+        var urlSearch = JSON_URLS.search;
         var urlHomeOffice = JSON_URLS.homeOfficeShow;
         var urlSearchPage = JSON_URLS.searchPage;
         var homeOfficeID = userHomeOfficeID;
@@ -99,7 +100,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         function miniSearch(slug, taskSearch, extended) {
             slug = prepareSlug(slug);
 
-            $scope.searhPromise = $http.post(urlMiniSearch, { 'slug': slug, 'task': taskSearch })
+            $scope.searhPromise = $http.post(urlMiniSearch, { 'slug': slug, 'task': taskSearch, 'extended': extended })
                 .success(function (response) {
                     $scope.miniSearchResults = prepareSearchResults(response);
                     $scope.miniSearchResults.total = response.QnAForums.threads.length + response.QnAForums.posts.length;
@@ -134,10 +135,10 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
             timerHandler = setTimeout(function () {
                 if(!isNaN(parseInt(searchInput))) {
                     highlightSearchWords(searchInput);
-                    miniSearch(searchInput, true);
+                    miniSearch(searchInput, true, extended);
                 } else if (searchInput && searchInput.length >= 3) {
                     highlightSearchWords(searchInput);
-                    miniSearch(searchInput, false);
+                    miniSearch(searchInput, false, extended);
                 } else if(searchInput.length < 3) {
                     var pageWrapper = $('#page-wrapper');
                     pageWrapper.removeHighlight();

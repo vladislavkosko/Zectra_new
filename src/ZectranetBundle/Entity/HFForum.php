@@ -281,9 +281,9 @@ class HFForum
     public static function searchHFForums($forums, $slug, $limit = null) {
         $threads = array();
         $posts = array();
+        $iterations = $limit;
         /** @var HFForum $forum */
         foreach ($forums as $forum) {
-            $iterations = $limit;
             /** @var HFHeader $header */
             foreach ($forum->getHeaders() as $header) {
                 /** @var HFSubHeader $sub */

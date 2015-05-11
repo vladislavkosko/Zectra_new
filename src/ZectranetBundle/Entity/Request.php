@@ -75,7 +75,7 @@ class Request
 
     /**
      * @var HFForum
-     * @ORM\ManyToOne(targetEntity="HFForum")
+     * @ORM\ManyToOne(targetEntity="HFForum", inversedBy="requests")
      * @ORM\JoinColumn(name="hf_forum_id", referencedColumnName="id")
      */
     private $HFForum;

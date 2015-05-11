@@ -25,11 +25,14 @@ class SearchController extends Controller {
         $data = json_decode($request->getContent(), true);
         $slug = $data['slug'];
         $task = $data['task'];
+        $extended = $data['extended'];
+        $limit = ($extended) ? null : 3;
         /** @var User $user */
         $user = $this->getUser();
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $result = null;
+
         if ($task) {
             $result = array(
                 'homeOffice' => array(),
@@ -41,11 +44,11 @@ class SearchController extends Controller {
             );
         } else {
             $result = array(
-                'homeOffice' => Office::searchHomeOffice($em, $user->getHomeOfficeID(), $slug, 3),
-                'HFForums' => HFForum::searchHFForums($user->getConnectedHFForums(), $slug, 3),
-                'QnAForums' => QnAForum::searchQnAForums($user->getConnectedQnAForums(), $slug, 3),
+                'homeOffice' => Office::searchHomeOffice($em, $user->getHomeOfficeID(), $slug, $limit),
+                'HFForums' => HFForum::searchHFForums($user->getConnectedHFForums(), $slug, $limit),
+                'QnAForums' => QnAForum::searchQnAForums($user->getConnectedQnAForums(), $slug, $limit),
                 'reserved' => array(),
-                'Projects' => Project::searchProjects($user->getProjects(), $slug, 3),
+                'Projects' => Project::searchProjects($user->getProjects(), $slug, $limit),
                 'Tasks' => array(),
             );
         }
