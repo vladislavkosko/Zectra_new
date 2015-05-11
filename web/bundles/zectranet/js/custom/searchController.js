@@ -96,7 +96,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
             return results;
         }
 
-        function miniSearch(slug, taskSearch) {
+        function miniSearch(slug, taskSearch, extended) {
             slug = prepareSlug(slug);
 
             $http.post(urlMiniSearch, { 'slug': slug, 'task': taskSearch })
@@ -122,7 +122,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
             }, 200);
         }
 
-        $scope.InputChange = function (searchInput) {
+        $scope.InputChange = function (searchInput, extended) {
             if (timerHandler) {
                 clearTimeout(timerHandler);
                 $scope.miniSearchResults = miniSearchTemp;
@@ -139,13 +139,13 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
                     highlightSearchWords(searchInput);
                     miniSearch(searchInput, false);
                 } else if(searchInput.length < 3) {
-                    var pageWrapper =  $('#page-wrapper');
+                    var pageWrapper = $('#page-wrapper');
                     pageWrapper.removeHighlight();
                 }
             }, 700);
         };
 
-        $scope.searchAction = function ( slug ) {
+        $scope.searchAction = function (slug) {
             if (slug) {
                 location.href = urlSearchPage.replace('slug', slug);
             }
