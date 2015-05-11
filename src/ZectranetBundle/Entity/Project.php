@@ -414,7 +414,17 @@ class Project
                 $matchesLength = preg_match('/' . $slug . '/mi', $task->getName(), $matches);
                 $matchesLength += preg_match('/' . $slug . '/mi', $task->getDescription(), $matches);
                 if ($matchesLength > 0) {
-                    $tasks[] = $task->getInArray();
+                    $jsonTask = $task->getInArray();
+                    $parent = $task->getParent();
+                    if ($parent) {
+                        $subtasks = $parent->getSubtasks();
+                        for ($i = 0; $i < count($subtasks); $i++) {
+                            if ($subtasks[$i]->getId() == $task->getId()) {
+                                $jsonTask['subindex'] = $i;
+                            }
+                        }
+                    }
+                    $tasks[] = $jsonTask;
                     $iterations = ($iterations) ? $iterations - 1 : null;
                 }
 

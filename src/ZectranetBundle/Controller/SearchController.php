@@ -26,7 +26,7 @@ class SearchController extends Controller {
         $slug = $data['slug'];
         $task = $data['task'];
         $extended = $data['extended'];
-        $limit = ($extended) ? null : 3;
+        $limit = ($extended) ? null : 2;
         /** @var User $user */
         $user = $this->getUser();
         /** @var EntityManager $em */

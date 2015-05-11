@@ -92,7 +92,10 @@
 
                         <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.Projects.tasks">
                             <a ng-href="[[ item.href ]]" target="_self">
-                                <h2>[[ item.id + ' ' + item.name ]]</h2>
+                                <h2 ng-init="task_id = (item.subindex) ? item.id + '.' + item.subindex : item.id">
+                                    #[[ task_id ]]
+                                    [[ ' ' + item.name ]]
+                                </h2>
                                 <span class="text-muted">[[ item.description.substr(0, 250) ]]</span>
 
                                 <span class="clearfix"></span>
