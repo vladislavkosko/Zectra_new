@@ -9,177 +9,240 @@
             <h3 style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">Edit Profile</h3>
         </div>
         <div class="col-md-12">
-            <form action="{{ path('zectranet_edit_user_page_action', { 'user_id': app.user.id }) }}" method="post" class="form-horizontal">
+            <form name="formEditProfile" action="{{ path('zectranet_edit_user_page_action', { 'user_id': app.user.id }) }}" method="post" class="form-horizontal">
                 <div class="row">
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <label style="width: 100%;">
-                            Name:
-                            <input name="name" class="form-control" value="{{ user.name }}" />
-                        </label>
-                    </div>
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <label style="width: 100%;">
-                            Surname:
-                            <input type="text" name="surname" class="form-control" value="{{ user.surname }}" />
-                        </label>
-                    </div>
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <label style="width: 100%;">
-                            Email:
-                            <input type="email" name="email" class="form-control" value="{{ user.email }}"/>
-                        </label>
-                    </div>
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    Country:
-                                    <input type="text" name="residenceCountry" class="form-control" value="{{ userInfo.residenceCountry }}" />
-                                </label>
+
+                    <div class="col-md-6">
+                        <div style="margin-top: 15px;">
+                            <label style="width: 100%;">
+                                Name:
+                                <input class="form-control" name="name" ng-init="name = '{{ user.name }}'" ng-model="name" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z]{1,}" required>
+                            </label>
+
+                            <div ng-messages="formEditProfile.name.$error" style="color: red;">
+                                <span ng-message="pattern">format: "A-Z,a-z"</span>
+                                <span ng-message="minlength">Min length of this field is 2 characters</span>
+                                <span ng-message="maxlength">Max length of this field is 20 characters</span>
                             </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" name="residenceCountryVisible" {% if userInfo.residenceCountryVisible %}checked{% endif %}/>
-                                </label>
+
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <label style="width: 100%;">
+                                Email:
+                                <input type="email" class="form-control" name="email" ng-init="email = '{{ user.email }}'" ng-model="email" required>
+                            </label>
+
+                            <div ng-messages="formEditProfile.email.$error" style="color: red;">
+                                <span ng-message="email">Invalid email</span>
+                            </div>
+
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        Work Experience:
+                                        <textarea style="resize: vertical;" class="form-control" name="workExpirience" ng-init="workExpirience = '{{ userInfo.workExpirience }}'" ng-model="workExpirience" ng-maxlength="255"></textarea>
+                                    </label>
+
+                                    <div ng-messages="formEditProfile.workExpirience.$error" style="color: red;">
+                                        <span ng-message="maxlength">Max length of this field is 255 characters</span>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" class="checkbox checkbox-inline" name="workExpirienceVisible" {% if userInfo.workExpirienceVisible %}checked{% endif %} />
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    Work Experience:
-                                    <textarea style="resize: vertical;" class="form-control" name="workExpirience">{{ userInfo.workExpirience }}</textarea>
-                                </label>
-                            </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" class="checkbox checkbox-inline" name="workExpirienceVisible" {% if userInfo.workExpirienceVisible %}checked{% endif %} />
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    Skills:
-                                    <textarea style="resize: vertical;" class="form-control" name="skills">{{ userInfo.skills }}</textarea>
-                                </label>
-                            </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" name="skillsVisible" {% if userInfo.skillsVisible %}checked{% endif %}/>
-                                </label>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        Intersts:
+                                        <textarea style="resize: vertical;" class="form-control" name="interests" ng-init="interests = '{{ userInfo.interests }}'" ng-model="interests" ng-maxlength="255"></textarea>
+                                    </label>
+
+                                    <div ng-messages="formEditProfile.interests.$error" style="color: red;">
+                                        <span ng-message="maxlength">Max length of this field is 255 characters</span>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" name="interestsVisible" {% if userInfo.interestsVisible %}checked{% endif %}/>
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    Intersts:
-                                    <textarea style="resize: vertical;" class="form-control" name="interests">{{ userInfo.interests }}</textarea>
-                                </label>
-                            </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" name="interestsVisible" {% if userInfo.interestsVisible %}checked{% endif %}/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    Volunteer Work:
-                                    <textarea style="resize: vertical;" class="form-control" name="volunteerWork">{{ userInfo.volunteerWork }}</textarea>
-                                </label>
-                            </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" name="volunteerWorkVisible" {% if userInfo.volunteerWorkVisible %}checked{% endif %}/>
-                                </label>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        Facebook:
+                                        <input class="form-control" type="text" placeholder="http://" name="facebook" value="{{ userInfo.facebook }}">
+                                    </label>
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" name="facebookVisible" {% if userInfo.facebookVisible %}checked{% endif %} />
+                                    </label>
+                                </div>
                             </div>
                         </div>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        LinkedIn:
+                                        <input class="form-control" type="text" placeholder="http://" name="linkedIn" value="{{ userInfo.linkedIn }}" />
+                                    </label>
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" name="linkedInVisible" {% if userInfo.linkedInVisible %}checked{% endif %}/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    Facebook:
-                                    <input class="form-control" type="text" placeholder="http://" name="facebook" value="{{ userInfo.facebook }}" />
-                                </label>
+                    <div class="col-md-6">
+
+                        <div style="margin-top: 15px;">
+                            <label style="width: 100%;">
+                                Surname:
+                                <input type="text" class="form-control" name="surname" ng-init="surname = '{{ user.surname }}'" ng-model="surname" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z]{1,}" required>
+                            </label>
+
+                            <div ng-messages="formEditProfile.surname.$error" style="color: red;">
+                                <span ng-message="pattern">format: "A-Z,a-z"</span>
+                                <span ng-message="minlength">Min length of this field is 2 characters</span>
+                                <span ng-message="maxlength">Max length of this field is 20 characters</span>
                             </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" name="facebookVisible" {% if userInfo.facebookVisible %}checked{% endif %} />
-                                </label>
+
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        Country:
+                                        <input type="text" class="form-control" name="residenceCountry" ng-init="residenceCountry = '{{ userInfo.residenceCountry }}'" ng-model="residenceCountry" ng-minlength="4" ng-maxlength="20" pattern="[A-Za-z ]{1,}">
+                                    </label>
+
+                                    <div ng-messages="formEditProfile.residenceCountry.$error" style="color: red;">
+                                        <span ng-message="pattern">format: "A-Z,a-z, "</span>
+                                        <span ng-message="minlength">Min length of this field is 4 characters</span>
+                                        <span ng-message="maxlength">Max length of this field is 20 characters</span>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" name="residenceCountryVisible" {% if userInfo.residenceCountryVisible %}checked{% endif %}/>
+                                    </label>
+                                </div>
                             </div>
                         </div>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        Skills:
+                                        <textarea style="resize: vertical;" class="form-control" name="skills" ng-init="skills = '{{ userInfo.skills }}'" ng-model="skills" ng-maxlength="255"></textarea>
+                                    </label>
+
+                                    <div ng-messages="formEditProfile.skills.$error" style="color: red;">
+                                        <span ng-message="maxlength">Max length of this field is 255 characters</span>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" name="skillsVisible" {% if userInfo.skillsVisible %}checked{% endif %}/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        Volunteer Work:
+                                        <textarea style="resize: vertical;" class="form-control" name="volunteerWork" ng-init="volunteerWork = '{{ userInfo.volunteerWork }}'" ng-model="volunteerWork" ng-maxlength="255"></textarea>
+                                    </label>
+
+                                    <div ng-messages="formEditProfile.volunteerWork.$error" style="color: red;">
+                                        <span ng-message="maxlength">Max length of this field is 255 characters</span>
+                                    </div>
+
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" name="volunteerWorkVisible" {% if userInfo.volunteerWorkVisible %}checked{% endif %}/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        Twitter:
+                                        <input class="form-control" type="text" placeholder="http://" name="twitter" value="{{ userInfo.twitter }}" />
+                                    </label>
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" name="twitterVisible" {% if userInfo.twitterVisible %}checked{% endif %}/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <div class="row">
+                                <div class="col-xs-10">
+                                    <label style="width: 100%;">
+                                        Google+:
+                                        <input class="form-control" type="text" placeholder="http://" name="googlePlus" value="{{ userInfo.googlePlus }}"/>
+                                    </label>
+                                </div>
+                                <div class="col-xs-2">
+                                    <label>
+                                        Visible
+                                        <input type="checkbox" name="googlePlusVisible" {% if userInfo.googlePlusVisible %}checked{% endif %}/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    Twitter:
-                                    <input class="form-control" type="text" placeholder="http://" name="twitter" value="{{ userInfo.twitter }}" />
-                                </label>
-                            </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" name="twitterVisible" {% if userInfo.twitterVisible %}checked{% endif %}/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    LinkedIn:
-                                    <input class="form-control" type="text" placeholder="http://" name="linkedIn" value="{{ userInfo.linkedIn }}" />
-                                </label>
-                            </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" name="linkedInVisible" {% if userInfo.linkedInVisible %}checked{% endif %}/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6" style="margin-top: 15px;">
-                        <div class="row">
-                            <div class="col-xs-10">
-                                <label style="width: 100%;">
-                                    Google+:
-                                    <input class="form-control" type="text" placeholder="http://" name="googlePlus" value="{{ userInfo.googlePlus }}"/>
-                                </label>
-                            </div>
-                            <div class="col-xs-2">
-                                <label>
-                                    Visible
-                                    <input type="checkbox" name="googlePlusVisible" {% if userInfo.googlePlusVisible %}checked{% endif %}/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <hr/>
                 <div class="btn-group">
-                    <button type="submit" class="btn btn-default btn-success">
+                    <button ng-disabled="formEditProfile.$invalid" type="submit" class="btn btn-default btn-success">
                         Save
                     </button>
                 </div>
