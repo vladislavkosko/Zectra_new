@@ -3,78 +3,143 @@
 {% block title %}Register Area{% endblock %}
 
 {% block styles %}
-	{{ parent() }}
+    {{ parent() }}
 {% endblock %}
 
 {% block page %}
-	<div class="container" style="height: 100%; margin-top: 50px;">
-		<div class="row text-center pad-top ">
-			<div class="col-md-12">
-				<h2 style="color:gray;">Registration</h2>
-			</div>
-		</div>
-		<div class="row pad-top">
+    <div class="container" style="height: 100%; margin-top: 50px;">
+        <div class="row text-center pad-top ">
+            <div class="col-md-12">
+                <h2 style="color:gray;">Registration</h2>
+            </div>
+        </div>
+        <div class="row pad-top">
 
-			<div class="col-md-12">
+            <div class="col-md-12">
 
-				<form role="form" id="signup_form" action="{{ path('zectranet_signup_action') }}" method="post">
-					<br/>
-					{% if zm is defined %}
-						<!-- Error message -->
-						<div class="alert alert-danger alert-dismissible fade in" role="alert">
-							<button class="close" aria-label="Close" data-dismiss="alert" type="button">
-								<span aria-hidden="true">×</span>
-							</button>
-							{{ zm }}
-						</div>
-						<!-- -->
-					{% endif %}
-					<br/>
-					<div class="form-group input-group">
-						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<input type="text" class="form-control name" pattern="[A-Za-z]{2,20}" name="name" placeholder="Name" required/>
-					</div>
-					<div class="form-group input-group">
-						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<input type="text" class="form-control surname" pattern="[A-Za-z]{2,20}" name="surname" placeholder="Surname" required/>
-					</div>
-					<div class="form-group input-group">
-						<span style="font-size: 10px; font-weight: bold;" class="input-group-addon">@</span>
-						<input type="email" class="form-control email" name="email" placeholder="Email" required/>
-					</div>
-					<div class="form-group input-group">
-						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<input type="text" class="form-control username" pattern="[A-Za-z0-9_-*!#$%^&*()@]{3,16}" name="username" placeholder="Username" required/>
-					</div>
-					<div class="form-group input-group">
-						<span class="input-group-addon"><i class="fa fa-lock"></i></span>
-						<input type="password" class="form-control password" id="pass" pattern="[A-Za-z0-9_-!@#$%^&()]{5,30}" name="password" placeholder="Password" required/>
-					</div>
-					<div class="form-group input-group">
-						<span class="input-group-addon"><i class="fa fa-lock"></i></span>
-						<input type="password" class="form-control password" id="repeatpass" pattern="[A-Za-z0-9_-!@#$%^&()]{5,30}" name="repeatPassword" placeholder="Repeat password" required/>
-					</div>
-					<button type="submit" class="btn btn-success">Signup</button>
-				</form>
-			</div>
-		</div>
-	</div>
+                <form role="form" name="formRegistration" id="signup_form" action="{{ path('zectranet_signup_action') }}" method="post">
+                    <br/>
+                    {% if zm is defined %}
+                        <!-- Error message -->
+                        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button class="close" aria-label="Close" data-dismiss="alert" type="button">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            {{ zm }}
+                        </div>
+                        <!-- -->
+                    {% endif %}
+                    <br/>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" class="form-control name" placeholder="Name" name="name" ng-model="name" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z]{1,}" required/>
+                        <span ng-if="formRegistration.name.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.name.$valid" class="input-group-addon">
+                            <i style="color: greenyellow;" class="fa fa-check"></i>
+                        </span>
+                    </div>
+
+                    <div ng-messages="formRegistration.name.$error" style="color: red;">
+                        <span ng-message="pattern">format: "A-Z,a-z"</span>
+                        <span ng-message="minlength">Min length of this field is 2 characters</span>
+                        <span ng-message="maxlength">Max length of this field is 20 characters</span>
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" class="form-control surname" placeholder="Surname" name="surname" ng-model="surname" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z]{1,}" required/>
+                        <span ng-if="formRegistration.surname.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.surname.$valid" class="input-group-addon">
+                            <i style="color: greenyellow;" class="fa fa-check"></i>
+                        </span>
+                    </div>
+
+                    <div ng-messages="formRegistration.surname.$error" style="color: red;">
+                        <span ng-message="pattern">format: "A-Z,a-z"</span>
+                        <span ng-message="minlength">Min length of this field is 2 characters</span>
+                        <span ng-message="maxlength">Max length of this field is 20 characters</span>
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span style="font-size: 10px; font-weight: bold;" class="input-group-addon">@</span>
+                        <input type="email" class="form-control email" placeholder="Email" name="email" ng-model="email" required/>
+                        <span ng-if="formRegistration.email.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.email.$valid" class="input-group-addon">
+                            <i style="color: greenyellow;" class="fa fa-check"></i>
+                        </span>
+                    </div>
+
+                    <div ng-messages="formRegistration.email.$error" style="color: red;">
+                        <span ng-message="email">Invalid email</span>
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" class="form-control username" placeholder="Username" name="username" ng-model="username" ng-minlength="3" ng-maxlength="16" pattern="[A-Za-z0-9_]{1,}" required/>
+                        <span ng-if="formRegistration.username.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.username.$valid" class="input-group-addon">
+                            <i style="color: greenyellow;" class="fa fa-check"></i>
+                        </span>
+                    </div>
+
+                    <div ng-messages="formRegistration.username.$error" style="color: red;">
+                        <span ng-message="pattern">format: "A-Z,a-z,0-9,_"</span>
+                        <span ng-message="minlength">Min length of this field is 3 characters</span>
+                        <span ng-message="maxlength">Max length of this field is 16 characters</span>
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" class="form-control password" id="pass" placeholder="Password" name="password" ng-model="password" ng-minlength="5" ng-maxlength="30" pattern="[A-Za-z0-9]{1,}" required/>
+                        <span ng-if="formRegistration.password.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.password.$valid" class="input-group-addon">
+                            <i style="color: greenyellow;" class="fa fa-check"></i>
+                        </span>
+                    </div>
+
+                    <div ng-messages="formRegistration.password.$error" style="color: red;">
+                        <span ng-message="pattern">format: "A-Z,a-z,0-9"</span>
+                        <span ng-message="minlength">Min length of password is 5 characters</span>
+                        <span ng-message="maxlength">Max length of password is 30 characters</span>
+                    </div>
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" class="form-control password" id="repeatpass" placeholder="Repeat password" name="repeatPassword" ng-model="repeatPassword" ng-minlength="5" ng-maxlength="30" pattern="[A-Za-z0-9]{1,}" required/>
+                        <span ng-if="formRegistration.repeatPassword.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.repeatPassword.$valid" class="input-group-addon">
+                            <i style="color: greenyellow;" class="fa fa-check"></i>
+                        </span>
+                    </div>
+
+                    <div ng-messages="formRegistration.repeatPassword.$error" style="color: red;">
+                        <div ng-if="formRegistration.password.$viewValue != formRegistration.repeatPassword.$viewValue" style="color:maroon">
+                            Password and Repeated Password did not match<br/>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success" type="submit" ng-disabled="(formRegistration.$invalid) || (formRegistration.password.$viewValue != formRegistration.repeatPassword.$viewValue)">Signup</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
-	{{ parent() }}
-	<script src="{{ asset('bundles/zectranet/js/notify.min.js') }}" type="text/javascript"></script>
-	<script>
-		$('#signup_form').bind('submit', function (event) {
-			var pass = $('#pass');
-			var repeatPass = $('#repeatpass');
-			if (pass.val() !== repeatPass.val()) {
-				repeatPass.notify(
-						"Passwords do not match",
-						{ position:"right" }
-				);
-				return false;
-			}
-		});
-	</script>
+    {{ parent() }}
+    <script src="{{ asset('bundles/zectranet/js/notify.min.js') }}" type="text/javascript"></script>
+    <script>
+        $('#signup_form').bind('submit', function (event) {
+            var pass = $('#pass');
+            var repeatPass = $('#repeatpass');
+            if (pass.val() !== repeatPass.val()) {
+                repeatPass.notify(
+                        "Passwords do not match",
+                        { position:"right" }
+                );
+                return false;
+            }
+        });
+    </script>
 {% endblock %}
