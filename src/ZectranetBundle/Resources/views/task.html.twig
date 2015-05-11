@@ -36,7 +36,7 @@
             <!-- Begin of Task Info Section -->
             <div class="row" style="margin-top: 20px;">
                 <!--Begin of Main Task Info-->
-                <form cg-busy="taskPromise" class="col-md-6">
+                <form name="formTaskEdit" cg-busy="taskPromise" class="col-md-6">
                     <div cg-busy="mainInfoPromise">
                         <div class="page-header" style="margin-top: 0; border-bottom: 0;">
                             <span style="font-size: 20px;  color: #337ab7;">Task Info</span>
@@ -52,7 +52,14 @@
 
                             <div class="col-md-9">
                                 <div class="input-group" style="width: 100%;">
-                                    <input type="text" name="name" style="border: none;font-weight: bold;" ng-model="taskInfoEdit.name" class="form-control btn-group-justified" value="{{ task.name }}">
+                                    <input type="text" class="form-control btn-group-justified" style="border: none;font-weight: bold;" name="name" ng-init="taskInfoEdit.name = '{{ task.name }}'" ng-model="taskInfoEdit.name" ng-minlength="5" ng-maxlength="100" pattern="[A-Za-z0-9 ]{1,}" required>
+
+                                    <div ng-messages="formTaskEdit.name.$error" style="color: red;">
+                                        <span ng-message="pattern">format: "A-Z,a-z,0-9"</span>
+                                        <span ng-message="minlength">Min length of password is 5 characters</span>
+                                        <span ng-message="maxlength">Max length of password is 100 characters</span>
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -434,7 +441,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <button type="button" ng-click="saveSingleTaskInfo(taskInfoEdit);" class="btn btn-default btn-primary">
+                        <button type="button" ng-disabled="formTaskEdit.$invalid" ng-click="saveSingleTaskInfo(taskInfoEdit);" class="btn btn-default btn-primary">
                             Save
                         </button>
                     </div>
@@ -450,12 +457,18 @@
                     </div>
 
                     <div class="row">
-                        <form class="col-md-12" action="{{ path('zectranet_task_edit_descritpion', { 'task_id': task.id }) }}" method="post">
+                        <form name="formDescriptionEdit" class="col-md-12" action="{{ path('zectranet_task_edit_descritpion', { 'task_id': task.id }) }}" method="post">
                             <div class="form-group">
-                                <textarea class="form-control" name="description" style="border: none; height: 170px; resize: vertical; font-weight: bold;">{{ task.description }}</textarea>
+                                <textarea class="form-control" style="border: none; height: 170px; resize: vertical; font-weight: bold;" name="description" ng-init="description = '{{ task.description }}'" ng-model="description" ng-minlength="5" ng-maxlength="5000" required></textarea>
+
+                                <div ng-messages="formDescriptionEdit.description.$error" style="color: red;">
+                                    <span ng-message="minlength">Min length of password is 5 characters</span>
+                                    <span ng-message="maxlength">Max length of password is 5000 characters</span>
+                                </div>
+
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-default btn-primary">Save</button>
+                                <button ng-disabled="formDescriptionEdit.$invalid" type="submit" class="btn btn-default btn-primary">Save</button>
                             </div>
                         </form>
                     </div>
