@@ -12,10 +12,17 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-10 col-md-offset-1">
-                            <form class="form-horizontal">
+                            <form class="form-horizontal" name="formSubTaskAdd">
                                 <div class="form-group">
                                     <label for="add_subtask_name" class="control-label">Task Name:</label>
-                                    <input type="text" id="add_subtask_name" class="form-control" ng-model="subtask.name" name="name" required>
+                                    <input type="text" id="add_subtask_name" class="form-control" ng-model="subtask.name" name="name" ng-minlength="5" ng-maxlength="100" pattern="[A-Za-z0-9 ]{1,}" required>
+
+                                    <div ng-messages="formSubTaskAdd.name.$error" style="color: red;">
+                                        <span ng-message="pattern">format: "A-Z,a-z,0-9"</span>
+                                        <span ng-message="minlength">Min length of password is 5 characters</span>
+                                        <span ng-message="maxlength">Max length of password is 100 characters</span>
+                                    </div>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="add_subtask_type" class="control-label">Task Type:</label>
@@ -51,10 +58,16 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="add_subtask_description" class="control-label">Task Description:</label>
-                                    <textarea style="resize: vertical;" id="add_subtask_description" class="form-control" ng-model="subtask.description" name="description" required></textarea>
+                                    <textarea style="resize: vertical;" id="add_subtask_description" class="form-control" ng-model="subtask.description" name="description" ng-minlength="5" ng-maxlength="5000" required></textarea>
+
+                                    <div ng-messages="formSubTaskAdd.description.$error" style="color: red;">
+                                        <span ng-message="minlength">Min length of password is 5 characters</span>
+                                        <span ng-message="maxlength">Max length of password is 5000 characters</span>
+                                    </div>
+
                                 </div>
                                 <div class="form-group">
-                                    <a ng-click="addSubTask(subtask)" class="btn btn-primary">Add</a>
+                                    <button type="button" ng-disabled="formSubTaskAdd.$invalid" ng-click="addSubTask(subtask)" class="btn btn-primary">Add</button>
                                     <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
                                 </div>
                             </form>
