@@ -99,7 +99,7 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
         function miniSearch(slug, taskSearch, extended) {
             slug = prepareSlug(slug);
 
-            $http.post(urlMiniSearch, { 'slug': slug, 'task': taskSearch })
+            $scope.searhPromise = $http.post(urlMiniSearch, { 'slug': slug, 'task': taskSearch })
                 .success(function (response) {
                     $scope.miniSearchResults = prepareSearchResults(response);
                     $scope.miniSearchResults.total = response.QnAForums.threads.length + response.QnAForums.posts.length;

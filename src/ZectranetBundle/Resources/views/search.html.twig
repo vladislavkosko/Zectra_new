@@ -32,17 +32,19 @@
                     </span>
                 </div>
 
-                <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.homeOffice">
-                    <a ng-href="[[ item.href ]]" target="_self">
-                        <h2></h2>
-                        <span class="text-muted">[[ item.message ]]</span>
+                <div cg-busy="searhPromise">
+                    <div class="col-md-12 search-result-main" ng-repeat="item in miniSearchResults.homeOffice">
+                        <a ng-href="[[ item.href ]]" target="_self">
+                            <h2></h2>
+                            <span class="text-muted">[[ item.message ]]</span>
 
-                        <span class="clearfix"></span>
-                        <div class="pull-right">
-                            <i class="text-muted" style="font-size: 10px;">home office chat</i>
-                        </div>
-                        <span class="clearfix"></span>
-                    </a>
+                            <span class="clearfix"></span>
+                            <div class="pull-right">
+                                <i class="text-muted" style="font-size: 10px;">home office chat</i>
+                            </div>
+                            <span class="clearfix"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

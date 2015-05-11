@@ -189,43 +189,45 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             $scope.notifPromise = $http.get(notificationsGetUrl)
                 .success(function(response) {
                     $scope.FirstInit = true;
-                    if (response.result.requests){
-                        $scope.requests = prepareRequests(response.result.requests);
-                    }
+                    if (angular.isDefined(response.result)) {
+                        if (response.result.requests){
+                            $scope.requests = prepareRequests(response.result.requests);
+                        }
 
-                    if (response.result.notifications && response.result.notifications.length > 0){
-                        if (response.result.notifications.length != $scope.notificationsLength){
-                            StartNotify();
-                            document.getElementById('notif_sound').play();
-                            var chatUpdate = false;
-                            $scope.notificationsLength = response.result.notifications.length;
-                            $rootScope.NOTIFICATIONS = $scope.notifications;
-                            prepareNotifications(response.result.notifications);
-                            shareNotifications(response.result.notifications);
-                            for (var i = 0; i < $scope.notifications.length; i++) {
-                                if ($scope.notifications[i].type == 'message_office'
-                                    || $scope.notifications[i].type == 'message_project'
-                                    || $scope.notifications[i].type == 'message_task'
-                                    || $scope.notifications[i].type == 'message_epic_story'
-                                    || $scope.notifications[i].type == 'private_message_office'
-                                    || $scope.notifications[i].type == 'private_message_project'
-                                    || $scope.notifications[i].type == 'private_message_task'
-                                    || $scope.notifications[i].type == 'private_message_epic_story'
-                                ) {
-                                    chatUpdate = true;
-                                }
+                        if (response.result.notifications && response.result.notifications.length > 0){
+                            if (response.result.notifications.length != $scope.notificationsLength){
+                                StartNotify();
+                                document.getElementById('notif_sound').play();
+                                var chatUpdate = false;
+                                $scope.notificationsLength = response.result.notifications.length;
+                                $rootScope.NOTIFICATIONS = $scope.notifications;
+                                prepareNotifications(response.result.notifications);
+                                shareNotifications(response.result.notifications);
+                                for (var i = 0; i < $scope.notifications.length; i++) {
+                                    if ($scope.notifications[i].type == 'message_office'
+                                        || $scope.notifications[i].type == 'message_project'
+                                        || $scope.notifications[i].type == 'message_task'
+                                        || $scope.notifications[i].type == 'message_epic_story'
+                                        || $scope.notifications[i].type == 'private_message_office'
+                                        || $scope.notifications[i].type == 'private_message_project'
+                                        || $scope.notifications[i].type == 'private_message_task'
+                                        || $scope.notifications[i].type == 'private_message_epic_story'
+                                    ) {
+                                        chatUpdate = true;
+                                    }
 
-                                if (chatUpdate && angular.isDefined($rootScope.updateChat)) {
-                                    $rootScope.updateChat(0, 100);
+                                    if (chatUpdate && angular.isDefined($rootScope.updateChat)) {
+                                        $rootScope.updateChat(0, 100);
+                                    }
                                 }
                             }
+                        } else {
+                            StopNotify();
+                            $scope.notifications = [];
+                            $scope.contactNotifications = [];
                         }
-                    } else {
-                        StopNotify();
-                        $scope.notifications = [];
-                        $scope.contactNotifications = [];
+                        setTimeout(getNotifications, 5000);
                     }
-                    setTimeout(getNotifications, 5000);
                 });
 
             $scope.notifPromise.then(function () {
