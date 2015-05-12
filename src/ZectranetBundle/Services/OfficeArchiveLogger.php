@@ -29,10 +29,12 @@ class OfficeArchiveLogger
 
     /**
      * @param string $eventMsg
+     * @param Office $office
      */
-    public function logEvent($eventMsg) {
+    public function logEvent($eventMsg, $office) {
         $event = new OfficeArchiveLog();
         $event->setMessage($eventMsg);
+        $event->setOffice($office);
         $this->em->persist($event);
         $this->em->flush();
     }

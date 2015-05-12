@@ -165,6 +165,46 @@
                     </div>
                     <!-- END OF DEVELOPMENT TEMPLATE ARCHIVE -->
                 </div>
+
+                <div class="panel-heading">
+                    <div ng-click="(showLogs == false) ? showLogs = true : showLogs = false" style="display: inline-block; cursor: pointer; color: #31708f;">
+                        <i class="fa fa-plus" ng-if="!showLogs"></i>
+                        <i class="fa fa-minus" ng-if="showLogs"></i>
+                    </div>
+                    Logs
+                </div>
+                <div class="panel-body" cg-busy="officeArchivePromise" ng-if="showLogs">
+                    <div class="row" ng-if="(!logs) || (logs.length == 0)">
+                        <div class="col-md-12">
+                            <h4 class="text-info" align="center">
+                                There is empty
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="(logs) && (logs.length > 0)">
+                        <div class="col-md-12">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th class="col-xs-1">#</th>
+                                    <th class="col-xs-9">Event</th>
+                                    <th class="col-xs-2"><div class="text-center">Date</div></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="log in logs">
+                                    <td class="col-xs-1">[[ $index + 1 ]]</td>
+                                    <td class="col-xs-9">[[ log.event ]]</td>
+                                    <td class="col-xs-2">
+                                        [[ log.date ]]
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
+use ZectranetBundle\Entity\OfficeArchiveLog;
 use ZectranetBundle\Entity\OfficePost;
 use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\HFForum;
@@ -37,7 +38,8 @@ class OfficeArchiveController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $archives = Office::getOfficeArchive($em, $office_id);
-        return new JsonResponse($archives);
+        $logs = OfficeArchiveLog::getArchiveLogs($em, $office_id);
+        return new JsonResponse(array('archives' => $archives, 'logs' => $logs));
     }
 
     /**
@@ -52,6 +54,25 @@ class OfficeArchiveController extends Controller {
         $em = $this->getDoctrine()->getManager();
         try {
             Office::addToArchive($em, $project_id, $project_type);
+
+            /** @var User $user */
+            $user = $this->getUser();
+
+            /** @var Office $office */
+            $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+
+            $project = null;
+            switch ($project_type) {
+                case 1: $project = $em->find('ZectranetBundle:QnAForum', $project_id); break;
+                case 2: $project = $em->find('ZectranetBundle:HFForum', $project_id); break;
+                case 3: /*$project = $em->find('ZectranetBundle:QnAForum', $project_id);*/ break;
+                case 4: $project = $em->find('ZectranetBundle:Project', $project_id); break;
+            }
+
+            $message = 'user ' . $user->getUsername() . ' has added project "' . $project->getName() . '" to office archive';
+
+            $this->get('zectranet.officeArchiveLogger')->logEvent($message, $office);
+
             return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office_id));
         } catch (\Exception $ex) {
             $from = 'class: Office, function: addToArchive';
@@ -73,6 +94,22 @@ class OfficeArchiveController extends Controller {
         $em = $this->getDoctrine()->getManager();
         try {
             Office::restoreFromArchive($em, $project_id, $project_type);
+
+            $project = null;
+            switch ($project_type) {
+                case 1: $project = $em->find('ZectranetBundle:QnAForum', $project_id); break;
+                case 2: $project = $em->find('ZectranetBundle:HFForum', $project_id); break;
+                case 3: /*$project = $em->find('ZectranetBundle:QnAForum', $project_id);*/ break;
+                case 4: $project = $em->find('ZectranetBundle:Project', $project_id); break;
+            }
+
+            /** @var Office $office */
+            $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($project->getOfficeID());
+
+            $message = 'user ' . $user->getUsername() . ' has restored project "' . $project->getName() . '" from office archive';
+
+            $this->get('zectranet.officeArchiveLogger')->logEvent($message, $office);
+
             switch ($project_type) {
                 case 1: return $this->redirectToRoute('zectranet_show_QnA_forum', array('project_id' => $project_id));
                 case 2: return $this->redirectToRoute('zectranet_show_header_forum', array('project_id' => $project_id));
@@ -98,7 +135,26 @@ class OfficeArchiveController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         try {
+            /** @var User $user */
+            $user = $this->getUser();
+
+            $project = null;
+            switch ($project_type) {
+                case 1: $project = $em->find('ZectranetBundle:QnAForum', $project_id); break;
+                case 2: $project = $em->find('ZectranetBundle:HFForum', $project_id); break;
+                case 3: /*$project = $em->find('ZectranetBundle:QnAForum', $project_id);*/ break;
+                case 4: $project = $em->find('ZectranetBundle:Project', $project_id); break;
+            }
+
+            /** @var Office $office */
+            $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($project->getOfficeID());
+
+            $message = 'user ' . $user->getUsername() . ' has deleted project "' . $project->getName() . '" from office archive';
+
+            $this->get('zectranet.officeArchiveLogger')->logEvent($message, $office);
+
             Office::deleteFromArchive($em, $project_id, $project_type);
+
         } catch (\Exception $ex) {
             $from = 'class: Office, function: addToArchive';
             $this->get('zectranet.errorlogger')->registerException($ex, $from);

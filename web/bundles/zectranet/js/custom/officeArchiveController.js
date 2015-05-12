@@ -6,7 +6,9 @@ Zectranet.controller('OfficeArchiveController', ['$scope', '$http', '$rootScope'
         var urlDeleteFromArchive = JSON_URLS.deleteFromArchive;
 
         $scope.archives = {};
+        $scope.logs = null;
         $scope.officeArchivePromise = null;
+        $scope.showLogs = false;
 
         function prepareArchives (archives) {
             for (var i = 0; i < archives.QnAForums.length; i++) {
@@ -28,7 +30,10 @@ Zectranet.controller('OfficeArchiveController', ['$scope', '$http', '$rootScope'
             $scope.officeArchivePromise = $http
                 .get(urlGetOfficeArchive)
                 .success(function (response) {
-                    $scope.archives = prepareArchives(response);
+                    if (response.archives)
+                        $scope.archives = prepareArchives(response.archives);
+                    if (response.logs)
+                        $scope.logs = response.logs;
                 }
             );
         };
