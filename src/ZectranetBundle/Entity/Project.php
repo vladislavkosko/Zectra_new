@@ -137,6 +137,12 @@ class Project
     private $archived;
 
     /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="ProjectLog", mappedBy="project", cascade={"remove"})
+     */
+    private $logs;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -206,21 +212,6 @@ class Project
         $em->flush();
 
         return $project;
-    }
-
-    /**
-     * @param EntityManager $em
-     * @param int $user_id
-     * @param int $project_id
-     */
-    public static function addUserToProject(EntityManager $em, $user_id, $project_id) {
-        $user = $em->find('ZectranetBundle:User', $user_id);
-        $project = $em->find('ZectranetBundle:Project', $project_id);
-        if (!$project->getUsers()->contains($user)) {
-            $project->addUser($user);
-            $em->persist($project);
-            $em->flush();
-        }
     }
 
     /**
@@ -1027,4 +1018,37 @@ class Project
         }
     }
 
+
+    /**
+     * Add logs
+     *
+     * @param \ZectranetBundle\Entity\ProjectLog $logs
+     * @return Project
+     */
+    public function addLog(\ZectranetBundle\Entity\ProjectLog $logs)
+    {
+        $this->logs[] = $logs;
+
+        return $this;
+    }
+
+    /**
+     * Remove logs
+     *
+     * @param \ZectranetBundle\Entity\ProjectLog $logs
+     */
+    public function removeLog(\ZectranetBundle\Entity\ProjectLog $logs)
+    {
+        $this->logs->removeElement($logs);
+    }
+
+    /**
+     * Get logs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLogs()
+    {
+        return $this->logs;
+    }
 }

@@ -500,7 +500,8 @@ class ProjectController extends Controller
         $info['Project_Team'] = EntityOperations::arrayToJsonArray(
             $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id))
         );
-        //$info['ProjectLogs'] = EntityOperations::arrayToJsonArray($project->getLogs());
+
+        $info['ProjectLogs'] = EntityOperations::arrayToJsonArray($project->getLogs());
         $info['timeNow'] = (new \DateTime())->format('Y-m-d H:i:s');
 
         return new JsonResponse($info);
