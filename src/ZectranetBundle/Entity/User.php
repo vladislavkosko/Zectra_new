@@ -1165,62 +1165,52 @@ class User implements UserInterface, \Serializable
      * @param EntityManager $em
      * @param User $user
      */
-    public static function GenerateDefaultAvatar($em, $user)
-    {
+    public static function GenerateDefaultAvatar(EntityManager $em, User $user) {
+        $fs = new Filesystem();
+        // Delete existing avatar
         if ($user->getAvatar() != null) {
-            // Delete existing avatar
-            $file_path = __DIR__ . '/../../../../web/documents/' . $user->getAvatar();
-            if (file_exists($file_path)) unlink($file_path);
+            $oldAvatarPath = __DIR__ . '/../../../../web/documents/' . $user->getAvatar();
+            if ($fs->exists($oldAvatarPath)) $fs->remove($oldAvatarPath);
         }
 
         $text_colors = array(
-            array(1, 201, 220),
-            array(126, 0, 151),
-            array(0, 151, 71),
-            array(236, 126, 0),
-            array(210, 8, 0),
-            array(167, 0, 219),
-            array(15, 0, 226),
-            array(244, 0, 114),
-            array(91, 162, 0),
-            array(16, 32, 53),
-            array(36, 203, 222),
-            array(36, 80, 223),
-            array(150, 36, 223),
-            array(223, 36, 199),
-            array(0, 150, 203),
-            array(151, 100, 38),
+            array(1, 201, 220), array(126, 0, 151),
+            array(0, 151, 71), array(236, 126, 0),
+            array(210, 8, 0), array(167, 0, 219),
+            array(15, 0, 226), array(244, 0, 114),
+            array(91, 162, 0), array(16, 32, 53),
+            array(36, 203, 222), array(36, 80, 223),
+            array(150, 36, 223), array(223, 36, 199),
+            array(0, 150, 203), array(151, 100, 38),
         );
 
-        $rnd_clr = rand(0, count($text_colors) - 1);
-        $first = substr(ucfirst($user->getName()),0,1);
-        $second = substr(ucfirst($user->getSurname()),0,1);
-        $text = $first . $second;
+        $backgroundColor = rand(0, count($text_colors) - 1);
+        $firstLetter = substr(ucfirst($user->getName()), 0, 1);
+        $secondLetter = substr(ucfirst($user->getSurname()), 0, 1);
+        $text = $firstLetter . $secondLetter;
         $font = __DIR__.'/../../../web/bundles/zectranet/fonts/DejaVuSansMono.ttf';
-
-        $image_path = __DIR__.'/../../../web/documents/' . $user->getUsername() .'/avatar/';
-        $width = 150; $height = 150;
-        $center = round($width/2);
+        $imagePath = __DIR__.'/../../../web/documents/' . $user->getUsername() .'/avatar/';
+        $imageWidth = 150; $height = 150;
+        $imageCenter = round($imageWidth/2);
         $box = imagettfbbox(60, 0, $font, $text);
-        $position = $center-round(($box[2]-$box[0])/2);
+        $centerPosition = $imageCenter-round(($box[2]-$box[0])/2);
 
         // Draw image
-        $im = imagecreate($width, $height);
-        imagefilledrectangle($im, 0, 0, $width, $height, imagecolorallocate($im, $text_colors[$rnd_clr][0],
-            $text_colors[$rnd_clr][1], $text_colors[$rnd_clr][2]));
-        imagettftext($im, 60, 0, $position, 105, imagecolorallocate($im, 255, 255, 255),
-            $font, $first . $second);
+        $im = imagecreate($imageWidth, $height);
+        imagefilledrectangle($im, 0, 0, $imageWidth, $height,
+            imagecolorallocate($im, $text_colors[$backgroundColor][0],
+            $text_colors[$backgroundColor][1], $text_colors[$backgroundColor][2]));
+        imagettftext($im, 60, 0, $centerPosition, 105, imagecolorallocate($im, 255, 255, 255),
+            $font, $firstLetter . $secondLetter);
         $datetime = new \DateTime();
         srand($datetime->format('s'));
-        $file_name = rand(1000, 100000);
-        $fs = new Filesystem();
-        $fs->dumpFile($image_path . $file_name . '.jpeg', '');
-        imagejpeg($im, $image_path . $file_name . '.jpeg');
+        $newImageFile = rand(1000, 100000);
+        $fs->dumpFile($imagePath . $newImageFile . '.jpeg', '');
+        imagejpeg($im, $imagePath . $newImageFile . '.jpeg');
 
         // Set new avatar as current
-        $user->setAvatar($user->getUsername() . '/avatar/' . $file_name . '.jpeg');
-        $user = $em->getRepository('ZectranetBundle:User')->find($user->getId());
-        $user->setAvatar($user->getUsername() . '/avatar/' . $file_name . '.jpeg');
+        $user->setAvatar($user->getUsername() . '/avatar/' . $newImageFile . '.jpeg');
+        $em->persist($user);
         $em->flush();
     }
 
