@@ -974,4 +974,42 @@ class Project
         return $request;
     }
 
+    /**
+     * @param EntityManager $em
+     * @param $request_id
+     * @return null|Request
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function removeRequest(EntityManager $em, $request_id) {
+        $request = $em->find('ZectranetBundle:Request', $request_id);
+        if ($request) {
+            $clone = clone $request;
+            $em->remove($request);
+            $em->flush();
+            return $clone;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $user_id
+     * @param $project_id
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function removeUserFromProject(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        if ($project->getUsers()->contains($user)) {
+            $project->removeUser($user);
+            $em->persist($project);
+            $em->flush();
+        }
+    }
+
 }

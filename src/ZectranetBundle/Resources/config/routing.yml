@@ -698,6 +698,14 @@ zectranet_send_project_request:
     pattern: /project/send_request/{project_id}
     defaults: { _controller: ZectranetBundle:Project:sendRequest }
 
+zectranet_delete_project_request:
+    pattern: /request/{project_id}/delete/{request_id}
+    defaults: { _controller: ZectranetBundle:Project:deleteRequest }
+
+zectranet_re_send_request:
+    pattern: /project/re/Send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:Project:reSendRequest }
+
 
 ############################### END PROJECT REQUESTS #####################################
 

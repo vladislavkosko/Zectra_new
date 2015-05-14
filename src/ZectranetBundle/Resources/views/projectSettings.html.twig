@@ -37,7 +37,7 @@
                         <li class="list-group-item" style="cursor: pointer;"
                             ng-repeat="HO_Contact in HO_Contacts"
                             ng-class="{'contact-list-active':HO_Contact.checked}"
-                            ng-click="contactChecked(1,$index, HO_Contacts);" >
+                            ng-click="contactChecked(1, $index, HO_Contacts);" >
                             [[ HO_Contact.username ]]
                         </li>
                     </ul>
@@ -241,7 +241,7 @@
 
         JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_project_settings_info', { 'project_id': project.id}) }}";
         JSON_URLS.urlSendProjectRequest = "{{ path('zectranet_send_project_request', { 'project_id': project.id}) }}";
-        JSON_URLS.urlDeleteQNAProjectRequest = "{{ path('zectranet_delete_QNA_project_request', { 'project_id': project.id , 'request_id': 'requestid'}) }}";
-        JSON_URLS.urlReSendProjectRequest = "{{ path('zectranet_re_send_QNA_request', { 'project_id': project.id}) }}";
+        JSON_URLS.urlDeleteProjectRequest = "{{ path('zectranet_delete_project_request', { 'project_id': project.id , 'request_id': 'requestid'}) }}";
+        JSON_URLS.ReSendProjectRequest = "{{ path('zectranet_re_send_request', { 'project_id': project.id}) }}";
     </script>
 {% endblock %}

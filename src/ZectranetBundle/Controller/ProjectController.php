@@ -23,6 +23,7 @@ use ZectranetBundle\Entity\QnAForum;
 use ZectranetBundle\Entity\RequestType;
 use ZectranetBundle\Entity\Task;
 use ZectranetBundle\Entity\User;
+use ZectranetBundle\Entity\Request as Req;
 
 class ProjectController extends Controller
 {
@@ -537,6 +538,80 @@ class ProjectController extends Controller
             . $contact->getUsername() . '"';
         $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);*/
         return new JsonResponse(1);
+    }
+
+    /**
+     * @param Request $request
+     * @param $project_id
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function reSendRequestAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $request_id = $data['id'];
+        $user_id = $data['user_id'];
+        $message = $data['message'];
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $contact = $em->find('ZectranetBundle:User', $user_id);
+        try {
+            Project::removeRequest($em, $request_id);
+            Project::sendRequestToUser($em, $user_id, $project_id, $message, $this->getUser()->getId());
+        } catch (\Exception $ex) {
+            $from = 'class: ProjectController, function: reSendRequestAction';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        /*$logMessage = 'User "' . $user->getUsername() . '" resent project request to user "'
+            . $contact->getUsername() . '"';
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);*/
+
+        return new JsonResponse(1);
+    }
+
+    /**
+     * @param $project_id
+     * @param $request_id
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function deleteRequestAction($project_id, $request_id) {
+        /** @var User $user */
+        $user = $this->getUser();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $request = $em->find('ZectranetBundle:Request', $request_id);
+        $contact = $em->find('ZectranetBundle:User', $request->getUserid());
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return new JsonResponse('Not Allowed!!!');
+        }
+        try {
+            /** @var Req $request */
+            $request = Project::removeRequest($em, $request_id);
+        } catch (\Exception $ex) {
+            $from = 'class: Project, function: removeRequest';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        try {
+            Project::removeUserFromProject($em, $contact->getId(), $project_id);
+            /*$logMessage = 'User "' . $user->getUsername() . '" remove user "'
+                . $request->getUser()->getUsername() . '" from request grid';
+            $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);*/
+            return new JsonResponse(1);
+        } catch (\Exception $ex) {
+            $from = 'class: Project, function: removeUserFromProject';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+
     }
 
 }

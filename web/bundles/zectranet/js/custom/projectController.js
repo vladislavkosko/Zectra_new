@@ -1,22 +1,19 @@
 Zectranet.controller('ProjectController', ['$scope', '$http',
     function($scope, $http) {
 
-        $scope.urlGetProjectSettingInfo = JSON_URLS.urlGetProjectSettingInfo;//+
-        $scope.urlSendProjectRequest = JSON_URLS.urlSendProjectRequest;//+
+        $scope.urlGetProjectSettingInfo = JSON_URLS.urlGetProjectSettingInfo;
+        $scope.urlSendProjectRequest = JSON_URLS.urlSendProjectRequest;
+        $scope.urlDeleteProjectRequest = JSON_URLS.urlDeleteProjectRequest;
+        $scope.ReSendProjectRequest = JSON_URLS.ReSendProjectRequest;
 
+        $scope.HO_Contacts = [];
+        $scope.All_Contacts = [];
+        $scope.Project_Team = [];
 
-
-        $scope.urlDeleteQNAProjectRequest = JSON_URLS.urlDeleteQNAProjectRequest;
-        $scope.urlReSendProjectRequest = JSON_URLS.urlReSendProjectRequest;
-
-        $scope.HO_Contacts = [];//+
-        $scope.All_Contacts = [];//+
-        $scope.Project_Team = [];//+
-
-        $scope.HO_contact_message = '';//+
-        $scope.All_contact_message = '';//+
-        $scope.HO_Contacts_test = false;//+
-        $scope.All_Contacts_test = false;//+
+        $scope.HO_contact_message = '';
+        $scope.All_contact_message = '';
+        $scope.HO_Contacts_test = false;
+        $scope.All_Contacts_test = false;
 
         $scope.QnALogsVisible = false;
 
@@ -27,10 +24,10 @@ Zectranet.controller('ProjectController', ['$scope', '$http',
         };
 
         setInterval( function() {
-            $scope.getProjectSettingInfo();    //+
+            $scope.getProjectSettingInfo();
         }, 60000);
 
-        $scope.getProjectSettingInfo = function () {                                //+
+        $scope.getProjectSettingInfo = function () {
             $http.get($scope.urlGetProjectSettingInfo)
                 .success(function (response) {
                     $scope.HO_Contacts = response.HO_Contacts;
@@ -73,7 +70,7 @@ Zectranet.controller('ProjectController', ['$scope', '$http',
         };
 
 
-        $scope.SendRequest = function (type, message, array)              //+
+        $scope.SendRequest = function (type, message, array)
         {
             if((type == 1) && (message == ''))
             {
@@ -109,7 +106,7 @@ Zectranet.controller('ProjectController', ['$scope', '$http',
         };
 
         $scope.testClickableButton = function (type,array) {
-            for(var i=0; i< array.length; i++)
+            for(var i = 0; i < array.length; i++)
             {
                 if(type == 1)
                 {
@@ -136,8 +133,8 @@ Zectranet.controller('ProjectController', ['$scope', '$http',
         };
 
         $scope.deleteProjectRequest = function (request_id) {
-            var urlDeleteQNAProjectRequest = $scope.urlDeleteQNAProjectRequest.replace('requestid',request_id);
-            $http.delete(urlDeleteQNAProjectRequest)
+            var urlDeleteProjectRequest = $scope.urlDeleteProjectRequest.replace('requestid', request_id);
+            $http.delete(urlDeleteProjectRequest)
                 .success(function (response) {
                     switch (response)
                     {
@@ -156,7 +153,7 @@ Zectranet.controller('ProjectController', ['$scope', '$http',
         };
 
         $scope.reSendRequest = function (request) {
-            $http.post($scope.urlReSendProjectRequest,{
+            $http.post($scope.ReSendProjectRequest,{
                 'id': request.id,
                 'user_id': request.user.id,
                 'message': request.message,
