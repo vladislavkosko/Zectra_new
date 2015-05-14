@@ -888,4 +888,90 @@ class Project
     {
         return $this->archived;
     }
+
+    /**
+     * @param EntityManager $em
+     * @param $user_id
+     * @param $project_id
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function getNotProjectHomeOfficeMembers(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        $notProjectContacts = array();
+        /** @var User $contact */
+        foreach ($user->getContacts() as $contact) {
+            if (!$project->getUsers()->contains($contact)) {
+                $notProjectContacts[] = $contact->getInArray();
+            }
+        }
+        return $notProjectContacts;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $project_id
+     * @return array
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function getNotProjectSiteMembers(EntityManager $em, $project_id) {
+        $users = $em->getRepository('ZectranetBundle:User')->findAll();
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        $notProjectContacts = array();
+        /** @var User $contact */
+        foreach ($users as $contact) {
+            if (!$project->getUsers()->contains($contact)) {
+                $notProjectContacts[] = $contact->getInArray();
+            }
+        }
+        return $notProjectContacts;
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param $user_id
+     * @param $project_id
+     * @param $message
+     * @param $initiator_id
+     * @return Request
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public static function sendRequestToUser(EntityManager $em, $user_id, $project_id, $message, $initiator_id) {
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $initiator = $em->find('ZectranetBundle:User', $initiator_id);
+        $status = $em->find('ZectranetBundle:RequestStatus', 1);
+        $type = RequestType::getDevelopmentMembershipRequest($em);
+
+        // Check for old request
+        $request = $em->getRepository('ZectranetBundle:Request')->findOneBy(array(
+            'userid' => $user_id,
+            'projectid' => $project_id,
+            'typeid' => $type->getId(),
+        ));
+        // Delete old request if existing
+        if ($request) {
+            $em->remove($request);
+        }
+        // Create new request
+        $request = new Request();
+        $request->setType($type);
+        $request->setUser($user);
+        $request->setContact($initiator);
+        $request->setMessage($message);
+        $request->setProject($project);
+        $request->setStatus($status);
+
+        $em->persist($request);
+        $em->flush();
+        return $request;
+    }
+
 }

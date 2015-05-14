@@ -171,4 +171,28 @@ class RequestType
     public static function getQnAMembershipRequestResend(EntityManager $em) {
         return $em->find('ZectranetBundle:RequestType', 15);
     }
+
+    /**
+     * @param EntityManager $em
+     * @return RequestType
+     */
+    public static function getDevelopmentMembershipRequest(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 16);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return RequestType
+     */
+    public static function getDevelopmentMembershipRequestBack(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 17);
+    }
+
+    /**
+     * @param EntityManager $em
+     * @return RequestType
+     */
+    public static function getDevelopmentMembershipRequestResend(EntityManager $em) {
+        return $em->find('ZectranetBundle:RequestType', 18);
+    }
 }

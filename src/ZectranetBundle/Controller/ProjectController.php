@@ -475,4 +475,68 @@ class ProjectController extends Controller
         $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
         return $this->render('@Zectranet/projectVersions.html.twig', array('project' => $project));
     }
+
+
+    /**
+     * @param $project_id
+     * @return JsonResponse|RedirectResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function getProjectSettingsInfoAction($project_id) {
+        $info = array();
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$project->getUsers()->contains($user)) {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
+        }
+        $info['HO_Contacts'] = Project::getNotProjectHomeOfficeMembers($em, $user->getId(), $project_id);
+        $info['All_Contacts'] = Project::getNotProjectSiteMembers($em, $project_id);
+        $info['Project_Team'] = EntityOperations::arrayToJsonArray(
+            $em->getRepository('ZectranetBundle:Request')->findBy(array('projectid' => $project_id))
+        );
+        //$info['ProjectLogs'] = EntityOperations::arrayToJsonArray($project->getLogs());
+        $info['timeNow'] = (new \DateTime())->format('Y-m-d H:i:s');
+
+        return new JsonResponse($info);
+    }
+
+    /**
+     * @param Request $request
+     * @param $project_id
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     */
+    public function sendRequestAction(Request $request, $project_id) {
+        $data = json_decode($request->getContent(), true);
+        $user_id = $data['user_id'];
+        $message = $data['message'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $this->getUser();
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            return new JsonResponse('Not Allowed!!!');
+        }
+        $contact = $em->find('ZectranetBundle:User', $user_id);
+        try {
+            Project::sendRequestToUser($em, $user_id, $project_id, $message, $user->getId());
+        } catch (\Exception $ex) {
+            $from = 'class: Project, function: sendRequestToUser';
+            $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            return new JsonResponse(-1);
+        }
+        /*$logMessage = 'User "' . $user->getUsername() . '" sent project request to user "'
+            . $contact->getUsername() . '"';
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);*/
+        return new JsonResponse(1);
+    }
+
 }

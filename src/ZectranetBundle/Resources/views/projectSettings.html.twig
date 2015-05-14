@@ -1,263 +1,247 @@
 {% extends '@Zectranet/index.html.twig' %}
 
-{% block title %}{{ project.name }} Settings{% endblock %}
+{% block title %}{{ project.name }}{% endblock %}
 
 {% block body %}
-    <div ng-controller="ProjectController" ng-init="getMembers(); getOffices(); getEpicStories({{ project.id }});">
-        <div class="row">
-            <ol class="breadcrumb" style="margin: 0 -15px;">
-                <li>
-                    <a href="{{ path('zectranet_user_home') }}">Summary</a>
-                </li>
-                <li>
-                    <a href="{{ path('zectranet_show_project', {'project_id': project.id}) }}">
-                        {{ project.name }}
-                    </a>
-                </li>
-                <li class="active">Settings</li>
-            </ol>
-            <div class="col-md-12">
-                <div class="page-header">
-                    <h4><i class="fa fa-briefcase"></i> Project Managment</h4>
-                </div>
 
-                <div class="row" style="margin-bottom: 25px;">
-                    <div class="col-md-4">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="input-group form-group">
-                                <span class="input-group-addon" cg-busy="visiblePromise">
-                                    <input id="change-visible-state" type="checkbox" ng-model="projectVisible" value="{{ project.visible }}">
-                                </span>
-                                    <label for="change-visible-state" class="form-control form-control-static">Project visible</label>
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-success" ng-click="changeVisibleState(projectVisible);">Save</button>
-                                </span>
-                                </div>
-                                <div class="input-group">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 15px;">
-                            <div class="col-md-12">
-                                <div class="input-group form-group">
-                                    <input type="text" class="form-control" placeholder="Project name" value="{{ project.name }}">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-success" ng-click="changeVisibleState(projectVisible);">Save</button>
-                                </span>
-                                </div>
-                                <div class="input-group">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <textarea class="form-control"  style="resize: vertical;height: 64px;" placeholder="Project description">{{ project.description }}</textarea>
-                                    <button type="button" class="form-control btn-success" ng-click="changeVisibleState(projectVisible);">Save</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{{ path('zectranet_show_office', { 'office_id': project.office.id }) }}">{{ project.office.name }}</a>
+            </li>
 
-                <ul id="project-manage-tabs" class="nav nav-tabs">
-                    <li class="active">
-                        <a href="#users-manage" data-toggle="tab" class="btn">
-                            Single Users Manage
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#offices-manage" data-toggle="tab" class="btn">
-                            Offices Manage
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#epic-stories-manage" data-toggle="tab" class="btn">
-                            Epic Stories Manage
-                        </a>
-                    </li>
-                </ul>
+            <li>
+                <a href="{{ path('zectranet_show_project', { 'project_id': project.id }) }}">{{ project.name }}</a>
+            </li>
 
-                <div class="tab-content">
-                    <!-- Begin of Users Manage Panel -->
-                    <div id="users-manage" style="margin-top: 25px;" class="tab-pane fade in active">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6" cg-busy="membersPromise">
-                                    <div class="list-group">
-                                        <div class="list-group-item active">
-                                            <i class="fa fa-users"></i>
-                                            Users Without Office
-                                        </div>
-                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in users" ng-init="user.selected = false; user.index = $index"
-                                               ng-class="{ 'active': user.selected }" ng-click="user.selected = !user.selected">
-                                                <i class="fa fa-user"></i>
-                                                [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
-                                            </a>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" ng-click="addUsersToProject()" class="form-control btn btn-default btn-success">
-                                                <i class="fa fa-plus-circle"></i>
-                                                Add Users To Project
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6" cg-busy="membersPromise">
-                                    <div class="list-group">
-                                        <div class="list-group-item active">
-                                            <i class="fa fa-users"></i>
-                                            Project Members
-                                        </div>
-                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="user in projectMembers" ng-init="user.selected = false; user.index = $index"
-                                               ng-class="{ 'active': user.selected }" ng-click="selectUser(user)">
-                                                <i class="fa fa-user"></i>
-                                                [[user.name + ' ' + user.surname + ' (' + user.username + ')' ]]
-                                                <label ng-if="user.request" class="pull-right label label-default">Request sended</label>
-                                            </a>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeUsersFromProject()">
-                                                <i class="fa fa-trash"></i>
-                                                Delete Users From Project
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End of Users Manage Panel -->
-                    
-                    <!-- Begin of Offices Manage Panel -->
-                    <div id="offices-manage" style="margin-top: 25px;" class="tab-pane fade">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6" cg-busy="promiseProject">
-                                    <div class="list-group">
-                                        <div class="list-group-item active">
-                                            <i class="fa fa-home"></i>
-                                            Offices
-                                        </div>
-                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="office in offices" ng-init="office.selected = false;"
-                                               ng-class="{ 'active': office.selected }" ng-click="office.selected = !office.selected">
-                                                <i class="fa fa-home"></i>
-                                                [[ office.name ]]
-                                            </a>
-                                            <div class="list-group-item" ng-if="offices.length == 0">
-                                                <h4 class="text-center text-info">No available offices to show</h4>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" ng-click="addOfficesToProject()" class="form-control btn btn-default btn-success">
-                                                <i class="fa fa-plus-circle"></i>
-                                                Add Offices To Project
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6" cg-busy="promiseProject">
-                                    <div class="list-group">
-                                        <div class="list-group-item active">
-                                            <i class="fa fa-home"></i>
-                                            Project Offices
-                                        </div>
-                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="office in projectOffices" ng-init="office.selected = false;"
-                                               ng-class="{ 'active': office.selected }" ng-click="selectOffice(office)">
-                                                <i class="fa fa-home"></i>
-                                                [[ office.name ]]
-                                                <label ng-if="office.request" class="pull-right label label-default">Request sended</label>
-                                            </a>
-                                            <div class="list-group-item" ng-if="projectOffices.length == 0">
-                                                <h4 class="text-center text-info">Project Offices will be displayed here</h4>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" class="form-control btn btn-default btn-danger" ng-click="removeOfficesFromProject()">
-                                                <i class="fa fa-trash"></i>
-                                                Remove Offices From Project
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End of Offices Manage Panel -->
-
-                    <!-- Begin of Epic Stories Manage Panel -->
-                    <div id="epic-stories-manage" style="margin-top: 25px;" class="tab-pane fade">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-offset-2 col-md-8 col-xs-12" cg-busy="promiseProject">
-                                    <div class="list-group">
-                                        <div class="list-group-item active">
-                                            <i class="fa fa-home"></i>
-                                            Epic Stories
-                                        </div>
-                                        <div class="list-group-item" style="height: 250px; max-height: 250px; overflow-y: auto;" ng-cloak>
-                                            <a style="cursor: pointer;" class="list-group-item" ng-repeat="epicStory in epicStories" ng-init="epicStory.selected = false;"
-                                               ng-class="{ 'active': epicStory.selected }" ng-click="epicStory.selected = !epicStory.selected">
-                                                <i class="fa fa-home"></i>
-                                                [[ epicStory.name ]]
-                                            </a>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" data-toggle="modal" data-target="#add_epic_story" class="form-control btn btn-default btn-success">
-                                                <i class="fa fa-plus-circle"></i>
-                                                Add New Epic Story
-                                            </button>
-                                            <button type="button" data-toggle="modal" data-target="#delete_project_epic_story" class="form-control btn btn-default btn-danger">
-                                                <i class="fa fa-trash"></i>
-                                                Delete Selected Epic Stories
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End of Epic Stories Manage Panel -->
-                </div>
-            </div>
-        </div>
-        <!-- BEGIN OF EPIC STORY ADD MODAL -->
-        {% include '@Zectranet/projectAddEpicStory.html.twig' %}
-        <!-- END OF EPIC STORY ADD MODAL -->
-
-        <!-- BEGIN OF EPIC STORY DELETE MODAL -->
-        {% include '@Zectranet/projectDeleteEpicStory.html.twig' %}
-        <!-- END OF EPIC STORY DELETE MODAL -->
+            <li>Settings</li>
+        </ol>
     </div>
 
-{% endblock %}
+    <div class="page-header">
+        <div class="row">
+            <div class="col-md-12">
+                <span style="font-size: 30px; font-family: 'PT Sans Narrow', sans-serif; font-weight: bold;">Settings</span>
+            </div>
+        </div>
+    </div>
 
+    <div ng-controller="ProjectController">
+        <div ng-init="getProjectSettingInfo();">
+            <div class="row">
+                <div class="col-md-3 " style="margin-top: 15px;">
+                    <ul class="list-group" style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px;overflow-y: auto; margin-bottom: 0;">
+                        <li class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            HO Contacts available
+                        </li>
+                        <li class="list-group-item" style="cursor: pointer;"
+                            ng-repeat="HO_Contact in HO_Contacts"
+                            ng-class="{'contact-list-active':HO_Contact.checked}"
+                            ng-click="contactChecked(1,$index, HO_Contacts);" >
+                            [[ HO_Contact.username ]]
+                        </li>
+                    </ul>
+                    <a ng-init="testClickableButton(1,HO_Contacts);" ng-if="HO_Contacts_test"  class="btn btn-default btn-success" data-toggle="modal"
+                       data-target="#send_request_by_HO_contacts" style="width: 100%;">
+                        Send Request
+                    </a>
+                </div>
+
+                <div class="col-md-3 " style="margin-top: 15px;">
+                    <ul class="list-group"  style="box-shadow: 2px 3px 6px 0 darkkhaki; height: 250px;overflow-y: auto; margin-bottom: 0;">
+                        <li class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            All Contacts
+                        </li>
+                        <li class="list-group-item" style="cursor: pointer;"
+                            ng-repeat="contact in All_Contacts"
+                            ng-class="{'contact-list-active':contact.checked}"
+                            ng-click="contactChecked(2,$index,All_Contacts);">
+                            [[ contact.username ]]
+                        </li>
+                    </ul>
+                    <a ng-init="testClickableButton(2,All_Contacts);" ng-if="All_Contacts_test" class="btn btn-default btn-success" data-toggle="modal"
+                       data-target="#send_request_by_All_contacts" style="width: 100%;">
+                        Send Request
+                    </a>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="list-group" style="margin-top: 15px;">
+                        <div class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            Project Team
+                        </div>
+                        <div class="list-group-item" style="height: 240px;overflow-y: auto;">
+                            <table class="table">
+                                <thead class="table-striped">
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Status</th>
+                                    <th>Reply</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="request in Project_Team">
+                                    <td>
+                                        [[ request.user.username ]]
+                                    </td>
+                                    <td>
+                                        <span ng-if="request.reSendVisibleButton == false" class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
+                                        <span ng-if="request.reSendVisibleButton == true" class="label" style="background-color: hotpink;">Pending</span>
+                                    </td>
+                                    <td>
+
+                                            <span ng-if="request.reSendVisibleButton == true" class="label" style="background-color: #337ab7;cursor: pointer;" ng-click="reSendRequest(request)">
+                                            Re-Send
+                                        </span>
+
+                                    </td>
+                                    <td>
+                                        <i class="fa fa-close" style="color: red;cursor: pointer;" ng-click="deleteProjectRequest(request.id);"></i>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" />
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!------------ Begin of project log ------------>
+            <div class="row" style="margin-bottom: 30px;">
+                <div class="col-xs-12">
+                    <div class="list-group">
+                        <div class="list-group-item active" style="background-color: #ddedf4; color: #000000;">
+                            <div class="text-center">
+                                Project logs
+                                <a class="btn-xs pull-right" ng-click="QnALogsVisible = !QnALogsVisible">
+                                    <i ng-hide="QnALogsVisible" class="fa fa-plus-circle fa-fw"></i>
+                                    <i ng-show="QnALogsVisible" class="fa fa-fw fa-minus-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="list-group-item" ng-show="QnALogsVisible">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Event</th>
+                                    <th>Date</th>
+                                </tr>
+                                </thead>
+                                <tbody style="height: 200px; max-height: 400px; overflow-y: auto;">
+                                <tr ng-repeat="log in QnALogs">
+                                    <td>[[ $index + 1 ]]</td>
+                                    <td>[[ log.event ]]</td>
+                                    <td>[[ log.date ]]</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!------------ End of project log -------------->
+
+            <!-- START MODAL -->
+            <div class="modal fade" id="send_request_by_HO_contacts" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" style="color: #000000;" align="center">
+                                Send Request
+                            </h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-offset-1 col-xs-10">
+                                    <div class="form-group">
+                                        <label>
+                                            <b>Request Message</b>
+                                        </label>
+                                        <textarea class="form-control " rows="5" style="width: 100%;resize: vertical;"
+                                                  ng-model="HO_contact_message"
+                                                  ng-init="HO_contact_message = '{{ app.user.username ~', has invited you to join ' ~   project.name }}'">
+
+                                        </textarea>
+                                        <br/>
+                                        <div ng-if="QNASettingsErrors.HO_Contact_message_Error == true">
+                                            <span  class="label label-danger"> Please fill out this field </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(1,HO_contact_message,HO_Contacts);">Send Request</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="send_request_by_All_contacts" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header " style="background-color: #e7e7e7 !important;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title" style="color: #000000;" align="center">
+                                Send Request
+                            </h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-offset-1 col-xs-10">
+                                    <div class="form-group">
+                                        <label>
+                                            <b>Request Message</b>
+                                        </label>
+                                        <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;"
+                                                   ng-model="All_contact_message"
+                                                   ng-init="All_contact_message = '{{ app.user.username ~', has invited you to join ' ~   project.name }}'">
+
+                                        </textarea>
+                                        <br/>
+                                        <div ng-if="QNASettingsErrors.All_Contact_message_Error == true">
+                                            <span  class="label label-danger"> Please fill out this field </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success btn-default" ng-click="SendRequest(2, All_contact_message, All_Contacts);">Send Request</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- END MODAL -->
+
+        </div>
+    </div>
+{% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/zectranet/js/custom/projectController.js') }}"></script>
     <script>
-        JSON_URLS.changeVisibleState = "{{ path('zectranet_project_change_visible_state', { 'project_id': project.id }) }}";
-        JSON_URLS.getMembers = "{{ path('zectranet_get_project_members', { 'project_id': project.id }) }}";
-        JSON_URLS.saveMembers = "{{ path('zectranet_save_project_members', { 'project_id': project.id }) }}";
-        JSON_URLS.getOffices = "{{ path('zectranet_get_project_offices', { 'project_id': project.id }) }}";
-        JSON_URLS.addOffices = "{{ path('zectranet_project_add_offices', {'project_id': project.id}) }}";
-        JSON_URLS.removeOffices = "{{ path('zectranet_project_remove_offices', {'project_id': project.id}) }}";
-        JSON_URLS.getEpicStories = "{{ path('zectranet_project_get_epic_stories', { 'project_id': project.id }) }}";
-        JSON_URLS.addEpicStory = "{{ path('zectranet_project_add_epic_story', { 'project_id': project.id }) }}";
-        JSON_URLS.deleteEpicStories = "{{ path('zectranet_project_delete_epic_stories', { 'project_id': project.id }) }}";
 
-        $('#project-manage-tabs a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        });
+        JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_project_settings_info', { 'project_id': project.id}) }}";
+        JSON_URLS.urlSendProjectRequest = "{{ path('zectranet_send_project_request', { 'project_id': project.id}) }}";
+        JSON_URLS.urlDeleteQNAProjectRequest = "{{ path('zectranet_delete_QNA_project_request', { 'project_id': project.id , 'request_id': 'requestid'}) }}";
+        JSON_URLS.urlReSendProjectRequest = "{{ path('zectranet_re_send_QNA_request', { 'project_id': project.id}) }}";
     </script>
 {% endblock %}

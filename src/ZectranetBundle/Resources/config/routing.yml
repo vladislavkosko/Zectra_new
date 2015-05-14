@@ -688,6 +688,19 @@ zectranet_approve_QNA_membership_request:
 
 ############################### END QNA FORUM REQUESTS ###################################
 
+############################### BEGIN PROJECT REQUESTS ###################################
+
+zectranet_get_project_settings_info:
+    pattern: /project/get/settings/info/{project_id}
+    defaults: { _controller: ZectranetBundle:Project:getProjectSettingsInfo }
+
+zectranet_send_project_request:
+    pattern: /project/send_request/{project_id}
+    defaults: { _controller: ZectranetBundle:Project:sendRequest }
+
+
+############################### END PROJECT REQUESTS #####################################
+
 zectranet_get_office_profile:
     pattern: /office/{office_id}/profile
     defaults: { _controller: ZectranetBundle:OfficeProfile:index }
