@@ -1,4 +1,4 @@
-var Zectranet = angular.module('Zectranet', ['ngRoute', 'ui.bootstrap', 'ngSanitize', 'ngAnimate', 'cgBusy', 'ang-drag-drop', 'luegg.directives', 'ngMessages', 'angularFlatCharts'])
+var Zectranet = angular.module('Zectranet', ['ngRoute', 'ui.bootstrap', 'ngSanitize', 'ngAnimate', 'cgBusy', 'ang-drag-drop', 'luegg.directives', 'ngMessages'])
 	.config(['$interpolateProvider', '$httpProvider',
 		function ($interpolateProvider, $httpProvider) {
 			$interpolateProvider.startSymbol('[[');

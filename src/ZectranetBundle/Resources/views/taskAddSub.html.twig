@@ -19,8 +19,8 @@
 
                                     <div ng-messages="formSubTaskAdd.name.$error" style="color: red;">
                                         <span ng-message="pattern">format: "A-Z,a-z,0-9"</span>
-                                        <span ng-message="minlength">Min length of password is 5 characters</span>
-                                        <span ng-message="maxlength">Max length of password is 100 characters</span>
+                                        <span ng-message="minlength">Min length of name is 5 characters</span>
+                                        <span ng-message="maxlength">Max length of name is 100 characters</span>
                                     </div>
 
                                 </div>
@@ -61,8 +61,8 @@
                                     <textarea style="resize: vertical;" id="add_subtask_description" class="form-control" ng-model="subtask.description" name="description" ng-minlength="5" ng-maxlength="5000" required></textarea>
 
                                     <div ng-messages="formSubTaskAdd.description.$error" style="color: red;">
-                                        <span ng-message="minlength">Min length of password is 5 characters</span>
-                                        <span ng-message="maxlength">Max length of password is 5000 characters</span>
+                                        <span ng-message="minlength">Min length of description is 5 characters</span>
+                                        <span ng-message="maxlength">Max length of description is 5000 characters</span>
                                     </div>
 
                                 </div>
