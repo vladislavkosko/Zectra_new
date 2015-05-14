@@ -100,13 +100,13 @@
                                 <div class="divider"></div>
 
                                 <div class="btn-group">
-                                    <button class="btn btn-default btn-success" ng-click="acceptQnAMembershipRequest(requestQNA.id);">
+                                    <button class="btn btn-default btn-success" ng-click="acceptQnAMembershipRequest(requestQNA.id, $index);">
                                         Accept
                                     </button>
-                                    <button class="btn btn-default btn-danger" ng-click="declineQnAMembershipRequest(requestQNA.id);">
+                                    <button class="btn btn-default btn-danger" ng-click="declineQnAMembershipRequest(requestQNA.id, $index);">
                                         Decline
                                     </button>
-                                    <button class="btn btn-default btn-info" ng-click="moreInfoContactMembershipRequest(requestQNA);">
+                                    <button class="btn btn-default btn-info" ng-click="moreInfoQnAMembershipRequest(requestQNA.id, $index);">
                                         More info
                                     </button>
                                 </div>
@@ -126,13 +126,13 @@
                                 <div class="divider"></div>
 
                                 <div class="btn-group">
-                                    <button class="btn btn-default btn-success" ng-click="acceptHFMembershipRequest(requesthf.id);">
+                                    <button class="btn btn-default btn-success" ng-click="acceptHFMembershipRequest(requesthf.id, $index);">
                                         Accept
                                     </button>
-                                    <button class="btn btn-default btn-danger" ng-click="declineHFMembershipRequest(requesthf.id);">
+                                    <button class="btn btn-default btn-danger" ng-click="declineHFMembershipRequest(requesthf.id, $index);">
                                         Decline
                                     </button>
-                                    <button class="btn btn-default btn-info" ng-click="moreInfoContactMembershipRequest(requesthf);">
+                                    <button class="btn btn-default btn-info" ng-click="moreInfoHFMembershipRequest(requesthf.id, $index);">
                                         More info
                                     </button>
                                 </div>
@@ -170,13 +170,13 @@
                                 <div class="divider"></div>
 
                                 <div class="btn-group">
-                                    <button class="btn btn-default btn-success" ng-click="acceptContactMembershipRequest(request.id);">
+                                    <button class="btn btn-default btn-success" ng-click="acceptContactMembershipRequest(request.id, $index);">
                                         Accept
                                     </button>
-                                    <button class="btn btn-default btn-danger" ng-click="declineContactMembershipRequest(request.id);">
+                                    <button class="btn btn-default btn-danger" ng-click="declineContactMembershipRequest(request.id, $index);">
                                         Decline
                                     </button>
-                                    <button class="btn btn-default btn-info" ng-click="moreInfoContactMembershipRequest(request);">
+                                    <button class="btn btn-default btn-info" ng-click="moreInfoContactMembershipRequest(request.id, $index);">
                                         More info
                                     </button>
                                 </div>

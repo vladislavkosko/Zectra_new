@@ -255,6 +255,7 @@ class User implements UserInterface, \Serializable
      * @param EntityManager $em
      * @param int $user_id
      * @param int $contact_id
+     * @return Conversation $conversation
      */
     public static function addToContactList(EntityManager $em, $user_id, $contact_id) {
         $user = $em->find('ZectranetBundle:User', $user_id);
@@ -276,6 +277,7 @@ class User implements UserInterface, \Serializable
         }
 
         $em->flush();
+        return $conversation;
     }
 
     /**

@@ -140,6 +140,17 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             );
         };
 
+        $scope.moreInfoContactMembershipRequest = function (request_id, index ) {
+            var approveUrl = approveContactMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': 'more_info' })
+                .success(function (response) {
+                    $scope.requests.contactRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+
+        };
+
         $scope.acceptHFMembershipRequest = function (request_id, index) {
             var approveUrl = approveHFMembershipRequest.replace('request_id', request_id);
             $http.post(approveUrl, { 'answer': true })
@@ -158,6 +169,17 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                     $('#request_more_info').modal('hide');
                 }
             );
+        };
+
+        $scope.moreInfoHFMembershipRequest = function (request_id, index ) {
+            var approveUrl = approveHFMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': 'more_info' })
+                .success(function (response) {
+                    $scope.requests.contactRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+
         };
 
         $scope.acceptQnAMembershipRequest = function (request_id, index) {
@@ -180,10 +202,18 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             );
         };
 
-        $scope.moreInfoContactMembershipRequest = function (request) {
-            $scope.requestMoreInfo = request;
-            $('#request_more_info').modal('show');
+        $scope.moreInfoQnAMembershipRequest = function (request_id, index ) {
+            var approveUrl = approveQnAMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': 'more_info' })
+                .success(function (response) {
+                    $scope.requests.contactRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+
         };
+
+
 
         $scope.getNotification = function getNotifications() {
             $scope.notifPromise = $http.get(notificationsGetUrl)

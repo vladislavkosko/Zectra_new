@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use ZectranetBundle\Entity\Conversation;
+use ZectranetBundle\Entity\ConversationMessage;
 use ZectranetBundle\Entity\DailyTimeSheet;
 use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\HFForum;
@@ -364,9 +366,11 @@ class UserController extends Controller
         /** @var Req $userRequest */
         $userRequest = $em->find('ZectranetBundle:Request', $request_id);
 
+        $conversation = null;
         if ($data) {
             try {
-                User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
+                /** @var Conversation $conversation */
+                $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             } catch (\Exception $ex) {
                 $from = 'Class: User, function: addToContactList';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -374,6 +378,22 @@ class UserController extends Controller
             Req::changeRequestState($em, $request_id, 2);
         } else {
             Req::changeRequestState($em, $request_id, 3);
+        }
+        if($data == 'more_info')
+        {
+            $message1 = new ConversationMessage();
+            $message1->setMessage($userRequest->getMessage());
+            $message1->setConversation($conversation);
+            $message1->setUser($userRequest->getContact());
+            $newMessage2 = $userRequest->getUser()->getUsername() .' want to know more info about you.';
+            $message2 = new ConversationMessage();
+            $message2->setMessage($newMessage2);
+            $message2->setConversation($conversation);
+            $message2->setUser($userRequest->getUser());
+            $em->persist($message1);
+            $em->persist($message2);
+            $em->flush();
+            Req::changeRequestState($em, $request_id, 4);
         }
         return new JsonResponse();
     }
@@ -404,10 +424,15 @@ class UserController extends Controller
         /** @var User $user */
         $user = $this->getUser();
 
+        $conversation = null;
         if ($data) {
             try {
-                HFForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getHFForumID());
-                User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
+                if($data != 'more_info')
+                {
+                    HFForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getHFForumID());
+                }
+                /** @var Conversation $conversation */
+               $conversation= User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             } catch (\Exception $ex) {
                 $from = 'Class: HFForum, function: addUserToProject';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -417,6 +442,22 @@ class UserController extends Controller
             $this->get('zectranet.projectlogger')->logEvent($event, $userRequest->getHFForumID(), 2);
         } else {
             Req::changeRequestState($em, $request_id, 3);
+        }
+        if($data == 'more_info')
+        {
+            $message1 = new ConversationMessage();
+            $message1->setMessage($userRequest->getMessage());
+            $message1->setConversation($conversation);
+            $message1->setUser($userRequest->getContact());
+            $newMessage2 = $userRequest->getUser()->getUsername() .' want to know more info about '. $userRequest->getHFForum()->getName();
+            $message2 = new ConversationMessage();
+            $message2->setMessage($newMessage2);
+            $message2->setConversation($conversation);
+            $message2->setUser($userRequest->getUser());
+            $em->persist($message1);
+            $em->persist($message2);
+            $em->flush();
+            Req::changeRequestState($em, $request_id, 4);
         }
         return new JsonResponse();
     }
@@ -436,11 +477,15 @@ class UserController extends Controller
         $userRequest = $em->find('ZectranetBundle:Request', $request_id);
         /** @var User $user */
         $user = $this->getUser();
-
+        $conversation = null;
         if ($data) {
             try {
+                if($data == 'more_info')
+                {
                 QnAForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getQnAForumID());
-                User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
+                }
+                /** @var Conversation $conversation */
+                $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             } catch (\Exception $ex) {
                 $from = 'Class: QnAForum, function: addUserToProject';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);
@@ -450,6 +495,22 @@ class UserController extends Controller
             $this->get('zectranet.projectlogger')->logEvent($event, $userRequest->getQnAForumID(), 1);
         } else {
             Req::changeRequestState($em, $request_id, 3);
+        }
+        if($data == 'more_info')
+        {
+            $message1 = new ConversationMessage();
+            $message1->setMessage($userRequest->getMessage());
+            $message1->setConversation($conversation);
+            $message1->setUser($userRequest->getContact());
+            $newMessage2 = $userRequest->getUser()->getUsername() .' want to know more info about '. $userRequest->getQnAForum()->getName();
+            $message2 = new ConversationMessage();
+            $message2->setMessage($newMessage2);
+            $message2->setConversation($conversation);
+            $message2->setUser($userRequest->getUser());
+            $em->persist($message1);
+            $em->persist($message2);
+            $em->flush();
+            Req::changeRequestState($em, $request_id, 4);
         }
         return new JsonResponse();
     }

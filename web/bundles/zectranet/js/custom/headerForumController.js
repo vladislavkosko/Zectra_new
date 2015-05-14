@@ -16,6 +16,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
 
 
 
+
         $scope.quickheader = {
             'title': '',
             'bgColor': '#BBBBBB',
@@ -264,6 +265,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                 if(type == 1) {
                     if(array[i].checked) {
                         $scope.HO_Contacts_test = true;
+
                         break;
                     } else {
                         $scope.HO_Contacts_test = false;
@@ -271,6 +273,7 @@ Zectranet.controller('HeaderForumController', ['$scope', '$http',
                 } if(type == 2) {
                     if(array[i].checked) {
                         $scope.All_Contacts_test = true;
+
                         break;
                     } else {
                         $scope.All_Contacts_test = false;

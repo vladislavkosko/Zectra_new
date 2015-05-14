@@ -127,8 +127,7 @@
                                     </label>
                                     <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;"
                                                ng-model="HO_contact_message"
-                                            ng-init="HO_contact_message = '{{ app.user.username ~', has invited you to join ' ~   forum.name }}'">
-
+                                               ng-init="HO_contact_message = '{{ app.user.username ~', has invited you to join ' ~   forum.name }}'">
                                     </textarea>
                                     <br/>
                                     <div ng-if="headerForumSettingsErrors.HO_Contact_message_Error == true">
@@ -169,7 +168,7 @@
                                     </label>
                                     <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;"
                                                ng-model="All_contact_message"
-                                               ng-init="All_contact_message = '{{ app.user.username ~', has invited you to join ' ~   forum.name }}'">
+                                               ng-init="All_contact_message = '{{ app.user.username }}' + ', has invited you to join '  + '{{ forum.name }}'">
 
                                     </textarea>
                                     <br/>
@@ -270,5 +269,6 @@
         JSON_URLS.urlSendProjectRequest = "{{ path('zectranet_send_hf_request', { 'project_id': forum.id}) }}";
         JSON_URLS.urlReSendProjectRequest = "{{ path('zectranet_re_send_hf_request', { 'project_id': forum.id}) }}";
         JSON_URLS.urlDeleteProjectRequest = "{{ path('zectranet_delete_hf_request', { 'project_id': forum.id , 'request_id': 'requestid'}) }}";
+
     </script>
 {% endblock %}
