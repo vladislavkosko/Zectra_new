@@ -52,7 +52,7 @@
                                         <label>
                                             <b>Request Message</b>
                                         </label>
-                                        <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="atclRequest.message"></textarea>
+                                        <textarea  class="form-control " rows="5" style="width: 100%;resize: vertical;" ng-model="atclRequest.message" ng-init="atclRequest.message = '{{ app.user.username }}' + ' want add you to contact list'"></textarea>
                                         <br/>
                                     </div>
                                 </div>
