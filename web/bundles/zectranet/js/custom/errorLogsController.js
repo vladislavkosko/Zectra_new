@@ -1,26 +1,7 @@
 Zectranet.controller('ErrorLogsController', ['$scope', '$http',
     function($scope, $http) {
         $scope.errors = null;
-
-        $scope.data = [
-            { 'x': 1, 'y': 5 },
-            { 'x': 2, 'y': 12 },
-            { 'x': 3, 'y': 11 },
-            { 'x': 4, 'y': 8 },
-            { 'x': 5, 'y': 0 },
-            { 'x': 6, 'y': 3 },
-            { 'x': 7, 'y': 10 },
-            { 'x': 8, 'y': 15 },
-            { 'x': 9, 'y': 7 },
-            { 'x': 10, 'y': 9 },
-            { 'x': 11, 'y': 2 },
-            { 'x': 12, 'y': 0 },
-            { 'x': 13, 'y': 0 },
-            { 'x': 14, 'y': 4 },
-            { 'x': 15, 'y': 5 }
-        ];
-
-        $scope.urlGetErrors = JSON_URLS.getErrors;
+        var urlGetErrors = JSON_URLS.getErrors;
 
         function highlightSyntax(text) {
             var sqlKeywords = [
@@ -35,7 +16,8 @@ Zectranet.controller('ErrorLogsController', ['$scope', '$http',
             text = text.replace(new RegExp('file', 'gi'), '<span class="file">file</span>');
             text = text.replace(new RegExp('function', 'gi'), '<span class="function">function</span>');
             for (var i = 0; i < sqlKeywords.length; i++) {
-                text = text.replace(new RegExp(sqlKeywords[i], 'gi'), '<span class="SQL">' + sqlKeywords[i] + '</span>')
+                text = text.replace(new RegExp(sqlKeywords[i], 'gi'),
+                    '<span class="SQL">' + sqlKeywords[i] + '</span>')
             }
 
             return text;
@@ -51,7 +33,7 @@ Zectranet.controller('ErrorLogsController', ['$scope', '$http',
         }
 
         $scope.getErrors = function () {
-            $http.get($scope.urlGetErrors)
+            $http.get(urlGetErrors)
                 .success(function (response) {
                     $scope.errors = prepareErrors(response);
                 }

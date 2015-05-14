@@ -140,7 +140,6 @@ Zectranet.directive('highlight', ['$sce', function($sce) {
 			var username = true;
 
 			var message = $sce.getTrustedHtml($scope.post.message);
-			//var message = $scope.post.message;
 
 			regex = new RegExp('@all', 'mig');
 			matches = message.match(regex);

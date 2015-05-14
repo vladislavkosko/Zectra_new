@@ -57,7 +57,7 @@ Zectranet.controller('DocumentsController', ['$scope', '$http', '$rootScope', '$
         {
             var docsinchat = [];
             var textarea = $('#textarea-post');
-            for(var i=0;i < $scope.documents.length;i++)
+            for(var i = 0; i < $scope.documents.length; i++)
             {
                 if($scope.documents[i].checked && $.inArray($scope.documents[i],$scope.DocsAttachmens) == -1 )
                 {
