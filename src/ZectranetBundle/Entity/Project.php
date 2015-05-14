@@ -210,6 +210,21 @@ class Project
 
     /**
      * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     */
+    public static function addUserToProject(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            $project->addUser($user);
+            $em->persist($project);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param EntityManager $em
      * @param int $project_id
      */
     public static function deleteProject(EntityManager $em, $project_id) {

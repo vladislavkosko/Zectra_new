@@ -15,6 +15,7 @@ use ZectranetBundle\Entity\ConversationMessage;
 use ZectranetBundle\Entity\DailyTimeSheet;
 use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\HFForum;
+use ZectranetBundle\Entity\Project;
 use ZectranetBundle\Entity\QnAForum;
 use ZectranetBundle\Entity\User;
 use ZectranetBundle\Entity\UserInfo;
@@ -367,7 +368,7 @@ class UserController extends Controller
         $userRequest = $em->find('ZectranetBundle:Request', $request_id);
 
         $conversation = null;
-        if ($data) {
+        if ($data == 'accept') {
             try {
                 /** @var Conversation $conversation */
                 $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
@@ -376,11 +377,13 @@ class UserController extends Controller
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);
             }
             Req::changeRequestState($em, $request_id, 2);
-        } else {
+        } elseif($data == 'decline') {
             Req::changeRequestState($em, $request_id, 3);
         }
-        if($data == 'more_info')
+        elseif($data == 'more_info')
         {
+            /** @var Conversation $conversation */
+            $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             $message1 = new ConversationMessage();
             $message1->setMessage($userRequest->getMessage());
             $message1->setConversation($conversation);
@@ -425,12 +428,9 @@ class UserController extends Controller
         $user = $this->getUser();
 
         $conversation = null;
-        if ($data) {
+        if ($data == 'accept') {
             try {
-                if($data != 'more_info')
-                {
-                    HFForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getHFForumID());
-                }
+                HFForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getHFForumID());
                 /** @var Conversation $conversation */
                $conversation= User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             } catch (\Exception $ex) {
@@ -440,11 +440,14 @@ class UserController extends Controller
             Req::changeRequestState($em, $request_id, 2);
             $event = 'User "' . $user->getUsername() . '" has joined the project';
             $this->get('zectranet.projectlogger')->logEvent($event, $userRequest->getHFForumID(), 2);
-        } else {
+        }
+        elseif($data == 'decline') {
             Req::changeRequestState($em, $request_id, 3);
         }
-        if($data == 'more_info')
+        elseif($data == 'more_info')
         {
+            /** @var Conversation $conversation */
+            $conversation= User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             $message1 = new ConversationMessage();
             $message1->setMessage($userRequest->getMessage());
             $message1->setConversation($conversation);
@@ -478,12 +481,9 @@ class UserController extends Controller
         /** @var User $user */
         $user = $this->getUser();
         $conversation = null;
-        if ($data) {
+        if ($data == 'accept') {
             try {
-                if($data == 'more_info')
-                {
                 QnAForum::addUserToProject($em, $userRequest->getUserid(), $userRequest->getQnAForumID());
-                }
                 /** @var Conversation $conversation */
                 $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             } catch (\Exception $ex) {
@@ -493,16 +493,72 @@ class UserController extends Controller
             Req::changeRequestState($em, $request_id, 2);
             $event = 'User "' . $user->getUsername() . '" has joined the project';
             $this->get('zectranet.projectlogger')->logEvent($event, $userRequest->getQnAForumID(), 1);
-        } else {
+        }
+        elseif($data == 'decline') {
             Req::changeRequestState($em, $request_id, 3);
         }
-        if($data == 'more_info')
+        elseif($data == 'more_info')
         {
+            /** @var Conversation $conversation */
+            $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
             $message1 = new ConversationMessage();
             $message1->setMessage($userRequest->getMessage());
             $message1->setConversation($conversation);
             $message1->setUser($userRequest->getContact());
             $newMessage2 = $userRequest->getUser()->getUsername() .' want to know more info about '. $userRequest->getQnAForum()->getName();
+            $message2 = new ConversationMessage();
+            $message2->setMessage($newMessage2);
+            $message2->setConversation($conversation);
+            $message2->setUser($userRequest->getUser());
+            $em->persist($message1);
+            $em->persist($message2);
+            $em->flush();
+            Req::changeRequestState($em, $request_id, 4);
+        }
+        return new JsonResponse();
+    }
+
+    /**
+     * @Security("has_role('ROLE_USER')")
+     * @param Request $request
+     * @param int $request_id
+     * @return JsonResponse
+     */
+    public function approveProjectMembershipRequestAction(Request $request, $request_id) {
+        $data = json_decode($request->getContent(), true);
+        $data = $data['answer'];
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var Req $userRequest */
+        $userRequest = $em->find('ZectranetBundle:Request', $request_id);
+        /** @var User $user */
+        $user = $this->getUser();
+        $conversation = null;
+        if ($data == 'accept') {
+            try {
+                Project::addUserToProject($em, $userRequest->getUserid(), $userRequest->getProject()->getId());
+                /** @var Conversation $conversation */
+                $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
+            } catch (\Exception $ex) {
+                $from = 'Class: Project, function: addUserToProject';
+                $this->get('zectranet.errorlogger')->registerException($ex, $from);
+            }
+            Req::changeRequestState($em, $request_id, 2);
+            $event = 'User "' . $user->getUsername() . '" has joined the project';
+            $this->get('zectranet.projectlogger')->logEvent($event, $userRequest->getProject()->getId(), 1);
+        }
+        elseif($data == 'decline') {
+            Req::changeRequestState($em, $request_id, 3);
+        }
+        elseif($data == 'more_info')
+        {
+            /** @var Conversation $conversation */
+            $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
+            $message1 = new ConversationMessage();
+            $message1->setMessage($userRequest->getMessage());
+            $message1->setConversation($conversation);
+            $message1->setUser($userRequest->getContact());
+            $newMessage2 = $userRequest->getUser()->getUsername() .' want to know more info about '. $userRequest->getProject()->getName();
             $message2 = new ConversationMessage();
             $message2->setMessage($newMessage2);
             $message2->setConversation($conversation);

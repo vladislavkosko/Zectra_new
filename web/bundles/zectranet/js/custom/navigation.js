@@ -11,6 +11,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
         var approveContactMembershipRequest = JSON_URLS.approveContactMembershipRequest;
         var approveHFMembershipRequest = JSON_URLS.approveHFMembershipRequest;
         var approveQnAMembershipRequest = JSON_URLS.approveQnAMembershipRequest;
+        var approveProjectMembershipRequest = JSON_URLS.approveProjectMembershipRequest;
 
         // ---- For editable fields in projects ----
 
@@ -97,7 +98,8 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             var newRequests = {
                 'contactRequests': [],
                 'hfRequests': [],
-                'QnARequests': []
+                'QnARequests': [],
+                'projectRequests': []
             };
 
             for (var i = 0; i < requests.length; i++) {
@@ -115,6 +117,9 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
                     case 13: newRequests.QnARequests.push(requests[i]); break;
                     case 14: break;
                     case 15: break;
+                    case 16: newRequests.projectRequests.push(requests[i]); break;
+                    case 17: break;
+                    case 18: break;
                 }
             }
             return newRequests;
@@ -122,7 +127,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.acceptContactMembershipRequest = function (request_id, index) {
             var approveUrl = approveContactMembershipRequest.replace('request_id', request_id);
-            $http.post(approveUrl, { 'answer': true })
+            $http.post(approveUrl, { 'answer': 'accept' })
                 .success(function (response) {
                     $scope.requests.contactRequests.splice(index, 1);
                     $('#request_more_info').modal('hide');
@@ -132,7 +137,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.declineContactMembershipRequest = function (request_id, index) {
             var approveUrl = approveContactMembershipRequest.replace('request_id', request_id);
-            $http.post(approveUrl, { 'answer': false })
+            $http.post(approveUrl, { 'answer': 'decline' })
                 .success(function (response) {
                     $scope.requests.contactRequests.splice(index, 1);
                     $('#request_more_info').modal('hide');
@@ -153,9 +158,9 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.acceptHFMembershipRequest = function (request_id, index) {
             var approveUrl = approveHFMembershipRequest.replace('request_id', request_id);
-            $http.post(approveUrl, { 'answer': true })
+            $http.post(approveUrl, { 'answer': 'accept' })
                 .success(function (response) {
-                    $scope.requests.contactRequests.splice(index, 1);
+                    $scope.requests.hfRequests.splice(index, 1);
                     $('#request_more_info').modal('hide');
                 }
             );
@@ -163,9 +168,9 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.declineHFMembershipRequest = function (request_id, index) {
             var approveUrl = approveHFMembershipRequest.replace('request_id', request_id);
-            $http.post(approveUrl, { 'answer': false })
+            $http.post(approveUrl, { 'answer': 'decline' })
                 .success(function (response) {
-                    $scope.requests.contactRequests.splice(index, 1);
+                    $scope.requests.hfRequests.splice(index, 1);
                     $('#request_more_info').modal('hide');
                 }
             );
@@ -175,7 +180,7 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             var approveUrl = approveHFMembershipRequest.replace('request_id', request_id);
             $http.post(approveUrl, { 'answer': 'more_info' })
                 .success(function (response) {
-                    $scope.requests.contactRequests.splice(index, 1);
+                    $scope.requests.hfRequests.splice(index, 1);
                     $('#request_more_info').modal('hide');
                 }
             );
@@ -184,9 +189,9 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.acceptQnAMembershipRequest = function (request_id, index) {
             var approveUrl = approveQnAMembershipRequest.replace('request_id', request_id);
-            $http.post(approveUrl, { 'answer': true })
+            $http.post(approveUrl, { 'answer': 'accept' })
                 .success(function (response) {
-                    $scope.requests.contactRequests.splice(index, 1);
+                    $scope.requests.QnARequests.splice(index, 1);
                     $('#request_more_info').modal('hide');
                 }
             );
@@ -194,9 +199,9 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
 
         $scope.declineQnAMembershipRequest = function (request_id, index) {
             var approveUrl = approveQnAMembershipRequest.replace('request_id', request_id);
-            $http.post(approveUrl, { 'answer': false })
+            $http.post(approveUrl, { 'answer': 'decline' })
                 .success(function (response) {
-                    $scope.requests.contactRequests.splice(index, 1);
+                    $scope.requests.QnARequests.splice(index, 1);
                     $('#request_more_info').modal('hide');
                 }
             );
@@ -206,14 +211,47 @@ Zectranet.controller('NavigationController', ['$scope', '$http', '$rootScope',
             var approveUrl = approveQnAMembershipRequest.replace('request_id', request_id);
             $http.post(approveUrl, { 'answer': 'more_info' })
                 .success(function (response) {
-                    $scope.requests.contactRequests.splice(index, 1);
+                    $scope.requests.QnARequests.splice(index, 1);
                     $('#request_more_info').modal('hide');
                 }
             );
 
         };
 
+        //START Project REQUESTS
 
+
+        $scope.acceptProjectMembershipRequest = function (request_id, index) {
+            var approveUrl = approveProjectMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': 'accept' })
+                .success(function (response) {
+                    $scope.requests.projectRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+        };
+
+        $scope.declineProjectMembershipRequest = function (request_id, index) {
+            var approveUrl = approveProjectMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': 'decline' })
+                .success(function (response) {
+                    $scope.requests.projectRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+        };
+
+        $scope.moreInfoProjectMembershipRequest = function (request_id, index ) {
+            var approveUrl = approveProjectMembershipRequest.replace('request_id', request_id);
+            $http.post(approveUrl, { 'answer': 'more_info' })
+                .success(function (response) {
+                    $scope.requests.projectRequests.splice(index, 1);
+                    $('#request_more_info').modal('hide');
+                }
+            );
+
+        };
+        //END Project REQUESTS
 
         $scope.getNotification = function getNotifications() {
             $scope.notifPromise = $http.get(notificationsGetUrl)

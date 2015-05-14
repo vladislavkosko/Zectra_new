@@ -421,14 +421,9 @@ class Request
                 ? $this->getDate()->format('Y-m-d H:i:s')
                 : null,
             'user' =>$this->getUser()->getInArray(),
-            'project' => (($this->getType()->getLabel() == 'request_user_project')
-                or ($this->getType()->getLabel() == 'request_project'))
-                ? $this->getProject()->getInArray() : null,
-            'office' => (($this->getType()->getLabel() == 'request_office')
-                or ($this->getType()->getLabel() == 'request_project'))
-                ? $this->getOffice()->getInArray() : null,
-            'task' => ($this->getType()->getLabel() == 'request_assign_task')
-                ? $this->getTask()->getInArray() : null,
+            'project' => ($this->getProject())
+                ? $this->getProject()->getInArray()
+                : null,
             'message' => $this->getMessage(),
             'contact' => ($this->getUser())
                 ? $this->getContact()->getInArray()
@@ -439,6 +434,7 @@ class Request
             'QnAForum' => ($this->getQnAForum())
                 ? $this->getQnAForum()->getInArray()
                 : null,
+
         );
     }
 

@@ -686,6 +686,10 @@ zectranet_approve_QNA_membership_request:
     pattern: /QnA/request/approve/{request_id}
     defaults: { _controller: ZectranetBundle:User:approveQnAForumMembershipRequest }
 
+zectranet_approve_project_membership_request:
+    pattern: /Project/request/approve/{request_id}
+    defaults: { _controller: ZectranetBundle:User:approveProjectMembershipRequest }
+
 ############################### END QNA FORUM REQUESTS ###################################
 
 ############################### BEGIN PROJECT REQUESTS ###################################
