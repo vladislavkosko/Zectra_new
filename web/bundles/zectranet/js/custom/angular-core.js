@@ -103,12 +103,12 @@ Zectranet.directive('paginator', function () {
             $scope.paginator = {
                 'first': 0,
                 'current': 0,
-                'last': ($scope.$parent.tasks) ? ~~($scope.$parent.tasks.length / $scope.itemsPerPage) - 1 : 0
+                'last': ($scope.$parent.tasks) ? ~~($scope.$parent.tasks.length / $scope.itemsPerPage) : 0
             };
 
             $scope.$parent.$watch('tasks', function(){
                 if ($scope.$parent.tasks != null) {
-                    $scope.paginator.last = ~~($scope.$parent.tasks.length / $scope.itemsPerPage) - 1;
+                    $scope.paginator.last = ~~($scope.$parent.tasks.length / $scope.itemsPerPage);
                 }
             });
 
@@ -123,7 +123,7 @@ Zectranet.directive('paginator', function () {
             };
 
             $scope.next = function () {
-                if (paginator.current + 1 < paginator.last) {
+                if (paginator.current + 1 <= paginator.last) {
                     paginator.current++;
                     $scope.$parent.tablePages.from += $scope.itemsPerPage;
                     $scope.$parent.tablePages.to += $scope.itemsPerPage;
