@@ -144,6 +144,9 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                     $scope.tasks = response.Tasks;
                     $scope.taskStatuses = response.taskStatuses;
                     separationTasksByStatus(response.Tasks);
+                    $('.noclose').bind('click', function (e) {
+                        e.stopPropagation();
+                    });
                 }
             );
 
