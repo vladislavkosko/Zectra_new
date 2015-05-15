@@ -5,7 +5,12 @@
 <table ng-if="(tasks) && (tasks.length > 0)" class="table">
     <thead>
     <tr>
-        <th>ID</th>
+        <th>
+            <a href="">
+                <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[0] }">ID</span>
+                <span class="caret"></span>
+            </a>
+        </th>
         <th class="hidden-sm hidden-xs">Type</th>
         <th>Name</th>
         <th class="hidden-sm hidden-xs">Priority</th>

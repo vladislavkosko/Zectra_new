@@ -64,9 +64,14 @@ class TaskPost
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="edited", type="datetime")
+     * @ORM\Column(name="edited", type="datetime", nullable=true, options={"defaul" = null})
      */
     private $edited;
+
+    public function __construct() {
+        $this->posted = new \DateTime();
+        $this->edited = null;
+    }
 
     /**
      * Get inArray
@@ -286,8 +291,6 @@ class TaskPost
         $post->setEdited(null);
         $post->setMessage($message);
         $post->setTask($task);
-        $post->setPosted(new \DateTime());
-        $post->setEdited(new \DateTime());
 
         $em->persist($post);
         $em->flush();
