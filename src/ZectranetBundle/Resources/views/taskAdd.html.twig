@@ -20,8 +20,8 @@
 
                                     <div ng-messages="formTaskAdd.name.$error" style="color: red;">
                                         <span ng-message="pattern">format: "A-Z,a-z,0-9"</span>
-                                        <span ng-message="minlength">Min length of password is 5 characters</span>
-                                        <span ng-message="maxlength">Max length of password is 100 characters</span>
+                                        <span ng-message="minlength">Min length of name is 5 characters</span>
+                                        <span ng-message="maxlength">Max length of name is 100 characters</span>
                                     </div>
 
                                 </div>
@@ -60,8 +60,8 @@
                                     <textarea style="resize: vertical; height: 100px;" id="add_task_description" class="form-control" name="description" ng-model="taskModel.description" ng-minlength="5" ng-maxlength="5000" required></textarea>
 
                                     <div ng-messages="formTaskAdd.description.$error" style="color: red;">
-                                        <span ng-message="minlength">Min length of password is 5 characters</span>
-                                        <span ng-message="maxlength">Max length of password is 5000 characters</span>
+                                        <span ng-message="minlength">Min length of description is 5 characters</span>
+                                        <span ng-message="maxlength">Max length of description is 5000 characters</span>
                                     </div>
 
                                 </div>

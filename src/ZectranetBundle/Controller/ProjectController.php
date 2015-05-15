@@ -535,9 +535,9 @@ class ProjectController extends Controller
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return new JsonResponse(-1);
         }
-        /*$logMessage = 'User "' . $user->getUsername() . '" sent project request to user "'
+        $logMessage = 'User "' . $user->getUsername() . '" sent project request to user "'
             . $contact->getUsername() . '"';
-        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);*/
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 4);
         return new JsonResponse(1);
     }
 
@@ -567,9 +567,9 @@ class ProjectController extends Controller
             $this->get('zectranet.errorlogger')->registerException($ex, $from);
             return new JsonResponse(-1);
         }
-        /*$logMessage = 'User "' . $user->getUsername() . '" resent project request to user "'
+        $logMessage = 'User "' . $user->getUsername() . '" resent project request to user "'
             . $contact->getUsername() . '"';
-        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);*/
+        $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 4);
 
         return new JsonResponse(1);
     }
@@ -603,9 +603,9 @@ class ProjectController extends Controller
         }
         try {
             Project::removeUserFromProject($em, $contact->getId(), $project_id);
-            /*$logMessage = 'User "' . $user->getUsername() . '" remove user "'
+            $logMessage = 'User "' . $user->getUsername() . '" remove user "'
                 . $request->getUser()->getUsername() . '" from request grid';
-            $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 1);*/
+            $this->get('zectranet.projectlogger')->logEvent($logMessage, $project_id, 4);
             return new JsonResponse(1);
         } catch (\Exception $ex) {
             $from = 'class: Project, function: removeUserFromProject';

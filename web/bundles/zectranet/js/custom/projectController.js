@@ -1,173 +1,295 @@
-Zectranet.controller('ProjectController', ['$scope', '$http',
-    function($scope, $http) {
+Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
+    function ($scope, $http, $rootScope) {
 
-        $scope.urlGetProjectSettingInfo = JSON_URLS.urlGetProjectSettingInfo;
-        $scope.urlSendProjectRequest = JSON_URLS.urlSendProjectRequest;
-        $scope.urlDeleteProjectRequest = JSON_URLS.urlDeleteProjectRequest;
-        $scope.ReSendProjectRequest = JSON_URLS.ReSendProjectRequest;
-
-        $scope.HO_Contacts = [];
-        $scope.All_Contacts = [];
-        $scope.Project_Team = [];
-
-        $scope.HO_contact_message = '';
-        $scope.All_contact_message = '';
-        $scope.HO_Contacts_test = false;
-        $scope.All_Contacts_test = false;
-
-        $scope.QnALogsVisible = false;
-
-
-        $scope.QNASettingsErrors = {
-            'HO_Contact_message_Error' : false,
-            'All_Contact_message_Error' : false
-        };
-
-        setInterval( function() {
-            $scope.getProjectSettingInfo();
-        }, 60000);
-
-        $scope.getProjectSettingInfo = function () {
-            $http.get($scope.urlGetProjectSettingInfo)
-                .success(function (response) {
-                    $scope.HO_Contacts = response.HO_Contacts;
-                    $scope.All_Contacts = response.All_Contacts;
-                    $scope.Project_Team = response.Project_Team;
-
-                    //$scope.QnALogs = response.QnALogs;
-
-                    for(var i = 0; i < $scope.HO_Contacts.length;i++)
-                    {
-                        $scope.HO_Contacts[i].checked = false;
-                    }
-                    for(i = 0; i < $scope.All_Contacts.length;i++)
-                    {
-                        $scope.All_Contacts[i].checked = false;
-                    }
-                    for( i = 0; i < $scope.Project_Team.length;i++)
-                    {
-                        $scope.Project_Team[i].reSendVisibleButton = false;
-                        var one_minute = 1000 * 60;
-                        var now = new Date(response.timeNow);
-                        var timeRequest = new Date($scope.Project_Team[i].date);
-                        var difference_miliseconds = now - timeRequest;
-                        difference_miliseconds = difference_miliseconds / one_minute;
-
-                        if($scope.Project_Team[i].status.id == 1 && difference_miliseconds >= 0.5) {
-                            $scope.Project_Team[i].reSendVisibleButton = true;
-                        }
-                    }
-                }
-            );
-        };
-
-        $scope.contactChecked = function (type, index, array) {
-            for(var i = 0; i < array.length; i++)
-            {
-                array[i].checked = (i == index);
-            }
-            $scope.testClickableButton(type, array);
-        };
-
-
-        $scope.SendRequest = function (type, message, array)
+        // -------------------- Begin of Scope Variables --------------------\\
         {
-            if((type == 1) && (message == ''))
-            {
-                $scope.QNASettingsErrors.HO_Contact_message_Error = true;
-                $scope.QNASettingsErrors.All_Contact_message_Error = false;
-            } else if(type == 2 && message == '') {
-                $scope.QNASettingsErrors.HO_Contact_message_Error = false;
-                $scope.QNASettingsErrors.All_Contact_message_Error = true;
-            } else {
-                var user_id = 0;
-                for (var i = 0; i < array.length; i++) {
-                    if (array[i].checked) {
-                        user_id = array[i].id;
-                    }
-                }
+            $scope.currentProjectId = null;
+            $scope.epicStories = null;
 
-                $http.post($scope.urlSendProjectRequest, {'message': message, 'user_id': user_id})
+            $scope.projectMembers = null;
+            $scope.users = null;
+
+            $scope.projectOffices = null;
+            $scope.offices = null;
+
+            $scope.projectVersions = null;
+
+            $scope.projectVisible = null;
+
+            $scope.urlGetEpicStories = JSON_URLS.getEpicStories;
+            $scope.urlAddEpicStory = JSON_URLS.addEpicStory;
+            $scope.urlDeleteEpicStories = JSON_URLS.deleteEpicStories;
+            $scope.urlGetProjectMembers = JSON_URLS.getMembers;
+            $scope.urlSaveProjectMembers = JSON_URLS.saveMembers;
+            $scope.urlgetProjectOffices = JSON_URLS.getOffices;
+            $scope.urlAddOffices = JSON_URLS.addOffices;
+            $scope.urlRemoveOffices = JSON_URLS.removeOffices;
+            $scope.urlChangeVisibleState = JSON_URLS.changeVisibleState;
+            $scope.urlGetProjectVersions = JSON_URLS.getProjectVersions;
+            $scope.urlAddNewProjectVersion = JSON_URLS.addNewProjectVersion;
+            $scope.urlShowTask = JSON_URLS.showTask;
+        }
+        // -------------------- End of Scope Variables ----------------------\\
+
+
+
+        // -------------------- Begin of Project Functions --------------------\\
+        {
+            $scope.getEpicStories = function (project_id) {
+                $scope.currentProjectId = project_id;
+                $scope.promiseProject = $http
+                    .get($scope.urlGetEpicStories)
                     .success(function (response) {
-                        if (response == 1) {
-                            if (type == 1) {
-                                $scope.QNASettingsErrors.HO_Contact_message_Error = false;
-                                $('#send_request_by_HO_contacts').modal('hide');
-                            }
-                            else if (type == 2) {
-                                $scope.QNASettingsErrors.All_Contact_message_Error = false;
-                                $('#send_request_by_All_contacts').modal('hide');
-                            }
-                            $scope.getProjectSettingInfo();
-                        }
+                        $scope.epicStories = response.EpicStories;
                     }
                 );
-            }
-        };
+            };
 
-        $scope.testClickableButton = function (type,array) {
-            for(var i = 0; i < array.length; i++)
-            {
-                if(type == 1)
-                {
-                    if(array[i].checked)
-                    {
-                        $scope.HO_Contacts_test = true;
-                        break;
+            function prepareProjectVersions(versions) {
+                for (var i = 0; i < versions.length; i++) {
+                    versions[i].tasks = giveTasksHref(versions[i].tasks);
+                }
+                return versions;
+            }
+
+            $scope.getProjectVersions = function () {
+                $scope.versionPromise = $http
+                    .get($scope.urlGetProjectVersions)
+                    .success(function(response) {
+                        $scope.projectVersions = prepareProjectVersions(response.versions);
                     }
-                    else
-                    {
-                        $scope.HO_Contacts_test = false;
+                );
+            };
+
+            $scope.addNewVersion = function (version) {
+                if (version.name && version.description) {
+                    $http.post($scope.urlAddNewProjectVersion, { 'version': version })
+                        .success(function (response) {
+                           if (response.success) {
+                               $('#project_version_add').modal('hide');
+                               $scope.getProjectVersions();
+                           }
+                        }
+                    );
+                }
+            };
+
+            function assignTaskHref(task_id) {
+                return $scope.urlShowTask.replace('0', task_id);
+            }
+
+            function giveTasksHref (tasks) {
+                for (var i = 0; i < tasks.length; i++) {
+                    tasks[i].href = assignTaskHref(tasks[i].id);
+                    if (tasks[i].subtasks.length > 0) {
+                        tasks[i].subtasks = giveTasksHref(tasks[i].subtasks);
+                        tasks[i].subtasks = giveSubtaskIndex(tasks[i].subtasks);
                     }
                 }
-                if(type == 2)
-                {
-                    if(array[i].checked) {
-                        $scope.All_Contacts_test = true;
-                        break;
-                    } else {
-                        $scope.All_Contacts_test = false;
+                return tasks;
+            }
+
+            function giveSubtaskIndex(subtasks) {
+                for (var i = 0; i < subtasks.length; i++) {
+                    subtasks[i].subindex = i + 1;
+                }
+                return subtasks;
+            }
+
+            $scope.changeCurrentPage = function (project_id) {
+                $scope.urlCurrentProject = project_id;
+                $rootScope.initTaskController(project_id);
+                $rootScope.initChatController(project_id);
+            };
+
+            $scope.highlightCurrentEpicStory = function (epic_story_id) {
+                for (var i = 0; i < $scope.epicStories.length; i++) {
+                    $scope.epicStories[i].selected = ($scope.epicStories[i].id == epic_story_id);
+                }
+            };
+
+            $scope.removeHighlightFromEpicStories = function () {
+                for (var i = 0; i < $scope.epicStories.length; i++) {
+                    $scope.epicStories[i].selected = false;
+                }
+            };
+
+            $scope.addNewEpicStory = function (story) {
+                if (story.name && story.description) {
+                    $('#add_epic_story').modal('hide');
+                    $scope.promiseProject = $http
+                        .post($scope.urlAddEpicStory, {'story': story})
+                        .success(function (response) {
+                            $scope.epicStories.push(response.EpicStory);
+                        });
+                }
+            };
+            
+            $scope.deleteEpicStories = function () {
+                $('#delete_project_epic_story').modal('hide');
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.epicStories.length; i++) {
+                    if ($scope.epicStories[i].selected) {
+                        idsToRemove.push($scope.epicStories[i]);
                     }
                 }
+
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.epicStories.splice(findElementById(idsToRemove[i], $scope.epicStories), 1);
+                }
+
+                var ids = [];
+                for (i = 0; i < idsToRemove.length; i++) {
+                    ids.push(idsToRemove[i].id);
+                }
+
+                if (idsToRemove.length > 0) {
+                    $scope.promiseProject = $http
+                        .post($scope.urlDeleteEpicStories, { 'epicStories': ids });
+                }
+            };
+
+            $scope.changeVisibleState = function (visible) {
+                $scope.visiblePromise = $http
+                    .post($scope.urlChangeVisibleState, { 'visible': visible });
+            };
+
+            function findElementById(what, from) {
+                var index = -1;
+                for (var i = 0; i < from.length; i++) {
+                    if (what.id == from[i].id) {
+                        index = i;
+                        break;
+                    }
+                }
+                return index;
             }
-        };
+        }
+        // -------------------- End of Project Functions ----------------------\\
 
-        $scope.deleteProjectRequest = function (request_id) {
-            var urlDeleteProjectRequest = $scope.urlDeleteProjectRequest.replace('requestid', request_id);
-            $http.delete(urlDeleteProjectRequest)
-                .success(function (response) {
-                    switch (response)
-                    {
-                        case 0:
 
-                            break;
-                        case 1:
 
-                            break;
-                        case -1:
-
-                            break;
+        // -------------------- Begin of Single Users Manage --------------------\\
+        {
+            $scope.getMembers = function () {
+                $scope.membersPromise = $http
+                    .get($scope.urlGetProjectMembers)
+                    .success(function (response) {
+                        $scope.projectMembers = response.projectMembers;
+                        $scope.users = response.users;
                     }
-                    $scope.getProjectSettingInfo();
-                })
-        };
+                );
+            };
 
-        $scope.reSendRequest = function (request) {
-            $http.post($scope.ReSendProjectRequest,{
-                'id': request.id,
-                'user_id': request.user.id,
-                'message': request.message,
-                'request_status': request.status.id
-            })
-                .success(function (response) {
-                    if(response == 1)
-                    {
-                        $scope.getProjectSettingInfo();
+            $scope.addUsersToProject = function () {
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.users.length; i++) {
+                    if ($scope.users[i].selected) {
+                        $scope.users[i].request = 2;
+                        $scope.projectMembers.push($scope.users[i]);
+                        idsToRemove.push($scope.users[i]);
                     }
+                }
 
-                })
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.users.splice(findElementById(idsToRemove[i], $scope.users), 1);
+                }
 
-        };
+                if (idsToRemove.length > 0) {
+                    $scope.saveMembersState(1);
+                }
+            };
 
-    }
-]);
+            $scope.removeUsersFromProject = function () {
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.projectMembers.length; i++) {
+                    if ($scope.projectMembers[i].selected) {
+                        $scope.users.push($scope.projectMembers[i]);
+                        idsToRemove.push($scope.projectMembers[i]);
+                    }
+                }
+
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.projectMembers.splice(findElementById(idsToRemove[i], $scope.projectMembers), 1);
+                }
+
+                if (idsToRemove.length > 0) {
+                    $scope.saveMembersState(0);
+                }
+            };
+
+            $scope.saveMembersState = function (status) {
+                $scope.membersPromise = $http
+                    .post($scope.urlSaveProjectMembers, {'users': $scope.projectMembers, 'status': status})
+                    .success(function (response) {
+                    });
+            };
+
+            $scope.selectUser = function (user) {
+                if (!user.request) user.selected = !user.selected;
+            };
+        }
+        // -------------------- End of Single Users Manage ----------------------\\
+
+
+
+        // -------------------- Begin of Offices Manage --------------------\\
+        {
+            $scope.getOffices = function () {
+                $scope.officesPromise = $http
+                    .get($scope.urlgetProjectOffices)
+                    .success(function (response) {
+                        $scope.projectOffices = response.projectOffices;
+                        $scope.offices = response.offices;
+                    });
+            };
+
+            $scope.addOfficesToProject = function () {
+                var idsToAdd = [];
+                for (var i = 0; i < $scope.offices.length; i++) {
+                    if ($scope.offices[i].selected) {
+                        $scope.offices[i].request = 2;
+                        $scope.projectOffices.push($scope.offices[i]);
+                        idsToAdd.push($scope.offices[i]);
+                    }
+                }
+
+                for (i = 0; i < idsToAdd.length; i++) {
+                    $scope.offices.splice(findElementById(idsToAdd[i], $scope.offices), 1);
+                }
+
+                if (idsToAdd.length > 0) {
+                    $scope.promiseProject = $http
+                        .post($scope.urlAddOffices, { 'offices': idsToAdd });
+                }
+            };
+
+            $scope.removeOfficesFromProject = function () {
+                var idsToRemove = [];
+                for (var i = 0; i < $scope.projectOffices.length; i++) {
+                    if ($scope.projectOffices[i].selected) {
+                        $scope.offices.push($scope.projectOffices[i]);
+                        idsToRemove.push($scope.projectOffices[i]);
+                    }
+                }
+
+                for (i = 0; i < idsToRemove.length; i++) {
+                    $scope.projectOffices.splice(findElementById(idsToRemove[i], $scope.projectOffices), 1);
+                }
+
+                if (idsToRemove.length > 0) {
+                    $scope.promiseProject = $http
+                        .post($scope.urlRemoveOffices, { 'offices': idsToRemove });
+                }
+            };
+
+            $scope.selectOffice = function (office) {
+                if (!office.request) office.selected = !office.selected;
+            };
+        }
+        // -------------------- End of Offices Manage ----------------------\\
+
+        console.log('Project Controller was loaded...');
+    }]);
+
+

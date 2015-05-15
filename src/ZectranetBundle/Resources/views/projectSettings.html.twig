@@ -26,7 +26,7 @@
         </div>
     </div>
 
-    <div ng-controller="ProjectController">
+    <div ng-controller="ProjectSettingsController">
         <div ng-init="getProjectSettingInfo();">
             <div class="row">
                 <div class="col-md-3 " style="margin-top: 15px;">
@@ -132,7 +132,7 @@
                                 </tr>
                                 </thead>
                                 <tbody style="height: 200px; max-height: 400px; overflow-y: auto;">
-                                <tr ng-repeat="log in QnALogs">
+                                <tr ng-repeat="log in ProjectLogs">
                                     <td>[[ $index + 1 ]]</td>
                                     <td>[[ log.event ]]</td>
                                     <td>[[ log.date ]]</td>
@@ -236,7 +236,7 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bundles/zectranet/js/custom/projectController.js') }}"></script>
+    <script src="{{ asset('bundles/zectranet/js/custom/projectSettingsController.js') }}"></script>
     <script>
 
         JSON_URLS.urlGetProjectSettingInfo = "{{ path('zectranet_get_project_settings_info', { 'project_id': project.id}) }}";
