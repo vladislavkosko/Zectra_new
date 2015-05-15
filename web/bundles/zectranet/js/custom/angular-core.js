@@ -86,9 +86,15 @@ Zectranet.directive('highlight', ['$sce', function($sce) {
 
 Zectranet.directive('paginator', function () {
     return {
-        restrict: "AE",
+        restrict: 'AE',
+        templateUrl: JSON_URLS.asset + "bundles/zectranet/templates/paginator.html",
+        link: function (scope) {
 
-    }
+        }
+    };
+
+
+
 });
 
 Zectranet.directive("calendar", function() {
