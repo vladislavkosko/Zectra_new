@@ -1,5 +1,5 @@
-var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope', '$sce', '$paginator','$compile',
-    function($scope, $http, $rootScope, $sce, $paginator, $compile) {
+var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope', '$sce',
+    function($scope, $http, $rootScope, $sce) {
 
         // ------------ BEGIN OF SCOPE VARIABLES ------------ \\
         {
