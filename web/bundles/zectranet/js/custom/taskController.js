@@ -58,6 +58,19 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             $scope.getTasks();
         };
 
+        /*$scope.pages = 0;
+
+        $scope.preparePages = function (tasks, pages) {
+
+        };
+
+        $scope.paginationTask = function (first, last, current) {
+            if ((current >= first) && (current <= last))
+                return true;
+            else
+                return false;
+        };*/
+
         function prepareShowStatusLabel(tasks) {
             for (var i = 0; i < tasks.length; i++)
             {
