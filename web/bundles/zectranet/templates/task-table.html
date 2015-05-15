@@ -214,9 +214,9 @@
     </tr>
     </thead>
 
-    <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter"
-           ng-init="parentTask = task">
-    <tr ng-if="task.parentid == null">
+    <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter | range: tablePages.from: tablePages.to"
+           ng-init="parentTask = task;">
+    <tr>
 
         <td style="font-size: 10px;">
             <span style="vertical-align: middle;">
@@ -355,10 +355,14 @@
     </tbody>
 </table>
 
-<ul>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-</ul>
+<div class="row">
+    <div class="col-xs-12">
+        <div >
+            <paginator from="tablePages.from"
+                       to="tablePages.to"
+                       total="tasks.length"
+                       items-per-page="tablePages.itemsPerPage">
+            </paginator>
+        </div>
+    </div>
+</div>

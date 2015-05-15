@@ -58,18 +58,11 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
             $scope.getTasks();
         };
 
-        /*$scope.pages = 0;
-
-        $scope.preparePages = function (tasks, pages) {
-
+        $scope.tablePages = {
+            'from': 1,
+            'to': 20,
+            'itemsPerPage': 20
         };
-
-        $scope.paginationTask = function (first, last, current) {
-            if ((current >= first) && (current <= last))
-                return true;
-            else
-                return false;
-        };*/
 
         function prepareShowStatusLabel(tasks) {
             for (var i = 0; i < tasks.length; i++)
@@ -172,7 +165,14 @@ var taskController = Zectranet.controller('TaskController', ['$scope', '$http', 
                 }
                 $scope.tasks = tasks;
                 tasks = $scope.tasks;
-                $scope.tasks = prepareShowStatusLabel(tasks);
+                var newTasks = [];
+                for(i = 0; i < tasks.length; i++) {
+                    if (!tasks[i].parentid) {
+                        newTasks.push(tasks[i]);
+                    }
+                }
+
+                $scope.tasks = prepareShowStatusLabel(newTasks);
                 initUniquesCount();
                 calculateUniques($scope.tasks);
                 var status = {

@@ -8,6 +8,15 @@ var Zectranet = angular.module('Zectranet', ['ngRoute', 'ui.bootstrap', 'ngSanit
 	]
 );
 
+Zectranet.filter('range', function() {
+    return function(array, from, to) {
+        from--;
+        to = (array.length < to) ? array.length : to - 1;
+        array = array.slice(from, to);
+        return array;
+    };
+});
+
 Zectranet.directive('document', function() {
 	return {
 		restrict: 'E',
@@ -87,14 +96,60 @@ Zectranet.directive('highlight', ['$sce', function($sce) {
 Zectranet.directive('paginator', function () {
     return {
         restrict: 'AE',
+        scope: { from: '=', to: '=', total: '=', itemsPerPage: '=' },
         templateUrl: JSON_URLS.asset + "bundles/zectranet/templates/paginator.html",
-        link: function (scope) {
+        controller: function ($scope) {
 
+            $scope.paginator = {
+                'first': 0,
+                'current': 0,
+                'last': ~~($scope.total / $scope.itemsPerPage) - 1
+            };
+
+            $scope.$parent.$watch('tasks', function(){
+                if ($scope.$parent.tasks != null) {
+                    $scope.paginator.last = ~~($scope.$parent.tasks.length / $scope.itemsPerPage) - 1;
+                }
+            });
+
+            var paginator = $scope.paginator;
+
+            $scope.prev = function () {
+                if (paginator.current - 1 >= paginator.first) {
+                    paginator.current--;
+                    $scope.$parent.tablePages.from -= $scope.itemsPerPage;
+                    $scope.$parent.tablePages.to -= $scope.itemsPerPage;
+                }
+            };
+
+            $scope.next = function () {
+                if (paginator.current + 1 < paginator.last) {
+                    paginator.current++;
+                    $scope.$parent.tablePages.from += $scope.itemsPerPage;
+                    $scope.$parent.tablePages.to += $scope.itemsPerPage;
+                }
+            };
+
+            $scope.first = function () {
+                paginator.current = paginator.first;
+                $scope.$parent.tablePages.from = (paginator.current) * $scope.itemsPerPage + 1;
+                $scope.$parent.tablePages.to = (paginator.current + 1) * $scope.itemsPerPage;
+            };
+
+            $scope.last = function () {
+                paginator.current = paginator.last;
+                $scope.$parent.tablePages.from = (paginator.current) * $scope.itemsPerPage + 1;
+                $scope.$parent.tablePages.to= (paginator.current + 1) * $scope.itemsPerPage;
+            };
+            
+            $scope.goToPage = function (page) {
+                paginator.current = (page <= paginator.last && page >= paginator.first)
+                    ? page : paginator.current;
+                $scope.$parent.tablePages.from = (paginator.current) * $scope.itemsPerPage + 1;
+                $scope.$parent.tablePages.to= (paginator.current + 1) * $scope.itemsPerPage;
+            };
         }
     };
-
-
-
 });
 
 Zectranet.directive("calendar", function() {

@@ -1,0 +1,37 @@
+<nav>
+    <hr/>
+    <ul class="pagination">
+        <li>
+            <a href="#" ng-click="first();">
+                <span>&laquo;</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" ng-click="prev();">
+                <span>Previous</span>
+            </a>
+        </li>
+        <li><a href="#"
+               ng-if="(paginator.current - 1) >= paginator.first"
+               ng-click="goToPage(paginator.current - 1);"
+               ng-bind="paginator.current">
+
+        </a></li>
+        <li class="active"><a href="#" ng-bind="paginator.current + 1"></a></li>
+        <li><a href="#"
+               ng-if="(paginator.current + 1) <= paginator.last"
+               ng-click="goToPage(paginator.current + 1);"
+               ng-bind="paginator.current + 2">
+        </a></li>
+        <li>
+            <a href="#" ng-click="next();">
+                <span>Next</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" ng-click="last();">
+                <span>&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
