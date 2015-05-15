@@ -11,56 +11,33 @@
 
 
     <div class="row">
-
+        {% for user in users %}
         <div class="col-xs-12 publickMarker-all-member">
             <div class="col-xs-1">
-                <img class="img-responsive" src="{{ asset('') }}documents/{{ app.user.avatar }}">
+                <img class="img-responsive" src="{{ asset('') }}documents/{{ user.avatar }}">
             </div>
             <div class="col-xs-8 all-member-text">
-                <h4><a href="#">Nikita Lyashenko</a> </h4>
-                <span class="all-member-work">Ukraine StarLife Ltd </span>
+                <h4>
+                    <a href="{{ path('zectranet_user_page', {'user_id': user.id}) }}">
+                        {{ user.name ~ ' ' ~ user.surname ~ ' (' ~ user.username ~ ')' }}
+                    </a>
+                </h4>
+                {% if user.userInfo.skillsVisible %}
+                <span class="all-member-work">
+                    {{ user.userInfo.skills }}
+                </span>
+                {% endif %}
                 <br>
-                <span class="all-member-address text-muted">Ukraine, Kyiv Bla bla bl </span>
+                {% if user.userInfo.residenceCountryVisible %}
+                <span class="all-member-address text-muted">
+                    {{ user.userInfo.residenceCountry }}
+                </span>
+                {% endif %}
             </div>
             <div class="col-xs-12">
-                <hr style="margin: 8px 0px 0px 0px ;">
+                <hr style="margin: 8px 0 0 0;">
             </div>
         </div>
-
-        <div class="col-xs-12 publickMarker-all-member">
-            <div class="col-xs-1">
-                <img class="img-responsive" src="{{ asset('') }}documents/{{ app.user.avatar }}">
-            </div>
-            <div class="col-xs-8 all-member-text">
-                <h4><a href="#">Nikita Lyashenko</a> </h4>
-                <span class="all-member-work">Ukraine StarLife Ltd </span>
-                <br>
-                <span class="all-member-address text-muted">Ukraine, Kyiv Bla bla bl </span>
-            </div>
-            <div class="col-xs-12">
-                <hr style="margin: 8px 0px 0px 0px ;">
-            </div>
-        </div>
-
-        <div class="col-xs-12 publickMarker-all-member">
-            <div class="col-xs-1">
-                <img class="img-responsive" src="{{ asset('') }}documents/{{ app.user.avatar }}">
-            </div>
-            <div class="col-xs-8 all-member-text">
-                <h4><a href="#">Nikita Lyashenko</a> </h4>
-                <span class="all-member-work">Ukraine StarLife Ltd </span>
-                <br>
-                <span class="all-member-address text-muted">Ukraine, Kyiv Bla bla bl </span>
-            </div>
-            <div class="col-xs-12">
-                <hr style="margin: 8px 0px 0px 0px ;">
-            </div>
-        </div>
-
-
-
-
-
-
+        {% endfor %}
     </div>
 {% endblock %}

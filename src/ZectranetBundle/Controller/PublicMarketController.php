@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -33,6 +34,9 @@ class PublicMarketController extends Controller {
      * @return Response
      */
     public function getAllContactsAction() {
-        return $this->render('@Zectranet/publicMarketAllMembers.html.twig');
+        $allMembers = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findAll();
+        return $this->render('@Zectranet/publicMarketAllMembers.html.twig', array(
+            'users' => $allMembers
+        ));
     }
 }

@@ -16,7 +16,7 @@ class ProjectPostController extends Controller
      * @param $project_id
      * @return Response
      */
-    public function addPostAction(Request $request,$project_id)
+    public function addPostAction(Request $request, $project_id)
     {
         $post = json_decode($request->getContent(), true);
         $post = (object)$post;
