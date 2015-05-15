@@ -125,6 +125,7 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
                         $scope.editPostButtonVisible = false;
                         $scope.editedPost = null;
                         $scope.getConversation($scope.conversation.id);
+
                         $('#textarea-post').val('');
                     }
                 })
@@ -138,7 +139,7 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
                 var messages_user = [];
                 for(var i = 0; i < messages.length; i++)
                 {
-                    if($scope.conversation.user1.id == $scope.USER_ID)
+                    if($scope.conversation.user2.id == $scope.USER_ID)
                     {
                         messages_user.push(messages[i]);
                     }
