@@ -103,7 +103,7 @@ Zectranet.directive('paginator', function () {
             $scope.paginator = {
                 'first': 0,
                 'current': 0,
-                'last': ~~($scope.total / $scope.itemsPerPage) - 1
+                'last': ($scope.$parent.tasks) ? ~~($scope.$parent.tasks.length / $scope.itemsPerPage) - 1 : 0
             };
 
             $scope.$parent.$watch('tasks', function(){
