@@ -13,7 +13,7 @@
 {% block body %}
     <div ng-cloak>
         <!-- Begin of Task Info -->
-        <div ng-controller="TaskController" ng-init="getSingleTask();">
+        <div ng-controller="SingleTaskController" ng-init="getSingleTask();">
             <!-- Begin of Breadcrumbs -->
             <div class="row">
                 <ol class="breadcrumb" style="margin: 0 -30px; border-radius: 0 !important; padding: 12px 50px; background-color: #fbfbfb; ">
@@ -640,8 +640,6 @@
         JSON_URLS.getPosts = "{{ path('zectranet_task_get_post', { 'task_id': task.id }) }}";
         JSON_URLS.InsertScreenshotsInPHP = "{{ path('zectranet_InsertScreenshotsInPHP') }}";
         JSON_URLS.userPage = "{{ path('zectranet_user_page', {'user_id': 0}) }}";
-        JSON_URLS.saveTaskInfo = "{{ path('zectranet_task_edit_info', { 'task_id': task.id }) }}";
-        JSON_URLS.getSingleTask = "{{ path('zectranent_task_get_single', { 'task_id': task.id }) }}";
         TEMPPARAMS.TASK_ID = {{ task.id }};
         JSON_URLS.editPost = "{{ path('zectranet_task_post_edit', { 'post_id': 0 }) }}";
     </script>
