@@ -100,13 +100,7 @@
                                 <i class="fa fa-table fa-2x"></i>
                             </a>
                         </li>
-                        {#
-                        <li data-toggle="tooltip" data-placement="top" title="List view" role="presentation">
-                            <a data-toggle="tab" id="task-view-list" class="btn" href="#list-view" aria-controls="list-view" role="tab" aria-expanded="false">
-                                <i class="fa fa-list fa-2x"></i>
-                            </a>
-                        </li>
-                        #}
+
                         <li data-toggle="tooltip" data-placement="top" title="Agile view" role="presentation">
                             <a data-toggle="tab" id="task-view-agile"  class="btn" href="#agile-view" aria-controls="agile-view" role="tab" aria-expanded="false">
                                 <i class="fa fa-th fa-2x"></i>
@@ -122,14 +116,6 @@
                             <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-table-sprint.html') ~ '\'' }}"></ng-include>
                         </div>
                         <!-- End of Task Table View -->
-
-                        {#
-                        <!-- Begin of Task List View -->
-                        <div id="list-view" class="tab-pane fade" aria-labelledby="task-view-list" role="tabpanel">
-                            <ng-include src="{{ '\'' ~ asset('bundles/zectranet/templates/task-list.html') ~ '\'' }}"></ng-include>
-                        </div>
-                        <!-- End of Task List View -->
-                        #}
 
                         <!-- Begin of Task Agile View -->
                         <div id="agile-view" class="tab-pane fade" aria-labelledby="task-view-agile" role="tabpanel">
@@ -149,8 +135,6 @@
     <script>
         TEMPPARAMS.sprintID = {{ sprint.id }};
     </script>
-
-    <script src="{{ asset('bundles/zectranet/js/custom/Project/Controllers/project.sprint.controller.js') }}" type="text/javascript"></script>
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()

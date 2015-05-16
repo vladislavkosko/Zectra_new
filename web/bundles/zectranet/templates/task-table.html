@@ -2,358 +2,362 @@
     <h3 class="text-info text-center">Tasks will be displayed here</h3>
 </div>
 
-<table ng-if="(tasks) && (tasks.length > 0)" class="table">
-    <thead>
-    <tr>
-        <!----------------------------- ID ----------------------------->
-        <th class="dropdown noclose">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[0] }">ID</span>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu noclose" ng-init="orderByID = 2">
-                <li>
-                    <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = 'id'; orderByID = 1;"
-                       ng-class="{'btn-warning': orderByID == 1}">Sort A-Z</a></li>
-                <li>
-                    <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = '-id'; orderByID = 2;"
-                       ng-class="{'btn-warning': orderByID == 2}">Sort Z-A</a></li>
-                <li>
-                    <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = null; orderByID = 0;">
-                        Disable sort by this field
-                    </a>
-                </li>
-            </ul>
-        </th>
-
-        <th class="hidden-sm hidden-xs">
-            <span class="btn">Type</span>
-        </th>
-
-        <!--------------------------- NAME ----------------------------->
-        <th>
-            <span class="btn">Name</span>
-        </th>
-
-        <!------------------------- PRIORITY --------------------------->
-        <th class="hidden-sm hidden-xs dropdown">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[1] }">Priority</span>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu noclose" role="menu" ng-init="orderByPriority = 0">
-                <li>
-                    <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = 'priority.label'; orderByPriority = 1;"
-                       ng-class="{'btn-warning': orderByPriority == 1}">Sort A-Z</a></li>
-                <li>
-                    <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = '-priority.label'; orderByPriority = 2;"
-                       ng-class="{'btn-warning': orderByPriority == 2}">Sort Z-A</a></li>
-                <li>
-                    <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = null; orderByPriority = 0;">
-                        Disable sort by this field
-                    </a>
-                </li>
-                <li class="divider"></li>
-                <li style="padding: 3px 10px;">
-                    <button type="button" ng-click="selectAll(uniqueFilterOptions.priority, filterByPriority);" class="btn-link">Select All</button>
-                    <button type="button" ng-click="clearAll(uniqueFilterOptions.priority, filterByPriority);" class="btn-link">Clear All</button>
-                </li>
-                <li class="divider"></li>
-                <li ng-repeat="priority in uniqueFilterOptions.priority | filter: filterForPriority">
-                    <a style="cursor: pointer;" ng-click="priority.checked = !priority.checked; filterByPriority(priority);">
-                        <input type="checkbox" ng-model="priority.checked" class="checkbox checkbox-inline">
-                        [[ priority.priority.label ]]
-                    </a>
-                </li>
-            </ul>
-        </th>
-
-        <!-------------------------- STATUS ---------------------------->
-        <th class="hidden-sm hidden-xs dropdown noclose">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[2] }">Status</span>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu noclose" role="menu" ng-init="orderByStatus = 0">
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = 'status.label'; orderByStatus = 1;"
-                       ng-class="{'btn-warning': orderByStatus == 1}">Sort A-Z</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = '-status.label'; orderByStatus = 2;"
-                       ng-class="{'btn-warning': orderByStatus == 2}">Sort Z-A</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = null; orderByStatus = 0;">
-                    Disable sort by this field</a></li>
-                <li class="divider"></li>
-                <li style="padding: 3px 10px;">
-                    <button type="button" ng-click="selectAll(uniqueFilterOptions.status, filterByStatus);" class="btn-link">Select All</button>
-                    <button type="button" ng-click="clearAll(uniqueFilterOptions.status, filterByStatus);" class="btn-link">Clear All</button>
-                </li>
-                <li class="divider"></li>
-                <li ng-repeat="status in uniqueFilterOptions.status | filter: filterForStatus">
-                    <a style="cursor: pointer;" ng-click="status.checked = !status.checked; filterByStatus(status);">
-                        <input type="checkbox" ng-model="status.checked" class="checkbox checkbox-inline">
-                        [[ status.status.label ]]
-                    </a>
-                </li>
-            </ul>
-        </th>
-
-        <!------------------------- PROGRESS --------------------------->
-        <th class="hidden-xs dropdown noclose">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[3] }">Progress</span>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu noclose" role="menu" ng-init="orderByProgress = 0">
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = 'progress'; orderByProgress = 1;"
-                       ng-class="{'btn-warning': orderByProgress == 1}">Sort A-Z</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = '-progress'; orderByProgress = 2;"
-                       ng-class="{'btn-warning': orderByProgress == 2}">Sort Z-A</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = null; orderByProgress = 0;">Disable sort by this field</a></li>
-                <li class="divider"></li>
-                <li style="padding: 3px 10px;">
-                    <button type="button" ng-click="selectAll(uniqueFilterOptions.progress, filterByProgress);" class="btn-link">Select All</button>
-                    <button type="button" ng-click="clearAll(uniqueFilterOptions.progress, filterByProgress);" class="btn-link">Clear All</button>
-                </li>
-                <li class="divider"></li>
-                <li ng-repeat="progress in uniqueFilterOptions.progress | filter: filterForProgress">
-                    <a style="cursor: pointer;" ng-click="progress.checked = !progress.checked; filterByProgress(progress);">
-                        <input type="checkbox" ng-model="progress.checked" class="checkbox checkbox-inline">
-                        [[ progress.progress ]]%
-                    </a>
-                </li>
-            </ul>
-        </th>
-
-        <th class="hidden-sm hidden-xs">
-            <span class="btn">Estimated</span>
-        </th>
-
-        <!-------------------------- OWNER ----------------------------->
-        <th class="hidden-sm hidden-xs dropdown noclose">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[4] }">Owner</span>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu noclose" role="menu" ng-init="orderByOwner = 0">
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = 'owner.username'; orderByOwner = 1;"
-                       ng-class="{'btn-warning': orderByOwner == 1}">Sort A-Z</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = '-owner.username'; orderByOwner = 2;"
-                       ng-class="{'btn-warning': orderByOwner == 2}">Sort Z-A</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = null; orderByOwner = 0;">Disable sort by this field</a></li>
-                <li class="divider"></li>
-                <li style="padding: 3px 10px;">
-                    <button type="button" ng-click="selectAll(uniqueFilterOptions.owner, filterByOwner);" class="btn-link">Select All</button>
-                    <button type="button" ng-click="clearAll(uniqueFilterOptions.owner, filterByOwner);" class="btn-link">Clear All</button>
-                </li>
-                <li class="divider"></li>
-                <li ng-repeat="owner in uniqueFilterOptions.owner | filter: filterForOwner">
-                    <a style="cursor: pointer;" ng-click="owner.checked = !owner.checked; filterByOwner(owner);">
-                        <input type="checkbox" ng-model="owner.checked" class="checkbox checkbox-inline">
-                        [[ owner.owner.username ]]
-                    </a>
-                </li>
-            </ul>
-        </th>
-
-        <!------------------------ ASSIGNED --------------------------->
-        <th class="hidden-sm hidden-xs dropdown noclose">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[5] }">Assigned</span>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu noclose" role="menu" ng-init="orderByAssigned = 0">
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = 'assigned.username'; orderByAssigned = 1;"
-                       ng-class="{'btn-warning': orderByAssigned == 1}">Sort A-Z</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = '-assigned.username'; orderByAssigned = 2;"
-                       ng-class="{'btn-warning': orderByAssigned == 2}">Sort Z-A</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = null; orderByAssigned = 0;">Disable sort by this field</a></li>
-                <li class="divider"></li>
-                <li style="padding: 3px 10px;">
-                    <button type="button" ng-click="selectAll(uniqueFilterOptions.assigned, filterByAssigned);" class="btn-link">Select All</button>
-                    <button type="button" ng-click="clearAll(uniqueFilterOptions.assigned, filterByAssigned);" class="btn-link">Clear All</button>
-                </li>
-                <li class="divider"></li>
-                <li ng-repeat="assigned in uniqueFilterOptions.assigned | filter: filterForAssigned">
-                    <a style="cursor: pointer;" ng-click="assigned.checked = !assigned.checked; filterByAssigned(assigned);">
-                        <input type="checkbox" ng-model="assigned.checked" class="checkbox checkbox-inline">
-                        [[ assigned.assigned.username ]]
-                    </a>
-                </li>
-            </ul>
-        </th>
-
-        <!------------------------ SPRINT --------------------------->
-        <th class="hidden-xs dropdown noclose">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[6] }">Sprint</span>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu noclose" role="menu" ng-init="orderBySprint = 0" style="left:-85px !important;">
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = 'sprint.name'; orderBySprint = 1;"
-                       ng-class="{'btn-warning': orderBySprint == 1}">Sort A-Z</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = '-sprint.name'; orderBySprint = 2;"
-                       ng-class="{'btn-warning': orderBySprint == 2}">Sort Z-A</a></li>
-                <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = null; orderBySprint = 0;">Disable sort by this field</a></li>
-                <li class="divider"></li>
-                <li style="padding: 3px 10px;">
-                    <button type="button" ng-click="selectAll(uniqueFilterOptions.sprint, filterBySprint);" class="btn-link">Select All</button>
-                    <button type="button" ng-click="clearAll(uniqueFilterOptions.sprint, filterBySprint);" class="btn-link">Clear All</button>
-                </li>
-                <li class="divider"></li>
-                <li ng-repeat="sprint in uniqueFilterOptions.sprint | filter: filterForSprint">
-                    <a style="cursor: pointer;" ng-click="sprint.checked = !sprint.checked; filterBySprint(sprint);">
-                        <input type="checkbox" ng-model="sprint.checked" class="checkbox checkbox-inline">
-                        [[ sprint.sprint.name ]]
-                    </a>
-                </li>
-            </ul>
-        </th>
-
-        <th>
-            <span class="btn">Fun</span>
-        </th>
-    </tr>
-    </thead>
-
-    <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: execTaskFilter | range: tablePages.from: tablePages.to"
-           ng-init="parentTask = task;">
-    <tr>
-
-        <td style="font-size: 10px;">
-            <span style="vertical-align: middle;">
-                [[ task.id ]]
-            </span>
-        </td>
-
-        <td class="hidden-sm hidden-xs">
-            <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
-            <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
-            <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
-        </td>
-
-        <td>
-            <a ng-show="task.subtasks.length > 0" ng-click="task.expand = !task.expand" style="text-decoration: none; cursor: pointer;">
-                <i ng-hide="task.expand" class="fa fa-plus"></i>
-                <i ng-show="task.expand" class="fa fa-minus"></i>
-            </a>
-            <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[ taskHref ]]"
-               data-toggle="popover"
-               data-placement="top"
-               data-content="[[ task.description.substr(0, 250); ]]">
-                <span class="badge" style="background-color: blueviolet;" ng-if="task.newCommentsCount">[[task.newCommentsCount]]</span>
-                <span class="badge" style="background-color: cadetblue;" ng-if="(task.newSubCommentsCount) && (!task.expand)">[[task.newSubCommentsCount]]</span>
-                <span>[[ task.name ]]</span>
-            </a>
-        </td>
-        <td class="hidden-sm hidden-xs">
-            <div class="label label-default" style="background-color: [[ task.priority.color ]];">
-                [[ task.priority.label ]]
-            </div>
-        </td>
-        <td class="hidden-xs">
-
-            <select ng-if="(task.subtasks.length == 0) && (task.showStatusLabel)" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
-                <option ng-repeat="status in taskStatuses"
-                        style="color: [[ status.color ]]" value="[[ status.id ]]" ng-selected="status.id == task.status.id">
-                    [[status.label]]
-                </option>
-            </select>
-
-            <div ng-class="{'classHoverStatus': NeedClassHover(task)}" ng-if="!task.showStatusLabel" ng-click="task.showStatusLabel = clickOnStatus(task.showStatusLabel)" class="label label-default" style="background-color: [[ task.status.color ]];">
-                [[ task.status.label ]]
-            </div>
-        </td>
-        <td class="hidden-xs">[[ task.progress ]]%</td>
-        <td class="hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
-        <td class="hidden-sm hidden-xs">[[ task.owner.username ]]</td>
-        <td class="hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
-        <td class="hidden-xs">
-            <div ng-if="task.sprint.name != 'none'">
-                <a ng-init="task.sprint.href = assignSprintHref(task.sprint.officeid, task.sprint.id)"
-                   ng-href="[[task.sprint.href]]">
-                    [[task.sprint.name]]
+<div style="min-height: 250px !important;">
+    <table ng-if="(tasks) && (tasks.length > 0)" class="table" style="margin-bottom: 0;">
+        <thead>
+        <tr>
+            <!----------------------------- ID ----------------------------->
+            <th class="dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[0] }">ID</span>
+                    <span class="caret"></span>
                 </a>
-            </div>
-            <div ng-if="task.sprint.name == 'none'">none</div>
-        </td>
-        <td>
-            <div class="btn-group">
-                <button class="btn btn-default dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">
-                    <i class="fa fa-ellipsis-v"></i>
-                </button>
-                <ul class="dropdown-menu" role="menu" style="left:-100px !important;">
+                <ul class="dropdown-menu noclose" ng-init="orderByID = 2">
                     <li>
-                        <a data-toggle="modal" data-target="#add_new_subtask" ng-click="addParentIdToSubTask(task.id)" style="cursor: pointer"><i class="fa fa-code-fork"></i> Add new subtask</a>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = 'id'; orderByID = 1;"
+                           ng-class="{'btn-warning': orderByID == 1}">Sort A-Z</a></li>
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = '-id'; orderByID = 2;"
+                           ng-class="{'btn-warning': orderByID == 2}">Sort Z-A</a></li>
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = null; orderByID = 0;">
+                            Disable sort by this field
+                        </a>
                     </li>
-                    <li ng-if="task.sprint.name == 'none'">
-                        <a  data-toggle="modal" data-target="#add_task_to_sprint" ng-click="taskModel.id = task.id" style="cursor: pointer"><i class="fa fa-stack-overflow"></i> Add task to sprint</a>
-                    </li>
-                    <li ng-if="task.sprint.name != 'none'">
-                        <a ng-click="detachTaskFromSprint(task);" style="cursor: pointer;">
-                            <i class="fa fa-stack-overflow"></i>
-                            Detach task from sprint
+                </ul>
+            </th>
+
+            <th class="hidden-sm hidden-xs">
+                <span class="btn">Type</span>
+            </th>
+
+            <!--------------------------- NAME ----------------------------->
+            <th>
+                <span class="btn">Name</span>
+            </th>
+
+            <!------------------------- PRIORITY --------------------------->
+            <th class="hidden-sm hidden-xs dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[1] }">Priority</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu noclose" ng-init="orderByPriority = 0">
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = 'priority.label'; orderByPriority = 1;"
+                           ng-class="{'btn-warning': orderByPriority == 1}">Sort A-Z</a></li>
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = '-priority.label'; orderByPriority = 2;"
+                           ng-class="{'btn-warning': orderByPriority == 2}">Sort Z-A</a></li>
+                    <li>
+                        <a style="cursor: pointer;" ng-click="tasksOrderBy[1] = null; orderByPriority = 0;">
+                            Disable sort by this field
                         </a>
                     </li>
                     <li class="divider"></li>
-                    <li>
-                        <a data-toggle="modal" data-target="#delete_task" ng-click="addDeleteTaskId(task.id)" style="cursor: pointer"><span class="text-danger"><i class="fa fa-trash"></i> Delete task</span></a>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="" class="btn-link">Select All</button>
+                        <button type="button" ng-click="" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="(key, val) in filterFields.priority">
+                        <a style="cursor: pointer;" ng-click="filterByField('priority', key, !val.checked, 'label');"
+                           ng-style="{ 'text-decoration': (val.count > 0 || val.filtered ) ? 'none' : 'line-through' }">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': (val.checked && val.count > 0), 'fa-square-o': (!val.checked || val.count == 0) }"></i>
+                            <span ng-bind="key"></span>
+                        </a>
                     </li>
                 </ul>
-            </div>
-        </td>
-    </tr>
+            </th>
 
-    <tr ng-show="parentTask.expand" class="angular-show-transition-2-ms" ng-repeat="task in task.subtasks">
-        <td style="font-size: 10px;">
+            <!-------------------------- STATUS ---------------------------->
+            <th class="hidden-sm hidden-xs dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[2] }">Status</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByStatus = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = 'status.label'; orderByStatus = 1;"
+                           ng-class="{'btn-warning': orderByStatus == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = '-status.label'; orderByStatus = 2;"
+                           ng-class="{'btn-warning': orderByStatus == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[2] = null; orderByStatus = 0;">
+                        Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.status, filterByStatus);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.status, filterByStatus);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="(key, val) in filterFields.status">
+                        <a style="cursor: pointer;" ng-click="filterByField('status', key, !val.checked, 'label');">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                            <span ng-bind="key"></span>
+                        </a>
+                    </li>
+                </ul>
+            </th>
+
+            <!------------------------- PROGRESS --------------------------->
+            <th class="hidden-xs dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[3] }">Progress</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByProgress = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = 'progress'; orderByProgress = 1;"
+                           ng-class="{'btn-warning': orderByProgress == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = '-progress'; orderByProgress = 2;"
+                           ng-class="{'btn-warning': orderByProgress == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = null; orderByProgress = 0;">Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.progress, filterByProgress);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.progress, filterByProgress);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="(key, val) in filterFields.progress">
+                        <a style="cursor: pointer;" ng-click="filterByField('progress', key, !val.checked);">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                            <span ng-bind="key"></span>
+                        </a>
+                    </li>
+                </ul>
+            </th>
+
+            <th class="hidden-sm hidden-xs">
+                <span class="btn">Estimated</span>
+            </th>
+
+            <!-------------------------- OWNER ----------------------------->
+            <th class="hidden-sm hidden-xs dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[4] }">Owner</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByOwner = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = 'owner.username'; orderByOwner = 1;"
+                           ng-class="{'btn-warning': orderByOwner == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = '-owner.username'; orderByOwner = 2;"
+                           ng-class="{'btn-warning': orderByOwner == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = null; orderByOwner = 0;">Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.owner, filterByOwner);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.owner, filterByOwner);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="(key, val) in filterFields.owner">
+                        <a style="cursor: pointer;" ng-click="filterByField('owner', key, !val.checked, 'username');">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                            <span ng-bind="key"></span>
+                        </a>
+                    </li>
+                </ul>
+            </th>
+
+            <!------------------------ ASSIGNED --------------------------->
+            <th class="hidden-sm hidden-xs dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[5] }">Assigned</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu noclose" role="menu" ng-init="orderByAssigned = 0">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = 'assigned.username'; orderByAssigned = 1;"
+                           ng-class="{'btn-warning': orderByAssigned == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = '-assigned.username'; orderByAssigned = 2;"
+                           ng-class="{'btn-warning': orderByAssigned == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = null; orderByAssigned = 0;">Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.assigned, filterByAssigned);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.assigned, filterByAssigned);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="(key, val) in filterFields.assigned">
+                        <a style="cursor: pointer;" ng-click="filterByField('assigned', key, !val.checked, 'username');">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                            <span ng-bind="key"></span>
+                        </a>
+                    </li>
+                </ul>
+            </th>
+
+            <!------------------------ SPRINT --------------------------->
+            <th class="hidden-xs dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[6] }">Sprint</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu noclose" ng-init="orderBySprint = 0" style="left:-85px !important;">
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = 'sprint.name'; orderBySprint = 1;"
+                           ng-class="{'btn-warning': orderBySprint == 1}">Sort A-Z</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = '-sprint.name'; orderBySprint = 2;"
+                           ng-class="{'btn-warning': orderBySprint == 2}">Sort Z-A</a></li>
+                    <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = null; orderBySprint = 0;">Disable sort by this field</a></li>
+                    <li class="divider"></li>
+                    <li style="padding: 3px 10px;">
+                        <button type="button" ng-click="selectAll(uniqueFilterOptions.sprint, filterBySprint);" class="btn-link">Select All</button>
+                        <button type="button" ng-click="clearAll(uniqueFilterOptions.sprint, filterBySprint);" class="btn-link">Clear All</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-repeat="(key, val) in filterFields.sprint">
+                        <a style="cursor: pointer;" ng-click="filterByField('sprint', key, !val.checked, 'name');">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                            <span ng-bind="key"></span>
+                        </a>
+                    </li>
+                </ul>
+            </th>
+
+            <th>
+                <span class="btn">Fun</span>
+            </th>
+        </tr>
+        </thead>
+
+        <tbody ng-repeat="task in tasks | orderBy: tasksOrderBy | filter: filterFunc | range: tablePages.from: tablePages.to"
+               ng-init="parentTask = task;">
+        <tr>
+
+            <td style="font-size: 10px;">
+            <span style="vertical-align: middle;">
+                [[ task.id ]]
+            </span>
+            </td>
+
+            <td class="hidden-sm hidden-xs">
+                <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
+                <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
+                <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
+            </td>
+
+            <td>
+                <a ng-show="task.subtasks.length > 0" ng-click="task.expand = !task.expand" style="text-decoration: none; cursor: pointer;">
+                    <i ng-hide="task.expand" class="fa fa-plus"></i>
+                    <i ng-show="task.expand" class="fa fa-minus"></i>
+                </a>
+                <a ng-href="[[ task.href ]]"
+                   data-toggle="popover"
+                   data-placement="top"
+                   data-content="[[ task.description.substr(0, 250); ]]">
+                    <span class="badge" style="background-color: blueviolet;" ng-if="task.newCommentsCount">[[task.newCommentsCount]]</span>
+                    <span class="badge" style="background-color: cadetblue;" ng-if="(task.newSubCommentsCount) && (!task.expand)">[[task.newSubCommentsCount]]</span>
+                    <span>[[ task.name ]]</span>
+                </a>
+            </td>
+            <td class="hidden-sm hidden-xs">
+                <div class="label label-default" style="background-color: [[ task.priority.color ]];">
+                    [[ task.priority.label ]]
+                </div>
+            </td>
+            <td class="hidden-xs">
+
+                <select ng-if="(task.subtasks.length == 0) && (task.showStatusLabel)" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
+                    <option ng-repeat="status in taskStatuses"
+                            style="color: [[ status.color ]]" value="[[ status.id ]]" ng-selected="status.id == task.status.id">
+                        [[status.label]]
+                    </option>
+                </select>
+
+                <div ng-class="{'classHoverStatus': NeedClassHover(task)}" ng-if="!task.showStatusLabel" ng-click="task.showStatusLabel = clickOnStatus(task.showStatusLabel)" class="label label-default" style="background-color: [[ task.status.color ]];">
+                    [[ task.status.label ]]
+                </div>
+            </td>
+            <td class="hidden-xs">[[ task.progress ]]%</td>
+            <td class="hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
+            <td class="hidden-sm hidden-xs">[[ task.owner.username ]]</td>
+            <td class="hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
+            <td class="hidden-xs">
+                <div ng-if="task.sprint.name != 'none'">
+                    <a ng-href="[[task.sprintHref]]">
+                        [[task.sprint.name]]
+                    </a>
+                </div>
+                <div ng-if="task.sprint.name == 'none'">none</div>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-default dropdown-toggle" aria-expanded="false" data-toggle="dropdown" type="button">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" style="left:-100px !important;">
+                        <li>
+                            <a data-toggle="modal" data-target="#add_new_subtask" ng-click="addParentIdToSubTask(task.id)" style="cursor: pointer"><i class="fa fa-code-fork"></i> Add new subtask</a>
+                        </li>
+                        <li ng-if="task.sprint.name == 'none'">
+                            <a  data-toggle="modal" data-target="#add_task_to_sprint" ng-click="taskModel.id = task.id" style="cursor: pointer"><i class="fa fa-stack-overflow"></i> Add task to sprint</a>
+                        </li>
+                        <li ng-if="task.sprint.name != 'none'">
+                            <a ng-click="detachTaskFromSprint(task);" style="cursor: pointer;">
+                                <i class="fa fa-stack-overflow"></i>
+                                Detach task from sprint
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a data-toggle="modal" data-target="#delete_task" ng-click="addDeleteTaskId(task.id)" style="cursor: pointer"><span class="text-danger"><i class="fa fa-trash"></i> Delete task</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+
+        <tr ng-show="parentTask.expand" class="angular-show-transition-2-ms" ng-repeat="task in task.subtasks">
+            <td style="font-size: 10px;">
             <span style="vertical-align: middle;">
                 [[ parentTask.id ]].[[ $index + 1 ]]
             </span>
-        </td>
-        <td class="hidden-sm hidden-xs">
-            <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
-            <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
-            <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
-        </td>
-        <td>
-            <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
-               data-toggle="popover"
-               data-placement="top"
-               data-content="[[ task.description.substr(0, 250); ]]">
-                <span class="badge" style="background-color: blueviolet;" ng-if="task.newCommentsCount">[[task.newCommentsCount]]</span>
-                <span>[[ task.name ]]</span>
-            </a>
-        </td>
-        <td class="hidden-sm hidden-xs">
-            <div class="label label-default" style="background-color: [[ task.priority.color ]];">
-                [[ task.priority.label ]]
-            </div>
-        </td>
-        <td class="hidden-xs">
+            </td>
+            <td class="hidden-sm hidden-xs">
+                <span ng-if="task.type.label == 'task'" class="badge" style="background-color: #5cb85c; font-size: 10px;">[['t']]</span>
+                <span ng-if="task.type.label == 'bug'" class="badge" style="background-color: #d9534f; font-size: 10px;">[['b']]</span>
+                <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
+            </td>
+            <td>
+                <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
+                   data-toggle="popover"
+                   data-placement="top"
+                   data-content="[[ task.description.substr(0, 250); ]]">
+                    <span class="badge" style="background-color: blueviolet;" ng-if="task.newCommentsCount">[[task.newCommentsCount]]</span>
+                    <span>[[ task.name ]]</span>
+                </a>
+            </td>
+            <td class="hidden-sm hidden-xs">
+                <div class="label label-default" style="background-color: [[ task.priority.color ]];">
+                    [[ task.priority.label ]]
+                </div>
+            </td>
+            <td class="hidden-xs">
 
-            <select ng-if="task.showStatusLabel" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
-                <option ng-repeat="status in taskStatuses"
-                        style="color: [[ status.color ]]" value="[[ status.id ]]" ng-selected="status.id == task.status.id">
-                    [[status.label]]
-                </option>
-            </select>
+                <select ng-if="task.showStatusLabel" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
+                    <option ng-repeat="status in taskStatuses"
+                            style="color: [[ status.color ]]" value="[[ status.id ]]" ng-selected="status.id == task.status.id">
+                        [[status.label]]
+                    </option>
+                </select>
 
-            <div ng-class="{'classHoverStatus': NeedClassHover(task)}" ng-if="!task.showStatusLabel" ng-click="task.showStatusLabel = clickOnStatus(task.showStatusLabel)" class="label label-default" style="background-color: [[ task.status.color ]];">
-                [[ task.status.label ]]
-            </div>
-        </td>
-        <td class="hidden-xs">[[ task.progress ]]%</td>
-        <td class="hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
-        <td class="hidden-sm hidden-xs">[[ task.owner.username ]]</td>
-        <td class="hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
-        <td></td>
-        <td>
-            <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
-               ng-click="addDeleteTaskId(task.id)" style="width: 22px; height: 22px;">
-                <i class="fa fa-trash"></i>
-            </a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+                <div ng-class="{'classHoverStatus': NeedClassHover(task)}" ng-if="!task.showStatusLabel" ng-click="task.showStatusLabel = clickOnStatus(task.showStatusLabel)" class="label label-default" style="background-color: [[ task.status.color ]];">
+                    [[ task.status.label ]]
+                </div>
+            </td>
+            <td class="hidden-xs">[[ task.progress ]]%</td>
+            <td class="hidden-sm hidden-xs">[[ task.estimatedHours + ' h ' + task.estimatedMinutes + ' m' ]]</td>
+            <td class="hidden-sm hidden-xs">[[ task.owner.username ]]</td>
+            <td class="hidden-xs"><span ng-if="task.assigned">[[ task.assigned.username ]]</span></td>
+            <td></td>
+            <td>
+                <a class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete_task" href="#"
+                   ng-click="addDeleteTaskId(task.id)" style="width: 22px; height: 22px;">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
 
 <div class="row">
     <div class="col-xs-12">

@@ -191,13 +191,13 @@
     -webkit-user-select: none !important;
 }
 
-.noclose {
-    font-size: 10px;
-}
-
 .pointer-class {
     cursor: pointer;
     font-weight: normal;
+}
+
+.noclose {
+    font-size: 10px;
 }
 
 .width-300
