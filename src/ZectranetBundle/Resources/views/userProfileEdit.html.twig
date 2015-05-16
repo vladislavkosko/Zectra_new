@@ -20,6 +20,7 @@
                             </label>
 
                             <div ng-messages="formEditProfile.name.$error" style="color: red;">
+                                <span ng-message="required">Please, enter name</span>
                                 <span ng-message="pattern">format: "A-Z,a-z"</span>
                                 <span ng-message="minlength">Min length of this field is 2 characters</span>
                                 <span ng-message="maxlength">Max length of this field is 20 characters</span>
