@@ -506,8 +506,8 @@ div[data-role="editor-toolbar"] {
     border-radius: 3px;
 }
 .search-result-main h2{
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 .search-result-main span{
     margin-top: 5px;
@@ -526,11 +526,11 @@ div[data-role="editor-toolbar"] {
     margin-top: 10px;
 }
 .all-member-text{
-    margin-left: 0px;
+    margin-left: 0;
 
 }
 .all-member-text h4{
-    margin: 0px;
+    margin: 0;
 }
 .all-member-work .all-member-address{
     font-size: 13px;

@@ -1,5 +1,4 @@
 $(function(){
-    console.log('script.js was loadded');
     var allowable_extension = new Array(
         "doc", "docx", "xls", "xlsx",
         "jpeg", "gif", "png", "avi",

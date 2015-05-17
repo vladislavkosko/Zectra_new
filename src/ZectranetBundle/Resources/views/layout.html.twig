@@ -714,8 +714,14 @@
 
 
 {% block javascripts %}
+    <!--------------------------- JAVASCRIPT LIBRARIES --------------------------->
 	<script src="{{ asset('bundles/zectranet/js/Bootstrap/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/Bootstrap/ui-bootstrap-tpls-0.10.0.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/metisMenu.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/sb-admin-2.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/highlight.js') }}" type="text/javascript"></script>
 
+    <!--------------------------- ANGULAR LIB MODULES --------------------------->
 	<script src="{{ asset('bundles/zectranet/js/AngularJS/angular-route.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/AngularJS/angular-sanitize.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/AngularJS/angular-animate.min.js') }}" type="text/javascript"></script>
@@ -724,25 +730,26 @@
     <script src="{{ asset('bundles/zectranet/js/AngularJS/scrollglue.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/AngularJS/angular-messages.min.js') }}" type="text/javascript"></script>
 
-    <script src="{{ asset('bundles/zectranet/js/Bootstrap/ui-bootstrap-tpls-0.10.0.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('bundles/zectranet/js/metisMenu.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('bundles/zectranet/js/sb-admin-2.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('bundles/zectranet/js/highlight.js') }}" type="text/javascript"></script>
-
     <!------------------------------- CORE MODULE ------------------------------->
 	<script src="{{ asset('bundles/zectranet/js/custom/angular-core.js') }}" type="text/javascript"></script>
 
     <!------------------------------- DATA MODULE ------------------------------->
     <script src="{{ asset('bundles/zectranet/js/custom/Data/data.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/Data/Entities/data.tasks.table.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/custom/Project/Controllers/project.task.controller.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/custom/Data/Services/data.tasks.service.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/custom/Data/Services/data.tasksSort.service.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('bundles/zectranet/js/custom/Data/Services/data.tasksFilter.service.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/zectranet/js/custom/Data/Filters/data.tasksFilter.service.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/zectranet/js/custom/Data/Services/data.homeOffice.service.js') }}" type="text/javascript"></script>
 
     <!------------------------------ PROJECT MODULE ----------------------------->
     <script src="{{ asset('bundles/zectranet/js/custom/Project/project.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/Project/Controllers/project.singleTask.controller.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/zectranet/js/custom/Project/Controllers/project.sprint.controller.js') }}" type="text/javascript"></script>
+
+    <!---------------------------- HOME OFFICE MODULE --------------------------->
+    <script src="{{ asset('bundles/zectranet/js/custom/HomeOffice/homeOffice.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/zectranet/js/custom/HomeOffice/Controllers/homeOffice.controller.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('bundles/zectranet/js/custom/navigation.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('bundles/zectranet/js/lightbox.min.js') }}"></script>
@@ -750,7 +757,6 @@
     <script src="{{ asset('bundles/zectranet/js/text-redactor.js') }}"></script>
     <script src="{{ asset('bundles/zectranet/js/jquery.hotkeys.js') }}"></script>
     <script src="{{ asset('bundles/zectranet/js/Semantic/popup.js') }}"></script>
-    <script src="{{ asset('bundles/zectranet/js/google-code-prettify/prettify.js') }}"></script>
     <script type="text/javascript">
         $('#editor').wysiwyg();
     </script>

@@ -6,14 +6,12 @@
 
     function tasksFilterService() {
         var self = this;
-        this.fieldList = {
-            'priority': { }, 'status': { },
-            'progress': { }, 'owner': { },
-            'assigned': { }, 'sprint': { }
-        };
+
+        this.fieldList = clearFields();
 
         var tasksFilter = {
             'prepareTasks': prepareTasks,
+            'prepareSingleTask': prepareSingleTask,
             'addToUniueFields': addToUniueFields,
             'removeFromUniqueFields': removeFromUniqueFields,
             'filterByField': filterByField,
@@ -23,6 +21,7 @@
         return tasksFilter;
 
         function prepareTasks(tasks) {
+            self.fieldList = clearFields();
             for (var i = 0; i < tasks.length; i++) {
                 addToUniueFields(tasks[i]);
                 tasks[i].excludedBy = angular.isDefined(tasks[i].excludedBy)
@@ -33,6 +32,29 @@
                 'tasks': tasks,
                 'fieldList': self.fieldList
             };
+        }
+
+        function prepareSingleTask(task, isNew) {
+            if (!isNew) {
+                removeFromUniqueFields(task);
+            }
+            addToUniueFields(task);
+            task.excludedBy = angular.isDefined(task.excludedBy)
+                ? task.excludedBy
+                : null;
+            return {
+                'task': task,
+                'fieldList': self.fieldList
+            };
+        }
+
+        function clearFields() {
+            var fieldList = {
+                'priority': { }, 'status': { },
+                'progress': { }, 'owner': { },
+                'assigned': { }, 'sprint': { }
+            };
+            return fieldList;
         }
 
         function addToUniueFields(task) {

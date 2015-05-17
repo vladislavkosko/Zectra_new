@@ -14,7 +14,7 @@
 
         return tasksSort;
 
-        function calculateTasksInfo (tasks) {
+        function calculateTasksInfo(tasks) {
             tasks = giveTasksHref(tasks);
             var newTasks = [];
             for (var i = 0; i < tasks.length; i++) {

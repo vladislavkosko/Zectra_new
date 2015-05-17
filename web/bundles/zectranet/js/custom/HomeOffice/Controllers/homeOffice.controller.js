@@ -1,11 +1,13 @@
-Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
-    function($scope, $http, $rootScope) {
+(function () {
+    angular.module('Zectranet.homeOffice').controller('HomeOfficeController', HomeOfficeController);
 
-        $scope.urlGetContactList = JSON_URLS.getContactList;
-        $scope.urlGetConversation = JSON_URLS.getConversation;
-        $scope.urlSendConversationMessage = JSON_URLS.urlSendConversationMessage;
-        $scope.urlEditPost = JSON_URLS.urlEditPost;
+    HomeOfficeController.$inject = [
+        '$scope',
+        '$rootScope',
+        '$homeOffice'
+    ];
 
+    function HomeOfficeController($scope, $rootScope, $homeOffice) {
         $scope.conversation = null;
         $scope.conv_id = 0;
         $scope.asset = JSON_URLS.asset;
@@ -16,8 +18,7 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
         $scope.contactListPromise = null;
         $scope.conversationChatPromise = null;
         $scope.editPostButtonVisible = false;
-        $scope.homeOfficeInputs =
-        {
+        $scope.homeOfficeInputs = {
             'projectNameError': false
         };
         $scope.editedPost = null;
@@ -30,24 +31,24 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
         };
 
         $scope.getContactList = function (conv_id) {
-            $scope.contactListPromise = $http
-                .get($scope.urlGetContactList)
-                .success(function (response) {
-                    $rootScope.contacts = response;
-                    for(var i=0; i<$rootScope.contacts.length; i++) {
-                        $rootScope.contacts[i].checked = false;
+            $scope.contactListPromise = $homeOffice.getContactList(conv_id);
+            $scope.contactListPromise.then(function (response) {
+                response = response.data;
+                $rootScope.contacts = response;
+                for(var i = 0; i < $rootScope.contacts.length; i++) {
+                    $rootScope.contacts[i].checked = false;
+                }
+
+                if ($rootScope.contacts.length > 0) {
+                    if (conv_id != 0) {
+                        $scope.returnConv_id($rootScope.contacts, conv_id);
+                        $scope.getConversation($rootScope.contacts[$scope.conv_id].id);
                     }
-                    if ($rootScope.contacts.length > 0) {
-                        if (conv_id != 0)
-                        {
-                            $scope.returnConv_id($rootScope.contacts, conv_id);
-                            $scope.getConversation($rootScope.contacts[$scope.conv_id].id);
-                        }
-                        else
-                            $scope.getConversation($rootScope.contacts[0].id);
+                    else {
+                        $scope.getConversation($rootScope.contacts[0].id);
                     }
                 }
-            );
+            });
         };
 
         $scope.returnConv_id = function(contacts, conv_id)
@@ -73,62 +74,51 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
                     }
                 }
             }
-            $scope.conversationChatPromise = $http
-                .get($scope.urlGetConversation.replace('0' , id))
-                .success(function (response) {
-                    $scope.conversation = response;
-                }
-            );
+
+            $scope.conversationChatPromise = $homeOffice.getConversation(id);
+            $scope.conversationChatPromise.then(function(response) {
+                $scope.conversation = response.data;
+            });
         };
 
         $rootScope.dynamicChatRefresh = function (id) {
             $scope.getConversation(id);
         };
 
-        $scope.SendConversationMessage = function (message, conversation_id) {
-            if(message != '')
+        $scope.SendConversationMessage = function (message, conv_id, edit) {
+            if(message && message != '')
             {
                 $scope.homeOfficeInputs.messageError = false;
                 $scope.message = '';
-                $scope.conversationChatPromise = $http
-                    .post($scope.urlSendConversationMessage.replace('0',conversation_id), {'message': message})
-                    .success(function (response) {
-                        $scope.conversation.messages.push(response);
-                        /*setTimeout(function () {
-                            scrollChat();
-                            return false;
-                        }, 300);*/
-                    }
-                );
-            }
-
-        };
-
-        $scope.pressEnter = function ($event, message, conv_id) {
-            if ($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey && $scope.editPostButtonVisible == false) {
-                $event.preventDefault();
-                $scope.SendConversationMessage(message, conv_id);
-            }
-            else if($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey && $scope.editPostButtonVisible == true)
-            {
-                $scope.EditMessage($('#textarea-post').val());
-            }
-        };
-
-        $scope.EditMessage = function(message)
-        {
-            $http.post($scope.urlEditPost.replace('0',$scope.editedPost.id),{'message': message})
-                .success(function(response)
-                {
+                if (edit) {
+                    $scope.conversationChatPromise = $homeOffice.editConversationMessage(conv_id, message);
                     if(response == 1)
                     {
                         $scope.editPostButtonVisible = false;
                         $scope.editedPost = null;
                         $scope.getConversation($scope.conversation.id);
-
                         $('#textarea-post').val('');
                     }
-                })
+                } else {
+                    $scope.conversationChatPromise = $homeOffice.sendConversationMessage(conv_id, message);
+                    $scope.conversationChatPromise.then(function (response) {
+                        $scope.conversation.messages.push(response.data);
+                    });
+                }
+            }
+
+        };
+
+        $scope.pressEnter = function ($event, message, conv_id) {
+            if ($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey && $scope.editPostButtonVisible === false) {
+                $event.preventDefault();
+                $scope.SendConversationMessage(message, conv_id, false);
+            }
+
+            else if($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey && $scope.editPostButtonVisible === true)
+            {
+                $scope.SendConversationMessage($('#textarea-post').val(), $scope.editedPost.id, true);
+            }
         };
 
         $scope.testEditPostButtonVisible = function($event)
@@ -154,19 +144,14 @@ Zectranet.controller('HomeOfficeController', ['$scope', '$http', '$rootScope',
                 difference_ms = difference_ms / one_minute;
                 if(difference_ms <= 20)
                 {
-
                     $('#textarea-post').val(last_post.message);
                     $scope.editPostButtonVisible = true;
                     $scope.editedPost = last_post;
-
                 }
-                else{
+                else {
                     $('#textarea-post').val('Editing time are gone');
                 }
-
             }
-
-
         }
     }
-]);
+})();

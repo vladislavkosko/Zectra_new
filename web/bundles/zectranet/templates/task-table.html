@@ -8,17 +8,17 @@
         <tr>
             <!----------------------------- ID ----------------------------->
             <th class="dropdown">
-                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" style="padding-left: 0; padding-right: 0;">
                     <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[0] }">ID</span>
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu noclose" ng-init="orderByID = 2">
                     <li>
                         <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = 'id'; orderByID = 1;"
-                           ng-class="{'btn-warning': orderByID == 1}">Sort A-Z</a></li>
+                           ng-class="{ 'btn-warning': orderByID == 1 }">Sort A-Z</a></li>
                     <li>
                         <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = '-id'; orderByID = 2;"
-                           ng-class="{'btn-warning': orderByID == 2}">Sort Z-A</a></li>
+                           ng-class="{'btn-warning': orderByID == 2 }">Sort Z-A</a></li>
                     <li>
                         <a style="cursor: pointer;" ng-click="tasksOrderBy[0] = null; orderByID = 0;">
                             Disable sort by this field
@@ -33,7 +33,7 @@
 
             <!--------------------------- NAME ----------------------------->
             <th>
-                <span class="btn">Name</span>
+                <span class="btn" style="padding-left: 0; padding-right: 0;">Name</span>
             </th>
 
             <!------------------------- PRIORITY --------------------------->
@@ -61,7 +61,7 @@
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="(key, val) in filterFields.priority">
-                        <a style="cursor: pointer;" ng-click="filterByField('priority', key, !val.checked, 'label');"
+                        <a style="cursor: pointer;" ng-click="filterByField(val.filtered, val.count, 'priority', key, !val.checked, 'label');"
                            ng-style="{ 'text-decoration': (val.count > 0 || val.filtered ) ? 'none' : 'line-through' }">
                             <i class="fa" ng-class="{ 'fa-check-square-o': (val.checked && val.count > 0), 'fa-square-o': (!val.checked || val.count == 0) }"></i>
                             <span ng-bind="key"></span>
@@ -72,7 +72,7 @@
 
             <!-------------------------- STATUS ---------------------------->
             <th class="hidden-sm hidden-xs dropdown">
-                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" style="padding-left: 0; padding-right: 0;">
                     <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[2] }">Status</span>
                     <span class="caret"></span>
                 </a>
@@ -85,13 +85,14 @@
                         Disable sort by this field</a></li>
                     <li class="divider"></li>
                     <li style="padding: 3px 10px;">
-                        <button type="button" ng-click="selectAll(uniqueFilterOptions.status, filterByStatus);" class="btn-link">Select All</button>
-                        <button type="button" ng-click="clearAll(uniqueFilterOptions.status, filterByStatus);" class="btn-link">Clear All</button>
+                        <button type="button" ng-click="" class="btn-link">Select All</button>
+                        <button type="button" ng-click="" class="btn-link">Clear All</button>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="(key, val) in filterFields.status">
-                        <a style="cursor: pointer;" ng-click="filterByField('status', key, !val.checked, 'label');">
-                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                        <a style="cursor: pointer;" ng-click="filterByField(val.filtered, val.count, 'status', key, !val.checked, 'label');"
+                            ng-style="{ 'text-decoration': (val.count > 0 || val.filtered ) ? 'none' : 'line-through' }">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': (val.checked && val.count > 0), 'fa-square-o': (!val.checked || val.count == 0) }"></i>
                             <span ng-bind="key"></span>
                         </a>
                     </li>
@@ -100,7 +101,7 @@
 
             <!------------------------- PROGRESS --------------------------->
             <th class="hidden-xs dropdown">
-                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" style="padding-left: 0; padding-right: 0;">
                     <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[3] }">Progress</span>
                     <span class="caret"></span>
                 </a>
@@ -112,26 +113,27 @@
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[3] = null; orderByProgress = 0;">Disable sort by this field</a></li>
                     <li class="divider"></li>
                     <li style="padding: 3px 10px;">
-                        <button type="button" ng-click="selectAll(uniqueFilterOptions.progress, filterByProgress);" class="btn-link">Select All</button>
-                        <button type="button" ng-click="clearAll(uniqueFilterOptions.progress, filterByProgress);" class="btn-link">Clear All</button>
+                        <button type="button" ng-click="" class="btn-link">Select All</button>
+                        <button type="button" ng-click="" class="btn-link">Clear All</button>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="(key, val) in filterFields.progress">
-                        <a style="cursor: pointer;" ng-click="filterByField('progress', key, !val.checked);">
-                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
-                            <span ng-bind="key"></span>
+                        <a style="cursor: pointer;" ng-click="filterByField(val.filtered, val.count, 'progress', key, !val.checked);"
+                            ng-style="{ 'text-decoration': (val.count > 0 || val.filtered ) ? 'none' : 'line-through' }">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': (val.checked && val.count > 0), 'fa-square-o': (!val.checked || val.count == 0) }"></i>
+                            <span ng-bind="key + '%'"></span>
                         </a>
                     </li>
                 </ul>
             </th>
 
             <th class="hidden-sm hidden-xs">
-                <span class="btn">Estimated</span>
+                <span class="btn" style="padding-left: 0; padding-right: 0;">Estimated</span>
             </th>
 
             <!-------------------------- OWNER ----------------------------->
             <th class="hidden-sm hidden-xs dropdown">
-                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" style="padding-left: 0; padding-right: 0;">
                     <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[4] }">Owner</span>
                     <span class="caret"></span>
                 </a>
@@ -143,13 +145,14 @@
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[4] = null; orderByOwner = 0;">Disable sort by this field</a></li>
                     <li class="divider"></li>
                     <li style="padding: 3px 10px;">
-                        <button type="button" ng-click="selectAll(uniqueFilterOptions.owner, filterByOwner);" class="btn-link">Select All</button>
-                        <button type="button" ng-click="clearAll(uniqueFilterOptions.owner, filterByOwner);" class="btn-link">Clear All</button>
+                        <button type="button" ng-click="" class="btn-link">Select All</button>
+                        <button type="button" ng-click="" class="btn-link">Clear All</button>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="(key, val) in filterFields.owner">
-                        <a style="cursor: pointer;" ng-click="filterByField('owner', key, !val.checked, 'username');">
-                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                        <a style="cursor: pointer;" ng-click="filterByField(val.filtered, val.count, 'owner', key, !val.checked, 'username');"
+                            ng-style="{ 'text-decoration': (val.count > 0 || val.filtered ) ? 'none' : 'line-through' }">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': (val.checked && val.count > 0), 'fa-square-o': (!val.checked || val.count == 0) }"></i>
                             <span ng-bind="key"></span>
                         </a>
                     </li>
@@ -158,7 +161,7 @@
 
             <!------------------------ ASSIGNED --------------------------->
             <th class="hidden-sm hidden-xs dropdown">
-                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" style="padding-left: 0; padding-right: 0;">
                     <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[5] }">Assigned</span>
                     <span class="caret"></span>
                 </a>
@@ -170,13 +173,14 @@
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[5] = null; orderByAssigned = 0;">Disable sort by this field</a></li>
                     <li class="divider"></li>
                     <li style="padding: 3px 10px;">
-                        <button type="button" ng-click="selectAll(uniqueFilterOptions.assigned, filterByAssigned);" class="btn-link">Select All</button>
-                        <button type="button" ng-click="clearAll(uniqueFilterOptions.assigned, filterByAssigned);" class="btn-link">Clear All</button>
+                        <button type="button" ng-click="" class="btn-link">Select All</button>
+                        <button type="button" ng-click="" class="btn-link">Clear All</button>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="(key, val) in filterFields.assigned">
-                        <a style="cursor: pointer;" ng-click="filterByField('assigned', key, !val.checked, 'username');">
-                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                        <a style="cursor: pointer;" ng-click="filterByField(val.filtered, val.count, 'assigned', key, !val.checked, 'username');"
+                            ng-style="{ 'text-decoration': (val.count > 0 || val.filtered ) ? 'none' : 'line-through' }">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': (val.checked && val.count > 0), 'fa-square-o': (!val.checked || val.count == 0) }"></i>
                             <span ng-bind="key"></span>
                         </a>
                     </li>
@@ -185,7 +189,7 @@
 
             <!------------------------ SPRINT --------------------------->
             <th class="hidden-xs dropdown">
-                <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" style="padding-left: 0; padding-right: 0;">
                     <span ng-class="{ 'tasks-order-by-underline': tasksOrderBy[6] }">Sprint</span>
                     <span class="caret"></span>
                 </a>
@@ -197,13 +201,14 @@
                     <li><a style="cursor: pointer;" ng-click="tasksOrderBy[6] = null; orderBySprint = 0;">Disable sort by this field</a></li>
                     <li class="divider"></li>
                     <li style="padding: 3px 10px;">
-                        <button type="button" ng-click="selectAll(uniqueFilterOptions.sprint, filterBySprint);" class="btn-link">Select All</button>
-                        <button type="button" ng-click="clearAll(uniqueFilterOptions.sprint, filterBySprint);" class="btn-link">Clear All</button>
+                        <button type="button" ng-click="" class="btn-link">Select All</button>
+                        <button type="button" ng-click="" class="btn-link">Clear All</button>
                     </li>
                     <li class="divider"></li>
                     <li ng-repeat="(key, val) in filterFields.sprint">
-                        <a style="cursor: pointer;" ng-click="filterByField('sprint', key, !val.checked, 'name');">
-                            <i class="fa" ng-class="{ 'fa-check-square-o': val.checked, 'fa-square-o': !(val.checked) }"></i>
+                        <a style="cursor: pointer;" ng-click="filterByField(val.filtered, val.count, 'sprint', key, !val.checked, 'name');"
+                            ng-style="{ 'text-decoration': (val.count > 0 || val.filtered ) ? 'none' : 'line-through' }">
+                            <i class="fa" ng-class="{ 'fa-check-square-o': (val.checked && val.count > 0), 'fa-square-o': (!val.checked || val.count == 0) }"></i>
                             <span ng-bind="key"></span>
                         </a>
                     </li>
@@ -211,7 +216,7 @@
             </th>
 
             <th>
-                <span class="btn">Fun</span>
+                <span class="btn" style="padding-left: 0; padding-right: 0;">Fun</span>
             </th>
         </tr>
         </thead>

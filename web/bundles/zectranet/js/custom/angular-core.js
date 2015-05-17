@@ -8,7 +8,8 @@ var Zectranet = angular.module('Zectranet', [
     'luegg.directives',
     'ngMessages',
     'Zectranet.data',
-    'Zectranet.project'
+    'Zectranet.project',
+    'Zectranet.homeOffice'
 ])
 	.config(['$interpolateProvider', '$httpProvider',
 		function ($interpolateProvider, $httpProvider) {
