@@ -40,7 +40,10 @@ class ProjectController extends Controller
         $user = $this->getUser();
 
         if (!$user->getProjects()->contains($project)
-            && !$user->getOwnedProjects()->contains($project)) {
+            && !$user->getOwnedProjects()->contains($project)
+            || $project->getArchived())
+        {
+            return $this->redirectToRoute('zectranet_show_office', array('office_id' => $user->getHomeOfficeID()));
         }
 
         $this->get('zectranet.notifier')->clearNotificationsByProjectId($project_id);

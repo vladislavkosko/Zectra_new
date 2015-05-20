@@ -18,7 +18,8 @@
                                     <input type="text" id="add_subtask_name" class="form-control" ng-model="subtask.name" name="name" ng-minlength="5" ng-maxlength="100" pattern="[A-Za-z0-9 ]{1,}" required>
 
                                     <div ng-messages="formSubTaskAdd.name.$error" style="color: red;">
-                                        <span ng-message="pattern">format: "A-Z,a-z,0-9"</span>
+                                        <span ng-message="required">Please, enter name</span>
+                                        <span ng-message="pattern">Please match the requested format: "A-Z,a-z,0-9, "</span>
                                         <span ng-message="minlength">Min length of name is 5 characters</span>
                                         <span ng-message="maxlength">Max length of name is 100 characters</span>
                                     </div>
@@ -61,6 +62,7 @@
                                     <textarea style="resize: vertical;" id="add_subtask_description" class="form-control" ng-model="subtask.description" name="description" ng-minlength="5" ng-maxlength="5000" required></textarea>
 
                                     <div ng-messages="formSubTaskAdd.description.$error" style="color: red;">
+                                        <span ng-message="required">Please, enter description</span>
                                         <span ng-message="minlength">Min length of description is 5 characters</span>
                                         <span ng-message="maxlength">Max length of description is 5000 characters</span>
                                     </div>

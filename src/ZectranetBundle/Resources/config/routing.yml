@@ -26,8 +26,8 @@ zectranet_get_error_logs_errors:
     defaults: { _controller: ZectranetBundle:ErrorLog:getErrors }
 
 zectranet_signup:
-    path: /signup
-    defaults: { _controller: ZectranetBundle:Index:signup }
+    path: /signup/{errorValid}
+    defaults: { _controller: ZectranetBundle:Index:signup, errorValid: null }
 
 zectranet_signup_action:
     path: /signup_action

@@ -84,12 +84,16 @@ class IndexController extends Controller
 
     /**
      * @Route("/signup", name="zectranet_signup")
+     * @param null $errorValid
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function signupAction() {
+    public function signupAction($errorValid = null) {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_USER')) {
             return $this->redirectToRoute('zectranet_user_page');
         }
-        return $this->render('@Zectranet/register.html.twig');
+
+        return $this->render('@Zectranet/register.html.twig', array('errorValid' => $errorValid));
+
     }
 
     /**
@@ -112,6 +116,14 @@ class IndexController extends Controller
             'username' => $request->request->get('username'),
             'password' => $request->request->get('password'),
         );
+
+        $emailDB = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findOneBy(array('email' => $parameters['email']));
+        if ($emailDB != null)
+            return $this->redirectToRoute('zectranet_signup', array('errorValid' => 'errorEmail'));
+
+        $usernameDB = $this->getDoctrine()->getRepository('ZectranetBundle:User')->findOneBy(array('username' => $parameters['username']));
+        if ($usernameDB != null)
+            return $this->redirectToRoute('zectranet_signup', array('errorValid' => 'errorUsername'));
 
         $user = null;
         try{

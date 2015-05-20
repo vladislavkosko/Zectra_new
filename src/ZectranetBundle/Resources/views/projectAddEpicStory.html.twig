@@ -11,17 +11,21 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10 col-xs-offset-1 col-xs-10">
-                        <form class="form-horizontal">
+                        <form class="form-horizontal" name="formAddEpicStory">
                             <div class="form-group">
                                 <label for="add_epic_story_name">Epic Story Name:</label>
-                                <input type="text" id="add_epic_story_name" ng-model="story.name" pattern="[0-9A-Za-z -_()]{1,30}" class="form-control" required>
+                                <input type="text" class="form-control" id="add_epic_story_name" name="name" ng-model="story.name" pattern="[A-Za-z0-9 _]{1,}" ng-minlength="2" ng-maxlength="100" required>
                             </div>
-                            <div class="form-group">
-                                <label for="add_epic_story_description">Epic Story Description:</label>
-                                <input type="text" id="add_epic_story_description" ng-model="story.description" class="form-control" pattern="[0-9A-Za-z -_()]{1,50}" required>
+
+                            <div class="form-group" ng-messages="formAddEpicStory.name.$error" style="color: red;">
+                                <span ng-message="required">Please, enter name</span>
+                                <span ng-message="pattern">Alloved only A-Z, a-z, 0-9, underscore and space characters</span>
+                                <span ng-message="minlength">Mix length of this field is 2 characters</span>
+                                <span ng-message="maxlength">Max length of this field is 100 characters</span>
                             </div>
+
                             <div class="form-group">
-                                <a class="btn btn-primary" ng-click="addNewEpicStory(story)">Add</a>
+                                <a ng-disabled="formAddEpicStory.$invalid" class="btn btn-primary" ng-click="addNewEpicStory(story)">Add</a>
                                 <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</a>
                             </div>
                         </form>

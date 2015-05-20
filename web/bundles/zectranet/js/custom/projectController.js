@@ -115,7 +115,7 @@ Zectranet.controller('ProjectController', ['$scope', '$http', '$rootScope',
             };
 
             $scope.addNewEpicStory = function (story) {
-                if (story.name && story.description) {
+                if (story.name) {
                     $('#add_epic_story').modal('hide');
                     $scope.promiseProject = $http
                         .post($scope.urlAddEpicStory, {'story': story})

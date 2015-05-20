@@ -42,7 +42,7 @@
                                     <span class="input-group-addon">
                                         <i class="fa fa-edit"></i>
                                     </span>
-                                    <input class="form-control" name="name" pattern="[A-Za-z0-9 _]{1,}" ng-maxlength="100" ng-minlength="1" ng-model="projectName" type="text" required />
+                                    <input class="form-control" name="name" pattern="[A-Za-z0-9 _-]{1,}" ng-maxlength="100" ng-minlength="1" ng-model="projectName" type="text" required />
                                     <span class="input-group-addon" style="color: red;">
                                         <span ng-if="createProjectForm.name.$valid">
                                             <i style="color: lightseagreen;" class="fa fa-check"></i>
@@ -52,7 +52,7 @@
                             </div>
 
                             <div class="col-xs-12" ng-cloak ng-messages="createProjectForm.name.$error" style="color: red; margin-bottom: 10px;">
-                                <span ng-message="pattern">Alloved only A-Z, a-z, 0-9, underscore and space characters</span>
+                                <span ng-message="pattern">Alloved only A-Z, a-z, 0-9, underscore, hyphens and space characters</span>
                                 <span ng-message="maxlength">Max length of this field is 100 characters</span>
                             </div>
                         </div>

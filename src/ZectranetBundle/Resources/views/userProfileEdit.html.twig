@@ -16,14 +16,14 @@
                         <div style="margin-top: 15px;">
                             <label style="width: 100%;">
                                 Name:
-                                <input class="form-control" name="name" ng-init="name = '{{ user.name }}'" ng-model="name" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z]{1,}" required>
+                                <input class="form-control" name="name" ng-init="name = '{{ user.name }}'" ng-model="name" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z-]{1,}" required>
                             </label>
 
                             <div ng-messages="formEditProfile.name.$error" style="color: red;">
                                 <span ng-message="required">Please, enter name</span>
-                                <span ng-message="pattern">format: "A-Z,a-z"</span>
-                                <span ng-message="minlength">Min length of this field is 2 characters</span>
-                                <span ng-message="maxlength">Max length of this field is 20 characters</span>
+                                <span ng-message="pattern">Please match the requested format: "A-Z,a-z, -"</span>
+                                <span ng-message="minlength">Min length of name is 2 characters</span>
+                                <span ng-message="maxlength">Max length of name field is 20 characters</span>
                             </div>
 
                         </div>
@@ -129,9 +129,10 @@
                             </label>
 
                             <div ng-messages="formEditProfile.surname.$error" style="color: red;">
-                                <span ng-message="pattern">format: "A-Z,a-z"</span>
-                                <span ng-message="minlength">Min length of this field is 2 characters</span>
-                                <span ng-message="maxlength">Max length of this field is 20 characters</span>
+                                <span ng-message="required">Please, enter surname</span>
+                                <span ng-message="pattern">Please match the requested format: "A-Z,a-z"</span>
+                                <span ng-message="minlength">Min length of surname is 2 characters</span>
+                                <span ng-message="maxlength">Max length of surname is 20 characters</span>
                             </div>
 
                         </div>
@@ -146,8 +147,8 @@
 
                                     <div ng-messages="formEditProfile.residenceCountry.$error" style="color: red;">
                                         <span ng-message="pattern">format: "A-Z,a-z, "</span>
-                                        <span ng-message="minlength">Min length of this field is 4 characters</span>
-                                        <span ng-message="maxlength">Max length of this field is 20 characters</span>
+                                        <span ng-message="minlength">Min length of country is 4 characters</span>
+                                        <span ng-message="maxlength">Max length of country is 20 characters</span>
                                     </div>
 
                                 </div>

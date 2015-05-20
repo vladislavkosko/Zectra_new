@@ -19,13 +19,18 @@
 
                 <form role="form" name="formRegistration" id="signup_form" action="{{ path('zectranet_signup_action') }}" method="post">
                     <br/>
-                    {% if zm is defined %}
+                    {% if errorValid != null %}
                         <!-- Error message -->
                         <div class="alert alert-danger alert-dismissible fade in" role="alert">
                             <button class="close" aria-label="Close" data-dismiss="alert" type="button">
                                 <span aria-hidden="true">×</span>
                             </button>
-                            {{ zm }}
+                            {% if errorValid == 'errorEmail' %}
+                                Email is already in use
+
+                            {% elseif errorValid == 'errorUsername' %}
+                                Username is already in use
+                            {% endif %}
                         </div>
                         <!-- -->
                     {% endif %}
@@ -33,15 +38,17 @@
 
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <input type="text" class="form-control name" placeholder="Name" name="name" ng-model="name" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z]{1,}" required/>
-                        <span ng-if="formRegistration.name.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <input type="text" class="form-control name" placeholder="Name" name="name" ng-model="name" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z-]{1,}" required/>
+                        <span ng-if="formRegistration.name.$error.required" class="input-group-addon" style="color: red; font-size: 0.8em;">
+                            <i class="fa fa-asterisk"></i>
+                        </span>
                         <span ng-if="formRegistration.name.$valid" class="input-group-addon">
                             <i style="color: greenyellow;" class="fa fa-check"></i>
                         </span>
                     </div>
 
                     <div ng-messages="formRegistration.name.$error" style="color: red;">
-                        <span ng-message="pattern">format: "A-Z,a-z"</span>
+                        <span ng-message="pattern">Please match the requested format: "A-Z,a-z, -"</span>
                         <span ng-message="minlength">Min length of this field is 2 characters</span>
                         <span ng-message="maxlength">Max length of this field is 20 characters</span>
                     </div>
@@ -49,14 +56,16 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
                         <input type="text" class="form-control surname" placeholder="Surname" name="surname" ng-model="surname" ng-minlength="2" ng-maxlength="20" pattern="[A-Za-z]{1,}" required/>
-                        <span ng-if="formRegistration.surname.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.surname.$error.required" class="input-group-addon" style="color: red; font-size: 0.8em;">
+                            <i class="fa fa-asterisk"></i>
+                        </span>
                         <span ng-if="formRegistration.surname.$valid" class="input-group-addon">
                             <i style="color: greenyellow;" class="fa fa-check"></i>
                         </span>
                     </div>
 
                     <div ng-messages="formRegistration.surname.$error" style="color: red;">
-                        <span ng-message="pattern">format: "A-Z,a-z"</span>
+                        <span ng-message="pattern">Please match the requested format: "A-Z,a-z"</span>
                         <span ng-message="minlength">Min length of this field is 2 characters</span>
                         <span ng-message="maxlength">Max length of this field is 20 characters</span>
                     </div>
@@ -64,7 +73,9 @@
                     <div class="form-group input-group">
                         <span style="font-size: 10px; font-weight: bold;" class="input-group-addon">@</span>
                         <input type="email" class="form-control email" placeholder="Email" name="email" ng-model="email" required/>
-                        <span ng-if="formRegistration.email.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.email.$error.required" class="input-group-addon" style="color: red; font-size: 0.8em;">
+                            <i class="fa fa-asterisk"></i>
+                        </span>
                         <span ng-if="formRegistration.email.$valid" class="input-group-addon">
                             <i style="color: greenyellow;" class="fa fa-check"></i>
                         </span>
@@ -77,14 +88,16 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
                         <input type="text" class="form-control username" placeholder="Username" name="username" ng-model="username" ng-minlength="3" ng-maxlength="16" pattern="[A-Za-z0-9_]{1,}" required/>
-                        <span ng-if="formRegistration.username.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.username.$error.required" class="input-group-addon" style="color: red; font-size: 0.8em;">
+                            <i class="fa fa-asterisk"></i>
+                        </span>
                         <span ng-if="formRegistration.username.$valid" class="input-group-addon">
                             <i style="color: greenyellow;" class="fa fa-check"></i>
                         </span>
                     </div>
 
                     <div ng-messages="formRegistration.username.$error" style="color: red;">
-                        <span ng-message="pattern">format: "A-Z,a-z,0-9,_"</span>
+                        <span ng-message="pattern">Please match the requested format: "A-Z,a-z,0-9,_"</span>
                         <span ng-message="minlength">Min length of this field is 3 characters</span>
                         <span ng-message="maxlength">Max length of this field is 16 characters</span>
                     </div>
@@ -92,14 +105,16 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                         <input type="password" class="form-control password" id="pass" placeholder="Password" name="password" ng-model="password" ng-minlength="5" ng-maxlength="30" pattern="[A-Za-z0-9]{1,}" required/>
-                        <span ng-if="formRegistration.password.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.password.$error.required" class="input-group-addon" style="color: red; font-size: 0.8em;">
+                            <i class="fa fa-asterisk"></i>
+                        </span>
                         <span ng-if="formRegistration.password.$valid" class="input-group-addon">
                             <i style="color: greenyellow;" class="fa fa-check"></i>
                         </span>
                     </div>
 
                     <div ng-messages="formRegistration.password.$error" style="color: red;">
-                        <span ng-message="pattern">format: "A-Z,a-z,0-9"</span>
+                        <span ng-message="pattern">Please match the requested format: "A-Z,a-z,0-9"</span>
                         <span ng-message="minlength">Min length of password is 5 characters</span>
                         <span ng-message="maxlength">Max length of password is 30 characters</span>
                     </div>
@@ -107,7 +122,9 @@
                     <div class="form-group input-group">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                         <input type="password" class="form-control password" id="repeatpass" placeholder="Repeat password" name="repeatPassword" ng-model="repeatPassword" ng-minlength="5" ng-maxlength="30" pattern="[A-Za-z0-9]{1,}" required/>
-                        <span ng-if="formRegistration.repeatPassword.$error.required" class="input-group-addon" style="color: red;">*</span>
+                        <span ng-if="formRegistration.repeatPassword.$error.required" class="input-group-addon" style="color: red; font-size: 0.8em;">
+                            <i class="fa fa-asterisk"></i>
+                        </span>
                         <span ng-if="formRegistration.repeatPassword.$valid" class="input-group-addon">
                             <i style="color: greenyellow;" class="fa fa-check"></i>
                         </span>
