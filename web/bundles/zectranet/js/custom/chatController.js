@@ -1,5 +1,5 @@
-var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope', '$sce',
-    function($scope, $http, $rootScope, $sce) {
+var chatController = Zectranet.controller('ChatController', ['$scope', '$http', '$rootScope', '$sce', 'timeService',
+    function($scope, $http, $rootScope, $sce, timeService) {
 
         // ------------ BEGIN OF SCOPE VARIABLES ------------ \\
         {
@@ -162,7 +162,7 @@ var chatController = Zectranet.controller('ChatController', ['$scope', '$http', 
                }
                 var last_post = user_posts[user_posts.length-1];
                 var one_minute = 1000 * 60;
-                var now = new Date();
+                var now = timeService.getTime();
                 now = now.getTime();
                 var timepost = new Date(last_post.posted);
                 timepost = timepost.getTime();

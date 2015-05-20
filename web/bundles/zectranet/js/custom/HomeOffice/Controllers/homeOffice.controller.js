@@ -4,10 +4,11 @@
     HomeOfficeController.$inject = [
         '$scope',
         '$rootScope',
-        '$homeOffice'
+        '$homeOffice',
+        'timeService'
     ];
 
-    function HomeOfficeController($scope, $rootScope, $homeOffice) {
+    function HomeOfficeController($scope, $rootScope, $homeOffice, timeService) {
         $scope.conversation = null;
         $scope.conv_id = 0;
         $scope.asset = JSON_URLS.asset;
@@ -136,7 +137,7 @@
                 }
                 var last_post = messages_user[messages_user.length-1];
                 var one_minute = 1000 * 60;
-                var now = new Date();
+                var now = timeService.getTime();
                 now = now.getTime();
                 var timepost = new Date(last_post.posted);
                 timepost = timepost.getTime();
