@@ -93,13 +93,19 @@
                 $scope.message = '';
                 if (edit) {
                     $scope.conversationChatPromise = $homeOffice.editConversationMessage(conv_id, message);
-                    if(response == 1)
-                    {
-                        $scope.editPostButtonVisible = false;
-                        $scope.editedPost = null;
-                        $scope.getConversation($scope.conversation.id);
-                        $('#textarea-post').val('');
-                    }
+                    $scope.conversationChatPromise.then(function (response) {
+                        response = response.data;
+                        if(response == 1)
+                        {
+                            $scope.editPostButtonVisible = false;
+                            $scope.editedPost = null;
+                            var contact_id = ($scope.conversation.user1.id == $scope.USER_ID)
+                                ? $scope.conversation.user2.id
+                                : $scope.conversation.user1.id;
+                            $scope.getConversation(contact_id);
+                            $('#textarea-post').val('');
+                        }
+                    });
                 } else {
                     $scope.conversationChatPromise = $homeOffice.sendConversationMessage(conv_id, message);
                     $scope.conversationChatPromise.then(function (response) {
@@ -118,20 +124,18 @@
 
             else if($event.keyCode == '13' && !$event.shiftKey && !$event.ctrlKey && $scope.editPostButtonVisible === true)
             {
+                $event.preventDefault();
                 $scope.SendConversationMessage($('#textarea-post').val(), $scope.editedPost.id, true);
             }
-        };
 
-        $scope.testEditPostButtonVisible = function($event)
-        {
             if($event.keyCode == '38' && !$event.shiftKey && !$event.ctrlKey && $('#textarea-post').val() == '')
             {
                 var messages = $scope.conversation.messages;
                 var messages_user = [];
                 for(var i = 0; i < messages.length; i++)
                 {
-                    if($scope.conversation.user2.id == $scope.USER_ID)
-                    {
+                    if(($scope.conversation.user1.id == $scope.USER_ID)
+                        || ($scope.conversation.user2.id == $scope.USER_ID)) {
                         messages_user.push(messages[i]);
                     }
                 }
@@ -153,6 +157,6 @@
                     $('#textarea-post').val('Editing time are gone');
                 }
             }
-        }
+        };
     }
 })();

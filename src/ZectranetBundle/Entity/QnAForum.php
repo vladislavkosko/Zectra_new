@@ -245,9 +245,14 @@ class QnAForum
     public static function searchQnAForums($forums, $slug, $limit = null) {
         $threads = array();
         $posts = array();
+        $jsonForums = array();
         $iterations = $limit;
         /** @var QnAForum $forum */
         foreach ($forums as $forum) {
+            $matchesLength = preg_match('/' . $slug . '/mi', $forum->getName(), $matches);
+            if ($matchesLength > 0) {
+                $jsonForums[] = $forum->getInArray();
+            }
             /** @var QnAThread $thread */
             foreach ($forum->getThreads() as $thread) {
                 $matchesLength = preg_match('/' . $slug . '/mi', $thread->getTitle(), $matches);
@@ -270,6 +275,7 @@ class QnAForum
             }
         }
         return array(
+            'forums' => $jsonForums,
             'threads' => $threads,
             'posts' => $posts,
         );

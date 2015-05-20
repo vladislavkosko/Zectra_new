@@ -281,9 +281,14 @@ class HFForum
     public static function searchHFForums($forums, $slug, $limit = null) {
         $threads = array();
         $posts = array();
+        $jsonForums = array();
         $iterations = $limit;
         /** @var HFForum $forum */
         foreach ($forums as $forum) {
+            $matchesLength = preg_match('/' . $slug . '/mi', $forum->getName(), $matches);
+            if ($matchesLength > 0) {
+                $jsonForums[] = $forum->getInArray();
+            }
             /** @var HFHeader $header */
             foreach ($forum->getHeaders() as $header) {
                 /** @var HFSubHeader $sub */
@@ -315,6 +320,7 @@ class HFForum
             }
         }
         return array(
+            'forums' => $jsonForums,
             'threads' => $threads,
             'posts' => $posts,
         );

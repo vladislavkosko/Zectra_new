@@ -25,6 +25,10 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
             .replace('1', 'threadID' );
         $scope.urlMiniSearchProject = JSON_URLS.urlMiniSearchProject
             .replace('0', 'projectID' );
+        $scope.urlMiniSearchQnAForum = JSON_URLS.urlMiniSearchQnAForum
+            .replace('0', 'projectID' );
+        $scope.urlMiniSearchHeaderForum = JSON_URLS.urlMiniSearchHeaderForum
+            .replace('0', 'projectID' );
         $scope.urlMiniSearchTask = JSON_URLS.urlMiniSearchTask
             .replace('0', 'taskID' );
 
@@ -47,6 +51,12 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
                     .replace('conv_id', (homeOffice[i].contact_id));
             }
 
+            var headerForums = results.HFForums.forums;
+            for( i = 0; i < headerForums.length; i++ ) {
+                headerForums[i].href = $scope.urlMiniSearchHeaderForum
+                    .replace('projectID', headerForums[i].id);
+            }
+
             var headerThreads = results.HFForums.threads;
             for( i = 0;i < headerThreads.length;i++ ) {
                 headerThreads[i].href = $scope.urlMiniSearchThread
@@ -63,6 +73,12 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
                     .replace('id',headerPosts[i].threadID);
             }
 
+            var QnAForums = results.QnAForums.forums;
+            for( i = 0; i < QnAForums.length; i++ ) {
+                QnAForums[i].href = $scope.urlMiniSearchQnAForum
+                    .replace('projectID', QnAForums[i].id);
+            }
+
             var QnAThreads = results.QnAForums.threads;
             for( i = 0;i < QnAThreads.length;i++ ) {
                 QnAThreads[i].href = $scope.urlMiniSearchQnaThread
@@ -75,6 +91,12 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
                 QnAPosts[i].href = $scope.urlMiniSearchQnaThread
                     .replace('forumID', QnAPosts[i].forumID)
                     .replace('threadID', QnAPosts[i].threadID);
+            }
+
+            var projects = results.Projects.projects;
+            for( i = 0; i < projects.length; i++ ) {
+                projects[i].href = $scope.urlMiniSearchProject
+                    .replace('projectID', projects[i].id);
             }
 
             var projectPosts = results.Projects.posts;
@@ -103,9 +125,9 @@ Zectranet.controller('SearchController', ['$scope', '$http', '$rootScope',
             $scope.searhPromise = $http.post(urlMiniSearch, { 'slug': slug, 'task': taskSearch, 'extended': extended })
                 .success(function (response) {
                     $scope.miniSearchResults = prepareSearchResults(response);
-                    $scope.miniSearchResults.total = response.QnAForums.threads.length + response.QnAForums.posts.length;
-                    $scope.miniSearchResults.total += response.HFForums.threads.length + response.HFForums.posts.length;
-                    $scope.miniSearchResults.total += response.Projects.tasks.length + response.Projects.taskPosts.length + response.Projects.posts.length;
+                    $scope.miniSearchResults.total = response.QnAForums.threads.length + response.QnAForums.posts.length + response.QnAForums.forums.length;
+                    $scope.miniSearchResults.total += response.HFForums.threads.length + response.HFForums.posts.length + response.HFForums.forums.length;
+                    $scope.miniSearchResults.total += response.Projects.tasks.length + response.Projects.taskPosts.length + response.Projects.posts.length + response.Projects.projects.length;
                     $scope.miniSearchResults.total += response.homeOffice.length;
                     if ($scope.miniSearchResults.total == 0) {
                         $scope.miniSearchResults.total = -1;

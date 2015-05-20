@@ -102,6 +102,17 @@
                                                     </a>
                                                 </div>
 
+                                                <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.forums">
+                                                    <a ng-href="[[ item.href ]]" target="_self">
+                                                        [[ item.name ]]
+                                                        <span class="clearfix"></span>
+                                                        <div class="pull-right" style="font-size: 10px;">
+                                                            <i class="text-muted">Header forums</i>
+                                                        </div>
+                                                        <span class="clearfix"></span>
+                                                    </a>
+                                                </div>
+
                                                 <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.threads">
                                                     <a ng-href="[[ item.href ]]" target="_self" style="text-decoration: none;">
                                                         <h4 class="text-info">[[ item.title ]]</h4>
@@ -120,6 +131,17 @@
                                                         <span class="clearfix"></span>
                                                         <div class="pull-right" style="font-size: 10px;">
                                                             <i class="text-muted">header forums posts</i>
+                                                        </div>
+                                                        <span class="clearfix"></span>
+                                                    </a>
+                                                </div>
+
+                                                <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.forums">
+                                                    <a ng-href="[[ item.href ]]" target="_self">
+                                                        [[ item.name ]]
+                                                        <span class="clearfix"></span>
+                                                        <div class="pull-right" style="font-size: 10px;">
+                                                            <i class="text-muted">QnA Forums</i>
                                                         </div>
                                                         <span class="clearfix"></span>
                                                     </a>
@@ -180,6 +202,18 @@
                                                         <span class="clearfix"></span>
                                                     </a>
                                                 </div>
+
+                                                <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.projects">
+                                                    <a ng-href="[[ item.href ]]" target="_self">
+                                                        [[ item.name ]]
+                                                        <span class="clearfix"></span>
+                                                        <div class="pull-right" style="font-size: 10px;">
+                                                            <i class="text-muted">projects</i>
+                                                        </div>
+                                                        <span class="clearfix"></span>
+                                                    </a>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -773,6 +807,8 @@
             urlMiniSearchHeaderThread: "{{ path('zectranet_show_header_forum_thread', {'project_id': 0, 'subheader_id': 1, 'thread_id': 2 }) }}",
 			urlMiniSearchQnaThread: "{{ path('zectranet_show_QnA_thread', {'project_id': 0, 'thread_id' : 1}) }}",
             urlMiniSearchProject: "{{ path('zectranet_show_project', {'project_id': 0}) }}",
+            urlMiniSearchQnAForum: "{{ path('zectranet_show_QnA_forum', {'project_id': 0}) }}",
+            urlMiniSearchHeaderForum: "{{ path('zectranet_show_header_forum', {'project_id': 0}) }}",
             urlMiniSearchTask: "{{ path('zectranet_task_show', {'task_id': 0}) }}",
             notificationsGet: "{{ url('zectranet_notifications_get') }}",
             homeOfficeShow: "{{ url('zectranet_show_office', {'office_id': 0, 'conversation_id': 'conv_id'}) }}",

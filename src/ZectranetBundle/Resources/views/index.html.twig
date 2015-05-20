@@ -280,6 +280,17 @@
                                             </a>
                                         </div>
 
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.forums">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.name ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">Header forums</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
                                         <div class="list-group-item" ng-repeat="item in miniSearchResults.HFForums.threads">
                                             <a ng-href="[[ item.href ]]" target="_self" style="text-decoration: none;">
                                                 <h4 class="text-info">[[ item.title ]]</h4>
@@ -298,6 +309,17 @@
                                                 <span class="clearfix"></span>
                                                 <div class="pull-right" style="font-size: 10px;">
                                                     <i class="text-muted">header forums posts</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.QnAForums.forums">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.name ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">QnA Forums</i>
                                                 </div>
                                                 <span class="clearfix"></span>
                                             </a>
@@ -358,6 +380,18 @@
                                                 <span class="clearfix"></span>
                                             </a>
                                         </div>
+
+                                        <div class="list-group-item" ng-repeat="item in miniSearchResults.Projects.projects">
+                                            <a ng-href="[[ item.href ]]" target="_self">
+                                                [[ item.name ]]
+                                                <span class="clearfix"></span>
+                                                <div class="pull-right" style="font-size: 10px;">
+                                                    <i class="text-muted">projects</i>
+                                                </div>
+                                                <span class="clearfix"></span>
+                                            </a>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>

@@ -161,13 +161,13 @@
                     </div>
                     <div class="list-group-item">
                         <form class="input-group input-group-lg">
-                            <textarea id="textarea-post"  name="message" class="form-control" rows="3" ng-keyup="testEditPostButtonVisible($event)" ng-keypress="pressEnter($event, message, conversation.id)" style="resize: vertical; font-size: 11px; height: 65px;" ng-model="message"></textarea>
+                            <textarea id="textarea-post"  name="message" class="form-control" rows="3" ng-keyup="pressEnter($event, message, conversation.id)" style="resize: vertical; font-size: 11px; height: 65px;" ng-model="message"></textarea>
 
                             <span class="input-group-btn">
                                 <button  ng-if="editPostButtonVisible == false" class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendConversationMessage(message, conversation.id)">
                                     <span>Post</span>
                                 </button>
-                                <button  ng-if="editPostButtonVisible == true" class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="EditMessage(message)">
+                                <button  ng-if="editPostButtonVisible == true" class="btn btn-primary" name="subscribe" type="button" style="height: 65px; font-size:15px;" ng-click="SendConversationMessage(message, editedPost.id, true)">
                                     <span>Edit</span>
                                 </button>
                             </span>
