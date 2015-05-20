@@ -398,9 +398,15 @@ class Project
         $tasks = array();
         $taskPosts = array();
         $posts = array();
+        $jsonProjects = array();
 
         /** @var Project $project */
         foreach ($projects as $project) {
+            $matchesLength = preg_match('/' . $slug . '/mi', $project->getName(), $matches);
+            if ($matchesLength > 0) {
+                $jsonProjects[] = $project->getInArray();
+            }
+
             $iterations = $limit;
             /** @var ProjectPost $post */
             foreach ($project->getPostsProject() as $post) {
@@ -454,6 +460,7 @@ class Project
             'tasks' => $tasks,
             'taskPosts' => $taskPosts,
             'posts' => $posts,
+            'projects' => $jsonProjects
         );
     }
 
