@@ -118,6 +118,12 @@ class Project
     private $tasks;
 
     /**
+     * @ORM\OneToMany(targetEntity="Sprint", mappedBy="project", cascade={"remove"})
+     * @var ArrayCollection
+     */
+    private $sprints;
+
+    /**
      * @ORM\OneToMany(targetEntity="ProjectPost", mappedBy="project", cascade={"remove"})
      * @ORM\OrderBy({"posted" = "DESC"})
      * @var array
@@ -149,6 +155,7 @@ class Project
     {
         $this->users = new ArrayCollection();
         $this->tasks = new ArrayCollection();
+        $this->sprints = new ArrayCollection();
         $this->postsProject = new ArrayCollection();
         $this->visible = false;
         $this->archived = false;
@@ -1057,5 +1064,38 @@ class Project
     public function getLogs()
     {
         return $this->logs;
+    }
+
+    /**
+     * Add sprints
+     *
+     * @param \ZectranetBundle\Entity\Sprint $sprints
+     * @return Project
+     */
+    public function addSprint(\ZectranetBundle\Entity\Sprint $sprints)
+    {
+        $this->sprints[] = $sprints;
+
+        return $this;
+    }
+
+    /**
+     * Remove sprints
+     *
+     * @param \ZectranetBundle\Entity\Sprint $sprints
+     */
+    public function removeSprint(\ZectranetBundle\Entity\Sprint $sprints)
+    {
+        $this->sprints->removeElement($sprints);
+    }
+
+    /**
+     * Get sprints
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSprints()
+    {
+        return $this->sprints;
     }
 }

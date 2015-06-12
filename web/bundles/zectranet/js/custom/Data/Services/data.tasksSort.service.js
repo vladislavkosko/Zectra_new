@@ -9,7 +9,8 @@
 
     function tasksSortService() {
         var tasksSort = {
-            'calculateTasksInfo': calculateTasksInfo
+            'calculateTasksInfo': calculateTasksInfo,
+            'assignSprintHref': assignSprintHref
         };
 
         return tasksSort;
@@ -33,7 +34,7 @@
             if (angular.isUndefined(task.assigned) || task.assigned == null) {
                 task.assigned = { 'username': 'none', name: 'none', 'surname': 'none' };
             }
-            if (angular.isUndefined(task.assigned) || task.sprint == null) {
+            if (angular.isUndefined(task.sprint) || task.sprint == null) {
                 task.sprint = { 'name': 'none' };
             }
 
@@ -136,9 +137,9 @@
             return JSON_URLS.showTask.replace('0', task_id);
         }
 
-        function assignSprintHref(office_id, sprint_id) {
-            var url = JSON_URLS.showSprint.replace('0', 'office_id').replace('1', 'sprint_id');
-            return url.replace('office_id', office_id).replace('sprint_id', sprint_id);
+        function assignSprintHref(project_id, sprint_id) {
+            var url = JSON_URLS.showSprint.replace('0', 'project_id').replace('1', 'sprint_id');
+            return url.replace('project_id', project_id).replace('sprint_id', sprint_id);
         }
 
         function giveTasksHref (tasks) {
@@ -147,8 +148,8 @@
                 if (tasks[i].assigned) {
                     tasks[i].assigned.avatar = generateAsset(JSON_URLS.asset, 'documents/' + tasks[i].assigned.avatar);
                 }
-                if (tasks[i].sprintid) {
-                    tasks[i].sprintHref = assignSprintHref(tasks[i].sprint.officeid, tasks[i].sprintid);
+                if (tasks[i].sprint) {
+                    tasks[i].sprintHref = assignSprintHref(tasks[i].sprint.projectid, tasks[i].sprint.id);
                 }
                 if (tasks[i].subtasks.length > 0) {
                     tasks[i].subtasks = giveTasksHref(tasks[i].subtasks);

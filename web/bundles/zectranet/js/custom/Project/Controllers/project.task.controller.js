@@ -344,6 +344,7 @@
                         for (var j = 0; j < $scope.tasks.length; j++) {
                             if ($scope.tasks[j].id == response[i].id) {
                                 $scope.tasks[j].sprint = response[i].sprint;
+                                $scope.tasks[j].sprintHref = $tasksSort.assignSprintHref($scope.tasks[j].projectid, $scope.tasks[j].sprint.id);
                                 break;
                             }
                         }

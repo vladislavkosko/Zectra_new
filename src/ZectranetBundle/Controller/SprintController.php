@@ -18,33 +18,33 @@ use ZectranetBundle\Entity\Sprint;
 
 class SprintController extends Controller {
     /**
-     * @Route("/office/{office_id}/sprint/{sprint_id}")
+     * @Route("/project/{project_id}/sprint/{sprint_id}")
      * @Security("has_role('ROLE_USER')")
-     * @param int $office_id
+     * @param int $project_id
      * @param int $sprint_id
      * @return Response
      */
-    public function indexAction($office_id, $sprint_id)
+    public function indexAction($project_id, $sprint_id)
     {
-        $office = $this->getDoctrine()->getRepository('ZectranetBundle:Office')->find($office_id);
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
         $sprint = $this->getDoctrine()->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
         $sprint_status = $this->getDoctrine()->getRepository('ZectranetBundle:SprintStatus')->findAll();
         return $this->render('@Zectranet/sprint.html.twig', array(
                 'sprint' => $sprint,
-                'office' => $office,
+                'project' => $project,
                 'sprint_status' => $sprint_status,
             )
         );
     }
 
     /**
-     * @Route("/office/{office_id}/sprint/addSprint")
+     * @Route("/sprint/{project_id}/addSprint")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
-     * @param int $office_id
+     * @param int $project_id
      * @return Response
      */
-    public function addSprintAction(Request $request, $office_id) {
+    public function addSprintAction(Request $request, $project_id) {
         $sprintName = $request->request->get('name');
         $sprintDescription = $request->request->get('description');
         $params = array(
@@ -54,33 +54,40 @@ class SprintController extends Controller {
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        $sprint = Sprint::addNewSprint($em, $office_id, $params);
+        $sprint = Sprint::addNewSprint($em, $project_id, $params);
 
         return $this->redirectToRoute('zectranet_show_sprint', array(
-            'office_id' => $office_id,
+            'project_id' => $project_id,
             'sprint_id' => $sprint->getId()
         ));
     }
 
     /**
-     * @Route("/office/{office_id}/sprint/{sprint_id}/deleteSprint")
+     * @Route("/project/{project_id}/sprint/{sprint_id}/deleteSprint")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
-     * @param int $office_id
+     * @param int $project_id
      * @param int $sprint_id
      * @return Response
      */
-    public function deleteSprintAction(Request $request, $office_id, $sprint_id) {
+    public function deleteSprintAction(Request $request, $project_id, $sprint_id) {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        /** @var Sprint $sprint */
         $sprint = $em->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
         if ($sprint) {
+            /** @var Task $task */
+            foreach ($sprint->getTasks() as $task)
+            {
+                $task->setSprintid(null);
+                $task->setSprint(null);
+            }
             $em->remove($sprint);
             $em->flush();
         }
 
-        return $this->redirectToRoute('zectranet_show_office', array(
-            'office_id' => $office_id
+        return $this->redirectToRoute('zectranet_show_project', array(
+            'project_id' => $project_id
         ));
     }
 
@@ -142,7 +149,7 @@ class SprintController extends Controller {
         $em->flush();
 
         return $this->redirectToRoute('zectranet_show_sprint', array(
-            'office_id' => $sprint->getOfficeid(),
+            'project_id' => $sprint->getProjectid(),
             'sprint_id' => $sprint->getId(),
         ));
     }

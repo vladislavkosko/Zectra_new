@@ -1082,7 +1082,7 @@ class Task
             'type' => $this->getType()->getInArray(),
             'priority' => $this->getPriority()->getInArray(),
             'subtasks' => EntityOperations::arrayToJsonArray($this->getSubtasks()),
-            'sprint' => ($this->getSprintid()) ? $this->getSprint()->getInArray() : null,
+            'sprint' => ($this->getSprint() || $this->getSprintid()) ? $this->getSprint()->getInArray() : null,
             'postCount' => count($this->getPosts()),
             'versionid' => $this->getVersionid(),
             'sprintID' => ($this->getParentid())

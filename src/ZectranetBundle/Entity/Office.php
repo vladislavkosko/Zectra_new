@@ -76,12 +76,6 @@ class Office
     private $QnAForums;
 
     /**
-     * @ORM\OneToMany(targetEntity="Sprint", mappedBy="office", cascade={"remove"})
-     * @var ArrayCollection
-     */
-    private $sprints;
-
-    /**
      * @ORM\OneToMany(targetEntity="OfficePost", mappedBy="office", cascade={"remove"})
      * @ORM\OrderBy({"posted" = "DESC"})
      * @var ArrayCollection
@@ -480,39 +474,6 @@ class Office
     public function getOfficeUserRoles()
     {
         return $this->officeUserRoles;
-    }
-
-    /**
-     * Add sprints
-     *
-     * @param \ZectranetBundle\Entity\Sprint $sprints
-     * @return Office
-     */
-    public function addSprint(\ZectranetBundle\Entity\Sprint $sprints)
-    {
-        $this->sprints[] = $sprints;
-
-        return $this;
-    }
-
-    /**
-     * Remove sprints
-     *
-     * @param \ZectranetBundle\Entity\Sprint $sprints
-     */
-    public function removeSprint(\ZectranetBundle\Entity\Sprint $sprints)
-    {
-        $this->sprints->removeElement($sprints);
-    }
-
-    /**
-     * Get sprints
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSprints()
-    {
-        return $this->sprints;
     }
 
     /**

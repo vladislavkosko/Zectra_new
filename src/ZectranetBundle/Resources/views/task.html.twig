@@ -394,7 +394,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     {% if sprint %}
-                                        <a style="font-weight: bold;" href="{{ path('zectranet_show_sprint', {'sprint_id': sprint.id, 'office_id': sprint.office.id }) }}" class="btn form-control-static text-info">
+                                        <a style="font-weight: bold;" href="{{ path('zectranet_show_sprint', {'sprint_id': sprint.id, 'project_id': sprint.projectid }) }}" class="btn form-control-static text-info">
                                             {{ sprint.name }}
                                         </a>
                                     {% else %}

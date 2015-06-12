@@ -40,6 +40,12 @@
                                     <i class="fa text-warning fa-fw fa-code fa-2x"></i>
                                 </a>
                             </div>
+
+                            <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Sprints">
+                                <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#project_sprints">
+                                    <i class="fa text-warning fa-fw fa-repeat  fa-2x"></i>
+                                </a>
+                            </div>
                         </div>
                     {% endif %}
                     <!-- End of Project controll buttons -->
@@ -249,6 +255,7 @@
     {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
         <!-- Begin of Delete Private Project Modal -->
         {% include '@Zectranet/projectDelete.html.twig' %}
+        {% include '@Zectranet/projectSprints.html.twig' %}
         <!-- End of Delete Private Project Modal -->
     {% endif %}
 

@@ -554,23 +554,23 @@ zectranet_document_delete:
         fileid: \d+
 
 zectranet_show_sprint:
-    pattern: /office/{office_id}/sprint/{sprint_id}
+    pattern: /project/{project_id}/sprint/{sprint_id}
     defaults: { _controller: ZectranetBundle:Sprint:index }
     requirements:
-        office_id: \d+
+        project_id: \d+
         sprint_id: \d+
 
 zectranet_sprint_add:
-    pattern: /sprint/{office_id}/addSprint
+    pattern: /sprint/{project_id}/addSprint
     defaults: { _controller: ZectranetBundle:Sprint:addSprint }
     requirements:
-        office_id: \d+
+        project_id: \d+
 
 zectranet_sprint_delete:
-    pattern: /sprint/{office_id}/delete/{sprint_id}
+    pattern: /project/{project_id}/sprint/{sprint_id}/deleteSprint
     defaults: { _controller: ZectranetBundle:Sprint:deleteSprint }
     requirements:
-        office_id: \d+
+        project_id: \d+
         sprint_id: \d+
 
 zectranet_sprint_add_tasks:

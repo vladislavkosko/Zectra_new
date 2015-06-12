@@ -45,16 +45,16 @@ class Sprint
 
     /**
      * @var integer
-     * @ORM\Column(name="office_id", type="integer")
+     * @ORM\Column(name="project_id", type="integer")
      */
-    private $officeid;
+    private $projectid;
 
     /**
-     * @var Office
-     * @ORM\ManyToOne(targetEntity="Office", inversedBy="sprints")
-     * @ORM\JoinColumn(name="office_id", referencedColumnName="id")
+     * @var Project
+     * @ORM\ManyToOne(targetEntity="Project", inversedBy="sprints")
+     * @ORM\JoinColumn(name="project_id", referencedColumnName="id")
      */
-    private $office;
+    private $project;
 
     /**
      * @var integer
@@ -205,52 +205,6 @@ class Sprint
     }
 
     /**
-     * Set officeid
-     *
-     * @param integer $officeid
-     * @return Sprint
-     */
-    public function setOfficeid($officeid)
-    {
-        $this->officeid = $officeid;
-
-        return $this;
-    }
-
-    /**
-     * Get officeid
-     *
-     * @return integer
-     */
-    public function getOfficeid()
-    {
-        return $this->officeid;
-    }
-
-    /**
-     * Set office
-     *
-     * @param \ZectranetBundle\Entity\Office $office
-     * @return Sprint
-     */
-    public function setOffice(Office $office = null)
-    {
-        $this->office = $office;
-
-        return $this;
-    }
-
-    /**
-     * Get office
-     *
-     * @return \ZectranetBundle\Entity\Office
-     */
-    public function getOffice()
-    {
-        return $this->office;
-    }
-
-    /**
      * @param EntityManager $em
      */
     public function __construct(EntityManager $em) {
@@ -267,21 +221,21 @@ class Sprint
             'id' => $this->getId(),
             'name' => $this->getName(),
             'description' => $this->getDescription(),
-            'officeid' => $this->getOfficeid(),
+            'projectid' => $this->getProjectid(),
             'status' => $this->getStatus()->getInArray(),
         );
     }
 
     /**
      * @param EntityManager $em
-     * @param int $office_id
+     * @param int $project_id
      * @param array $params
      * @return Sprint
      */
-    public static function addNewSprint(EntityManager $em, $office_id, $params) {
+    public static function addNewSprint(EntityManager $em, $project_id, $params) {
         $sprint = new Sprint($em);
-        $office = $em->getRepository('ZectranetBundle:Office')->find($office_id);
-        $sprint->setOffice($office);
+        $project = $em->getRepository('ZectranetBundle:Project')->find($project_id);
+        $sprint->setProject($project);
         $sprint->setName($params['name']);
         $sprint->setDescription($params['description']);
         $em->persist($sprint);
@@ -314,5 +268,51 @@ class Sprint
             $jsonTasks = EntityOperations::arrayToJsonArray($jsonTasks);
         }
         return $jsonTasks;
+    }
+
+    /**
+     * Set projectid
+     *
+     * @param integer $projectid
+     * @return Sprint
+     */
+    public function setProjectid($projectid)
+    {
+        $this->projectid = $projectid;
+
+        return $this;
+    }
+
+    /**
+     * Get projectid
+     *
+     * @return integer 
+     */
+    public function getProjectid()
+    {
+        return $this->projectid;
+    }
+
+    /**
+     * Set project
+     *
+     * @param \ZectranetBundle\Entity\Project $project
+     * @return Sprint
+     */
+    public function setProject(\ZectranetBundle\Entity\Project $project = null)
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return \ZectranetBundle\Entity\Project 
+     */
+    public function getProject()
+    {
+        return $this->project;
     }
 }

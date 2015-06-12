@@ -7,11 +7,11 @@
         <div class="row">
             <ol class="breadcrumb" style="margin: 0 -15px;">
                 <li>
-                    <a href="{{ path('zectranet_user_home') }}">Summary</a>
+                    <a href="{{ path('zectranet_show_office', { 'office_id': project.office.id }) }}">{{ project.office.name }}</a>
                 </li>
                 <li>
-                    <a href="{{ path('zectranet_show_office', { 'office_id': office.id }) }}">
-                        {{ office.name }}
+                    <a href="{{ path('zectranet_show_project', { 'project_id': project.id }) }}">
+                        {{ project.name }}
                     </a>
                 </li>
                 <li class="active">
@@ -25,17 +25,17 @@
                 <div class="row">
                     <div class="col-md-6">
                         <i class="fa fa-repeat fa-2x"></i>
-                <span style="font-size: 25px;">
-                    {{ sprint.name }}
-                    <span style="color: {{ sprint.status.color }}">
-                        {{ ' (' ~ sprint.status.label ~ ')'  }}
-                    </span>
-                </span>
+                        <span style="font-size: 25px;">
+                            {{ sprint.name }}
+                            <span style="color: {{ sprint.status.color }}">
+                                {{ ' (' ~ sprint.status.label ~ ')'  }}
+                            </span>
+                        </span>
                     </div>
 
                     <div class="col-md-6">
                         <!-- Begin of Office controll buttons -->
-                        {% if (office.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
+                        {% if (project.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) %}
                             <div class="pull-right">
                                 <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Delete This Sprint">
                                     <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_sprint">

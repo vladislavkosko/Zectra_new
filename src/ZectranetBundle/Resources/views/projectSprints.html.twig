@@ -1,0 +1,51 @@
+<div class="modal fade" id="project_sprints" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" style="margin-bottom: 10px;">&times;</button>
+                <div class="list-group">
+                    <div class="clearfix"></div>
+                    <div class="list-group-item">
+                        <i class="fa fa-repeat"></i>
+                        <strong> Project Sprints</strong>
+                    </div>
+                    {% for sprint in project.sprints %}
+                        <a class="list-group-item" href="{{ path('zectranet_show_sprint', {'sprint_id': sprint.id, 'project_id': project.id }) }}">
+                            <i class="fa fa-repeat"></i>
+                            <span>{{ sprint.name}}</span>
+                        </a>
+                    {% endfor %}
+                    {% if project.sprints|length == 0 %}
+                        <div class="list-group-item">
+                            <h4 class="text-info text-center">Sprints will be displayed here</h4>
+                        </div>
+                    {% endif %}
+
+                    <div ng-init="showAddSprint = false" style="float: right; margin: 10px 0;">
+                        <a ng-click="showAddSprint = !showAddSprint" style="color:#606060 !important;" class="addnew-btn-hover" href="#">
+                            Add New Sprint
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <div ng-show="showAddSprint" class="list-group-item" style="padding: 5px 20px;">
+                        <form action="{{ path('zectranet_sprint_add', { 'project_id': project.id }) }}" method="post">
+                            <div class="form-group">
+                                <label for="add_sprint_name">Sprint Name:</label>
+                                <input type="text" id="add_sprint_name" pattern="[0-9A-Za-z -_()]{1,30}" class="form-control" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="add_sprint_description">Sprint Description:</label>
+                                <input type="text" id="add_sprint_description" class="form-control" name="description" pattern="[0-9A-Za-z -_()]{1,50}" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

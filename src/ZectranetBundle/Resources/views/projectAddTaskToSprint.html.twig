@@ -15,7 +15,7 @@
                             <div class="form-group">
                                 <label for="sprint_to_add_task" class="form-control-static">Choose Sprint:</label>
                                 <select id="sprint_to_add_task" class="form-control" ng-model="sprint_id">
-                                    {% for i, sprint in office.sprints if sprint.status.label == 'Open' %}
+                                    {% for i, sprint in project.sprints if sprint.status.label == 'Open' %}
                                         <option value="{{ sprint.id }}" {% if i == 0 %}selected="selected"{% endif %}>
                                             {{ sprint.name }}
                                         </option>
