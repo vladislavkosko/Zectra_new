@@ -145,6 +145,64 @@
             </div>
             <!------------ End of project log -------------->
 
+            <div class="row">
+                <div class="col-md-12">
+
+                    {% if project.users | length < 2 %}
+                    <div></div>
+
+                    {% else %}
+
+                    <div style="margin-top: 20px; font-size: 1.3em; text-align: center; background-color: #F5F5F5; padding: 8px 0; border: 1px solid #ccc; border-radius: 5px;">
+                        Project Users
+                    </div>
+
+                    <div class="table-responsive" style="margin-top: 20px;">
+                        <table class="table">
+
+                            <thead>
+
+                            <tr>
+                                <td>Name</td>
+                                <td>Enable create sprint</td>
+                                <td></td>
+                            </tr>
+
+                            </thead>
+
+                            {% for user in project.users %}
+                                {% if app.user.username != user.username %}
+
+                                    <form action="{{ path('zectranet_project_permission_save', {'project_id': project.id, 'user_id': user.id}) }}" method="post">
+                                        <tbody>
+
+                                        <tr>
+                                            <td>{{ user.username }}</td>
+                                            <td>
+                                                <input type="checkbox" name="enableCreateSprint"
+                                                    {% for permission in project.projectPermissions %}
+                                                        {% if (permission.userid == user.id) and (permission.enableCreateSprint) %} checked {% endif %}
+                                                    {% endfor %}>
+                                            </td>
+                                            <td>
+                                                <input type="submit" class="btn btn-default" value="Save">
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </form>
+
+                                {% endif %}
+                            {% endfor %}
+
+                            {% endif %}
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
             <!-- START MODAL -->
             <div class="modal fade" id="send_request_by_HO_contacts" tabindex="-1">
                 <div class="modal-dialog">

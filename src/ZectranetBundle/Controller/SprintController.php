@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use ZectranetBundle\Entity\Office;
+use ZectranetBundle\Entity\SprintPermissions;
 use ZectranetBundle\Entity\Task;
 use ZectranetBundle\Entity\User;
 use ZectranetBundle\Entity\Sprint;
@@ -38,6 +39,52 @@ class SprintController extends Controller {
     }
 
     /**
+     * @Route("/project/{project_id}/sprint/{sprint_id}/settings")
+     * @Security("has_role('ROLE_USER')")
+     * @param $project_id
+     * @param $sprint_id
+     * @return Response
+     */
+    public function showSprintSettingsAction($project_id, $sprint_id)
+    {
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+        $sprint = $this->getDoctrine()->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
+        return $this->render('@Zectranet/sprintSettings.html.twig', array(
+            'sprint' => $sprint,
+            'project' => $project
+        ));
+    }
+
+    public function savePermissionsAction(Request $request, $sprint_id, $user_id)
+    {
+        /** @var Sprint $sprint */
+        $sprint = $this->getDoctrine()->getRepository('ZectranetBundle:Sprint')->find($sprint_id);
+
+        /** @var User $user */
+        $user = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($user_id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var array $parameters */
+        $parameters = array(
+            'enableCreateSprint' => $request->request->get('enableCreateSprint'),
+            'enableAddTaskToSprint' => $request->request->get('enableAddTaskToSprint'),
+            'enableStartSprint' => $request->request->get('enableStartSprint'),
+            'enableChangeTaskStatusToSignedOff' => $request->request->get('enableChangeTaskStatusToSignedOff'),
+            'enableAddSubtaskBug' => $request->request->get('enableAddSubtaskBug')
+        );
+
+        SprintPermissions::savePermission($em, $sprint, $user, $parameters);
+
+        return $this->redirectToRoute('zectranet_show_sprint_settings', array(
+            'sprint_id' => $sprint->getId(),
+            'project_id' => $sprint->getProjectid()
+        ));
+
+    }
+
+    /**
      * @Route("/sprint/{project_id}/addSprint")
      * @Security("has_role('ROLE_USER')")
      * @param Request $request
@@ -55,6 +102,9 @@ class SprintController extends Controller {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $sprint = Sprint::addNewSprint($em, $project_id, $params);
+
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+        SprintPermissions::addPermission1($em, $sprint, $project->getUsers());
 
         return $this->redirectToRoute('zectranet_show_sprint', array(
             'project_id' => $project_id,

@@ -1,7 +1,9 @@
 {% extends '@Zectranet/index.html.twig' %}
 
+{% set sprint = (task.parentId) ? task.parent.sprint : task.sprint %}
+
 {% set idInArray = -1 %}
-{% if task.parent %}
+{% if task.parent != null %}
     {% for i, item in task.parent.subtasks if item.id == task.id %}
         {% set idInArray = i + 1 %}
     {% endfor %}
@@ -77,16 +79,24 @@
 
                             <div class="col-md-9">
                                 <div class="input-group" style="width: 100%;">
-                                    <select class="form-control" name="type" ng-model="taskInfoEdit.type.id" style="border: none;font-weight: bold;">
-                                        {% for type in task_types %}
-                                            <option style="color: {{ type.color }}" value="{{ type.id }}"
-                                                    {% if type.id == task.type.id %}
-                                                selected="selected"
-                                                    {% endif %}>
-                                                {{ type.label }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
+                                    {% if sprint and sprint.status.id > 1 %}
+                                        <a style="font-weight: bold;" href="#" class="btn form-control-static text-info">
+                                            {{ task.type.label }}
+                                        </a>
+
+                                    {% else %}
+                                        <select class="form-control" name="type" ng-model="taskInfoEdit.type.id" style="border: none;font-weight: bold;">
+
+                                            {% for type in task_types %}
+                                                <option style="color: {{ type.color }}" value="{{ type.id }}"
+                                                        {% if type.id == task.type.id %}
+                                                    selected="selected"
+                                                        {% endif %}>
+                                                    {{ type.label }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -344,15 +354,25 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-9">
-                                <div class="input-group" style="width: 100%;">
-                                    <select class="form-control" name="estimated_hours" ng-model="taskInfoEdit.estimatedHours" style="border: none;font-weight: bold;">
-                                        {% for i in 0..48 %}
-                                            <option value="{{ i }}" {% if task.estimatedHours == i %}selected="selected"{% endif %}>{{ i }} h</option>
-                                        {% endfor %}
-                                    </select>
+                            {% if sprint and sprint.status.id > 1 %}
+                                <div class="col-md-9">
+                                    <a style="font-weight: bold;" href="#" class="btn form-control-static text-info">
+                                        {{ task.estimatedHours ~ 'h' }}
+                                    </a>
                                 </div>
-                            </div>
+
+                            {% else %}
+                                <div class="col-md-9">
+                                    <div class="input-group" style="width: 100%;">
+                                        <select class="form-control" name="estimated_hours" ng-model="taskInfoEdit.estimatedHours" style="border: none;font-weight: bold;">
+                                            {% for i in 0..48 %}
+                                                <option value="{{ i }}" {% if task.estimatedHours == i %}selected="selected"{% endif %}>{{ i }} h</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                            {% endif %}
                         </div>
                         <!-- End Of Task ESTIMATED HOURS Select -->
 
@@ -364,23 +384,32 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-9">
-                                <div class="input-group" style="width: 100%;">
-                                    <select class="form-control" name="estimated_minutes" ng-model="taskInfoEdit.estimatedMinutes" style="border: none;font-weight: bold;">
-                                        <option value="0" {% if task.estimatedMinutes == 0 %}selected="selected"{% endif %}>0 m</option>
-                                        <option value="10" {% if task.estimatedMinutes == 10 %}selected="selected"{% endif %}>10 m</option>
-                                        <option value="20" {% if task.estimatedMinutes == 20 %}selected="selected"{% endif %}>20 m</option>
-                                        <option value="30" {% if task.estimatedMinutes == 30 %}selected="selected"{% endif %}>30 m</option>
-                                        <option value="40" {% if task.estimatedMinutes == 40 %}selected="selected"{% endif %}>40 m</option>
-                                        <option value="50" {% if task.estimatedMinutes == 50 %}selected="selected"{% endif %}>50 m</option>
-                                    </select>
+                            {% if sprint and sprint.status.id > 1 %}
+                                <div class="col-md-9">
+                                    <a style="font-weight: bold;" href="#" class="btn form-control-static text-info">
+                                        {{ task.estimatedMinutes ~ 'm' }}
+                                    </a>
                                 </div>
-                            </div>
+
+                            {% else %}
+                                <div class="col-md-9">
+                                    <div class="input-group" style="width: 100%;">
+                                        <select class="form-control" name="estimated_minutes" ng-model="taskInfoEdit.estimatedMinutes" style="border: none;font-weight: bold;">
+                                            <option value="0" {% if task.estimatedMinutes == 0 %}selected="selected"{% endif %}>0 m</option>
+                                            <option value="10" {% if task.estimatedMinutes == 10 %}selected="selected"{% endif %}>10 m</option>
+                                            <option value="20" {% if task.estimatedMinutes == 20 %}selected="selected"{% endif %}>20 m</option>
+                                            <option value="30" {% if task.estimatedMinutes == 30 %}selected="selected"{% endif %}>30 m</option>
+                                            <option value="40" {% if task.estimatedMinutes == 40 %}selected="selected"{% endif %}>40 m</option>
+                                            <option value="50" {% if task.estimatedMinutes == 50 %}selected="selected"{% endif %}>50 m</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            {% endif %}
                         </div>
                         <!-- End Of Task ESTIMATED MINUTES Select -->
 
                         <!-- Begin Of Task SPRINT Details -->
-                        {% set sprint = (task.parentId) ? task.parent.sprint : task.sprint %}
 
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-3">

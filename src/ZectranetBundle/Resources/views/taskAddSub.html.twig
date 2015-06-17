@@ -27,13 +27,25 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="add_subtask_type" class="control-label">Task Type:</label>
-                                    <select id="add_subtask_type" class="form-control" ng-model="subtask.type" name="type" required>
+
+
+
+                                    <select ng-if="subtask.parentTask.sprintID == null" id="add_subtask_type" class="form-control" ng-model="subtask.type" name="type" required>
                                         {% for type in task_types %}
                                             <option value="{{ type.id }}">
                                                 {{ type.label }}
                                             </option>
                                         {% endfor %}
                                     </select>
+
+                                    <select ng-if="subtask.parentTask.sprintID != null" id="add_subtask_type" class="form-control" ng-model="subtask.type" name="type" required>
+                                        {% for type in task_types %}
+                                            <option  ng-if="'{{ type.label }}' == 'bug'" value="{{ type.id }}">
+                                                {{ type.label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="add_subtask_priority" class="control-label">Task Priority:</label>

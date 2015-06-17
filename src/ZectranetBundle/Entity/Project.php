@@ -93,6 +93,12 @@ class Project
     private $versions;
 
     /**
+     * @ORM\OneToMany(targetEntity="ProjectPermissions", mappedBy="project", cascade={"remove"})
+     * @var ArrayCollection
+     */
+    private $projectPermissions;
+
+    /**
      * @ORM\ManyToMany(targetEntity="User", inversedBy="projects", fetch="EXTRA_LAZY")
      * @var ArrayCollection
      */
@@ -1016,6 +1022,21 @@ class Project
 
     /**
      * @param EntityManager $em
+     * @param int $user_id
+     * @param int $project_id
+     */
+    public static function addUserToProject(EntityManager $em, $user_id, $project_id) {
+        $user = $em->find('ZectranetBundle:User', $user_id);
+        $project = $em->find('ZectranetBundle:Project', $project_id);
+        if (!$project->getUsers()->contains($user)) {
+            $project->addUser($user);
+            $em->persist($project);
+            $em->flush();
+        }
+    }
+
+    /**
+     * @param EntityManager $em
      * @param $user_id
      * @param $project_id
      * @throws \Doctrine\ORM\ORMException
@@ -1097,5 +1118,38 @@ class Project
     public function getSprints()
     {
         return $this->sprints;
+    }
+
+    /**
+     * Add projectPermissions
+     *
+     * @param \ZectranetBundle\Entity\ProjectPermissions $projectPermissions
+     * @return Project
+     */
+    public function addProjectPermission(\ZectranetBundle\Entity\ProjectPermissions $projectPermissions)
+    {
+        $this->projectPermissions[] = $projectPermissions;
+
+        return $this;
+    }
+
+    /**
+     * Remove projectPermissions
+     *
+     * @param \ZectranetBundle\Entity\ProjectPermissions $projectPermissions
+     */
+    public function removeProjectPermission(\ZectranetBundle\Entity\ProjectPermissions $projectPermissions)
+    {
+        $this->projectPermissions->removeElement($projectPermissions);
+    }
+
+    /**
+     * Get projectPermissions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProjectPermissions()
+    {
+        return $this->projectPermissions;
     }
 }

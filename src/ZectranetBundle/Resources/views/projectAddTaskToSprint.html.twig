@@ -15,10 +15,23 @@
                             <div class="form-group">
                                 <label for="sprint_to_add_task" class="form-control-static">Choose Sprint:</label>
                                 <select id="sprint_to_add_task" class="form-control" ng-model="sprint_id">
+                                    {% set enableAT = 0 %}
+
                                     {% for i, sprint in project.sprints if sprint.status.label == 'Open' %}
-                                        <option value="{{ sprint.id }}" {% if i == 0 %}selected="selected"{% endif %}>
-                                            {{ sprint.name }}
-                                        </option>
+
+                                        {% for permission in sprint.Permissions %}
+                                            {% set enableAT = 0 %}
+                                            {% if (permission.userid == app.user.id) and (permission.enableAddTaskToSprint) %}
+                                                {% set enableAT = 1 %}
+
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% if (project.owner.id == app.user.id) or (enableAT == 1) %}
+                                            <option value="{{ sprint.id }}" {% if i == 0 %} selected {% endif %}>
+                                                {{ sprint.name ~ ' ' }}
+                                            </option>
+                                        {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>

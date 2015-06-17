@@ -560,6 +560,13 @@ zectranet_show_sprint:
         project_id: \d+
         sprint_id: \d+
 
+zectranet_show_sprint_settings:
+    pattern: /project/{project_id}/sprint/{sprint_id}/settings
+    defaults: { _controller: ZectranetBundle:Sprint:showSprintSettings }
+    requirements:
+        project_id: \d+
+        sprint_id: \d+
+
 zectranet_sprint_add:
     pattern: /sprint/{project_id}/addSprint
     defaults: { _controller: ZectranetBundle:Sprint:addSprint }
@@ -578,6 +585,17 @@ zectranet_sprint_add_tasks:
     defaults: { _controller: ZectranetBundle:Sprint:addTasksToSprint }
     requirements:
         sprint_id: \d+
+
+zectranet_sprint_permission_save:
+    pattern: /sprint/{sprint_id}/user/{user_id}/save
+    defaults: { _controller: ZectranetBundle:Sprint:savePermissions }
+    requirements:
+        sprint_id: \d+
+        user_id: \d+
+
+zectranet_project_permission_save:
+    pattern: /project/{project_id}/user/{user_id}/save
+    defaults: { _controller: ZectranetBundle:Project:savePermissions }
 
 zectranet_detach_task_from_sprint:
     pattern: /task/detach_from_sprint/{task_id}

@@ -22,8 +22,8 @@
                 </div>
                 <div class="col-md-6">
                     <!-- Begin of Project controll buttons -->
-                    {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
-                        <div class="pull-right">
+                    <div class="pull-right">
+                        {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
                             <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Delete This Project">
                                 <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#delete_private_project">
                                     <i class="fa text-danger fa-fw fa-trash  fa-2x"></i>
@@ -35,19 +35,31 @@
                                     <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
                                 </a>
                             </div>
-                            <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Versions">
+                        {% endif %}
+                            {#<div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Versions">
                                 <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_show_project_versions', {'project_id': project.id }) }}">
                                     <i class="fa text-warning fa-fw fa-code fa-2x"></i>
                                 </a>
-                            </div>
+                            </div>#}
 
+                        {% set enableCS = false %}
+
+                        {% for permission in project.projectPermissions %}
+                            {% if (permission.userid == app.user.id) and (permission.enableCreateSprint) %}
+                                {% set enableCS = true %}
+
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if (project.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) or (enableCS == true) %}
                             <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Sprints">
                                 <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#project_sprints">
                                     <i class="fa text-warning fa-fw fa-repeat  fa-2x"></i>
                                 </a>
                             </div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+
+                    </div>
                     <!-- End of Project controll buttons -->
                 </div>
             </div>
@@ -252,10 +264,10 @@
         <div ng-init="changeCurrentPage('{{ project.id }}')"></div>
     </div>
 
+    {% include '@Zectranet/projectSprints.html.twig' %}
     {% if project.owner.id == app.user.id or (is_granted('ROLE_ADMIN')) %}
         <!-- Begin of Delete Private Project Modal -->
         {% include '@Zectranet/projectDelete.html.twig' %}
-        {% include '@Zectranet/projectSprints.html.twig' %}
         <!-- End of Delete Private Project Modal -->
     {% endif %}
 

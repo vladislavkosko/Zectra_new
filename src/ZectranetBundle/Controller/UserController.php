@@ -16,7 +16,10 @@ use ZectranetBundle\Entity\DailyTimeSheet;
 use ZectranetBundle\Entity\EntityOperations;
 use ZectranetBundle\Entity\HFForum;
 use ZectranetBundle\Entity\Project;
+use ZectranetBundle\Entity\ProjectPermissions;
 use ZectranetBundle\Entity\QnAForum;
+use ZectranetBundle\Entity\Sprint;
+use ZectranetBundle\Entity\SprintPermissions;
 use ZectranetBundle\Entity\User;
 use ZectranetBundle\Entity\UserInfo;
 use ZectranetBundle\Entity\UserSettings;
@@ -539,6 +542,10 @@ class UserController extends Controller
                 Project::addUserToProject($em, $userRequest->getUserid(), $userRequest->getProject()->getId());
                 /** @var Conversation $conversation */
                 $conversation = User::addToContactList($em, $userRequest->getContactID(), $userRequest->getUserid());
+
+                SprintPermissions::addPermission($em, $userRequest->getProject()->getSprints(), $userRequest->getUser());
+                ProjectPermissions::addPermission($em, $userRequest->getProject(), $userRequest->getUser());
+
             } catch (\Exception $ex) {
                 $from = 'Class: Project, function: addUserToProject';
                 $this->get('zectranet.errorlogger')->registerException($ex, $from);

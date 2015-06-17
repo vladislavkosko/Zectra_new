@@ -18,6 +18,7 @@ use ZectranetBundle\Entity\HFForum;
 use ZectranetBundle\Entity\Notification;
 use ZectranetBundle\Entity\Office;
 use ZectranetBundle\Entity\Project;
+use ZectranetBundle\Entity\ProjectPermissions;
 use ZectranetBundle\Entity\ProjectPost;
 use ZectranetBundle\Entity\QnAForum;
 use ZectranetBundle\Entity\RequestType;
@@ -147,6 +148,7 @@ class ProjectController extends Controller
                 $project = null;
                 try {
                     $project = Project::addNewProject($em, $user, $name, $type, $office_id);
+                    ProjectPermissions::addPermission($em, $project, $user);
                     return $this->redirectToRoute('zectranet_show_project',
                         array('project_id' => $project->getId()));
                 } catch (\Exception $ex) {
@@ -157,6 +159,25 @@ class ProjectController extends Controller
             default: break;
         }
         return $this->redirectToRoute('zectranet_show_office', array('office_id' => $office_id));
+    }
+
+    public function savePermissionsAction(Request $request, $project_id, $user_id)
+    {
+        /** @var Sprint $sprint */
+        $project = $this->getDoctrine()->getRepository('ZectranetBundle:Project')->find($project_id);
+
+        /** @var User $user */
+        $user = $this->getDoctrine()->getRepository('ZectranetBundle:User')->find($user_id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $enableCreateSprint = $request->request->get('enableCreateSprint');
+
+        ProjectPermissions::savePermission($em, $project, $user, $enableCreateSprint);
+
+        return $this->redirectToRoute('zectranet_settings_project', array('project_id' => $project_id));
+
     }
 
     /**

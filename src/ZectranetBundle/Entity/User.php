@@ -216,6 +216,18 @@ class User implements UserInterface, \Serializable
     private $userSettings;
 
     /**
+     * @ORM\OneToMany(targetEntity="SprintPermissions", mappedBy="user", cascade={"remove"})
+     * @var SprintPermissions
+     */
+    private $userPermissions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProjectPermissions", mappedBy="user", cascade={"remove"})
+     * @var ProjectPermissions
+     */
+    private $userProjectPermissions;
+
+    /**
      * @ORM\OneToMany(targetEntity="DailyTimeSheet", mappedBy="user", cascade={"remove"})
      * @ORM\OrderBy({"date" = "DESC"})
      * @var ArrayCollection
@@ -1502,5 +1514,84 @@ class User implements UserInterface, \Serializable
     public function getConnectedQnAForums()
     {
         return $this->connectedQnAForums;
+    }
+
+    /**
+     * Set userPermissions
+     *
+     * @param \ZectranetBundle\Entity\SprintPermissions $userPermissions
+     * @return User
+     */
+    public function setUserPermissions(\ZectranetBundle\Entity\SprintPermissions $userPermissions = null)
+    {
+        $this->userPermissions = $userPermissions;
+
+        return $this;
+    }
+
+    /**
+     * Get userPermissions
+     *
+     * @return \ZectranetBundle\Entity\SprintPermissions 
+     */
+    public function getUserPermissions()
+    {
+        return $this->userPermissions;
+    }
+
+    /**
+     * Add userPermissions
+     *
+     * @param \ZectranetBundle\Entity\SprintPermissions $userPermissions
+     * @return User
+     */
+    public function addUserPermission(\ZectranetBundle\Entity\SprintPermissions $userPermissions)
+    {
+        $this->userPermissions[] = $userPermissions;
+
+        return $this;
+    }
+
+    /**
+     * Remove userPermissions
+     *
+     * @param \ZectranetBundle\Entity\SprintPermissions $userPermissions
+     */
+    public function removeUserPermission(\ZectranetBundle\Entity\SprintPermissions $userPermissions)
+    {
+        $this->userPermissions->removeElement($userPermissions);
+    }
+
+    /**
+     * Add userProjectPermissions
+     *
+     * @param \ZectranetBundle\Entity\ProjectPermissions $userProjectPermissions
+     * @return User
+     */
+    public function addUserProjectPermission(\ZectranetBundle\Entity\ProjectPermissions $userProjectPermissions)
+    {
+        $this->userProjectPermissions[] = $userProjectPermissions;
+
+        return $this;
+    }
+
+    /**
+     * Remove userProjectPermissions
+     *
+     * @param \ZectranetBundle\Entity\ProjectPermissions $userProjectPermissions
+     */
+    public function removeUserProjectPermission(\ZectranetBundle\Entity\ProjectPermissions $userProjectPermissions)
+    {
+        $this->userProjectPermissions->removeElement($userProjectPermissions);
+    }
+
+    /**
+     * Get userProjectPermissions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserProjectPermissions()
+    {
+        return $this->userProjectPermissions;
     }
 }

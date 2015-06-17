@@ -97,7 +97,6 @@
             return deffered.promise;
         }
 
-        // TODO need check for working
         function addTaskToSprint(tasks, sprint_id) {
             var deffered = $q.defer();
             var promise = $http.post(JSON_URLS.sprintAddTasks.replace('0', sprint_id),

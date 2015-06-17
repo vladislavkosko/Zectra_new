@@ -1,0 +1,114 @@
+{% extends '@Zectranet/index.html.twig' %}
+
+{% block title %}{{ sprint.name ~ ' Settings' }}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="{{ path('zectranet_show_office', { 'office_id': project.office.id }) }}">{{ project.office.name }}</a>
+            </li>
+
+            <li>
+                <a href="{{ path('zectranet_show_project', { 'project_id': project.id }) }}">{{ project.name }}</a>
+            </li>
+
+            <li>
+                <a href="{{ path('zectranet_show_sprint', { 'project_id': project.id, 'sprint_id': sprint.id }) }}">{{ sprint.name }}</a>
+            </li>
+
+            <li>Settings</li>
+        </ol>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            {% if project.users | length < 2 %}
+                <div style="margin-top: 50px; color: #0088CC; font-size: 1.3em;">
+                    Please, invite some users to project
+                </div>
+
+            {% else %}
+
+                <div style="margin-top: 20px; font-size: 1.3em; text-align: center; background-color: #F5F5F5; padding: 8px 0; border: 1px solid #ccc; border-radius: 5px;">
+                    Project Users
+                </div>
+
+                <div class="table-responsive" style="margin-top: 20px;">
+                    <table class="table">
+
+                        <thead>
+
+                        <tr>
+                            <td>Name</td>
+                            <td>Enable create sprint</td>
+                            <td>Enable add task to sprint</td>
+                            <td>Enable start sprint</td>
+                            <td>Enable change status task to "Signed Off"</td>
+                            <td>Enable add subtask "BUG"</td>
+                            <td></td>
+                        </tr>
+
+                        </thead>
+
+                        {% for user in project.users %}
+                            {% if app.user.username != user.username %}
+
+                                <form action="{{ path('zectranet_sprint_permission_save', {'sprint_id': sprint.id, 'user_id': user.id}) }}" method="post">
+                                    <tbody>
+
+                                    <tr style="text-align: center;">
+                                        <td>{{ user.username }}</td>
+                                        <td>
+                                            <input type="checkbox" name="enableCreateSprint"
+                                                    {% for permission in sprint.permissions %}
+                                                {% if (permission.userid == user.id) and (permission.enableCreateSprint) %} checked {% endif %}
+                                                    {% endfor %}>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="enableAddTaskToSprint"
+                                                    {% for permission in sprint.permissions %}
+                                                {% if (permission.userid == user.id) and (permission.enableAddTaskToSprint) %} checked {% endif %}
+                                                    {% endfor %}>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="enableStartSprint"
+                                                    {% for permission in sprint.permissions %}
+                                                {% if (permission.userid == user.id) and (permission.enableStartSprint) %} checked {% endif %}
+                                                    {% endfor %}>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="enableChangeTaskStatusToSignedOff"
+                                                    {% for permission in sprint.permissions %}
+                                                {% if (permission.userid == user.id) and (permission.enableChangeTaskStatusToSignedOff) %} checked {% endif %}
+                                                    {% endfor %}>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="enableAddSubtaskBug"
+                                                    {% for permission in sprint.permissions %}
+                                                {% if (permission.userid == user.id) and (permission.enableAddSubtaskBug) %} checked {% endif %}
+                                                    {% endfor %}>
+                                        </td>
+
+                                        <td>
+                                            <input type="submit" class="btn btn-default" value="Save">
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </form>
+
+                            {% endif %}
+                        {% endfor %}
+
+                        {% endif %}
+
+                    </table>
+                </div>
+
+        </div>
+    </div>
+{% endblock %}

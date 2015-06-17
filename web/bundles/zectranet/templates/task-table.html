@@ -287,10 +287,14 @@
                         <i class="fa fa-ellipsis-v"></i>
                     </button>
                     <ul class="dropdown-menu" role="menu" style="left:-100px !important;">
-                        <li>
-                            <a data-toggle="modal" data-target="#add_new_subtask" ng-click="addParentIdToSubTask(task.id)" style="cursor: pointer"><i class="fa fa-code-fork"></i> Add new subtask</a>
+
+                        <li ng-if="isOvner || enableAddSubtaskBug(task)">
+                            <a data-toggle="modal" data-target="#add_new_subtask" ng-click="addParentIdToSubTask(task)" style="cursor: pointer"><i class="fa fa-code-fork"></i> Add new subtask</a>
                         </li>
-                        <li ng-if="task.sprint.name == 'none'">
+
+
+
+                        <li ng-if="(task.sprint.name == 'none') && (task.status.label == 'todo') && ((task.estimatedHours > 0) || (task.estimatedMinutes > 0))">
                             <a  data-toggle="modal" data-target="#add_task_to_sprint" ng-click="taskModel.id = task.id" style="cursor: pointer"><i class="fa fa-stack-overflow"></i> Add task to sprint</a>
                         </li>
                         <li ng-if="task.sprint.name != 'none'">
@@ -308,7 +312,7 @@
             </td>
         </tr>
 
-        <tr ng-show="parentTask.expand" class="angular-show-transition-2-ms" ng-repeat="task in task.subtasks">
+        <tr ng-show="parentTask.expand" class="angular-show-transition-2-ms" ng-repeat="task in task.subtasks track by $index">
             <td style="font-size: 10px;">
             <span style="vertical-align: middle;">
                 [[ parentTask.id ]].[[ $index + 1 ]]
@@ -320,7 +324,7 @@
                 <span ng-if="task.type.label == 'improvement'" class="badge" style="background-color: #337ab7; font-size: 10px;">[['i']]</span>
             </td>
             <td>
-                <a ng-init="taskHref = assignTaskHref(task.id)" ng-href="[[taskHref]]"
+                <a ng-href="[[ task.href ]]"
                    data-toggle="popover"
                    data-placement="top"
                    data-content="[[ task.description.substr(0, 250); ]]">
@@ -336,7 +340,7 @@
             <td class="hidden-xs">
 
                 <select ng-if="task.showStatusLabel" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
-                    <option ng-repeat="status in taskStatuses"
+                    <option ng-repeat="status in taskStatuses | statusFilter: task : tasks : isOvner : USER_ID"
                             style="color: [[ status.color ]]" value="[[ status.id ]]" ng-selected="status.id == task.status.id">
                         [[status.label]]
                     </option>

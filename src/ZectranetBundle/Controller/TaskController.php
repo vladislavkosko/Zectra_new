@@ -59,11 +59,17 @@ class TaskController extends Controller {
             }
         }
 
+        $user = $this->getUser();
+
+        $ovner = $project->getOwner();
+
+        $isOvner = ($user->getId() == $ovner->getId());
+
         $task_statuses = $this->getDoctrine()->getRepository('ZectranetBundle:TaskStatus')->findAll();
 
         $task_statuses = TaskStatus::arrayToJson($task_statuses);
 
-        $response = new Response(json_encode(array('Tasks' => $jsonTasks, 'taskStatuses' => $task_statuses)));
+        $response = new Response(json_encode(array('Tasks' => $jsonTasks, 'isOvner' =>$isOvner, 'taskStatuses' => $task_statuses)));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }

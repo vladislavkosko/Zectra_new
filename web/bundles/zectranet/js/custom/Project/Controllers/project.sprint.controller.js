@@ -16,33 +16,49 @@
         $scope.urlAsset = JSON_URLS.asset;
 
         $scope.totalEstimation = {
-            'h': 0,
-            'm': 0
+            'h': 0, 'm': 0, 'bh': 0, 'bm': 0
         };
         $scope.totalProgress = 0;
 
+        function calculateTaskTotalEstimation(task) {
+            var est = {
+                'h': 0, 'm': 0, 'bh': 0, 'bm': 0
+            };
+
+            if (task.type.id !== 2) {
+                est.h += task.estimatedHours;
+                est.m += task.estimatedMinutes;
+            } else {
+                est.bh += task.estimatedHours;
+                est.bm += task.estimatedMinutes;
+            }
+
+            return est;
+        }
+
         function calcuateTotalEstimation(tasks) {
             var est = {
-                'h': 0,
-                'm': 0
+                'h': 0, 'm': 0, 'bh': 0, 'bm': 0
             };
 
             for (var i = 0; i < tasks.length; i++) {
                 if (!tasks[i].parentid) {
-                    est.h += tasks[i].estimatedHours;
-                    est.m += tasks[i].estimatedMinutes;
-
+                    var time = calculateTaskTotalEstimation(tasks[i]);
+                    est.h += time.h; est.m += time.m;
+                    est.bh += time.bh; est.bm += time.bm;
                     for (var j = 0; j < tasks[i].subtasks.length; j++) {
-                        est.h += tasks[i].subtasks[j].estimatedHours;
-                        est.m += tasks[i].subtasks[j].estimatedMinutes;
+                        time = calculateTaskTotalEstimation(tasks[i].subtasks[j]);
+                        est.h += time.h; est.m += time.m;
+                        est.bh += time.bh; est.bm += time.bm;
                     }
                 }
             }
 
-            est.h += est.m / 60;
-            est.h = ~~est.h;
-            est.m = est.m % 60;
-            est.m = ~~est.m;
+            est.bh += est.bm / 60; est.bh = ~~est.bh;
+            est.bm = est.m % 60; est.bm = ~~est.bm;
+
+            est.h += est.m / 60; est.h = ~~est.h;
+            est.m = est.m % 60; est.m = ~~est.m;
             return est;
         }
 

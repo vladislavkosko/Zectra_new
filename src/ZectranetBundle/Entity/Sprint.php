@@ -70,6 +70,12 @@ class Sprint
     private $status;
 
     /**
+     * @ORM\OneToMany(targetEntity="SprintPermissions", mappedBy="sprint", cascade={"remove"})
+     * @var ArrayCollection
+     */
+    private $permissions;
+
+    /**
      * Get id
      *
      * @return integer
@@ -209,6 +215,7 @@ class Sprint
      */
     public function __construct(EntityManager $em) {
         $this->tasks = new ArrayCollection();
+        $this->permissions = new ArrayCollection();
         $this->setStatus(SprintStatus::getOpenStatus($em));
         $this->setStatusid(1);
     }
@@ -223,6 +230,7 @@ class Sprint
             'description' => $this->getDescription(),
             'projectid' => $this->getProjectid(),
             'status' => $this->getStatus()->getInArray(),
+            'permissions' => EntityOperations::arrayToJsonArray($this->getPermissions())
         );
     }
 
@@ -314,5 +322,38 @@ class Sprint
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * Add permissions
+     *
+     * @param \ZectranetBundle\Entity\SprintPermissions $permissions
+     * @return Sprint
+     */
+    public function addPermission(\ZectranetBundle\Entity\SprintPermissions $permissions)
+    {
+        $this->permissions[] = $permissions;
+
+        return $this;
+    }
+
+    /**
+     * Remove permissions
+     *
+     * @param \ZectranetBundle\Entity\SprintPermissions $permissions
+     */
+    public function removePermission(\ZectranetBundle\Entity\SprintPermissions $permissions)
+    {
+        $this->permissions->removeElement($permissions);
+    }
+
+    /**
+     * Get permissions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPermissions()
+    {
+        return $this->permissions;
     }
 }

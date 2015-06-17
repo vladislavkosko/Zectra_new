@@ -1,5 +1,50 @@
 (function () {
-    angular.module('Zectranet').controller('TaskController', TaskController);
+    angular.module('Zectranet').filter('statusFilter', function () {
+        function findParent(parentid, tasks) {
+            var taskIndex = -1;
+            for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i].id == parentid) {
+                    taskIndex = i; break;
+                }
+            }
+            return taskIndex;
+        }
+
+        function findPermission(permissions, user_id) {
+            for (var i = 0; i < permissions.length; i++)
+            {
+                if ((permissions[i].userid == user_id))
+                    return permissions[i];
+            }
+            return null;
+        }
+
+        return function (statuses, task, tasks, isOvner, USER_ID) {
+            if (isOvner) return statuses;
+
+            if (task.parentid)
+                task = tasks[findParent(task.parentid, tasks)];
+
+            if (task.sprint.name === 'none') return statuses;
+            if (!angular.isDefined(task.sprint.permissions)) return statuses;
+
+            var permission = findPermission(task.sprint.permissions, USER_ID);
+            if (permission) {
+                if (permission.enableChangeTaskStatusToSignedOff)
+                    return statuses;
+                else {
+                    for (var i = 0; i < statuses.length; i++) {
+                        if (statuses[i].label === 'signed off') {
+                            statuses.splice(i, 1);
+                            break;
+                        }
+                    }
+                    return statuses;
+                }
+            }
+        }
+
+    }).controller('TaskController', TaskController);
 
     TaskController.$inject = [
         '$scope',
@@ -124,6 +169,7 @@
                 response = response.data;
                 $scope.tasks = response.Tasks;
                 $scope.taskStatuses = response.taskStatuses;
+                $scope.isOvner = response.isOvner;
                 $scope.tasks = $tasksSort.calculateTasksInfo($scope.tasks);
                 var data = $tasksFilter.prepareTasks($scope.tasks);
                 $scope.tasks = data.tasks;
@@ -133,6 +179,24 @@
                 togglePopups();
                 dropdownsNoCLose();
             });
+        };
+
+        function findPermission(permissions, user_id) {
+            for (var i = 0; i < permissions.length; i++)
+            {
+                if ((permissions[i].userid == user_id))
+                    return permissions[i];
+            }
+            return null;
+        }
+
+
+        $scope.enableAddSubtaskBug = function (task) {
+            if (task.sprint.name === 'none') return true;
+            if (!angular.isDefined(task.sprint.permissions))
+                return false;
+            var permission = findPermission(task.sprint.permissions, $scope.USER_ID);
+            return (permission && permission.enableAddSubtaskBug);
         };
 
         function recalculateExistingSubTask(subtask, isNew) {
@@ -175,8 +239,13 @@
             }
         };
 
-        $scope.addParentIdToSubTask = function (parent_id) {
-            $scope.subtask.parent = parent_id;
+        $scope.addParentIdToSubTask = function (task) {
+            $scope.subtask.parent = task.id;
+            $scope.subtask.parentTask = task;
+            if ($scope.subtask.parentTask.sprintID != null)
+                $scope.subtask.type = '2';
+            else
+                $scope.subtask.type = '1';
         };
 
         $scope.addSubTask = function (task) {
@@ -344,6 +413,7 @@
                         for (var j = 0; j < $scope.tasks.length; j++) {
                             if ($scope.tasks[j].id == response[i].id) {
                                 $scope.tasks[j].sprint = response[i].sprint;
+                                $scope.tasks[j].sprintID = response[i].sprint.id;
                                 $scope.tasks[j].sprintHref = $tasksSort.assignSprintHref($scope.tasks[j].projectid, $scope.tasks[j].sprint.id);
                                 break;
                             }
