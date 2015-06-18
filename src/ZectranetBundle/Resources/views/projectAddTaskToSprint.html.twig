@@ -20,7 +20,6 @@
                                     {% for i, sprint in project.sprints if sprint.status.label == 'Open' %}
 
                                         {% for permission in sprint.Permissions %}
-                                            {% set enableAT = 0 %}
                                             {% if (permission.userid == app.user.id) and (permission.enableAddTaskToSprint) %}
                                                 {% set enableAT = 1 %}
 

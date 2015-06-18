@@ -44,7 +44,6 @@
 
                         <tr>
                             <td>Name</td>
-                            <td>Enable create sprint</td>
                             <td>Enable add task to sprint</td>
                             <td>Enable start sprint</td>
                             <td>Enable change status task to "Signed Off"</td>
@@ -62,12 +61,6 @@
 
                                     <tr style="text-align: center;">
                                         <td>{{ user.username }}</td>
-                                        <td>
-                                            <input type="checkbox" name="enableCreateSprint"
-                                                    {% for permission in sprint.permissions %}
-                                                {% if (permission.userid == user.id) and (permission.enableCreateSprint) %} checked {% endif %}
-                                                    {% endfor %}>
-                                        </td>
                                         <td>
                                             <input type="checkbox" name="enableAddTaskToSprint"
                                                     {% for permission in sprint.permissions %}

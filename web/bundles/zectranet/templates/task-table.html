@@ -259,7 +259,7 @@
             <td class="hidden-xs">
 
                 <select ng-if="(task.subtasks.length == 0) && (task.showStatusLabel)" ng-blur="changeStatus(task); task.showStatusLabel = false;" ng-model="task.status.selected" style="border: none;font-weight: bold;">
-                    <option ng-repeat="status in taskStatuses"
+                    <option ng-repeat="status in taskStatuses | statusFilter: task : tasks : isOvner : USER_ID"
                             style="color: [[ status.color ]]" value="[[ status.id ]]" ng-selected="status.id == task.status.id">
                         [[status.label]]
                     </option>
@@ -292,18 +292,19 @@
                             <a data-toggle="modal" data-target="#add_new_subtask" ng-click="addParentIdToSubTask(task)" style="cursor: pointer"><i class="fa fa-code-fork"></i> Add new subtask</a>
                         </li>
 
-
-
                         <li ng-if="(task.sprint.name == 'none') && (task.status.label == 'todo') && ((task.estimatedHours > 0) || (task.estimatedMinutes > 0))">
                             <a  data-toggle="modal" data-target="#add_task_to_sprint" ng-click="taskModel.id = task.id" style="cursor: pointer"><i class="fa fa-stack-overflow"></i> Add task to sprint</a>
                         </li>
+
                         <li ng-if="task.sprint.name != 'none'">
                             <a ng-click="detachTaskFromSprint(task);" style="cursor: pointer;">
                                 <i class="fa fa-stack-overflow"></i>
                                 Detach task from sprint
                             </a>
                         </li>
+
                         <li class="divider"></li>
+
                         <li>
                             <a data-toggle="modal" data-target="#delete_task" ng-click="addDeleteTaskId(task.id)" style="cursor: pointer"><span class="text-danger"><i class="fa fa-trash"></i> Delete task</span></a>
                         </li>

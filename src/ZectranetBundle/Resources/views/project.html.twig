@@ -35,30 +35,18 @@
                                     <i class="fa text-primary fa-fw fa-gear fa-2x"></i>
                                 </a>
                             </div>
-                        {% endif %}
                             {#<div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Versions">
                                 <a style="cursor: pointer; text-decoration: none;" href="{{ path('zectranet_show_project_versions', {'project_id': project.id }) }}">
                                     <i class="fa text-warning fa-fw fa-code fa-2x"></i>
                                 </a>
                             </div>#}
-
-                        {% set enableCS = false %}
-
-                        {% for permission in project.projectPermissions %}
-                            {% if (permission.userid == app.user.id) and (permission.enableCreateSprint) %}
-                                {% set enableCS = true %}
-
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if (project.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) or (enableCS == true) %}
-                            <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Sprints">
-                                <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#project_sprints">
-                                    <i class="fa text-warning fa-fw fa-repeat  fa-2x"></i>
-                                </a>
-                            </div>
                         {% endif %}
 
+                        <div class="pull-right" data-toggle="tooltip" data-placement="top" title="Project Sprints">
+                            <a style="cursor: pointer; text-decoration: none;" data-toggle="modal" data-target="#project_sprints">
+                                <i class="fa text-warning fa-fw fa-repeat  fa-2x"></i>
+                            </a>
+                        </div>
                     </div>
                     <!-- End of Project controll buttons -->
                 </div>

@@ -79,7 +79,7 @@
 
                             <div class="col-md-9">
                                 <div class="input-group" style="width: 100%;">
-                                    {% if sprint and sprint.status.id > 1 %}
+                                    {% if sprint and sprint.status.id > 1 and (task.type.label == 'bug') %}
                                         <a style="font-weight: bold;" href="#" class="btn form-control-static text-info">
                                             {{ task.type.label }}
                                         </a>
@@ -330,18 +330,68 @@
                             </div>
 
                             <div class="col-md-9">
-                                <div class="input-group" style="width: 100%;">
-                                    <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;font-weight: bold;">
-                                        {% for status in task_statuses %}
-                                            <option style="color: {{ status.color }}" value="{{ status.id }}"
-                                                    {% if status.id == task.status.id %}
-                                                selected="selected"
-                                                    {% endif %}>
-                                                {{ status.label }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+
+
+                                {% set taskProject = (task.project.parent) ? task.project.parent : task.project %}
+                                {% set enableSO = true %}
+
+                                {% if sprint and sprint.status.id > 1 %}
+
+                                    {% set enableSO = false %}
+
+                                    {% for permission in sprint.Permissions %}
+                                        {% if (permission.userid == app.user.id) and (permission.enableChangeTaskStatusToSignedOff) %}
+                                            {% set enableSO = true %}
+
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if (taskProject.owner.id == app.user.id) or (enableSO == true) %}
+                                        <div class="input-group" style="width: 100%;">
+                                            <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;font-weight: bold;">
+                                                {% for status in task_statuses %}
+                                                    <option style="color: {{ status.color }}" value="{{ status.id }}"
+                                                            {% if status.id == task.status.id %}
+                                                        selected="selected"
+                                                            {% endif %}>
+                                                        {{ status.label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                    {% else %}
+                                        <div class="input-group" style="width: 100%;">
+                                            <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;font-weight: bold;">
+                                                {% for status in task_statuses %}
+                                                    <option ng-if="'{{ status.label }}' != 'signed off'" style="color: {{ status.color }}" value="{{ status.id }}"
+                                                            {% if status.id == task.status.id %}
+                                                        selected="selected"
+                                                            {% endif %}>
+                                                        {{ status.label }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                    {% endif %}
+
+                                {% else %}
+                                    <div class="input-group" style="width: 100%;">
+                                        <select class="form-control" name="status" ng-model="taskInfoEdit.status.id" style="border: none;font-weight: bold;">
+                                            {% for status in task_statuses %}
+                                                <option style="color: {{ status.color }}" value="{{ status.id }}"
+                                                        {% if status.id == task.status.id %}
+                                                    selected="selected"
+                                                        {% endif %}>
+                                                    {{ status.label }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                {% endif %}
+
                             </div>
                         </div>
                         <!-- End of Task STATUS Select -->
@@ -354,7 +404,7 @@
                                 </div>
                             </div>
 
-                            {% if sprint and sprint.status.id > 1 %}
+                            {% if sprint and sprint.status.id > 1 and (task.type.label != 'bug') %}
                                 <div class="col-md-9">
                                     <a style="font-weight: bold;" href="#" class="btn form-control-static text-info">
                                         {{ task.estimatedHours ~ 'h' }}
@@ -384,7 +434,7 @@
                                 </div>
                             </div>
 
-                            {% if sprint and sprint.status.id > 1 %}
+                            {% if sprint and sprint.status.id > 1 and (task.type.label != 'bug') %}
                                 <div class="col-md-9">
                                     <a style="font-weight: bold;" href="#" class="btn form-control-static text-info">
                                         {{ task.estimatedMinutes ~ 'm' }}

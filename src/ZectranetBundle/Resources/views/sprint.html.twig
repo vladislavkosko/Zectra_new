@@ -59,7 +59,7 @@
                                     {% endif %}
                                 {% endfor %}
 
-                                {% if (project.owner.id == app.user.id) or (is_granted('ROLE_ADMIN')) or (enableSS == true) %}
+                                {% if (project.owner.id == app.user.id) or (enableSS == true) %}
                                     {% if sprint.status.label == 'Open' %}
                                         <div class="pull-right clearfix" data-toggle="tooltip" data-placement="top" title="Start Sprint">
                                             <a href="{{ path('zectranet_sprint_change_state', {'sprint_id': sprint.id, 'state': 2}) }}" style="text-decoration: none;">

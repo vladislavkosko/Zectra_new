@@ -30,7 +30,7 @@
 
 
 
-                                    <select ng-if="subtask.parentTask.sprintID == null" id="add_subtask_type" class="form-control" ng-model="subtask.type" name="type" required>
+                                    <select ng-if="(subtask.parentTask.sprintID == null) || ((subtask.parentTask.sprintID != null) && (subtask.parentTask.sprint.status.id == 1))" id="add_subtask_type" class="form-control" ng-model="subtask.type" name="type" required>
                                         {% for type in task_types %}
                                             <option value="{{ type.id }}">
                                                 {{ type.label }}
@@ -38,7 +38,7 @@
                                         {% endfor %}
                                     </select>
 
-                                    <select ng-if="subtask.parentTask.sprintID != null" id="add_subtask_type" class="form-control" ng-model="subtask.type" name="type" required>
+                                    <select ng-if="(subtask.parentTask.sprintID != null) && (subtask.parentTask.sprint.status.id > 1)" id="add_subtask_type" class="form-control" ng-model="subtask.type" name="type" required>
                                         {% for type in task_types %}
                                             <option  ng-if="'{{ type.label }}' == 'bug'" value="{{ type.id }}">
                                                 {{ type.label }}

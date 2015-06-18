@@ -25,6 +25,8 @@
             if (task.parentid)
                 task = tasks[findParent(task.parentid, tasks)];
 
+            if (task.sprint.status.id == 1) return statuses;
+
             if (task.sprint.name === 'none') return statuses;
             if (!angular.isDefined(task.sprint.permissions)) return statuses;
 
@@ -33,13 +35,14 @@
                 if (permission.enableChangeTaskStatusToSignedOff)
                     return statuses;
                 else {
-                    for (var i = 0; i < statuses.length; i++) {
-                        if (statuses[i].label === 'signed off') {
-                            statuses.splice(i, 1);
+                    var temp = statuses;
+                    for (var i = 0; i < temp.length; i++) {
+                        if (temp[i].label === 'signed off') {
+                            temp.splice(i, 1);
                             break;
                         }
                     }
-                    return statuses;
+                    return temp;
                 }
             }
         }
@@ -193,6 +196,7 @@
 
         $scope.enableAddSubtaskBug = function (task) {
             if (task.sprint.name === 'none') return true;
+            if (task.sprint.status.id == 1) return true;
             if (!angular.isDefined(task.sprint.permissions))
                 return false;
             var permission = findPermission(task.sprint.permissions, $scope.USER_ID);
@@ -242,7 +246,7 @@
         $scope.addParentIdToSubTask = function (task) {
             $scope.subtask.parent = task.id;
             $scope.subtask.parentTask = task;
-            if ($scope.subtask.parentTask.sprintID != null)
+            if (($scope.subtask.parentTask.sprintID != null) && ($scope.subtask.parentTask.sprint.status.id > 1))
                 $scope.subtask.type = '2';
             else
                 $scope.subtask.type = '1';
