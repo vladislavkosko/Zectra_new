@@ -83,8 +83,8 @@
                                         [[ request.user.username ]]
                                     </td>
                                     <td>
-                                       <span ng-if="request.reSendVisibleButton == false" class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
-                                       <span ng-if="request.reSendVisibleButton == true" class="label" style="background-color: hotpink;">Pending</span>
+                                       <span ng-if="(request.reSendVisibleButton == false) || (request.status.id == 4)" class="label" style="background-color: [[ request.status.color ]]">[[ request.status.label ]]</span>
+                                       <span ng-if="(request.reSendVisibleButton == true) && (request.status.id != 4)" class="label" style="background-color: hotpink;">Pending</span>
 
                                     </td>
                                     <td>

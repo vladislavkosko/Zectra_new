@@ -51,6 +51,9 @@ Zectranet.controller('QNAController', ['$scope', '$http',
                         var difference_miliseconds = now - timeRequest;
                         difference_miliseconds = difference_miliseconds / one_minute;
 
+                        if ($scope.Project_Team[i].status.id == 4)
+                            $scope.Project_Team[i].reSendVisibleButton = true;
+
                         if($scope.Project_Team[i].status.id == 1 && difference_miliseconds >= 0.5) {
                             $scope.Project_Team[i].reSendVisibleButton = true;
                         }
